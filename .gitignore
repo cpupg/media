@@ -1,0 +1,9 @@
+# sqlite
+database.sqlite
+
+# idea
+/.idea
+/*.iml
+
+# maven
+target
