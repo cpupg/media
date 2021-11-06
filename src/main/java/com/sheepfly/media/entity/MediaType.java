@@ -1,14 +1,13 @@
-package com.sheepfly.media.entities;
+package com.sheepfly.media.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
+ * 媒体类型。
  *
  * @author sheepfly
  * @since 2021-11-06
@@ -99,13 +98,13 @@ public class MediaType implements Serializable {
     @Override
     public String toString() {
         return "MediaType{" +
-        "id=" + id +
-        ", typeCode=" + typeCode +
-        ", typeDescription=" + typeDescription +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        ", status=" + status +
-        ", parentId=" + parentId +
-        "}";
+                "id=" + id +
+                ", typeCode=" + typeCode +
+                ", typeDescription=" + typeDescription +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", status=" + status +
+                ", parentId=" + parentId +
+                "}";
     }
 }

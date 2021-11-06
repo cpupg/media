@@ -13,6 +13,6 @@
     </environment>
   </environments>
   <mappers>
-    <package name="com.sheepfly.media.mappers"/>
+    <package name="com.sheepfly.media.mapper"/>
   </mappers>
 </configuration>
