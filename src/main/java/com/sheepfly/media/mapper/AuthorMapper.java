@@ -1,11 +1,11 @@
-package com.sheepfly.media.mappers;
+package com.sheepfly.media.mapper;
 
-import com.sheepfly.media.entities.Author;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.sheepfly.media.entity.Author;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author sheepfly

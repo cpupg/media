@@ -1,13 +1,12 @@
-package com.sheepfly.media.entities;
+package com.sheepfly.media.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
+ * 作者-资源关联。
  *
  * @author sheepfly
  * @since 2021-11-06
@@ -43,8 +42,8 @@ public class AuthorResource implements Serializable {
     @Override
     public String toString() {
         return "AuthorResource{" +
-        "resourceId=" + resourceId +
-        ", authorId=" + authorId +
-        "}";
+                "resourceId=" + resourceId +
+                ", authorId=" + authorId +
+                "}";
     }
 }

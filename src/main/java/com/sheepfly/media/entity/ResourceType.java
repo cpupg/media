@@ -1,13 +1,12 @@
-package com.sheepfly.media.entities;
+package com.sheepfly.media.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
+ * 资源类型。
  *
  * @author sheepfly
  * @since 2021-11-06
@@ -65,10 +64,10 @@ public class ResourceType implements Serializable {
     @Override
     public String toString() {
         return "ResourceType{" +
-        "resourceId=" + resourceId +
-        ", typeCode=" + typeCode +
-        ", createTime=" + createTime +
-        ", updateText=" + updateText +
-        "}";
+                "resourceId=" + resourceId +
+                ", typeCode=" + typeCode +
+                ", createTime=" + createTime +
+                ", updateText=" + updateText +
+                "}";
     }
 }
