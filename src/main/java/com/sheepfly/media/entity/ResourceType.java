@@ -25,8 +25,8 @@ public class ResourceType implements Serializable {
     @TableField("CREATE_TIME")
     private String createTime;
 
-    @TableField("UPDATE_TEXT")
-    private String updateText;
+    @TableField("UPDATE_TIME")
+    private String uptateTime;
 
 
     public String getResourceId() {
@@ -53,12 +53,12 @@ public class ResourceType implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getUpdateText() {
-        return updateText;
+    public String getUptateTime() {
+        return uptateTime;
     }
 
-    public void setUpdateText(String updateText) {
-        this.updateText = updateText;
+    public void setUptateTime(String uptateTime) {
+        this.uptateTime = uptateTime;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ResourceType implements Serializable {
                 "resourceId=" + resourceId +
                 ", typeCode=" + typeCode +
                 ", createTime=" + createTime +
-                ", updateText=" + updateText +
+                ", updateText=" + uptateTime +
                 "}";
     }
 }

@@ -14,22 +14,21 @@ import java.io.Serializable;
  */
 @TableName("RESOURCES")
 public class Resources implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @TableId("ID")
     private String id;
-
     @TableField("FILE_NAME")
     private String fileName;
-
     @TableField("CREATE_TIME")
     private String createTime;
-
     @TableField("UPDATE_TIME")
     private String updateTime;
-
-
+    @TableField("AUTHOR")
+    private String author;
+    @TableField("FILE_DIR")
+    private String fileDir;
+    
     public String getId() {
         return id;
     }
