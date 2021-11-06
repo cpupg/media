@@ -28,7 +28,9 @@ public class Resources implements Serializable {
     private String author;
     @TableField("FILE_DIR")
     private String fileDir;
-    
+    @TableField("SCORE")
+    private Integer score;
+
     public String getId() {
         return id;
     }
@@ -61,13 +63,40 @@ public class Resources implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getFileDir() {
+        return fileDir;
+    }
+
+    public void setFileDir(String fileDir) {
+        this.fileDir = fileDir;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "Resources{" +
-                "id=" + id +
-                ", fileName=" + fileName +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
+                "id='" + id + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", author='" + author + '\'' +
+                ", fileDir='" + fileDir + '\'' +
+                ", score=" + score +
+                '}';
     }
 }
