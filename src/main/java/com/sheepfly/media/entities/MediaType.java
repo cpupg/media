@@ -1,12 +1,13 @@
 package com.sheepfly.media.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.io.Serializable;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author sheepfly
@@ -17,18 +18,25 @@ public class MediaType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId("ID")
     private String id;
 
+    @TableField("TYPE_CODE")
     private String typeCode;
 
+    @TableField("TYPE_DESCRIPTION")
     private String typeDescription;
 
+    @TableField("CREATE_TIME")
     private String createTime;
 
+    @TableField("UPDATE_TIME")
     private String updateTime;
 
+    @TableField("STATUS")
     private Integer status;
 
+    @TableField("PARENT_ID")
     private String parentId;
 
 
@@ -91,13 +99,13 @@ public class MediaType implements Serializable {
     @Override
     public String toString() {
         return "MediaType{" +
-                "id=" + id +
-                ", typeCode=" + typeCode +
-                ", typeDescription=" + typeDescription +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", status=" + status +
-                ", parentId=" + parentId +
-                "}";
+        "id=" + id +
+        ", typeCode=" + typeCode +
+        ", typeDescription=" + typeDescription +
+        ", createTime=" + createTime +
+        ", updateTime=" + updateTime +
+        ", status=" + status +
+        ", parentId=" + parentId +
+        "}";
     }
 }

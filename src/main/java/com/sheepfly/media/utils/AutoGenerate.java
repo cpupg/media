@@ -23,7 +23,8 @@ public class AutoGenerate {
                         .pathInfo(Collections.singletonMap(OutputFile.mapperXml,
                                 "src\\main\\resources\\com\\sheepfly\\media\\mappers"))
                 )
-                .strategyConfig(builder -> builder.addInclude(tableName.toUpperCase()))
+                .strategyConfig(builder -> builder.addInclude(tableName.toUpperCase())
+                        .entityBuilder().enableTableFieldAnnotation())
                 .templateEngine(new VelocityTemplateEngine())
                 .execute();
     }
