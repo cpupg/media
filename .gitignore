@@ -7,3 +7,7 @@ database.sqlite
 
 # maven
 target
+
+# other
+**/Application.java
+**/ApplicationTest.java
