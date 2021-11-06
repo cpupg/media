@@ -1,25 +1,33 @@
 package com.sheepfly.media.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author sheepfly
  * @since 2021-11-06
  */
+@TableName("RESOURCES")
 public class Resources implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId("ID")
     private String id;
 
+    @TableField("FILE_NAME")
     private String fileName;
 
+    @TableField("CREATE_TIME")
     private String createTime;
 
+    @TableField("UPDATE_TIME")
     private String updateTime;
 
 
@@ -58,10 +66,10 @@ public class Resources implements Serializable {
     @Override
     public String toString() {
         return "Resources{" +
-                "id=" + id +
-                ", fileName=" + fileName +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
+        "id=" + id +
+        ", fileName=" + fileName +
+        ", createTime=" + createTime +
+        ", updateTime=" + updateTime +
+        "}";
     }
 }

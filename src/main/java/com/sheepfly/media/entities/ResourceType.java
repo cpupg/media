@@ -1,12 +1,12 @@
 package com.sheepfly.media.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.io.Serializable;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author sheepfly
@@ -17,12 +17,16 @@ public class ResourceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField("RESOURCE_ID")
     private String resourceId;
 
+    @TableField("TYPE_CODE")
     private String typeCode;
 
+    @TableField("CREATE_TIME")
     private String createTime;
 
+    @TableField("UPDATE_TEXT")
     private String updateText;
 
 
@@ -61,10 +65,10 @@ public class ResourceType implements Serializable {
     @Override
     public String toString() {
         return "ResourceType{" +
-                "resourceId=" + resourceId +
-                ", typeCode=" + typeCode +
-                ", createTime=" + createTime +
-                ", updateText=" + updateText +
-                "}";
+        "resourceId=" + resourceId +
+        ", typeCode=" + typeCode +
+        ", createTime=" + createTime +
+        ", updateText=" + updateText +
+        "}";
     }
 }
