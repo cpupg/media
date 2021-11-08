@@ -7,34 +7,47 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
 /**
- * 媒体类型。
+ * 媒体内容分类。
  *
  * @author sheepfly
  * @since 2021-11-06
  */
 @TableName("MEDIA_TYPE")
 public class MediaType implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 类型id。
+     */
     @TableId("ID")
     private String id;
-
+    /**
+     * 类型码，为描述的hashcode。
+     */
     @TableField("TYPE_CODE")
     private String typeCode;
-
+    /**
+     * 类型描述。
+     */
     @TableField("TYPE_DESCRIPTION")
     private String typeDescription;
-
+    /**
+     * 创建时间。
+     */
     @TableField("CREATE_TIME")
     private String createTime;
-
+    /**
+     * 更新时间。
+     */
     @TableField("UPDATE_TIME")
     private String updateTime;
-
+    /**
+     * 状态，0正常，1失效。
+     */
     @TableField("STATUS")
     private Integer status;
-
+    /**
+     * 父分类id。
+     */
     @TableField("PARENT_ID")
     private String parentId;
 

@@ -8,6 +8,9 @@ import java.io.Serializable;
 /**
  * 资源类型。
  *
+ * <p>一个资源可以对应多个类型，这写类型可以具有继承关系，也可以没有。在进行分类推荐时，除了推荐选择
+ * 的类型，还会推荐已选择类型的子类型。</p>
+ *
  * @author sheepfly
  * @since 2021-11-06
  */
@@ -15,16 +18,24 @@ import java.io.Serializable;
 public class ResourceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /***
+     * 资源id。
+     */
     @TableField("RESOURCE_ID")
     private String resourceId;
-
+    /**
+     * 类型码。
+     */
     @TableField("TYPE_CODE")
     private String typeCode;
-
+    /**
+     * 创建时间。
+     */
     @TableField("CREATE_TIME")
     private String createTime;
-
+    /**
+     * 更新时间。
+     */
     @TableField("UPDATE_TIME")
     private String uptateTime;
 

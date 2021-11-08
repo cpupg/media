@@ -8,6 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
+/**
+ * mybatis工具。
+ *
+ * @author sheepfly
+ */
 public class MybatisUtil {
     private static final Logger log = LoggerFactory.getLogger(MybatisUtil.class);
 

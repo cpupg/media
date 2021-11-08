@@ -9,6 +9,8 @@ import java.io.Serializable;
 /**
  * 资源/作者来源。
  *
+ * <p>通常是网站。一个作者可以在多个网站注册账号，因此一个作者可以有用多个source。</p>
+ *
  * @author sheepfly
  * @since 2021-11-06
  */
@@ -16,13 +18,19 @@ import java.io.Serializable;
 public class Source implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 来源id。
+     */
     @TableId("ID")
     private String id;
-
+    /**
+     * 网站主页。
+     */
     @TableField("SITE")
     private String site;
-
+    /**
+     * 网站名称。
+     */
     @TableField("NAME")
     private String name;
 
