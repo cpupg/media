@@ -9,25 +9,48 @@ import java.io.Serializable;
 /**
  * 资源。
  *
+ * <p>资源的作者字段是第一次下载资源时的上传用户。如果发现该用户在其他站点同步上传了资源，则后续站点
+ * 的资源会写入AuthorResource中。</p>
+ *
  * @author sheepfly
  * @since 2021-11-06
  */
 @TableName("RESOURCES")
 public class Resources implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 资源id。
+     */
     @TableId("ID")
     private String id;
+    /**
+     * 资源文件名。
+     */
     @TableField("FILE_NAME")
     private String fileName;
+    /**
+     * 创建时间。
+     */
     @TableField("CREATE_TIME")
     private String createTime;
+    /**
+     * 更新时间。移动、改变分类和作者都会视为更新资源。
+     */
     @TableField("UPDATE_TIME")
     private String updateTime;
+    /**
+     * 作者。
+     */
     @TableField("AUTHOR")
     private String author;
+    /**
+     * 资源在本地的存储目录。
+     */
     @TableField("FILE_DIR")
     private String fileDir;
+    /**
+     * 评分，区间0到10。
+     */
     @TableField("SCORE")
     private Integer score;
 

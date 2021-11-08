@@ -16,7 +16,9 @@ import java.io.Serializable;
 public class Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 作者id。
+     */
     @TableId("ID")
     private String id;
     /**
