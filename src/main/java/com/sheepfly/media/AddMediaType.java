@@ -39,6 +39,7 @@ public class AddMediaType {
                     sqlSession.commit();
                     System.out.println("删除数目:" + deleteCount);
                     queryWrapper.clear();
+                    continue;
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;
