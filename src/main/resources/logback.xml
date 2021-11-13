@@ -1,0 +1,19 @@
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>
+        %date{yyyy-MM-dd hh:mm:ss:SSS} %-5level [%thread]
+        %class#%method:%line
+        %message%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <logger name="java.sql.com.sheepfly.media.mapper" level="DEBUG" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>
