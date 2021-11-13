@@ -11,3 +11,6 @@ target
 # other
 **/Application.java
 **/ApplicationTest.java
+
+# logs
+logs/
