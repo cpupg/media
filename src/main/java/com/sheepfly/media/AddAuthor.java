@@ -49,6 +49,7 @@ public class AddAuthor {
             }
             try {
                 result = authorMapper.insert(author);
+                sqlSession.commit();
                 log.info("插入数量:" + result);
             } catch (Exception e) {
                 log.error("插入失败", e);
