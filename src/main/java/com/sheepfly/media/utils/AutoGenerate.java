@@ -17,7 +17,7 @@ public class AutoGenerate {
                         .author("sheepfly")
                         .disableOpenDir()
                         .fileOverride())
-                .packageConfig(builder -> builder.mapper("mapper")
+                .packageConfig(builder -> builder.mapper("configs/mappers")
                         .parent("com.sheepfly.media")
                         .service("service")
                         .serviceImpl("service.impl")
