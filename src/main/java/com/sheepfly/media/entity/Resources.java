@@ -53,6 +53,14 @@ public class Resources implements Serializable {
      */
     @TableField("SCORE")
     private Integer score;
+    /**
+     * 资源链接。
+     */
+    private String url;
+    /**
+     * 下载连接。
+     */
+    private String downloadUrl;
 
     public String getId() {
         return id;
@@ -108,6 +116,22 @@ public class Resources implements Serializable {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 
     @Override
