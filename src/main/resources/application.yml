@@ -5,6 +5,7 @@ spring:
     url: jdbc:sqlite:database.sqlite
 mybatis-plus:
   config-location: classpath:configs/mybatis.xml
+  mapper-locations: classpath:configs/mappers/**/*.xml
 
 # server
 server:
