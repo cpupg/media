@@ -1,0 +1,12 @@
+# datasource
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:database.sqlite
+mybatis-plus:
+  config-location: classpath:configs/mybatis.xml
+
+# server
+server:
+  servlet:
+    context-path: /media
