@@ -4,41 +4,62 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * <p>
- * 
+ * 资源
  * </p>
  *
  * @author sheepfly
- * @since 2022-02-04
+ * @since 2022-02-07
  */
 @TableName("RESOURCE")
 public class Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * ID
+     */
     @TableId("ID")
     private String id;
 
+    /**
+     * 文件名
+     */
     @TableField("FILENAME")
     private String filename;
 
+    /**
+     * 资源目录
+     */
     @TableField("DIR")
     private String dir;
 
+    /**
+     * 作者id
+     */
     @TableField("AUTHOR_ID")
     private String authorId;
 
+    /**
+     * 专辑id
+     */
     @TableField("ALBUM_ID")
     private String albumId;
 
+    /**
+     * 创建时间
+     */
     @TableField("CREATE_TIME")
-    private BigDecimal createTime;
+    private LocalDate createTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("UPDATE_TIME")
-    private BigDecimal updateTime;
+    private LocalDate updateTime;
 
 
     public String getId() {
@@ -81,19 +102,19 @@ public class Resource implements Serializable {
         this.albumId = albumId;
     }
 
-    public BigDecimal getCreateTime() {
+    public LocalDate getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(BigDecimal createTime) {
+    public void setCreateTime(LocalDate createTime) {
         this.createTime = createTime;
     }
 
-    public BigDecimal getUpdateTime() {
+    public LocalDate getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(BigDecimal updateTime) {
+    public void setUpdateTime(LocalDate updateTime) {
         this.updateTime = updateTime;
     }
 

@@ -8,14 +8,14 @@ import java.time.LocalDate;
 
 /**
  * <p>
- * 创作人员
+ * 资源所属专辑
  * </p>
  *
  * @author sheepfly
  * @since 2022-02-07
  */
-@TableName("AUTHOR")
-public class Author implements Serializable {
+@TableName("RESOURCE_ALBUM")
+public class ResourceAlbum implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,30 +24,6 @@ public class Author implements Serializable {
      */
     @TableId("ID")
     private String id;
-
-    /**
-     * 用户在站点注册时的id
-     */
-    @TableField("USER_ID")
-    private String userId;
-
-    /**
-     * 用户名
-     */
-    @TableField("USERNAME")
-    private String username;
-
-    /**
-     * 注册站点ID
-     */
-    @TableField("SITE")
-    private String site;
-
-    /**
-     * 主页
-     */
-    @TableField("HOMEPAGE")
-    private String homepage;
 
     /**
      * 创建时间
@@ -61,6 +37,18 @@ public class Author implements Serializable {
     @TableField("UPDATE_TIME")
     private LocalDate updateTime;
 
+    /**
+     * 资源ID
+     */
+    @TableField("RESOURCE_ID")
+    private String resourceId;
+
+    /**
+     * 专辑ID
+     */
+    @TableField("ALBUM_ID")
+    private String albumId;
+
 
     public String getId() {
         return id;
@@ -68,38 +56,6 @@ public class Author implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public String getHomepage() {
-        return homepage;
-    }
-
-    public void setHomepage(String homepage) {
-        this.homepage = homepage;
     }
 
     public LocalDate getCreateTime() {
@@ -118,16 +74,30 @@ public class Author implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
     @Override
     public String toString() {
-        return "Author{" +
+        return "ResourceAlbum{" +
         "id=" + id +
-        ", userId=" + userId +
-        ", username=" + username +
-        ", site=" + site +
-        ", homepage=" + homepage +
         ", createTime=" + createTime +
         ", updateTime=" + updateTime +
+        ", resourceId=" + resourceId +
+        ", albumId=" + albumId +
         "}";
     }
 }

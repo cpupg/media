@@ -7,11 +7,11 @@ import org.springframework.stereotype.Controller;
 
 /**
  * <p>
- *  前端控制器
+ * 创作人员 前端控制器
  * </p>
  *
  * @author sheepfly
- * @since 2022-02-04
+ * @since 2022-02-07
  */
 @Controller
 @RequestMapping("/author")

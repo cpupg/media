@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 创作人员 服务类
  * </p>
  *
  * @author sheepfly
- * @since 2022-02-04
+ * @since 2022-02-07
  */
 public interface IAuthorService extends IService<Author> {
 

@@ -17,6 +17,6 @@
     </environment>
   </environments>
   <mappers>
-    <package name="com.sheepfly.media.mapper"/>
+    <package name="com.sheepfly.media.dao"/>
   </mappers>
 </configuration>

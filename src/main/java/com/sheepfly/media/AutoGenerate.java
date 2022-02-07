@@ -11,11 +11,14 @@ import java.util.Scanner;
 
 public class AutoGenerate {
     public static void main(String[] args) {
+        String url = System.getProperty("url");
+        String username = System.getProperty("username");
+        String password = System.getProperty("password");
         Scanner scanner = new Scanner(System.in);
         System.out.println("请输入表名，使用逗号分隔：");
         String tableName = scanner.nextLine().toUpperCase();
         List<String> tableList = Arrays.asList(tableName.split(","));
-        FastAutoGenerator.create("jdbc:sqlite:database.sqlite", null, null)
+        FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> builder.outputDir("src\\main\\java")
                         .author("sheepfly")
                         .disableOpenDir()

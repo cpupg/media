@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 创作人员 服务实现类
  * </p>
  *
  * @author sheepfly
- * @since 2022-02-04
+ * @since 2022-02-07
  */
 @Service
 public class AuthorServiceImpl extends ServiceImpl<AuthorMapper, Author> implements IAuthorService {

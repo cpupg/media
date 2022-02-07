@@ -1,4 +1,4 @@
-package com.sheepfly.media.utils;
+package com.sheepfly.media.util;
 
 import com.baomidou.mybatisplus.core.MybatisSqlSessionFactoryBuilder;
 import org.apache.ibatis.session.SqlSession;

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 资源类型映射 服务实现类
  * </p>
  *
  * @author sheepfly
- * @since 2022-02-04
+ * @since 2022-02-07
  */
 @Service
 public class ResourceTypeMapServiceImpl extends ServiceImpl<ResourceTypeMapMapper, ResourceTypeMap> implements IResourceTypeMapService {
