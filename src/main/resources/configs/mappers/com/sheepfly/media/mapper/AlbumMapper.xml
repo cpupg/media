@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dao.AlbumMapper">
 
+  <resultMap id="album" type="com.sheepfly.media.vo.AlbumVo" autoMapping="true">
+    <id property="id" column="albumId"/>
+    <association property="author" javaType="com.sheepfly.media.vo.AuthorVo"
+                 autoMapping="true">
+      <id property="id" column="authorId"/>
+    </association>
+  </resultMap>
 </mapper>
