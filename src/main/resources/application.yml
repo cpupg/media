@@ -8,8 +8,3 @@ spring:
 mybatis-plus:
   config-location: classpath:configs/mybatis.xml
   mapper-locations: classpath:configs/mappers/**/*.xml
-
-# server
-server:
-  servlet:
-    context-path: /media
