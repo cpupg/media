@@ -45,9 +45,10 @@
     </encoder>
   </appender>
 
-  <logger name="java.sql.com.sheepfly.media.mapper" level="DEBUG" additivity="false">
+  <logger name="sql" level="DEBUG" additivity="false">
     <appender-ref ref="ALL"/>
     <appender-ref ref="SQL"/>
+    <appender-ref ref="STDOUT"/>
   </logger>
 
   <!-- 根logger等级是INFO -->
