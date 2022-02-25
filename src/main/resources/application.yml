@@ -1,10 +1,6 @@
-# datasource
-spring:
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: ${url}
-    username: ${username}
-    password: ${password}
 mybatis-plus:
-  config-location: classpath:configs/mybatis.xml
   mapper-locations: classpath:configs/mappers/**/*.xml
+  configuration:
+    log-prefix: sql.
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
