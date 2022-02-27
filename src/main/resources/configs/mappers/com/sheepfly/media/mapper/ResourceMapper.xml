@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dao.ResourceMapper">
-  <resultMap id="resource" type="com.sheepfly.media.vo.ResourceVo" autoMapping="true">
-    <id column="resourceId" property="id"/>
-    <association property="author"
-                 javaType="com.sheepfly.media.vo.AuthorVo">
-      <id property="id" column="authorId"/>
-    </association>
-    <association property="album"
-                 javaType="com.sheepfly.media.vo.AlbumVo">
-      <id property="id" column="resourceId"/>
-    </association>
+  <resultMap id="ResourceVo" type="com.sheepfly.media.vo.ResourceVo" autoMapping="true">
+    <id property="id" column="id"/>
+    <result property="createTime" column="createTime"/>
+    <result property="dir" column="dir"/>
+    <result property="filename" column="filename"/>
+    <result property="updateTime" column="updateTime"/>
+    <association property="albumVo"
+                 resultMap="com.sheepfly.media.dao.AlbumMapper.AlbumVo"
+                 columnPrefix="album_vo_"/>
+    <association property="authorVo"
+                 resultMap="com.sheepfly.media.dao.AuthorMapper.AuthorVo"
+                 columnPrefix="author_vo_"/>
   </resultMap>
+
+  <select id="selectResourceVoList"
+          parameterType="com.sheepfly.media.form.querylist.ResourceVoForm"
+          resultMap="ResourceVo">
+    SELECT RES.ID,
+           RES.DIR,
+           RES.FILENAME,
+           res.ALBUM_ID,
+           RES.CREATE_TIME,
+           RES.UPDATE_TIME,
+           ALBUM.ALBUM_NAME album_vo_album_name,
+           res.AUTHOR_ID author_vo_id,
+           author.USERNAME author_vo_username,
+           'end'
+    FROM RESOURCE RES
+           LEFT JOIN ALBUM ALBUM ON
+      ALBUM.ID = RES.ALBUM_ID
+           left join AUTHOR author on
+      AUTHOR.id = res.AUTHOR_ID
+  </select>
 </mapper>

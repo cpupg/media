@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dao.AuthorMapper">
-  <resultMap id="author" type="com.sheepfly.media.vo.AuthorVo">
-    <id property="id" column="authorId"/>
-    <association property="site" javaType="com.sheepfly.media.entity.Site">
-      <id property="id" column="siteId"/>
-    </association>
+  <resultMap id="AuthorVo"
+             type="com.sheepfly.media.vo.AuthorVo"
+             autoMapping="true">
+    <id property="id" column="id"/>
+    <result property="createTime" column="createTime"/>
+    <result property="homepage" column="homepage"/>
+    <result property="updateTime" column="updateTime"/>
+    <result property="userId" column="userId"/>
+    <result property="username" column="username"/>
+    <association property="site"
+                 resultMap="com.sheepfly.media.dao.SiteMapper.site"
+                 columnPrefix="site_"/>
   </resultMap>
 </mapper>
