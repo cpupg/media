@@ -5,11 +5,6 @@
              type="com.sheepfly.media.vo.AuthorVo"
              autoMapping="true">
     <id property="id" column="id"/>
-    <result property="createTime" column="createTime"/>
-    <result property="homepage" column="homepage"/>
-    <result property="updateTime" column="updateTime"/>
-    <result property="userId" column="userId"/>
-    <result property="username" column="username"/>
     <association property="site"
                  resultMap="com.sheepfly.media.dao.SiteMapper.site"
                  columnPrefix="site_"/>

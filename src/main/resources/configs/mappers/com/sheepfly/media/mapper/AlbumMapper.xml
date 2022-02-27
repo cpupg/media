@@ -5,9 +5,6 @@
              type="com.sheepfly.media.vo.AlbumVo"
              autoMapping="true">
     <id property="id" column="id"/>
-    <result property="albumName" column="albumName"/>
-    <result property="createTime" column="createTime"/>
-    <result property="updateTime" column="updateTime"/>
     <association property="authorVo"
                  columnPrefix="author_vo_"
                  resultMap="com.sheepfly.media.dao.AuthorMapper.AuthorVo"/>

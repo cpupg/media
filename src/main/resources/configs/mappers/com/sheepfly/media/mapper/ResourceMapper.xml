@@ -3,10 +3,6 @@
 <mapper namespace="com.sheepfly.media.dao.ResourceMapper">
   <resultMap id="ResourceVo" type="com.sheepfly.media.vo.ResourceVo" autoMapping="true">
     <id property="id" column="id"/>
-    <result property="createTime" column="createTime"/>
-    <result property="dir" column="dir"/>
-    <result property="filename" column="filename"/>
-    <result property="updateTime" column="updateTime"/>
     <association property="albumVo"
                  resultMap="com.sheepfly.media.dao.AlbumMapper.AlbumVo"
                  columnPrefix="album_vo_"/>
@@ -18,20 +14,20 @@
   <select id="selectResourceVoList"
           parameterType="com.sheepfly.media.form.querylist.ResourceVoForm"
           resultMap="ResourceVo">
-    SELECT RES.ID,
-           RES.DIR,
-           RES.FILENAME,
-           res.ALBUM_ID,
-           RES.CREATE_TIME,
-           RES.UPDATE_TIME,
-           ALBUM.ALBUM_NAME album_vo_album_name,
-           res.AUTHOR_ID author_vo_id,
-           author.USERNAME author_vo_username,
-           'end'
-    FROM RESOURCE RES
-           LEFT JOIN ALBUM ALBUM ON
-      ALBUM.ID = RES.ALBUM_ID
-           left join AUTHOR author on
-      AUTHOR.id = res.AUTHOR_ID
+    select res.id,
+      res.dir,
+      res.filename,
+      res.album_id,
+      res.create_time,
+      res.update_time,
+      res.author_id author_vo_id,
+      album.id album_vo_id,
+      album.album_name album_vo_album_name,
+      author.username author_vo_username
+    from resource res
+    left join album album
+        on album.id = res.album_id
+    left join author author
+        on author.id = res.author_id
   </select>
 </mapper>
