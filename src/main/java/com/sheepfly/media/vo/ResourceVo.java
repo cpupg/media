@@ -1,7 +1,5 @@
 package com.sheepfly.media.vo;
 
-import com.sheepfly.media.entity.Author;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -30,7 +28,7 @@ public class ResourceVo implements Serializable {
     /**
      * 作者。
      */
-    private Author author;
+    private AuthorVo authorVo;
 
     /**
      * 专辑。
@@ -53,7 +51,7 @@ public class ResourceVo implements Serializable {
                 "id='" + id + '\'' +
                 ", filename='" + filename + '\'' +
                 ", dir='" + dir + '\'' +
-                ", author=" + author +
+                ", author=" + authorVo +
                 ", albumVo=" + albumVo +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
@@ -84,12 +82,12 @@ public class ResourceVo implements Serializable {
         this.dir = dir;
     }
 
-    public Author getAuthor() {
-        return author;
+    public AuthorVo getAuthorVo() {
+        return authorVo;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorVo(AuthorVo authorVo) {
+        this.authorVo = authorVo;
     }
 
     public AlbumVo getAlbumVo() {

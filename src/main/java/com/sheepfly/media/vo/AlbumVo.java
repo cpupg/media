@@ -1,7 +1,5 @@
 package com.sheepfly.media.vo;
 
-import com.sheepfly.media.entity.Author;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -26,7 +24,7 @@ public class AlbumVo implements Serializable {
     /**
      * 专辑作者
      */
-    private Author author;
+    private AuthorVo authorVo;
 
     /**
      * 创建时间
@@ -43,7 +41,7 @@ public class AlbumVo implements Serializable {
         return "AlbumVo{" +
                 "id='" + id + '\'' +
                 ", albumName='" + albumName + '\'' +
-                ", author=" + author +
+                ", authorVo=" + authorVo +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
@@ -65,12 +63,12 @@ public class AlbumVo implements Serializable {
         this.albumName = albumName;
     }
 
-    public Author getAuthor() {
-        return author;
+    public AuthorVo getAuthorVo() {
+        return authorVo;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorVo(AuthorVo authorVo) {
+        this.authorVo = authorVo;
     }
 
     public LocalDate getCreateTime() {
