@@ -3,7 +3,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
-  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <bean id="sqlSessionFactory"
+        class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
     <property name="dataSource" ref="h2DataSource"/>
     <property name="plugins">
       <array>
