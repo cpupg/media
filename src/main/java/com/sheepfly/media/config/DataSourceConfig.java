@@ -17,7 +17,7 @@ public class DataSourceConfig {
     private static final Logger log = LoggerFactory.getLogger(DataSourceConfig.class);
 
     @Bean
-    public DataSource getDataSource() {
+    public DataSource h2DataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         Properties properties = new Properties();
         File file = new File("datasource.properties");

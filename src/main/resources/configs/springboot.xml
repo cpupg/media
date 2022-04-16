@@ -4,7 +4,7 @@
           http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-    <property name="dataSource" ref="getDataSource"/>
+    <property name="dataSource" ref="h2DataSource"/>
     <property name="plugins">
       <array>
         <bean class="com.github.pagehelper.PageInterceptor">
