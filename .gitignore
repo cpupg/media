@@ -11,6 +11,7 @@ target
 # other
 **/Application.java
 **/ApplicationTest.java
+**/SpringApplicationTest.java
 src/main/static
 
 # 忽略数据源配置，防止泄露数据库
