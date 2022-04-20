@@ -55,7 +55,7 @@ public class SiteController {
         site.setCreateTime(LocalDate.now());
         boolean save = iSiteService.save(site);
         if (save) {
-            return DataObject.success(iSiteService.list());
+            return DataObject.success("添加成功");
         } else {
             return DataObject.fail("添加失败");
         }
