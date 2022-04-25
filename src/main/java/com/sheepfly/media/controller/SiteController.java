@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -35,6 +36,16 @@ public class SiteController {
     @Resource(name = "siteServiceImpl")
     private ISiteService iSiteService;
 
+    /**
+     * 查询系统中的站点。
+     *
+     * @param vo 查询参数
+     *
+     * @return 和输入参数中的条件匹配的站点。
+     *
+     * @throws InvocationTargetException 异常
+     * @throws IllegalAccessException 异常
+     */
     @PostMapping("/fetchSiteVoListPro")
     @ResponseBody
     public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteForm, Object> vo)
@@ -48,6 +59,15 @@ public class SiteController {
         return proTableObject;
     }
 
+    /**
+     * 录入新站点。
+     *
+     * <p>新站点的id由后台生成，创建时间由前台传入。</p>
+     *
+     * @param site 要录入的站点
+     *
+     * @return 录入结果。
+     */
     @PostMapping("/addSite")
     @ResponseBody
     public DataObject<Site> addSite(@RequestBody Site site) {
