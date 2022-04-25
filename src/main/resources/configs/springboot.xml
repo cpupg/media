@@ -8,6 +8,8 @@
   <bean id="sqlSessionFactory"
         class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
     <property name="dataSource" ref="h2DataSource"/>
+    <property name="configLocation" value="classpath:configs/mybatix-plus.xml"/>
+    <property name="mapperLocations" value="classpath:configs/mapper/**/*Mapper.xml"/>
     <property name="plugins">
       <array>
         <bean class="com.github.pagehelper.PageInterceptor">
