@@ -11,6 +11,7 @@ import com.sheepfly.media.vo.common.DataObject;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,13 +72,30 @@ public class SiteController {
     @PostMapping("/addSite")
     @ResponseBody
     public DataObject<Site> addSite(@RequestBody Site site) {
-        // todo 生成id
         site.setCreateTime(LocalDate.now());
         boolean save = iSiteService.save(site);
         if (save) {
             return DataObject.success("添加成功");
         } else {
             return DataObject.fail("添加失败");
+        }
+    }
+
+    /**
+     * 删除站点。
+     *
+     * @param siteId 要删除的站点id。
+     *
+     * @return 操作结果。
+     */
+    @GetMapping("/delete")
+    @ResponseBody
+    public DataObject<Object> deleteSite(@RequestParam("id") long siteId) {
+        boolean result = iSiteService.removeById(siteId);
+        if (result) {
+            return DataObject.success("删除成功");
+        } else {
+            return DataObject.fail("删除失败");
         }
     }
 }
