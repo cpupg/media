@@ -16,6 +16,22 @@ import java.util.Properties;
 public class DataSourceConfig {
     private static final Logger log = LoggerFactory.getLogger(DataSourceConfig.class);
 
+    /**
+     * 初始化h2数据源。
+     *
+     * <p>先从类路径的datasource.properties中读取数据源配置，如果类路径中不存在此文件，则从系统
+     * 属性中获取数据源配置。</p>
+     *
+     * <p>不管是从配置文件读取还是从系统属性读取，都需要有以下属性：</p>
+     * <ul>
+     * <li>driverClassName：驱动程序</li>
+     * <li>url：jdbc连接</li>
+     * <li>username：用户名</li>
+     * <li>password：密码</li>
+     * </ul>
+     *
+     * @return 数据源。
+     */
     @Bean
     public DataSource h2DataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

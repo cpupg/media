@@ -1,12 +1,13 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
   <bean id="keyGenerator" class="com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator"/>
 
   <bean id="sqlSessionFactory"
-        class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+      class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+    <!--可以根据需求更换为其他数据源-->
     <property name="dataSource" ref="h2DataSource"/>
     <property name="configLocation" value="classpath:configs/mybatix-plus.xml"/>
     <property name="mapperLocations" value="classpath:configs/mapper/**/*Mapper.xml"/>

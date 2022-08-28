@@ -9,7 +9,7 @@ public class DataObject<T> {
     /**
      * 状态码。
      */
-    private long statusCode;
+    private String statusCode;
     /**
      * 返回前台的数据。
      */
@@ -22,7 +22,7 @@ public class DataObject<T> {
     public DataObject() {
     }
 
-    public DataObject(long statusCode, T data, String message) {
+    public DataObject(String statusCode, T data, String message) {
         this.statusCode = statusCode;
         this.data = data;
         this.message = message;
@@ -52,11 +52,11 @@ public class DataObject<T> {
         return new DataObject(StatusCode.FAILED.getCode(), null, message);
     }
 
-    public long getStatusCode() {
+    public String getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(long statusCode) {
+    public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
 
