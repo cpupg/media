@@ -16,6 +16,7 @@ src/main/static
 
 # 忽略数据源配置，防止泄露数据库
 datasource.properties
+*.db
 
 # logs
 logs/

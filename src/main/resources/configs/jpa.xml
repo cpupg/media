@@ -1,0 +1,39 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+  <bean id="entityManagerFactory"
+      class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="h2DataSource"/>
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    </property>
+    <property name="packagesToScan" value="com.sheepfly.media.entity"/>
+    <property name="jpaProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+        <prop key="hibernate.max_fetch_depth">3</prop>
+        <prop key="hibernate.jdbc.fetch_size">50</prop>
+        <prop key="hibernate.jdbc.batch_size">10</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.use_sql_comments">true</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="org.hibernate.envers.audit_table_suffix">_H</prop>
+        <prop key="org.hibernate.envers.revision_field_name">AUDIT_REVISION</prop>
+        <prop key="org.hibernate.envers.revision_type_field_name">ACTION_TYPE</prop>
+        <prop key="org.hibernate.envers.audit_strategy">org.hibernate.envers.strategy.internal.ValidityAuditStrategy
+        </prop>
+        <prop key="org.hibernate.envers.audit_strategy_validity_end_rev_field_name">AUDIT_REVISION_END</prop>
+        <prop key="org.hibernate.envers.audit_strategy_validity_store_revend_timestamp">True</prop>
+        <prop key="org.hibernate.envers.audit_strategy_validity_revend_timestamp_field_name">AUDIT_REVISION_END_TS
+        </prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionManager"
+      class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+  </bean>
+</beans>

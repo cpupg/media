@@ -3,6 +3,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
+  <import resource="jpa.xml"/>
   <bean id="keyGenerator" class="com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator"/>
 
   <bean id="sqlSessionFactory"
