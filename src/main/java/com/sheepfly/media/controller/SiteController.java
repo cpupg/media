@@ -91,6 +91,10 @@ public class SiteController {
     @GetMapping("/delete")
     @ResponseBody
     public DataObject<Object> deleteSite(@RequestParam("id") long siteId) {
+        Site site = iSiteService.getById(siteId);
+        if (site == null) {
+            return DataObject.fail("删除失败，记录不存在1");
+        }
         boolean result = iSiteService.removeById(siteId);
         if (result) {
             return DataObject.success("删除成功");

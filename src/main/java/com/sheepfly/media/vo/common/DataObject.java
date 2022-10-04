@@ -52,6 +52,14 @@ public class DataObject<T> {
         return new DataObject(StatusCode.FAILED.getCode(), null, message);
     }
 
+    public static <T> DataObject fail(ErrorCode errorCode, Object data) {
+        return new DataObject(errorCode.getErrorCode(), data, errorCode.getMessage());
+    }
+
+    public static <T> DataObject fail(ErrorCode errorCode, String message, Object data) {
+        return new DataObject(errorCode.getErrorCode(), data, message);
+    }
+
     public String getStatusCode() {
         return statusCode;
     }

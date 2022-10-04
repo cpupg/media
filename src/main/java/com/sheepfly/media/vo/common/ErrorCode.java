@@ -44,6 +44,10 @@ package com.sheepfly.media.vo.common;
 public enum ErrorCode {
     OPERATION_SUCCESS("00000000", "操作成功"),
     USER_NOT_LOG_IN("G0100001", "用户未登录"),
+    DELETE_NOT_EXIST_DATA("D0001001", "要删除的数据不存在"),
+    SAVE_DUPLICATED_DATA("C0001002", "重复的数据"),
+    REWRITE_FILE("K0002001", "覆盖文件"),
+    FILE_NOT_FOUND("K0002002", "文件不存在"),
     UNEXPECT_ERROR("Z0999999", "未知错误，请联系管理员");
     private String errorCode;
     private String message;

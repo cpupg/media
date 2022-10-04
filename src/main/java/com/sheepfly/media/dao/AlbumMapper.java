@@ -1,7 +1,7 @@
 package com.sheepfly.media.dao;
 
-import com.sheepfly.media.entity.Album;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.sheepfly.media.entity.Album;
 
 /**
  * <p>
