@@ -7,9 +7,10 @@ import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.form.querylist.SiteForm;
 import com.sheepfly.media.service.ISiteService;
 import com.sheepfly.media.util.FormUtil;
-import com.sheepfly.media.vo.common.DataObject;
+import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
+import com.sheepfly.media.vo.common.ResponseData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,13 +72,13 @@ public class SiteController {
      */
     @PostMapping("/addSite")
     @ResponseBody
-    public DataObject<Site> addSite(@RequestBody Site site) {
+    public ResponseData<Site> addSite(@RequestBody Site site) {
         site.setCreateTime(LocalDate.now());
         boolean save = iSiteService.save(site);
         if (save) {
-            return DataObject.success("添加成功");
+            return ResponseData.success("添加成功");
         } else {
-            return DataObject.fail("添加失败");
+            return ResponseData.fail("添加失败");
         }
     }
 
@@ -90,16 +91,16 @@ public class SiteController {
      */
     @GetMapping("/delete")
     @ResponseBody
-    public DataObject<Object> deleteSite(@RequestParam("id") long siteId) {
+    public ResponseData<Object> deleteSite(@RequestParam("id") long siteId) {
         Site site = iSiteService.getById(siteId);
         if (site == null) {
-            return DataObject.fail("删除失败，记录不存在1");
+            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
         boolean result = iSiteService.removeById(siteId);
         if (result) {
-            return DataObject.success("删除成功");
+            return ResponseData.success("删除成功");
         } else {
-            return DataObject.fail("删除失败");
+            return ResponseData.fail("删除失败");
         }
     }
 }
