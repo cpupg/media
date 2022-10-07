@@ -3,6 +3,7 @@ package com.sheepfly.media.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -50,7 +51,10 @@ public class Resource implements Serializable {
     private String albumId;
 
     /**
-     * 创建时间
+     * 创建时间。
+     *
+     * <p>创建时间是资源生成时间。对视频和照片来说，创建时间就是拍摄时间。如果是新闻，则创建时间
+     * 是新闻发生时间，而不是发稿时间，不管是视频稿还是文字稿。</p>
      */
     @TableField("CREATE_TIME")
     private LocalDate createTime;
@@ -60,6 +64,12 @@ public class Resource implements Serializable {
      */
     @TableField("UPDATE_TIME")
     private LocalDate updateTime;
+
+    /**
+     * 保存时间（入库时间）。
+     */
+    @TableField("SAVE_TIME")
+    private LocalDate saveTime;
 
 
     public String getId() {
@@ -118,16 +128,25 @@ public class Resource implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public LocalDate getSaveTime() {
+        return saveTime;
+    }
+
+    public void setSaveTime(LocalDate saveTime) {
+        this.saveTime = saveTime;
+    }
+
     @Override
     public String toString() {
         return "Resource{" +
-        "id=" + id +
-        ", filename=" + filename +
-        ", dir=" + dir +
-        ", authorId=" + authorId +
-        ", albumId=" + albumId +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        "}";
+                "id='" + id + '\'' +
+                ", filename='" + filename + '\'' +
+                ", dir='" + dir + '\'' +
+                ", authorId='" + authorId + '\'' +
+                ", albumId='" + albumId + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", saveTime=" + saveTime +
+                '}';
     }
 }
