@@ -36,4 +36,10 @@
       class="org.springframework.orm.jpa.JpaTransactionManager">
     <property name="entityManagerFactory" ref="entityManagerFactory"/>
   </bean>
+
+  <!--雪花id生成器，使用cn.hutool.core.lang.Snowflake.Snowflake(long, long)-->
+  <bean id="snowFlake" class="cn.hutool.core.lang.Snowflake">
+    <constructor-arg index="0" value="0"/>
+    <constructor-arg index="1" value="0"/>
+  </bean>
 </beans>
