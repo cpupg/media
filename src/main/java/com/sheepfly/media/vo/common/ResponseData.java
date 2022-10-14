@@ -37,7 +37,7 @@ public class ResponseData<T> {
     }
 
     public static <T> ResponseData success(String message) {
-        return new ResponseData(StatusCode.SUCCESS.getCode(), null, message);
+        return new ResponseData(ErrorCode.OPERATION_SUCCESS.getErrorCode(), null, message);
     }
 
     public static <T> ResponseData fail(T data) {

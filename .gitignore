@@ -18,6 +18,8 @@ src/main/static
 datasource.properties
 *.db
 
+.jpb
+
 # logs
 logs/
 upload

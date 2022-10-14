@@ -1,16 +1,20 @@
 package com.sheepfly.media.service;
 
+import com.sheepfly.media.entity.EntityInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * jpa增删改查。
  *
+ * <p>接口继承了两个父接口，一个是jpa的基本增删改查，一个是调用criteria的增删改查。</p>
+ *
  * @param <T> 实体类型。
  * @param <ID> 主键类型。
+ * @param <D> 实体类对应的repository。
  *
  * @author sheepfly
  */
-public interface BaseJpaService<T, ID, D extends JpaRepository<T, ID>> {
+public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepository<T, ID>> {
     /**
      * 根据id查找数据。
      *
@@ -22,6 +26,8 @@ public interface BaseJpaService<T, ID, D extends JpaRepository<T, ID>> {
 
     /**
      * 保存一个实体对象，需要自行设置主键。
+     *
+     * <p>保存前会先检查是否设置了主键id，若没有设置主键id，则自动生成主键id。</p>
      *
      * @param t 实体对象。
      *
