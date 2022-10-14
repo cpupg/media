@@ -1,8 +1,12 @@
 package com.sheepfly.media.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.metamodel.StaticMetamodel;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -14,39 +18,41 @@ import java.time.LocalDate;
  * @author sheepfly
  * @since 2022-02-07
  */
-@TableName("SITE")
-public class Site implements Serializable {
+@Entity
+@Table
+@StaticMetamodel(Site.class)
+public class Site implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * ID
      */
-    @TableId("ID")
+    @Id
     private String id;
 
     /**
      * 网站名称
      */
-    @TableField("SITE_NAME")
+    @Column(name = "SITE_NAME")
     private String siteName;
 
     /**
      * 网站地址
      */
-    @TableField("URL")
+    @Column(name = "URL")
     private String url;
 
     /**
      * 创建时间
      */
-    @TableField("CREATE_TIME")
+    @Column(name = "CREATE_TIME")
     private LocalDate createTime;
 
     /**
      * 更细时间
      */
-    @TableField("UPDATE_TIME")
+    @Column(name = "UPDATE_TIME")
     private LocalDate updateTime;
 
 
@@ -93,11 +99,11 @@ public class Site implements Serializable {
     @Override
     public String toString() {
         return "Site{" +
-        "id=" + id +
-        ", siteName=" + siteName +
-        ", url=" + url +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        "}";
+                "id=" + id +
+                ", siteName=" + siteName +
+                ", url=" + url +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                "}";
     }
 }

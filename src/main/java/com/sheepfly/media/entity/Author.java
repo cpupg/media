@@ -1,8 +1,11 @@
 package com.sheepfly.media.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -14,51 +17,52 @@ import java.time.LocalDate;
  * @author sheepfly
  * @since 2022-02-07
  */
-@TableName("AUTHOR")
-public class Author implements Serializable {
+@Table
+@Entity
+public class Author implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * ID
      */
-    @TableId("ID")
+    @Id
     private String id;
 
     /**
      * 用户在站点注册时的id
      */
-    @TableField("USER_ID")
+    @Column(name = "USER_ID")
     private String userId;
 
     /**
      * 用户名
      */
-    @TableField("USERNAME")
+    @Column(name = "USERNAME")
     private String username;
 
     /**
      * 注册站点ID
      */
-    @TableField("SITE")
+    @Column(name = "SITE")
     private String site;
 
     /**
      * 主页
      */
-    @TableField("HOMEPAGE")
+    @Column(name = "HOMEPAGE")
     private String homepage;
 
     /**
      * 创建时间
      */
-    @TableField("CREATE_TIME")
+    @Column(name = "CREATE_TIME")
     private LocalDate createTime;
 
     /**
      * 更新时间
      */
-    @TableField("UPDATE_TIME")
+    @Column(name = "UPDATE_TIME")
     private LocalDate updateTime;
 
 
@@ -121,13 +125,13 @@ public class Author implements Serializable {
     @Override
     public String toString() {
         return "Author{" +
-        "id=" + id +
-        ", userId=" + userId +
-        ", username=" + username +
-        ", site=" + site +
-        ", homepage=" + homepage +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        "}";
+                "id=" + id +
+                ", userId=" + userId +
+                ", username=" + username +
+                ", site=" + site +
+                ", homepage=" + homepage +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                "}";
     }
 }

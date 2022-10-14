@@ -1,7 +1,7 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.ResourceTypeMap;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.sheepfly.media.repository.ResourceTypeMapRepository;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author sheepfly
  * @since 2022-02-07
  */
-public interface IResourceTypeMapService extends IService<ResourceTypeMap> {
+public interface IResourceTypeMapService extends BaseJpaService<ResourceTypeMap, String, ResourceTypeMapRepository> {
 
 }

@@ -1,13 +1,13 @@
 package com.sheepfly.media.repository;
 
-import com.sheepfly.media.entity.Album;
+import com.sheepfly.media.entity.Site;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * 专辑仓库。
+ * 网站仓库。
  *
- * @author 东方红
+ * @author sheepfly
  */
-public interface AlbumRepository extends JpaRepository<Album, String>, JpaSpecificationExecutor<Album> {
+public interface SiteRepository extends JpaRepository<Site, String>, JpaSpecificationExecutor<Site> {
 }

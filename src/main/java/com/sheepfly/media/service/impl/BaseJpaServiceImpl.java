@@ -1,7 +1,7 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.entity.EntityInterface;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.service.BaseJpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;

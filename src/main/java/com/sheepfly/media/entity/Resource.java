@@ -1,9 +1,11 @@
 package com.sheepfly.media.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -15,39 +17,40 @@ import java.time.LocalDate;
  * @author sheepfly
  * @since 2022-02-07
  */
-@TableName("RESOURCE")
-public class Resource implements Serializable {
+@Entity
+@Table(name = "RESOURCE")
+public class Resource implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * ID
      */
-    @TableId("ID")
+    @Id
     private String id;
 
     /**
      * 文件名
      */
-    @TableField("FILENAME")
+    @Column(name = "FILENAME")
     private String filename;
 
     /**
      * 资源目录
      */
-    @TableField("DIR")
+    @Column(name = "DIR")
     private String dir;
 
     /**
      * 作者id
      */
-    @TableField("AUTHOR_ID")
+    @Column(name = "AUTHOR_ID")
     private String authorId;
 
     /**
      * 专辑id
      */
-    @TableField("ALBUM_ID")
+    @Column(name = "ALBUM_ID")
     private String albumId;
 
     /**
@@ -56,19 +59,19 @@ public class Resource implements Serializable {
      * <p>创建时间是资源生成时间。对视频和照片来说，创建时间就是拍摄时间。如果是新闻，则创建时间
      * 是新闻发生时间，而不是发稿时间，不管是视频稿还是文字稿。</p>
      */
-    @TableField("CREATE_TIME")
+    @Column(name = "CREATE_TIME")
     private LocalDate createTime;
 
     /**
      * 更新时间
      */
-    @TableField("UPDATE_TIME")
+    @Column(name = "UPDATE_TIME")
     private LocalDate updateTime;
 
     /**
      * 保存时间（入库时间）。
      */
-    @TableField("SAVE_TIME")
+    @Column(name = "SAVE_TIME")
     private LocalDate saveTime;
 
 

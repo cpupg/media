@@ -1,7 +1,7 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.Site;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.sheepfly.media.repository.SiteRepository;
 
 /**
  * <p>
@@ -11,6 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author sheepfly
  * @since 2022-02-07
  */
-public interface ISiteService extends IService<Site> {
-
+public interface ISiteService extends BaseJpaService<Site, String, SiteRepository> {
 }

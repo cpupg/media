@@ -1,7 +1,5 @@
 package com.sheepfly.media.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.form.querylist.ResourceVoForm;
 import com.sheepfly.media.vo.ResourceVo;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * @author sheepfly
  * @since 2022-02-07
  */
-public interface ResourceMapper extends BaseMapper<Resource> {
+public interface ResourceMapper {
     /**
      * 查询资源。
      *

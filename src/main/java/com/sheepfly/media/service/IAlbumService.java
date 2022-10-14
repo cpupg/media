@@ -1,7 +1,7 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.Album;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.sheepfly.media.repository.AlbumRepository;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author sheepfly
  * @since 2022-02-07
  */
-public interface IAlbumService extends IService<Album> {
+public interface IAlbumService extends BaseJpaService<Album, String, AlbumRepository> {
 
 }

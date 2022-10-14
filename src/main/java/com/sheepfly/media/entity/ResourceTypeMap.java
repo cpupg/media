@@ -1,8 +1,11 @@
 package com.sheepfly.media.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -14,39 +17,40 @@ import java.time.LocalDate;
  * @author sheepfly
  * @since 2022-02-07
  */
-@TableName("RESOURCE_TYPE_MAP")
-public class ResourceTypeMap implements Serializable {
+@Entity
+@Table(name = "RESOURCE_TYPE_MAP")
+public class ResourceTypeMap implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键
      */
-    @TableId("ID")
+    @Id
     private String id;
 
     /**
      * 父类型
      */
-    @TableField("PARENT_ID")
+    @Column(name = "PARENT_ID")
     private String parentId;
 
     /**
      * 名称
      */
-    @TableField("NAME")
+    @Column(name = "NAME")
     private String name;
 
     /**
      * 创建时间
      */
-    @TableField("CREATE_TIME")
+    @Column(name = "CREATE_TIME")
     private LocalDate createTime;
 
     /**
      * 更新时间
      */
-    @TableField("UPDATE_TIME")
+    @Column(name = "UPDATE_TIME")
     private LocalDate updateTime;
 
 
@@ -92,12 +96,12 @@ public class ResourceTypeMap implements Serializable {
 
     @Override
     public String toString() {
-        return "ResourceTypeMap{" +
-        "id=" + id +
-        ", parentId=" + parentId +
-        ", name=" + name +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        "}";
+        return "ResourceTypeMapRepository{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", name=" + name +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                "}";
     }
 }

@@ -1,8 +1,6 @@
 package com.sheepfly.media.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +20,9 @@ import static javax.persistence.GenerationType.IDENTITY;
  * @author sheepfly
  * @since 2022-02-07
  */
-@Table(name = "ALBUM")
 @Entity
-@TableName("ALBUM")
-public class Album implements Serializable {
+@Table(name = "ALBUM")
+public class Album implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,34 +31,29 @@ public class Album implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @TableId("ID")
     private String id;
 
     /**
      * 专辑
      */
-    @TableField("ALBUM_NAME")
     @Column(name = "ALBUM_NAME")
     private String albumName;
 
     /**
      * 专辑作者
      */
-    @TableField("AUTHOR_ID")
     @Column(name = "AUTHOR_ID")
     private String authorId;
 
     /**
      * 创建时间
      */
-    @TableField("CREATE_TIME")
     @Column(name = "CREATE_TIME")
     private LocalDate createTime;
 
     /**
      * 更新时间
      */
-    @TableField("UPDATE_TIME")
     @Column(name = "UPDATE_TIME")
     private LocalDate updateTime;
 

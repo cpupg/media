@@ -1,9 +1,7 @@
 package com.sheepfly.media.service.impl;
 
 import com.sheepfly.media.entity.ResourceTypeMap;
-import com.sheepfly.media.dao.ResourceTypeMapMapper;
-import com.sheepfly.media.service.IResourceTypeMapService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sheepfly.media.repository.ResourceTypeMapRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-02-07
  */
 @Service
-public class ResourceTypeMapServiceImpl extends ServiceImpl<ResourceTypeMapMapper, ResourceTypeMap> implements IResourceTypeMapService {
+public class ResourceTypeMapServiceImpl extends BaseJpaServiceImpl<ResourceTypeMap, String, ResourceTypeMapRepository> {
 
 }

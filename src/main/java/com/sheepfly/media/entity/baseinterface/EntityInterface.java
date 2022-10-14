@@ -1,4 +1,4 @@
-package com.sheepfly.media.entity;
+package com.sheepfly.media.entity.baseinterface;
 
 /**
  * 实体类接口。

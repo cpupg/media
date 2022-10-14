@@ -1,9 +1,7 @@
 package com.sheepfly.media.service.impl;
 
 import com.sheepfly.media.entity.Author;
-import com.sheepfly.media.dao.AuthorMapper;
-import com.sheepfly.media.service.IAuthorService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sheepfly.media.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-02-07
  */
 @Service
-public class AuthorServiceImpl extends ServiceImpl<AuthorMapper, Author> implements IAuthorService {
+public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, AuthorRepository> {
 
 }

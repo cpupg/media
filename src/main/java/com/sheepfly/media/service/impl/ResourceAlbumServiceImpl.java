@@ -1,9 +1,7 @@
 package com.sheepfly.media.service.impl;
 
 import com.sheepfly.media.entity.ResourceAlbum;
-import com.sheepfly.media.dao.ResourceAlbumMapper;
-import com.sheepfly.media.service.IResourceAlbumService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sheepfly.media.repository.ResourceAlbumRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-02-07
  */
 @Service
-public class ResourceAlbumServiceImpl extends ServiceImpl<ResourceAlbumMapper, ResourceAlbum> implements IResourceAlbumService {
+public class ResourceAlbumServiceImpl extends BaseJpaServiceImpl<ResourceAlbum, String, ResourceAlbumRepository> {
 
 }

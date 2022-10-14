@@ -1,7 +1,7 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.Author;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.sheepfly.media.repository.AuthorRepository;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author sheepfly
  * @since 2022-02-07
  */
-public interface IAuthorService extends IService<Author> {
+public interface IAuthorService extends BaseJpaService<Author, String, AuthorRepository> {
 
 }

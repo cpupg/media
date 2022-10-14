@@ -1,8 +1,8 @@
 package com.sheepfly.media.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.form.querylist.ResourceVoForm;
+import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.vo.ResourceVo;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author sheepfly
  * @since 2022-02-07
  */
-public interface IResourceService extends IService<Resource> {
+public interface IResourceService extends BaseJpaService<Resource, String, ResourceRepository> {
     /**
      * 查询资源。
      *

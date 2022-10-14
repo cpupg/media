@@ -1,6 +1,6 @@
 package com.sheepfly.media.service;
 
-import com.sheepfly.media.entity.EntityInterface;
+import com.sheepfly.media.entity.baseinterface.EntityInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
