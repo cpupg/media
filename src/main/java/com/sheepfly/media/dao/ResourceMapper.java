@@ -1,6 +1,6 @@
 package com.sheepfly.media.dao;
 
-import com.sheepfly.media.form.querylist.ResourceVoForm;
+import com.sheepfly.media.form.filter.ResourceFilter;
 import com.sheepfly.media.vo.ResourceVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,5 +23,5 @@ public interface ResourceMapper {
      *
      * @return 资源列表。
      */
-    List<ResourceVo> selectResourceVoList(ResourceVoForm form);
+    List<ResourceVo> selectResourceVoList(ResourceFilter form);
 }

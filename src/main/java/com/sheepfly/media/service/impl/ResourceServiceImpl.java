@@ -2,7 +2,7 @@ package com.sheepfly.media.service.impl;
 
 import com.sheepfly.media.dao.ResourceMapper;
 import com.sheepfly.media.entity.Resource;
-import com.sheepfly.media.form.querylist.ResourceVoForm;
+import com.sheepfly.media.form.filter.ResourceFilter;
 import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.service.IResourceService;
 import com.sheepfly.media.vo.ResourceVo;
@@ -30,7 +30,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     private ResourceMapper resourceMapper;
 
     @Override
-    public List<ResourceVo> queryResourceVoList(ResourceVoForm form) {
+    public List<ResourceVo> queryResourceVoList(ResourceFilter form) {
         return resourceMapper.selectResourceVoList(form);
     }
 }

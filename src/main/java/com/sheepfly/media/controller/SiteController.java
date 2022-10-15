@@ -1,12 +1,11 @@
 package com.sheepfly.media.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.entity.Site;
-import com.sheepfly.media.form.querylist.SiteForm;
+import com.sheepfly.media.form.data.SiteData;
+import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.util.FormUtil;
+import com.sheepfly.media.util.BeanUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
@@ -20,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-import java.util.List;
 
 /**
  * <p>
@@ -36,7 +32,7 @@ import java.util.List;
 @RequestMapping("/site")
 public class SiteController {
     @Resource(name = "siteServiceImpl")
-    private ISiteService iSiteService;
+    private ISiteService service;
 
     /**
      * 查询系统中的站点。
@@ -44,21 +40,11 @@ public class SiteController {
      * @param vo 查询参数
      *
      * @return 和输入参数中的条件匹配的站点。
-     *
-     * @throws InvocationTargetException 异常
-     * @throws IllegalAccessException 异常
      */
     @PostMapping("/fetchSiteVoListPro")
     @ResponseBody
-    public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteForm, Object> vo)
-            throws InvocationTargetException, IllegalAccessException {
-        QueryWrapper<Site> queryWrapper = new QueryWrapper<>();
-        SiteForm siteForm = vo.getParams();
-        PageHelper.startPage(siteForm.getCurrent(), siteForm.getPageSize());
-        List<Site> list = iSiteService.list(FormUtil.formToWrapper(vo.getParams()));
-        int count = iSiteService.count(queryWrapper);
-        ProTableObject proTableObject = new ProTableObject(count, list);
-        return proTableObject;
+    public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteFilter, Object> vo) {
+        return service.querySiteList(vo);
     }
 
     /**
@@ -66,20 +52,16 @@ public class SiteController {
      *
      * <p>新站点的id由后台生成，创建时间由前台传入。</p>
      *
-     * @param site 要录入的站点
+     * @param siteData 要录入的站点
      *
      * @return 录入结果。
      */
     @PostMapping("/addSite")
     @ResponseBody
-    public ResponseData<Site> addSite(@RequestBody Site site) {
-        site.setCreateTime(LocalDate.now());
-        boolean save = iSiteService.save(site);
-        if (save) {
-            return ResponseData.success("添加成功");
-        } else {
-            return ResponseData.fail("添加失败");
-        }
+    public ResponseData<Site> addSite(@RequestBody SiteData siteData) {
+        siteData.setId(null);
+        Site savedSite = service.save(BeanUtil.dataToEntity(siteData, new Site()));
+        return ResponseData.success(savedSite);
     }
 
     /**
@@ -91,16 +73,12 @@ public class SiteController {
      */
     @GetMapping("/delete")
     @ResponseBody
-    public ResponseData<Object> deleteSite(@RequestParam("id") long siteId) {
-        Site site = iSiteService.getById(siteId);
-        if (site == null) {
+    public ResponseData<Object> deleteSite(@RequestParam("id") String siteId) {
+        if (!service.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
-        }
-        boolean result = iSiteService.removeById(siteId);
-        if (result) {
-            return ResponseData.success("删除成功");
         } else {
-            return ResponseData.fail("删除失败");
+            service.deleteById(siteId);
+            return ResponseData.success();
         }
     }
 }

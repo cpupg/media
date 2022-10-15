@@ -1,4 +1,4 @@
-package com.sheepfly.media.form.querylist;
+package com.sheepfly.media.form.filter;
 
 import com.sheepfly.media.vo.common.ProPaginationForm;
 
@@ -7,12 +7,12 @@ import com.sheepfly.media.vo.common.ProPaginationForm;
  *
  * @author sheepfly
  */
-public class SiteForm extends ProPaginationForm {
+public class SiteFilter extends ProPaginationForm {
     private String siteName;
 
     @Override
     public String toString() {
-        return "SiteForm{" + "siteName='" + siteName + '\'' + '}';
+        return "SiteFilter{" + "siteName='" + siteName + '\'' + '}';
     }
 
     public String getSiteName() {

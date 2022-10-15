@@ -3,4 +3,27 @@
 <mapper namespace="com.sheepfly.media.dao.SiteMapper">
   <resultMap id="site" type="com.sheepfly.media.entity.Site" autoMapping="true">
   </resultMap>
+  <select id="querySiteList"
+      parameterType="com.sheepfly.media.form.filter.SiteFilter"
+      resultType="com.sheepfly.media.entity.Site">
+    select ID,
+    SITE_NAME,
+    URL,
+    CREATE_TIME,
+    UPDATE_TIME
+    from SITE
+    <where>
+      <if test="siteName != null and !siteName.equals('')">SITE_NAME = #{siteName}</if>
+    </where>
+    order by id desc
+  </select>
+  <select id="countSiteList"
+      parameterType="com.sheepfly.media.form.filter.SiteFilter"
+      resultType="int">
+    select count(1)
+    from SITE
+    <where>
+      <if test="siteName != null and !siteName.equals('')">SITE_NAME = #{siteName}</if>
+    </where>
+  </select>
 </mapper>

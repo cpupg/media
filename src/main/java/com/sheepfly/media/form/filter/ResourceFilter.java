@@ -1,4 +1,4 @@
-package com.sheepfly.media.form.querylist;
+package com.sheepfly.media.form.filter;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author sheepfly
  */
-public class ResourceVoForm implements Serializable {
+public class ResourceFilter implements Serializable {
     /**
      * 文件名。
      */
@@ -17,7 +17,7 @@ public class ResourceVoForm implements Serializable {
 
     @Override
     public String toString() {
-        return "ResourceVoForm{" +
+        return "ResourceFilter{" +
                 "filename='" + filename + '\'' +
                 '}';
     }

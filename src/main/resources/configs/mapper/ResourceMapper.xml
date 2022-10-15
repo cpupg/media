@@ -12,8 +12,8 @@
   </resultMap>
 
   <select id="selectResourceVoList"
-          parameterType="com.sheepfly.media.form.querylist.ResourceVoForm"
-          resultMap="ResourceVo">
+      parameterType="com.sheepfly.media.form.filter.ResourceFilter"
+      resultMap="ResourceVo">
     select res.id,
       res.dir,
       res.filename,

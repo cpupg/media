@@ -34,6 +34,19 @@ public class ProTableObject<T> {
         this.data = data;
     }
 
+    /**
+     * 创建分页查询结果。
+     *
+     * @param list 查询结果。
+     * @param total 数据量。
+     * @param <T> 数据类型。
+     *
+     * @return 查询结果。
+     */
+    public static <T> ProTableObject success(List<T> list, int total) {
+        return new ProTableObject<>(total, list);
+    }
+
     public Integer getPage() {
         return page;
     }

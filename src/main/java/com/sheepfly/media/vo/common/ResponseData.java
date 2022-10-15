@@ -28,40 +28,44 @@ public class ResponseData<T> {
         this.message = message;
     }
 
+    public static <T> ResponseData success() {
+        return ResponseData.success(ErrorCode.OPERATION_SUCCESS.getMessage());
+    }
+
     public static <T> ResponseData success(T data) {
-        return new ResponseData(StatusCode.SUCCESS.getCode(), data, StatusCode.SUCCESS.getMessage());
+        return new ResponseData<>(StatusCode.SUCCESS.getCode(), data, StatusCode.SUCCESS.getMessage());
     }
 
     public static <T> ResponseData success(T data, String message) {
-        return new ResponseData(StatusCode.SUCCESS.getCode(), data, message);
+        return new ResponseData<>(StatusCode.SUCCESS.getCode(), data, message);
     }
 
     public static <T> ResponseData success(String message) {
-        return new ResponseData(ErrorCode.OPERATION_SUCCESS.getErrorCode(), null, message);
+        return new ResponseData<T>(ErrorCode.OPERATION_SUCCESS.getCode(), null, message);
     }
 
     public static <T> ResponseData fail(T data) {
-        return new ResponseData(StatusCode.FAILED.getCode(), data, StatusCode.SUCCESS.getMessage());
+        return new ResponseData<>(StatusCode.FAILED.getCode(), data, StatusCode.SUCCESS.getMessage());
     }
 
     public static <T> ResponseData fail(T data, String message) {
-        return new ResponseData(StatusCode.FAILED.getCode(), data, message);
+        return new ResponseData<>(StatusCode.FAILED.getCode(), data, message);
     }
 
     public static <T> ResponseData fail(String message) {
-        return new ResponseData(StatusCode.FAILED.getCode(), null, message);
+        return new ResponseData<>(StatusCode.FAILED.getCode(), null, message);
     }
 
     public static <T> ResponseData fail(ErrorCode errorCode, Object data) {
-        return new ResponseData(errorCode.getErrorCode(), data, errorCode.getMessage());
+        return new ResponseData<>(errorCode.getCode(), data, errorCode.getMessage());
     }
 
     public static ResponseData fail(ErrorCode errorCode) {
-        return new ResponseData(errorCode.getErrorCode(), null, errorCode.getMessage());
+        return new ResponseData<>(errorCode.getCode(), null, errorCode.getMessage());
     }
 
     public static <T> ResponseData fail(ErrorCode errorCode, String message, Object data) {
-        return new ResponseData(errorCode.getErrorCode(), data, message);
+        return new ResponseData<>(errorCode.getCode(), data, message);
     }
 
     public String getStatusCode() {

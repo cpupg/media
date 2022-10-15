@@ -18,16 +18,10 @@ package com.sheepfly.media.vo.common;
  * <p>目前的错误类型有以下几种：</p>
  * <ul>
  * <li>A:用户填写的表单错误。</li>
- * <li>B:没有查询到数据。</li>
- * <li>C:重复插入数据（主键冲突，或业务主键冲突）。</li>
- * <li>D:删除不存在的数据。</li>
- * <li>E:查询条件错误。</li>
- * <li>F:更新不存在的数据。</li>
- * <li>G:用户输入有遗漏。</li>
- * <li>H:用户没有输入必需参数。</li>
- * <li>I:操作数据库失败。此处不限于select语句，所有数据库操作都归于此类。</li>
- * <li>J:文件不存在，可能是目录，也可能是文件。</li>
- * <li>K:尝试覆盖一个已存在的文件。</li>
+ * <li>B:表单校验错误。</li>
+ * <li>C:业务异常。大多数异常都可以作为业务异常。</li>
+ * <li>D:io错误，如文件不存在，目录不存在等。可以是手动判断，也可以是运行异常。</li>
+ * <li>E:工具类调用异常。</li>
  * <li>Z:未知错误，通常是没有捕获的异常。</li>
  * </ul>
  *
@@ -39,37 +33,31 @@ package com.sheepfly.media.vo.common;
  * <li>103:作者管理</li>
  * <li>104:标签管理</li>
  * <li>105:专辑管理</li>
+ * <li>106:BeanUtil异常</li>
  * </ul>
  */
 public enum ErrorCode {
     OPERATION_SUCCESS("00000000", "操作成功"),
-    USER_NOT_LOG_IN("G0100001", "用户未登录"),
-    DELETE_NOT_EXIST_DATA("D0001001", "要删除的数据不存在"),
+    USER_NOT_LOG_IN("C0100001", "用户未登录"),
+    DELETE_NOT_EXIST_DATA("C0001001", "要删除的数据不存在"),
     SAVE_DUPLICATED_DATA("C0001002", "重复的数据"),
-    REWRITE_FILE("K0002001", "覆盖文件"),
-    FILE_NOT_FOUND("K0002002", "文件不存在"),
+    REWRITE_FILE("D0002001", "覆盖文件"),
+    FILE_NOT_FOUND("D0002002", "文件不存在"),
+    DATA_TO_FORM_FAIL("C0106001", "转换失败"),
     UNEXPECT_ERROR("Z0999999", "未知错误，请联系管理员");
-    private String errorCode;
+    private String code;
     private String message;
 
     ErrorCode(String errorCode, String message) {
-        this.errorCode = errorCode;
+        this.code = errorCode;
         this.message = message;
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
+    public String getCode() {
+        return code;
     }
 
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
