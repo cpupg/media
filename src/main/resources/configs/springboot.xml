@@ -3,25 +3,17 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
+  <!--jpa配置-->
   <import resource="jpa.xml"/>
+  <!--事务切面配置。切面配置在service层，controller层不要出现太多逻辑代码-->
   <import resource="transaction.xml"/>
+  <!--数据源，主要用来配置mybatis。-->
+  <!--mybatis自己的配置文件在mybatis.xml中，由mybatis读取，不需要导入-->
+  <import resource="datasource.xml"/>
 
-  <bean id="keyGenerator" class="com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator"/>
-
-  <bean id="sqlSessionFactory"
-      class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
-    <!--可以根据需求更换为其他数据源-->
-    <property name="dataSource" ref="h2DataSource"/>
-    <property name="configLocation" value="classpath:configs/mybatix-plus.xml"/>
-    <property name="mapperLocations" value="classpath:configs/mapper/**/*Mapper.xml"/>
-    <property name="plugins">
-      <array>
-        <bean class="com.github.pagehelper.PageInterceptor">
-          <property name="properties">
-            <value>helperDialect=h2</value>
-          </property>
-        </bean>
-      </array>
-    </property>
+  <!--雪花id生成器，使用cn.hutool.core.lang.Snowflake.Snowflake(long, long)-->
+  <bean id="snowFlake" class="cn.hutool.core.lang.Snowflake">
+    <constructor-arg index="0" value="0"/>
+    <constructor-arg index="1" value="0"/>
   </bean>
 </beans>
