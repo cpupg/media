@@ -12,7 +12,7 @@ target
 **/Application.java
 **/ApplicationTest.java
 **/SpringApplicationTest.java
-src/main/static
+src/main/resources/static
 
 # 忽略数据源配置，防止泄露数据库
 datasource.properties
