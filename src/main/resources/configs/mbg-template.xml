@@ -1,0 +1,22 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+    "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <context id="simple" targetRuntime="MyBatis3Simple" defaultModelType="hierarchical">
+    <commentGenerator>
+      <property name="addRemarkComments" value="true"/>
+      <property name="dateFormat" value="yyyyMMdd HH:mm:ss.sss"/>
+    </commentGenerator>
+    <jdbcConnection driverClass="org.h2.Driver"
+        connectionURL="jdbc:h2:tcp://localhost/D:/Project/Java/Spring/media/media.h2"
+        userId="user" password="password"/>
+
+    <javaModelGenerator targetPackage="example.model.MyBatis3Simple" targetProject="src/main/java"/>
+    <sqlMapGenerator targetPackage="example.mapper.MyBatis3Simple" targetProject="src/main/resources"/>
+
+    <javaClientGenerator type="XMLMAPPER" targetPackage="example.mapper.MyBatis3Simple"
+        targetProject="src/main/java"/>
+
+    <table tableName="tableName"/>
+  </context>
+</generatorConfiguration>
