@@ -48,8 +48,6 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * 通过id删除对象。
      *
      * @param id id。
-     *
-     * @return 被删除的对象。
      */
     void deleteById(ID id);
 
