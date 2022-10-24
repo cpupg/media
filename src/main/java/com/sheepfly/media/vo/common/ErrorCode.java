@@ -33,20 +33,60 @@ package com.sheepfly.media.vo.common;
  * <li>103:作者管理</li>
  * <li>104:标签管理</li>
  * <li>105:专辑管理</li>
- * <li>106:BeanUtil异常</li>
+ * <li>106:工具类错误</li>
+ * <li>999:公共模块</li>
  * </ul>
  */
+@SuppressWarnings({"AlibabaClassMustHaveAuthor", "AlibabaEnumConstantsMustHaveComment"})
 public enum ErrorCode {
+    /**
+     * 操作成功。
+     */
     OPERATION_SUCCESS("00000000", "操作成功"),
+    /**
+     * 用户未登录。
+     */
     USER_NOT_LOG_IN("C0100001", "用户未登录"),
-    DELETE_NOT_EXIST_DATA("C0001001", "要删除的数据不存在"),
-    SAVE_DUPLICATED_DATA("C0001002", "重复的数据"),
+    // 网站模块开始
+    /**
+     * 网站名称和网站地址不能为空。
+     */
+    SITE_NAME_URL_CANT_BE_NULL("C0101001", "网站名称和网站地址不能为空"),
+    /**
+     * 网站地址不合法。
+     */
+    URL_IS_ILLEGAL("C0101002", "网站地址不合法"),
+    SITE_ID_CANT_NULL("C0101003", "网站标识不能为空"),
+    // 网站模块结束
+
+    // 作者模块开始
+    // 作者模块结束
+    /**
+     * 要删除的数据不存在。
+     */
+    DELETE_NOT_EXIST_DATA("C0999001", "要删除的数据不存在"),
+    /**
+     * 重复的数据。
+     */
+    SAVE_DUPLICATED_DATA("C0999002", "重复的数据"),
+    /**
+     * 覆盖文件。
+     */
     REWRITE_FILE("D0002001", "覆盖文件"),
+    /**
+     * 文件不存在。
+     */
     FILE_NOT_FOUND("D0002002", "文件不存在"),
-    DATA_TO_FORM_FAIL("C0106001", "转换失败"),
+    /**
+     * 转换失败。
+     */
+    DATA_TO_FORM_FAIL("E0106001", "转换失败"),
+    /**
+     * 未知错误，请联系管理员。
+     */
     UNEXPECT_ERROR("Z0999999", "未知错误，请联系管理员");
-    private String code;
-    private String message;
+    private final String code;
+    private final String message;
 
     ErrorCode(String errorCode, String message) {
         this.code = errorCode;

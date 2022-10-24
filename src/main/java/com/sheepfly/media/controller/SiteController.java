@@ -2,10 +2,12 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.entity.Site;
+import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.SiteData;
 import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.service.ISiteService;
 import com.sheepfly.media.util.BeanUtil;
+import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
@@ -58,8 +60,9 @@ public class SiteController {
      */
     @PostMapping("/addSite")
     @ResponseBody
-    public ResponseData<Site> addSite(@RequestBody SiteData siteData) {
+    public ResponseData<Site> addSite(@RequestBody SiteData siteData) throws BusinessException {
         siteData.setId(null);
+        service.validateSiteData(siteData);
         Site savedSite = service.save(BeanUtil.dataToEntity(siteData, new Site()));
         return ResponseData.success(savedSite);
     }
@@ -73,7 +76,10 @@ public class SiteController {
      */
     @GetMapping("/delete")
     @ResponseBody
-    public ResponseData<Object> deleteSite(@RequestParam("id") String siteId) {
+    public ResponseData<Object> deleteSite(@RequestParam("id") String siteId) throws BusinessException {
+        if (ValidateUtil.isEmptyString(siteId)) {
+            throw new BusinessException(ErrorCode.SITE_ID_CANT_NULL);
+        }
         if (!service.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
         } else {

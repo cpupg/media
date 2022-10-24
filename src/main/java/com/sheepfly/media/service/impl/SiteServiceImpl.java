@@ -3,9 +3,13 @@ package com.sheepfly.media.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.dao.SiteMapper;
 import com.sheepfly.media.entity.Site;
+import com.sheepfly.media.exception.BusinessException;
+import com.sheepfly.media.form.data.SiteData;
 import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.repository.SiteRepository;
 import com.sheepfly.media.service.ISiteService;
+import com.sheepfly.media.util.ValidateUtil;
+import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import org.slf4j.Logger;
@@ -38,5 +42,17 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
         List<Site> siteList = mapper.querySiteList(form);
         int count = mapper.countSiteList(form);
         return ProTableObject.success(siteList, count);
+    }
+
+    @Override
+    public boolean validateSiteData(SiteData siteData) throws BusinessException {
+        if (ValidateUtil.isEmptyString(siteData.getSiteName()) || ValidateUtil.isEmptyString(siteData.getUrl())) {
+            throw new BusinessException(ErrorCode.SITE_NAME_URL_CANT_BE_NULL);
+        }
+        String url = siteData.getUrl();
+        if (url.indexOf("http://") != 0 && url.indexOf("https://") != 0) {
+            throw new BusinessException(ErrorCode.URL_IS_ILLEGAL);
+        }
+        return false;
     }
 }
