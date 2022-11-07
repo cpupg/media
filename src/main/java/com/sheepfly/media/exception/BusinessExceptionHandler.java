@@ -4,6 +4,8 @@ import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,5 +45,12 @@ public class BusinessExceptionHandler {
     public ResponseData<Exception> handleException(Exception e) {
         log.error("发生未知异常", e);
         return ResponseData.fail(ErrorCode.UNEXPECT_ERROR);
+    }
+
+    @ExceptionHandler({MissingRequestValueException.class, HttpMessageNotReadableException.class})
+    @ResponseBody
+    public ResponseData<Exception> handleMissingRequestValueException(Exception e) {
+        log.error("缺少请求参数", e);
+        return ResponseData.fail(ErrorCode.REQUEST_VALUE_IS_LOST);
     }
 }

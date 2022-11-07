@@ -59,4 +59,13 @@ public class BeanUtil {
         }
         return e;
     }
+
+    public static <D, E> E dataToEntity(D d, Class<E> eClass) {
+        try {
+            E e = eClass.newInstance();
+            return dataToEntity(d, e);
+        } catch (Exception e) {
+            throw new RuntimeException(ErrorCode.DATA_TO_FORM_FAIL.name(), e);
+        }
+    }
 }
