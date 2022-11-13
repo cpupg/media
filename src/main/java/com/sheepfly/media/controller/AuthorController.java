@@ -2,7 +2,6 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.entity.Author;
-import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.AuthorData;
 import com.sheepfly.media.service.IAuthorService;
 import com.sheepfly.media.util.BeanUtil;
@@ -45,18 +44,16 @@ public class AuthorController {
      * @param authorData 作者数据。
      *
      * @return 新作者。
-     *
-     * @throws BusinessException 异常。
      */
     @PostMapping("/add")
     @ResponseBody
-    public ResponseData<Author> add(@RequestBody AuthorData authorData) throws BusinessException {
+    public ResponseData<Author> add(@RequestBody AuthorData authorData) {
         log.info("保存作者");
         if (ValidateUtil.isEmptyString(authorData.getSiteId())) {
             return ResponseData.fail(ErrorCode.AUTHOR_SITE_CANT_BE_NULL);
         }
-        if (ValidateUtil.isEmptyString(authorData.getUserId()) &&
-                ValidateUtil.isEmptyString(authorData.getUsername())) {
+        if (ValidateUtil.isEmptyString(authorData.getUserId()) && ValidateUtil.isEmptyString(
+                authorData.getUsername())) {
             return ResponseData.fail(ErrorCode.AUTHOR_ID_AND_NAME_CANT_NULL);
         }
         // todo 验证网站是否存在

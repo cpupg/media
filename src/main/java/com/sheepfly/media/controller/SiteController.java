@@ -12,7 +12,10 @@ import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import java.util.Set;
 
 /**
  * <p>
@@ -33,8 +40,12 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/site")
 public class SiteController {
+    private static final Logger log = LoggerFactory.getLogger(SiteController.class);
+
     @Resource(name = "siteServiceImpl")
     private ISiteService service;
+    @Resource(name = "defaultValidator")
+    private Validator validator;
 
     /**
      * 查询系统中的站点。
@@ -60,10 +71,14 @@ public class SiteController {
      */
     @PostMapping("/addSite")
     @ResponseBody
-    public ResponseData<Site> addSite(@RequestBody SiteData siteData) throws BusinessException {
+    public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData) {
         siteData.setId(null);
-        service.validateSiteData(siteData);
-        Site savedSite = service.save(BeanUtil.dataToEntity(siteData, new Site()));
+        Site site = BeanUtil.dataToEntity(siteData, Site.class);
+        Set<ConstraintViolation<Site>> validate = validator.validate(site);
+        if (!validate.isEmpty()) {
+            throw new ConstraintViolationException("验证失败", validate);
+        }
+        Site savedSite = service.save(site);
         return ResponseData.success(savedSite);
     }
 

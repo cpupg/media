@@ -1,12 +1,14 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.metamodel.StaticMetamodel;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -34,19 +36,23 @@ public class Site implements Serializable, EntityInterface {
     /**
      * 网站名称
      */
-    @Column(name = "SITE_NAME")
+    @NotNull(message = "{com.sheepfly.media.entity.site.siteName.notNull}")
+    @Column(name = "SITE_NAME", nullable = false)
     private String siteName;
 
     /**
      * 网站地址
      */
-    @Column(name = "URL")
+    @URL(message = "{com.sheepfly.media.entity.site.url.illegal}")
+    @NotNull(message = "{com.sheepfly.media.entity.site.url.notNull}")
+    @Column(name = "URL", nullable = false)
     private String url;
 
     /**
      * 创建时间
      */
-    @Column(name = "CREATE_TIME")
+    @NotNull(message = "{com.sheepfly.media.entity.site.createTime.notNull}")
+    @Column(name = "CREATE_TIME", nullable = false)
     private LocalDate createTime;
 
     /**

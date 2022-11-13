@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+import java.util.Set;
+
 /**
  * 全局异常处理器。
  *
@@ -53,4 +58,23 @@ public class BusinessExceptionHandler {
         log.error("缺少请求参数", e);
         return ResponseData.fail(ErrorCode.REQUEST_VALUE_IS_LOST);
     }
+
+    @ExceptionHandler({ValidationException.class})
+    @ResponseBody
+    public ResponseData<Exception> handleConstraintViolationException(Exception e) {
+        log.error("数据验证失败", e);
+        if (e instanceof ConstraintViolationException) {
+            ConstraintViolationException cve = (ConstraintViolationException) e;
+            Set<ConstraintViolation<?>> errors = cve.getConstraintViolations();
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append("验证失败:");
+            errors.forEach(ele -> stringBuffer.append(ele.getMessage()).append(","));
+            return ResponseData.fail(ErrorCode.UNEXPECT_ERROR, stringBuffer);
+        } else {
+            log.error("验证失败", e);
+            return ResponseData.fail("验证失败");
+        }
+    }
+
+
 }
