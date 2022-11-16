@@ -2,11 +2,16 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.entity.Author;
+import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.AuthorData;
+import com.sheepfly.media.form.filter.AuthorFilter;
 import com.sheepfly.media.service.IAuthorService;
+import com.sheepfly.media.service.ISiteService;
 import com.sheepfly.media.util.BeanUtil;
 import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
+import com.sheepfly.media.vo.common.ProComponentsRequestVo;
+import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +40,8 @@ public class AuthorController {
     private static final Logger log = LoggerFactory.getLogger(AuthorController.class);
     @Autowired
     private IAuthorService service;
+    @Autowired
+    private ISiteService siteService;
 
     /**
      * 新增作者。
@@ -49,14 +56,14 @@ public class AuthorController {
     @ResponseBody
     public ResponseData<Author> add(@RequestBody AuthorData authorData) {
         log.info("保存作者");
-        if (ValidateUtil.isEmptyString(authorData.getSiteId())) {
+        String siteId = authorData.getSiteId();
+        if (ValidateUtil.isEmptyString(siteId) || !siteService.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.AUTHOR_SITE_CANT_BE_NULL);
         }
         if (ValidateUtil.isEmptyString(authorData.getUserId()) && ValidateUtil.isEmptyString(
                 authorData.getUsername())) {
             return ResponseData.fail(ErrorCode.AUTHOR_ID_AND_NAME_CANT_NULL);
         }
-        // todo 验证网站是否存在
         Author author = BeanUtil.dataToEntity(authorData, Author.class);
         author.setCreateTime(LocalDate.now());
         Author savedAuthor = service.save(author);
@@ -65,8 +72,11 @@ public class AuthorController {
 
     @GetMapping("/delete")
     @ResponseBody
-    public ResponseData<Author> delete(@RequestParam("id") String id) {
+    public ResponseData<Author> delete(@RequestParam("id") String id) throws BusinessException {
         log.info("删除作者");
+        if (ValidateUtil.isEmptyString(id)) {
+            throw new BusinessException(ErrorCode.AUTHOR_ID_CANT_BE_NULL);
+        }
         if (service.existsById(id)) {
             service.deleteById(id);
             log.info("删除完成");
@@ -75,6 +85,13 @@ public class AuthorController {
             log.info("要删除的作者不存在");
             return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
+    }
+
+    @PostMapping("/queryList")
+    @ResponseBody
+    public ProTableObject<Author> queryList(
+            @RequestBody ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
+        return service.queryForAuthorList(vo);
     }
 }
 

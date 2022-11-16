@@ -5,6 +5,8 @@ package com.sheepfly.media.vo.common;
  *
  * <p>报表页面查询Form可以继承这个类。</p>
  *
+ * @param <T> 查询参数，用来做过滤，搜索和排序。
+ *
  * @author sheepfly
  */
 public class ProPaginationForm {

@@ -1,72 +1,55 @@
-package com.sheepfly.media.entity;
+package com.sheepfly.media.form.filter;
 
-import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.vo.common.ProPaginationForm;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * <p>
- * 创作人员
- * </p>
+ * 查询作者用的参数。
  *
- * @author sheepfly
- * @since 2022-02-07
+ * @author wrote-code
  */
-@Table
-@Entity
-public class Author implements Serializable, EntityInterface {
-
-    private static final long serialVersionUID = 1L;
-
+public class AuthorFilter extends ProPaginationForm implements Serializable {
     /**
      * ID
      */
-    @Id
-    @NotNull
     private String id;
 
     /**
      * 用户在站点注册时的id
      */
-    @Column(name = "USER_ID")
     private String userId;
 
     /**
      * 用户名
      */
-    @Column(name = "USERNAME")
     private String username;
 
     /**
      * 注册站点ID
      */
-    @Column(name = "SITE_ID", nullable = false)
     private String siteId;
 
     /**
      * 主页
      */
-    @Column(name = "HOMEPAGE")
     private String homepage;
 
     /**
      * 创建时间
      */
-    @Column(name = "CREATE_TIME")
     private LocalDate createTime;
 
     /**
      * 更新时间
      */
-    @Column(name = "UPDATE_TIME")
     private LocalDate updateTime;
 
+    @Override
+    public String toString() {
+        return "AuthorFilter{" + "id=" + id + ", userId=" + userId + ", username=" + username + ", siteId=" + siteId + ", homepage=" + homepage + ", createTime=" + createTime + ", updateTime=" + updateTime + '}';
+    }
 
     public String getId() {
         return id;
@@ -96,8 +79,8 @@ public class Author implements Serializable, EntityInterface {
         return siteId;
     }
 
-    public void setSiteId(String site) {
-        this.siteId = site;
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 
     public String getHomepage() {
@@ -122,18 +105,5 @@ public class Author implements Serializable, EntityInterface {
 
     public void setUpdateTime(LocalDate updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", username=" + username +
-                ", site=" + siteId +
-                ", homepage=" + homepage +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
     }
 }

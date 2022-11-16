@@ -59,12 +59,16 @@ public enum ErrorCode {
     /**
      * 注册网站为空。
      */
-    AUTHOR_SITE_CANT_BE_NULL("C0200001", "注册网站为空"),
+    AUTHOR_SITE_CANT_BE_NULL("C0201001", "注册网站为空"),
     /**
      * 用户名和用户id不能同时为空。
      */
-    AUTHOR_ID_AND_NAME_CANT_NULL("C0200002", "用户名和用户id不能同时为空"),
-    // 作者模块结束2001
+    AUTHOR_ID_AND_NAME_CANT_NULL("C0201002", "用户名和用户id不能同时为空"),
+    /**
+     * 作者标识不能为空。
+     */
+    AUTHOR_ID_CANT_BE_NULL("C0201002", "作者标识不能为空"),
+    // 作者模块结束201
 
     // 公共模块开始101
     /**
