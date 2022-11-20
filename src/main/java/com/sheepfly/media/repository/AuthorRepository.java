@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 作者仓库。
  *
- * @author 东方红
+ * @author wrote-code
  */
 public interface AuthorRepository extends JpaRepository<Author, String>, JpaSpecificationExecutor<Author> {
 }

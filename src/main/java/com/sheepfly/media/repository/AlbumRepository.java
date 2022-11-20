@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * 专辑仓库。
  *
- * @author 东方红
+ * @author wrote-code
  */
 public interface AlbumRepository extends JpaRepository<Album, String>, JpaSpecificationExecutor<Album> {
 }

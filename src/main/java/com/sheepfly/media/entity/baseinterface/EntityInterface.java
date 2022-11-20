@@ -3,7 +3,7 @@ package com.sheepfly.media.entity.baseinterface;
 /**
  * 实体类接口。
  *
- * @author 东方红
+ * @author wrote-code
  */
 public interface EntityInterface {
     /**
