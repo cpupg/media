@@ -1,6 +1,8 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.exception.BusinessException;
+import com.sheepfly.media.vo.common.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -50,6 +52,17 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @param id id。
      */
     void deleteById(ID id);
+
+    /**
+     * 通过id删除对象。
+     *
+     * <p>删除前会先调用{@link #existsById(Object)}进行判断，如果不存在，则会抛出
+     * 异常，异常类型为ErrorCode。</p>
+     *
+     * @param id 主键id。
+     * @param errorCode 错误码。
+     */
+    void deleteById(ID id, ErrorCode errorCode) throws BusinessException;
 
     /**
      * 删除对象。

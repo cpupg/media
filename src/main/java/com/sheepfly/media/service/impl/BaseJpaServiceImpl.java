@@ -2,7 +2,9 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.service.BaseJpaService;
+import com.sheepfly.media.vo.common.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -37,6 +39,15 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     @Override
     public void deleteById(ID id) {
         d.deleteById(id);
+    }
+
+    @Override
+    public void deleteById(ID id, ErrorCode errorCode) throws BusinessException {
+        if (existsById(id)) {
+            deleteById(id);
+        } else {
+            throw new BusinessException(errorCode);
+        }
     }
 
     @Override
