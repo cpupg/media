@@ -33,11 +33,12 @@ public class ResponseData<T> {
     }
 
     public static <T> ResponseData success(T data) {
-        return new ResponseData<>(StatusCode.SUCCESS.getCode(), data, StatusCode.SUCCESS.getMessage());
+        return new ResponseData<>(ErrorCode.OPERATION_SUCCESS.getCode(), data,
+                ErrorCode.OPERATION_SUCCESS.getMessage());
     }
 
     public static <T> ResponseData success(T data, String message) {
-        return new ResponseData<>(StatusCode.SUCCESS.getCode(), data, message);
+        return new ResponseData<>(ErrorCode.OPERATION_SUCCESS.getCode(), data, message);
     }
 
     public static <T> ResponseData success(String message) {
@@ -45,15 +46,15 @@ public class ResponseData<T> {
     }
 
     public static <T> ResponseData fail(T data) {
-        return new ResponseData<>(StatusCode.FAILED.getCode(), data, StatusCode.SUCCESS.getMessage());
+        return new ResponseData<>(ErrorCode.UNEXPECT_ERROR.getCode(), data, ErrorCode.UNEXPECT_ERROR.getMessage());
     }
 
     public static <T> ResponseData fail(T data, String message) {
-        return new ResponseData<>(StatusCode.FAILED.getCode(), data, message);
+        return new ResponseData<>(ErrorCode.UNEXPECT_ERROR.getCode(), data, message);
     }
 
     public static <T> ResponseData fail(String message) {
-        return new ResponseData<>(StatusCode.FAILED.getCode(), null, message);
+        return new ResponseData<>(ErrorCode.UNEXPECT_ERROR.getCode(), null, message);
     }
 
     public static <T> ResponseData fail(ErrorCode errorCode, Object data) {
