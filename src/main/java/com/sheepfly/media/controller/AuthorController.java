@@ -9,6 +9,7 @@ import com.sheepfly.media.service.IAuthorService;
 import com.sheepfly.media.service.ISiteService;
 import com.sheepfly.media.util.BeanUtil;
 import com.sheepfly.media.util.ValidateUtil;
+import com.sheepfly.media.vo.AuthorVo;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
@@ -89,7 +90,7 @@ public class AuthorController {
 
     @PostMapping("/queryList")
     @ResponseBody
-    public ProTableObject<Author> queryList(
+    public ProTableObject<AuthorVo> queryList(
             @RequestBody ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
         return service.queryForAuthorList(vo);
     }

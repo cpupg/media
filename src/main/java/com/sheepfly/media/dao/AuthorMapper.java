@@ -3,6 +3,7 @@ package com.sheepfly.media.dao;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.filter.AuthorFilter;
+import com.sheepfly.media.vo.AuthorVo;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,7 +22,7 @@ public interface AuthorMapper {
     /**
      * 查询作者清单。
      *
-     * @param authorFilter 参数。
+     * @param vo 参数。
      *
      * @return 查询结果。
      *
@@ -31,4 +32,20 @@ public interface AuthorMapper {
             throws BusinessException;
 
     int queryAuthorCount(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo);
+
+    /**
+     * 查询作者清单。
+     *
+     * @param vo 参数。
+     *
+     * @return 查询结果。
+     *
+     * @throws BusinessException 业务异常。
+     */
+    List<AuthorVo> queryAuthorVoList(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo)
+            throws BusinessException;
+
+    int queryAuthorVoCount(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo);
+
+
 }

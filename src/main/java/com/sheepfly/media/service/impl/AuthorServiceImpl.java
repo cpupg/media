@@ -6,6 +6,7 @@ import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.filter.AuthorFilter;
 import com.sheepfly.media.repository.AuthorRepository;
 import com.sheepfly.media.service.IAuthorService;
+import com.sheepfly.media.vo.AuthorVo;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,10 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
     private AuthorMapper mapper;
 
     @Override
-    public ProTableObject<Author> queryForAuthorList(
+    public ProTableObject<AuthorVo> queryForAuthorList(
             ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
-        List<Author> authorList = mapper.queryAuthorList(vo);
-        int count = mapper.queryAuthorCount(vo);
+        List<AuthorVo> authorList = mapper.queryAuthorVoList(vo);
+        int count = mapper.queryAuthorVoCount(vo);
         return ProTableObject.success(authorList, count);
     }
 }
