@@ -1,15 +1,14 @@
 <configuration>
   <property name="application" value="media"/>
   <property name="sqlFileName" value="sql"/>
-  <property name="consolePattern" value="[%date{yyyy-MM-dd hh:mm:ss:SSS}] %message%n"/>
+  <property name="consolePattern" value="%cyan(%date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread]) %n
+        %yellow([%30.30logger{20}#%-30.30(%method:%line)]) %blue(%message%n)"/>
 
   <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>logs/${application}.log</file>
     <encoder>
       <pattern>
-        %date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread]
-        %class#%method:%line
-        %message%n
+        ${consolePattern}
       </pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -24,9 +23,7 @@
     <file>logs/${sqlFileName}.log</file>
     <encoder>
       <pattern>
-        %date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread]
-        %class#%method:%line
-        %message%n
+        ${consolePattern}
       </pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -40,9 +37,7 @@
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>
-        %date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread] %X{requestId} %X{sessionId}
-        %class#%method:%line
-        %message%n
+        ${consolePattern}
       </pattern>
     </encoder>
   </appender>
