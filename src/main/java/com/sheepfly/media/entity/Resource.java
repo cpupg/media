@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -27,24 +29,31 @@ public class Resource implements Serializable, EntityInterface {
      * ID
      */
     @Id
+    @NotNull
     private String id;
 
     /**
      * 文件名
      */
     @Column(name = "FILENAME")
+    @NotNull
+    @Max(90)
     private String filename;
 
     /**
      * 资源目录
      */
     @Column(name = "DIR")
+    @NotNull
+    @Max(900)
     private String dir;
 
     /**
      * 作者id
      */
     @Column(name = "AUTHOR_ID")
+    @NotNull
+    @Max(19)
     private String authorId;
 
     /**
@@ -60,6 +69,7 @@ public class Resource implements Serializable, EntityInterface {
      * 是新闻发生时间，而不是发稿时间，不管是视频稿还是文字稿。</p>
      */
     @Column(name = "CREATE_TIME")
+    @NotNull
     private LocalDate createTime;
 
     /**

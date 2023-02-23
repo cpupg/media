@@ -97,9 +97,11 @@ public class SiteController {
         }
         if (!service.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
-        } else {
+        } else if (service.canSiteBeDelete(siteId)) {
             service.deleteById(siteId);
             return ResponseData.success();
+        } else {
+            return ResponseData.fail(ErrorCode.SITE_CANT_BE_DELETE);
         }
     }
 }

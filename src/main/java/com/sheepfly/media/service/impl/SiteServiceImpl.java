@@ -6,6 +6,7 @@ import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.SiteData;
 import com.sheepfly.media.form.filter.SiteFilter;
+import com.sheepfly.media.repository.AuthorRepository;
 import com.sheepfly.media.repository.SiteRepository;
 import com.sheepfly.media.service.ISiteService;
 import com.sheepfly.media.util.ValidateUtil;
@@ -32,6 +33,8 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
     private static final Logger log = LoggerFactory.getLogger(SiteServiceImpl.class);
     @Resource(name = "siteRepository")
     private SiteRepository repository;
+    @Resource(name = "authorRepository")
+    private AuthorRepository authorRepository;
     @Resource(name = "siteMapper")
     private SiteMapper mapper;
 
@@ -42,6 +45,11 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
         List<Site> siteList = mapper.querySiteList(form);
         int count = mapper.countSiteList(form);
         return ProTableObject.success(siteList, count);
+    }
+
+    @Override
+    public boolean canSiteBeDelete(String siteId) throws BusinessException {
+        return authorRepository.countBySiteId(siteId) == 0;
     }
 
     @Override

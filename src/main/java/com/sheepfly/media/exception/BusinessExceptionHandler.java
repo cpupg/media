@@ -5,6 +5,8 @@ import com.sheepfly.media.vo.common.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,12 +72,19 @@ public class BusinessExceptionHandler {
             StringBuffer stringBuffer = new StringBuffer();
             stringBuffer.append("验证失败:");
             errors.forEach(ele -> stringBuffer.append(ele.getMessage()).append(","));
-            return ResponseData.fail(ErrorCode.UNEXPECT_ERROR, stringBuffer);
+            return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuffer);
         } else {
             log.error("验证失败", e);
             return ResponseData.fail("验证失败");
         }
     }
 
-
+    @ExceptionHandler(BindException.class)
+    @ResponseBody
+    public ResponseData<Exception> handleBindException(BindException e) {
+        List<ObjectError> allErrors = e.getAllErrors();
+        StringBuffer stringBuffer = new StringBuffer();
+        allErrors.forEach(ele -> stringBuffer.append(ele.getDefaultMessage() + ","));
+        return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuffer);
+    }
 }

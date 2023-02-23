@@ -53,6 +53,7 @@ public enum ErrorCode {
      */
     URL_IS_ILLEGAL("C0200002", "网站地址不合法"),
     SITE_ID_CANT_NULL("C0200003", "网站标识不能为空"),
+    SITE_CANT_BE_DELETE("C0200004", "网站下有作者，不能删除网站"),
     // 网站模块结束200
 
     // 作者模块开始201
@@ -100,7 +101,8 @@ public enum ErrorCode {
     /**
      * 未知错误，请联系管理员。
      */
-    UNEXPECT_ERROR("Z0999999", "未知错误，请联系管理员");
+    UNEXPECT_ERROR("Z0999999", "未知错误，请联系管理员"),
+    VALIDATE_ERROR("Z0999998", "输入参数有误");
 
     private final String code;
     private final String message;
