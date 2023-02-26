@@ -6,7 +6,7 @@
 
   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
     <!--可以根据需求更换为其他数据源-->
-    <property name="dataSource" ref="h2DataSource"/>
+    <property name="dataSource" ref="dataSource"/>
     <property name="configLocation" value="classpath:configs/mybatis.xml"/>
     <property name="mapperLocations" value="classpath:configs/mapper/**/**.xml"/>
     <!--事务在service层开启，mapper在service中调用，已经开启事务，不需要重新开启-->

@@ -1,0 +1,8 @@
+# todo 配置文件改造：xml -> yaml
+spring:
+  #  生产环境通过jvm参数传入，测试环境可以写明文
+  datasource:
+    driver-class-name: ${driverClassName}
+    url: ${url}
+    username: ${username}
+    password: ${password}
