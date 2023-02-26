@@ -1,6 +1,19 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
+  <!--jpa配置-->
+  <import resource="jpa.xml"/>
+  <!--事务切面配置。切面配置在service层，controller层不要出现太多逻辑代码-->
+  <import resource="transaction.xml"/>
+  <!--数据源，主要用来配置mybatis。-->
+  <!--mybatis自己的配置文件在mybatis.xml中，由mybatis读取，不需要导入-->
+  <import resource="datasource.xml"/>
+
+  <!--雪花id生成器，使用cn.hutool.core.lang.Snowflake.Snowflake(long, long)-->
+  <bean id="snowFlake" class="cn.hutool.core.lang.Snowflake">
+    <constructor-arg index="0" value="0"/>
+    <constructor-arg index="1" value="0"/>
+  </bean>
 </beans>

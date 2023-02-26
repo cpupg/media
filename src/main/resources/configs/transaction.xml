@@ -1,0 +1,51 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop.xsd"
+>
+  <!--开启注解配置会导致bean重复，启动报错-->
+  <!--<tx:annotation-driven transaction-manager="jpaTransactionManager"/>-->
+
+  <!--切面配置-->
+  <aop:config>
+    <!--事务在service中开启，dao和controller中不开事务-->
+    <aop:pointcut id="txPointcut" expression="execution(* com.sheepfly.media.service..*(..))"/>
+
+    <!--事务通知-->
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+  </aop:config>
+
+
+  <!--事务配置-->
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <!--只对增删改开启事务，读取设置为只读事务（spring对只读有优化）-->
+      <!--增加操作，所有insert,save,add,create开头的方法-->
+      <tx:method name="insert*" rollback-for="Throwable"/>
+      <tx:method name="add*" rollback-for="Throwable"/>
+      <tx:method name="save*" rollback-for="Throwable"/>
+      <tx:method name="creat*" rollback-for="Throwable"/>
+
+      <!--删除操作，以delete，remove开头的方法-->
+      <tx:method name="delete*" rollback-for="Throwable"/>
+      <tx:method name="remove*" rollback-for="Throwable"/>
+
+      <!--修改操作，所有以update开头的方法-->
+      <tx:method name="update*" rollback-for="Throwable"/>
+
+      <!--查询操作，所有以find，query，select，以及以count开头或结尾的方法-->
+      <tx:method name="find*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="query*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="select*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="count*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*count" read-only="true" rollback-for="Throwable"/>
+      <!--切入点定义结束-->
+    </tx:attributes>
+  </tx:advice>
+</beans>

@@ -1,0 +1,24 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!--可以根据需求更换为其他数据源-->
+    <property name="dataSource" ref="dataSource"/>
+    <property name="configLocation" value="classpath:configs/mybatis.xml"/>
+    <property name="mapperLocations" value="classpath:configs/mapper/**/**.xml"/>
+    <!--事务在service层开启，mapper在service中调用，已经开启事务，不需要重新开启-->
+    <!--<property name="transactionFactory" ref=""/>-->
+    <property name="plugins">
+      <array>
+        <bean class="com.github.pagehelper.PageInterceptor">
+          <property name="properties">
+            <value>helperDialect=h2</value>
+          </property>
+        </bean>
+      </array>
+    </property>
+  </bean>
+</beans>
