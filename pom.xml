@@ -13,7 +13,7 @@
 
   <groupId>com.sheepfly.media</groupId>
   <artifactId>media</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1-alpha</version>
   <packaging>jar</packaging>
 
   <properties>
