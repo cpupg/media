@@ -2,7 +2,7 @@
   <property name="application" value="media"/>
   <property name="sqlFileName" value="sql"/>
   <property name="consolePattern" value="%cyan(%date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread]) %n
-        %yellow([%30.30logger{20}#%-30.30(%method:%line)]) %blue(%message%n)"/>
+        %yellow([%40.40logger{20}#%-20.20(%method:%line)]) %blue(%message%n)"/>
 
   <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>logs/${application}.log</file>
