@@ -1,7 +1,7 @@
 <configuration>
   <property name="application" value="media"/>
   <property name="sqlFileName" value="sql"/>
-  <property name="filePattern" value="%cyan(%date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread])
+  <property name="consolePattern" value="%cyan(%date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread])
  %yellow([%30.30logger{30}#%-20.20(%method:%line)]) %blue(%message%n)"/>
   <property name="filePattern" value="%date{yyyy-MM-dd HH:mm:ss:SSS} %-5level [%thread]
  [%30.30logger{30}#%-20.20(%method:%line)] %message%n"/>
