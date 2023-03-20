@@ -27,3 +27,7 @@ datasource.properties
 # logs
 logs/
 upload
+
+# 其他
+todo.txt
+dev-package.bat
