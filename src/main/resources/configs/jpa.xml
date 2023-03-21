@@ -18,7 +18,6 @@
         <prop key="hibernate.jdbc.batch_size">10</prop>
         <prop key="hibernate.format_sql">true</prop>
         <prop key="hibernate.use_sql_comments">true</prop>
-        <prop key="hibernate.show_sql">true</prop>
         <prop key="org.hibernate.envers.audit_table_suffix">_H</prop>
         <prop key="org.hibernate.envers.revision_field_name">AUDIT_REVISION</prop>
         <prop key="org.hibernate.envers.revision_type_field_name">ACTION_TYPE</prop>
