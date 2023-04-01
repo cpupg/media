@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -65,7 +66,7 @@ public class Author implements Serializable, EntityInterface {
      * 更新时间
      */
     @Column(name = "UPDATE_TIME")
-    private LocalDate updateTime;
+    private Date updateTime;
 
 
     public String getId() {
@@ -116,11 +117,11 @@ public class Author implements Serializable, EntityInterface {
         this.createTime = createTime;
     }
 
-    public LocalDate getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDate updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 

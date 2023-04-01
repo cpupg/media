@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
+import java.util.Date;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,7 +20,7 @@ public class SiteServiceImplTest {
     public void testFindById() throws Exception {
         Site site = new Site();
         site.setSiteName("百度");
-        site.setCreateTime(LocalDate.now());
+        site.setCreateTime(new Date());
         site.setUrl("http1://www.baidu.com");
         try {
             Site save = service.save(site);
