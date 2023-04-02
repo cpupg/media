@@ -18,7 +18,7 @@ import java.util.Date;
  * @since 2022-02-07
  */
 @Entity
-@Table(name = "RESOURCE_TYPE")
+@Table(schema = "MEDIA", name = "RESOURCE_TYPE")
 public class ResourceType implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;

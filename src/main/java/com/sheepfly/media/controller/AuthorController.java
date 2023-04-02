@@ -1,6 +1,7 @@
 package com.sheepfly.media.controller;
 
 
+import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.AuthorData;
@@ -14,6 +15,7 @@ import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +94,13 @@ public class AuthorController {
     @ResponseBody
     public ProTableObject<AuthorVo> queryList(
             @RequestBody ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
+        AuthorFilter params = vo.getParams();
+        String username = params.getUsername();
+        if (username != null && !StringUtils.isBlank(username)) {
+            // todo spring security
+            username = username.replace(Constant.SQL_LIKE, Constant.BLANK_STRING);
+            params.setUsername(Constant.SQL_LIKE + username + Constant.SQL_LIKE);
+        }
         return service.queryForAuthorList(vo);
     }
 }

@@ -21,7 +21,7 @@ import java.util.Date;
  * @since 2022-02-07
  */
 @Entity
-@Table
+@Table(schema = "MEDIA", name = "SITE")
 @StaticMetamodel(Site.class)
 public class Site implements Serializable, EntityInterface {
 

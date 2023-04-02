@@ -21,7 +21,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  * @since 2022-02-07
  */
 @Entity
-@Table(name = "ALBUM")
+@Table(schema = "MEDIA", name = "ALBUM")
 public class Album implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;

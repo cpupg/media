@@ -20,7 +20,7 @@ import java.util.Date;
  * @since 2022-02-07
  */
 @Entity
-@Table(name = "RESOURCE")
+@Table(schema = "MEDIA", name = "RESOURCE")
 public class Resource implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;

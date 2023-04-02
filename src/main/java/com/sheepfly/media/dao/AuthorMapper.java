@@ -31,8 +31,6 @@ public interface AuthorMapper {
     List<Author> queryAuthorList(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo)
             throws BusinessException;
 
-    int queryAuthorCount(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo);
-
     /**
      * 查询作者清单。
      *

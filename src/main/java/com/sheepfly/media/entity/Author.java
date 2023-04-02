@@ -18,7 +18,7 @@ import java.util.Date;
  * @author sheepfly
  * @since 2022-02-07
  */
-@Table
+@Table(schema = "MEDIA", name = "AUTHOR")
 @Entity
 public class Author implements Serializable, EntityInterface {
 

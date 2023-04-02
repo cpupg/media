@@ -23,19 +23,19 @@
     URL,
     CREATE_TIME,
     UPDATE_TIME
-    from SITE
+    from media.SITE
     <where>
-      <if test="siteName != null and !siteName.equals('')">SITE_NAME = #{siteName}</if>
+      <if test="siteName != null and !siteName.equals('')">SITE_NAME like #{siteName}</if>
     </where>
-    order by id desc
+    order by create_time desc
   </select>
   <select id="countSiteList"
       parameterType="com.sheepfly.media.form.filter.SiteFilter"
       resultType="int">
     select count(1)
-    from SITE
+    from media.SITE
     <where>
-      <if test="siteName != null and !siteName.equals('')">SITE_NAME = #{siteName}</if>
+      <if test="siteName != null and siteName != ''">SITE_NAME like #{siteName}</if>
     </where>
   </select>
 </mapper>
