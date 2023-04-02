@@ -4,7 +4,7 @@ import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.form.data.SiteData;
 import org.junit.Test;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class BeanUtilTest {
 
@@ -14,8 +14,8 @@ public class BeanUtilTest {
         siteData.setId("12345");
         siteData.setSiteName("测试工具类");
         siteData.setUrl("beanUtils");
-        siteData.setCreateTime(LocalDate.now());
-        siteData.setUpdateTime(LocalDate.now());
+        siteData.setCreateTime(new Date());
+        siteData.setUpdateTime(new Date());
         Site site = BeanUtil.dataToEntity(siteData, new Site());
         System.out.println(site);
     }

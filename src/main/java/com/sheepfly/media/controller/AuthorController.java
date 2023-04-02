@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -66,7 +66,7 @@ public class AuthorController {
             return ResponseData.fail(ErrorCode.AUTHOR_ID_AND_NAME_CANT_NULL);
         }
         Author author = BeanUtil.dataToEntity(authorData, Author.class);
-        author.setCreateTime(LocalDate.now());
+        author.setCreateTime(new Date());
         Author savedAuthor = service.save(author);
         return ResponseData.success(savedAuthor);
     }
