@@ -4,10 +4,10 @@
   <!--搜索条件-->
   <sql id="params">
     <if test="params.userId != null and params.userId != ''">
-      USER_ID = #{params.userId}
+      USER_ID like #{params.userId}
     </if>
     <if test="params.username != null and params.username != ''">
-      USERNAME = #{params.username}
+      USERNAME like #{params.username}
     </if>
     <if test="params.siteId != null and params.siteId != ''">
       SITE_ID = #{params.siteId}
@@ -26,7 +26,7 @@
   <select id="queryAuthorList" resultType="com.sheepfly.media.entity.Author"
       parameterType="com.sheepfly.media.vo.common.ProComponentsRequestVo">
     select *
-    from AUTHOR
+    from media.AUTHOR
     <where>
       <include refid="params"/>
     </where>
@@ -40,8 +40,8 @@
       <property name="prefix" value="site2"/>
     </include>
     ''
-    from AUTHOR
-    left join SITE
+    from media.AUTHOR
+    left join media.SITE
     on author.SITE_ID = SITE.ID
     <where>
       <include refid="params"/>
@@ -51,18 +51,9 @@
   <select id="queryAuthorVoCount" resultType="java.lang.Integer"
       parameterType="com.sheepfly.media.vo.common.ProComponentsRequestVo">
     select count(AUTHOR.ID)
-    from AUTHOR
-    left join SITE
+    from media.AUTHOR
+    left join media.SITE
     on author.SITE_ID = SITE.ID
-    <where>
-      <include refid="params"/>
-    </where>
-  </select>
-
-  <select id="queryAuthorCount" resultType="java.lang.Integer"
-      parameterType="com.sheepfly.media.vo.common.ProComponentsRequestVo">
-    select count(ID)
-    from AUTHOR
     <where>
       <include refid="params"/>
     </where>

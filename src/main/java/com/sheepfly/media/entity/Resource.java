@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,7 +20,7 @@ import java.time.LocalDate;
  * @since 2022-02-07
  */
 @Entity
-@Table(name = "RESOURCE")
+@Table(schema = "MEDIA", name = "RESOURCE")
 public class Resource implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -70,19 +70,19 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Column(name = "CREATE_TIME")
     @NotNull
-    private LocalDate createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
     @Column(name = "UPDATE_TIME")
-    private LocalDate updateTime;
+    private Date updateTime;
 
     /**
      * 保存时间（入库时间）。
      */
     @Column(name = "SAVE_TIME")
-    private LocalDate saveTime;
+    private Date saveTime;
 
 
     public String getId() {
@@ -125,27 +125,27 @@ public class Resource implements Serializable, EntityInterface {
         this.albumId = albumId;
     }
 
-    public LocalDate getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDate createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDate getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDate updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
-    public LocalDate getSaveTime() {
+    public Date getSaveTime() {
         return saveTime;
     }
 
-    public void setSaveTime(LocalDate saveTime) {
+    public void setSaveTime(Date saveTime) {
         this.saveTime = saveTime;
     }
 

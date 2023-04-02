@@ -3,7 +3,7 @@ package com.sheepfly.media.form.filter;
 import com.sheepfly.media.vo.common.ProPaginationForm;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * 查询作者用的参数。
@@ -39,12 +39,12 @@ public class AuthorFilter extends ProPaginationForm implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDate createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private LocalDate updateTime;
+    private Date updateTime;
 
     @Override
     public String toString() {
@@ -91,19 +91,19 @@ public class AuthorFilter extends ProPaginationForm implements Serializable {
         this.homepage = homepage;
     }
 
-    public LocalDate getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDate createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDate getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDate updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 }

@@ -1,5 +1,11 @@
-DROP TABLE IF EXISTS RESOURCE_TYPE_MAP;
-CREATE TABLE RESOURCE_TYPE_MAP
+-- 这个文件中的sql只能执行一次，如果在使用一段时间后执行，则会清空原来的数据。
+-- 如果启动后没有在页面进行操作，则可以执行。
+-- 这里的操作指：没有新增数据，页面查询结果都为空（配置类查询结果除外）
+drop schema  if exists MEDIA;
+create schema media;
+
+DROP TABLE IF exists media.RESOURCE_TYPE_MAP;
+CREATE TABLE MEDIA.RESOURCE_TYPE_MAP
 (
   ID VARCHAR(19) NOT NULL COMMENT '主键',
   PARENT_ID VARCHAR(19) COMMENT '父类型',
@@ -8,10 +14,11 @@ CREATE TABLE RESOURCE_TYPE_MAP
   UPDATE_TIME DATETIME COMMENT '更新时间',
   PRIMARY KEY (ID)
 );
-comment on table RESOURCE_TYPE_MAP is '资源类型映射';
+comment on table MEDIA.RESOURCE_TYPE_MAP is '资源类型映射';
+create index media.resource_type_map_1 on MEDIA.RESOURCE_TYPE_MAP(CREATE_TIME desc);
 
-DROP TABLE IF EXISTS RESOURCE;
-CREATE TABLE RESOURCE
+DROP TABLE IF exists media.RESOURCE;
+CREATE TABLE MEDIA.RESOURCE
 (
   ID VARCHAR(19) NOT NULL COMMENT 'ID',
   FILENAME VARCHAR(90) NOT NULL COMMENT '文件名',
@@ -23,10 +30,13 @@ CREATE TABLE RESOURCE
   SAVE_TIME DATETIME COMMENT '保存时间',
   PRIMARY KEY (ID)
 );
-COMMENT on table RESOURCE is '资源';
+comment on table MEDIA.RESOURCE is '资源';
+create index media.RESOURCE_1 on MEDIA.RESOURCE(CREATE_TIME desc);
+create index media.RESOURCE_2 on MEDIA.RESOURCE(UPDATE_TIME desc);
+create index media.RESOURCE_3 on MEDIA.RESOURCE(FILENAME);
 
-DROP TABLE IF EXISTS RESOURCE_TYPE;
-CREATE TABLE RESOURCE_TYPE
+DROP TABLE IF exists media.RESOURCE_TYPE;
+CREATE TABLE MEDIA.RESOURCE_TYPE
 (
   ID VARCHAR(19) NOT NULL COMMENT 'ID',
   RESOURCE_ID VARCHAR(19) NOT NULL COMMENT '资源id',
@@ -35,10 +45,10 @@ CREATE TABLE RESOURCE_TYPE
   UPDATE_TIME DATETIME COMMENT '更新时间',
   PRIMARY KEY (ID)
 );
-COMMENT on table RESOURCE_TYPE is '资源和类型关联';
+comment on table MEDIA.RESOURCE_TYPE is '资源和类型关联';
 
-DROP TABLE IF EXISTS AUTHOR;
-CREATE TABLE AUTHOR
+DROP TABLE IF exists media.AUTHOR;
+CREATE TABLE MEDIA.AUTHOR
 (
   ID VARCHAR(19) NOT NULL COMMENT 'ID',
   USER_ID VARCHAR(90) COMMENT '用户在站点注册时的id',
@@ -49,10 +59,15 @@ CREATE TABLE AUTHOR
   UPDATE_TIME DATETIME COMMENT '更新时间',
   PRIMARY KEY (ID)
 );
-COMMENT on table AUTHOR is '创作人员';
+comment on table MEDIA.AUTHOR is '创作人员';
+create index media.author_1 on media.author(USER_ID);
+create index media.author_2 on media.author(USERNAME);
+create index media.author_3 on media.author(SITE_ID);
+create index media.author_4 on media.author(CREATE_TIME);
+create index media.author_5 on media.author(UPDATE_TIME);
 
-DROP TABLE IF EXISTS SITE;
-CREATE TABLE SITE
+DROP TABLE IF exists media.SITE;
+CREATE TABLE MEDIA.SITE
 (
   ID VARCHAR(19) NOT NULL COMMENT 'ID',
   SITE_NAME VARCHAR(90) NOT NULL COMMENT '网站名称',
@@ -61,10 +76,13 @@ CREATE TABLE SITE
   UPDATE_TIME DATETIME COMMENT '更细时间',
   PRIMARY KEY (ID)
 );
-COMMENT on table SITE is '站点';
+comment on table MEDIA.SITE is '站点';
+create index media.site_1 on media.site(SITE_NAME);
+create index media.site_2 on media.site(CREATE_TIME);
+create index media.site_3 on media.site(UPDATE_TIME);
 
-DROP TABLE IF EXISTS ALBUM;
-CREATE TABLE ALBUM
+DROP TABLE IF exists media.ALBUM;
+CREATE TABLE MEDIA.ALBUM
 (
   ID VARCHAR(19) NOT NULL COMMENT 'ID',
   ALBUM_NAME VARCHAR(90) NOT NULL COMMENT '专辑',
@@ -73,10 +91,10 @@ CREATE TABLE ALBUM
   UPDATE_TIME DATETIME COMMENT '更新时间',
   PRIMARY KEY (ID)
 );
-COMMENT on table ALBUM is '专辑';
+comment on table MEDIA.ALBUM is '专辑';
 
-DROP TABLE IF EXISTS RESOURCE_ALBUM;
-CREATE TABLE RESOURCE_ALBUM
+DROP TABLE IF exists media.RESOURCE_ALBUM;
+CREATE TABLE MEDIA.RESOURCE_ALBUM
 (
   ID VARCHAR(19) NOT NULL COMMENT 'ID',
   CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
@@ -85,4 +103,4 @@ CREATE TABLE RESOURCE_ALBUM
   ALBUM_ID VARCHAR(19) NOT NULL COMMENT '专辑ID',
   PRIMARY KEY (ID)
 );
-COMMENT on table RESOURCE_ALBUM is '资源所属专辑';
+comment on table MEDIA.RESOURCE_ALBUM is '资源所属专辑';

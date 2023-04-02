@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -18,7 +18,7 @@ import java.time.LocalDate;
  * @since 2022-02-07
  */
 @Entity
-@Table(name = "RESOURCE_TYPE_MAP")
+@Table(schema = "MEDIA", name = "RESOURCE_TYPE_MAP")
 public class ResourceTypeMap implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -45,13 +45,13 @@ public class ResourceTypeMap implements Serializable, EntityInterface {
      * 创建时间
      */
     @Column(name = "CREATE_TIME")
-    private LocalDate createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
     @Column(name = "UPDATE_TIME")
-    private LocalDate updateTime;
+    private Date updateTime;
 
 
     public String getId() {
@@ -78,19 +78,19 @@ public class ResourceTypeMap implements Serializable, EntityInterface {
         this.name = name;
     }
 
-    public LocalDate getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDate createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDate getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDate updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 

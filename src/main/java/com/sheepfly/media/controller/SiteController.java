@@ -1,6 +1,7 @@
 package com.sheepfly.media.controller;
 
 
+import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.SiteData;
@@ -12,6 +13,7 @@ import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -57,6 +59,12 @@ public class SiteController {
     @PostMapping("/fetchSiteVoListPro")
     @ResponseBody
     public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteFilter, Object> vo) {
+        SiteFilter form = vo.getParams();
+        if (form.getSiteName() != null && !StringUtils.isBlank(form.getSiteName())) {
+            // todo spring security
+            String siteName = form.getSiteName().replace(Constant.SQL_LIKE, Constant.BLANK_STRING);
+            form.setSiteName(Constant.SQL_LIKE + siteName + Constant.SQL_LIKE);
+        }
         return service.querySiteList(vo);
     }
 

@@ -1,5 +1,6 @@
 package com.sheepfly.media.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.dao.AuthorMapper;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.exception.BusinessException;
@@ -30,6 +31,8 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
     @Override
     public ProTableObject<AuthorVo> queryForAuthorList(
             ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
+        AuthorFilter params = vo.getParams();
+        PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<AuthorVo> authorList = mapper.queryAuthorVoList(vo);
         int count = mapper.queryAuthorVoCount(vo);
         return ProTableObject.success(authorList, count);

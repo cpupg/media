@@ -1,7 +1,7 @@
 package com.sheepfly.media.vo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class ResourceTypeMapVo implements Serializable {
 
@@ -25,12 +25,12 @@ public class ResourceTypeMapVo implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDate createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private LocalDate updateTime;
+    private Date updateTime;
 
     @Override
     public String toString() {
@@ -67,19 +67,19 @@ public class ResourceTypeMapVo implements Serializable {
         this.name = name;
     }
 
-    public LocalDate getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDate createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDate getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDate updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 }
