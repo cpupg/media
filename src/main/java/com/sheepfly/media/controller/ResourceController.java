@@ -5,6 +5,7 @@ import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.form.data.ResourceData;
 import com.sheepfly.media.service.IResourceService;
 import com.sheepfly.media.vo.ResourceVo;
+import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
 import org.apache.commons.beanutils.BeanUtils;
@@ -54,6 +55,18 @@ public class ResourceController {
         resource.setSaveTime(date);
         Resource savedResource = service.save(resource);
         return ResponseData.success(savedResource);
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseData<ResourceVo> delete(@RequestBody String id) {
+        Resource resource = service.findById(id);
+        if (resource == null) {
+            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
+        } else {
+            service.deleteById(id);
+            return ResponseData.success();
+        }
     }
 }
 
