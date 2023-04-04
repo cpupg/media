@@ -9,7 +9,39 @@ package com.sheepfly.media.form.data;
  */
 public class ResourceData {
     /**
-     * 主键id。
+     * 作者id。
      */
-    private String id;
+    private String authorId;
+    /**
+     * 文件名。
+     */
+    private String filename;
+    /**
+     * 资源目录。
+     */
+    private String dir;
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
 }

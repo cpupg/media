@@ -29,6 +29,7 @@ import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -82,6 +83,7 @@ public class SiteController {
     public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData) {
         siteData.setId(null);
         Site site = BeanUtil.dataToEntity(siteData, Site.class);
+        site.setCreateTime(new Date());
         Set<ConstraintViolation<Site>> validate = validator.validate(site);
         if (!validate.isEmpty()) {
             throw new ConstraintViolationException("验证失败", validate);

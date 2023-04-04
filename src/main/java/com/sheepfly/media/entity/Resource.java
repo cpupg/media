@@ -1,12 +1,12 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +30,7 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Id
     @NotNull
+    @Length(max = 19)
     private String id;
 
     /**
@@ -37,7 +38,7 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Column(name = "FILENAME")
     @NotNull
-    @Max(90)
+    @Length(max = 90)
     private String filename;
 
     /**
@@ -45,7 +46,7 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Column(name = "DIR")
     @NotNull
-    @Max(900)
+    @Length(min = 0, max = 900)
     private String dir;
 
     /**
@@ -53,13 +54,14 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Column(name = "AUTHOR_ID")
     @NotNull
-    @Max(19)
+    @Length(max = 19)
     private String authorId;
 
     /**
      * 专辑id
      */
     @Column(name = "ALBUM_ID")
+    @Length(max = 19)
     private String albumId;
 
     /**
