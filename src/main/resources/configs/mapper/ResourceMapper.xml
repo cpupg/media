@@ -24,10 +24,10 @@
       album.id album_vo_id,
       album.album_name album_vo_album_name,
       author.username author_vo_username
-    from resource res
-    left join album album
+    from media.resource res
+    left join media.album album
         on album.id = res.album_id
-    left join author author
+    left join media.author author
         on author.id = res.author_id
   </select>
 </mapper>

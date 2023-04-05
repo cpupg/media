@@ -1,13 +1,14 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -18,7 +19,8 @@ import java.time.LocalDate;
  * @since 2022-02-07
  */
 @Entity
-@Table(name = "RESOURCE_TYPE_MAP")
+@Table(schema = "MEDIA", name = "RESOURCE_TYPE_MAP")
+@Data
 public class ResourceTypeMap implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -45,63 +47,11 @@ public class ResourceTypeMap implements Serializable, EntityInterface {
      * 创建时间
      */
     @Column(name = "CREATE_TIME")
-    private LocalDate createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
     @Column(name = "UPDATE_TIME")
-    private LocalDate updateTime;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDate createTime) {
-        this.createTime = createTime;
-    }
-
-    public LocalDate getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDate updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "ResourceTypeMapRepository{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", name=" + name +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
-    }
+    private Date updateTime;
 }

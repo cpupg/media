@@ -1,17 +1,19 @@
 package com.sheepfly.media.controller;
 
 
+import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.SiteData;
 import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.util.BeanUtil;
 import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -57,6 +61,12 @@ public class SiteController {
     @PostMapping("/fetchSiteVoListPro")
     @ResponseBody
     public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteFilter, Object> vo) {
+        SiteFilter form = vo.getParams();
+        if (form.getSiteName() != null && !StringUtils.isBlank(form.getSiteName())) {
+            // todo spring security
+            String siteName = form.getSiteName().replace(Constant.SQL_LIKE, Constant.BLANK_STRING);
+            form.setSiteName(Constant.SQL_LIKE + siteName + Constant.SQL_LIKE);
+        }
         return service.querySiteList(vo);
     }
 
@@ -71,9 +81,11 @@ public class SiteController {
      */
     @PostMapping("/addSite")
     @ResponseBody
-    public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData) {
-        siteData.setId(null);
-        Site site = BeanUtil.dataToEntity(siteData, Site.class);
+    public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData)
+            throws InvocationTargetException, IllegalAccessException {
+        Site site = new Site();
+        BeanUtils.copyProperties(site, siteData);
+        site.setCreateTime(new Date());
         Set<ConstraintViolation<Site>> validate = validator.validate(site);
         if (!validate.isEmpty()) {
             throw new ConstraintViolationException("验证失败", validate);

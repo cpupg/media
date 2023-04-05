@@ -28,4 +28,14 @@ public interface IAuthorService extends BaseJpaService<Author, String, AuthorRep
      */
     ProTableObject<AuthorVo> queryForAuthorList(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo)
             throws BusinessException;
+
+
+    /**
+     * 检查作者是否可以删除。
+     *
+     * @param id 作者id。
+     *
+     * @return 可以删除返回true。
+     */
+    boolean isAuthorCanBeDelete(String id);
 }
