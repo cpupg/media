@@ -60,7 +60,7 @@ public enum ErrorCode {
     /**
      * 注册网站为空。
      */
-    AUTHOR_SITE_CANT_BE_NULL("C0201001", "注册网站为空"),
+    AUTHOR_SITE_CANT_BE_NULL("C0201001", "注册网站不能为空"),
     /**
      * 用户名和用户id不能同时为空。
      */

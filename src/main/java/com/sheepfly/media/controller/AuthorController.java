@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,16 +59,12 @@ public class AuthorController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public ResponseData<Author> add(@RequestBody AuthorData authorData)
+    public ResponseData<Author> add(@RequestBody @Validated AuthorData authorData)
             throws InvocationTargetException, IllegalAccessException {
         log.info("保存作者");
         String siteId = authorData.getSiteId();
         if (ValidateUtil.isEmptyString(siteId) || !siteService.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.AUTHOR_SITE_CANT_BE_NULL);
-        }
-        if (ValidateUtil.isEmptyString(authorData.getUserId()) && ValidateUtil.isEmptyString(
-                authorData.getUsername())) {
-            return ResponseData.fail(ErrorCode.AUTHOR_ID_AND_NAME_CANT_NULL);
         }
         Author author = new Author();
         BeanUtils.copyProperties(author, authorData);

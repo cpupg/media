@@ -11,6 +11,7 @@ import com.sheepfly.media.vo.common.ResponseData;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +47,7 @@ public class ResourceController {
 
     @PostMapping("/add")
     @ResponseBody
-    public ResponseData<ResourceVo> add(@RequestBody ResourceData resourceData)
+    public ResponseData<ResourceVo> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException {
         Resource resource = new Resource();
         BeanUtils.copyProperties(resource, resourceData);

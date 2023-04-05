@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -30,37 +29,36 @@ public class Author implements Serializable, EntityInterface {
      * ID
      */
     @Id
-    @NotNull
     private String id;
 
     /**
      * 用户在站点注册时的id
      */
-    @Column(name = "USER_ID")
+    @Column(name = "USER_ID", length = 90)
     private String userId;
 
     /**
      * 用户名
      */
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", nullable = false, length = 90)
     private String username;
 
     /**
      * 注册站点ID
      */
-    @Column(name = "SITE_ID", nullable = false)
+    @Column(name = "SITE_ID", nullable = false, length = 19)
     private String siteId;
 
     /**
      * 主页
      */
-    @Column(name = "HOMEPAGE")
+    @Column(name = "HOMEPAGE", length = 90)
     private String homepage;
 
     /**
      * 创建时间
      */
-    @Column(name = "CREATE_TIME")
+    @Column(name = "CREATE_TIME", nullable = false)
     private Date createTime;
 
     /**
