@@ -58,9 +58,9 @@ public class ResourceController {
         File file = new File(resource.getDir());
         if (file.isFile()) {
             resource.setFilename(file.getName());
-            resource.setDir(file.getParent());
-        } else {
             resource.setDir(file.getParentFile().getAbsolutePath());
+        } else {
+            resource.setDir(file.getAbsolutePath());
         }
         Resource savedResource = service.save(resource);
         return ResponseData.success(savedResource);
