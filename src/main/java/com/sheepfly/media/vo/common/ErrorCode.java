@@ -69,6 +69,7 @@ public enum ErrorCode {
      * 作者标识不能为空。
      */
     AUTHOR_ID_CANT_BE_NULL("C0201002", "作者标识不能为空"),
+    AUTHOR_ASSOCIATE_RESOURCE("C0201003", "作者下由关联的资源"),
     // 作者模块结束201
 
     // 公共模块开始101

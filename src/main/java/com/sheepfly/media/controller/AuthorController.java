@@ -83,6 +83,9 @@ public class AuthorController {
         if (ValidateUtil.isEmptyString(id)) {
             throw new BusinessException(ErrorCode.AUTHOR_ID_CANT_BE_NULL);
         }
+        if (service.isAuthorCanBeDelete(id)) {
+            throw new BusinessException(ErrorCode.AUTHOR_ASSOCIATE_RESOURCE);
+        }
         if (service.existsById(id)) {
             service.deleteById(id);
             log.info("删除完成");
