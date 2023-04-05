@@ -8,13 +8,13 @@ import com.sheepfly.media.form.data.AuthorData;
 import com.sheepfly.media.form.filter.AuthorFilter;
 import com.sheepfly.media.service.IAuthorService;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.util.BeanUtil;
 import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.AuthorVo;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 /**
@@ -57,7 +58,8 @@ public class AuthorController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public ResponseData<Author> add(@RequestBody AuthorData authorData) {
+    public ResponseData<Author> add(@RequestBody AuthorData authorData)
+            throws InvocationTargetException, IllegalAccessException {
         log.info("保存作者");
         String siteId = authorData.getSiteId();
         if (ValidateUtil.isEmptyString(siteId) || !siteService.existsById(siteId)) {
@@ -67,7 +69,8 @@ public class AuthorController {
                 authorData.getUsername())) {
             return ResponseData.fail(ErrorCode.AUTHOR_ID_AND_NAME_CANT_NULL);
         }
-        Author author = BeanUtil.dataToEntity(authorData, Author.class);
+        Author author = new Author();
+        BeanUtils.copyProperties(author, authorData);
         author.setCreateTime(new Date());
         Author savedAuthor = service.save(author);
         return ResponseData.success(savedAuthor);

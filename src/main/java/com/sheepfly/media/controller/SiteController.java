@@ -7,12 +7,12 @@ import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.SiteData;
 import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.util.BeanUtil;
 import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +29,7 @@ import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Set;
 
@@ -80,9 +81,11 @@ public class SiteController {
      */
     @PostMapping("/addSite")
     @ResponseBody
-    public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData) {
+    public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData)
+            throws InvocationTargetException, IllegalAccessException {
         siteData.setId(null);
-        Site site = BeanUtil.dataToEntity(siteData, Site.class);
+        Site site = new Site();
+        BeanUtils.copyProperties(site, siteData);
         site.setCreateTime(new Date());
         Set<ConstraintViolation<Site>> validate = validator.validate(site);
         if (!validate.isEmpty()) {
