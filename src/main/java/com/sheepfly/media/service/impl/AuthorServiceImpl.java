@@ -3,9 +3,11 @@ package com.sheepfly.media.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.dao.AuthorMapper;
 import com.sheepfly.media.entity.Author;
+import com.sheepfly.media.entity.Resource_;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.filter.AuthorFilter;
 import com.sheepfly.media.repository.AuthorRepository;
+import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.service.IAuthorService;
 import com.sheepfly.media.vo.AuthorVo;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
@@ -27,6 +29,8 @@ import java.util.List;
 public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, AuthorRepository> implements IAuthorService {
     @Autowired
     private AuthorMapper mapper;
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     @Override
     public ProTableObject<AuthorVo> queryForAuthorList(
@@ -36,5 +40,12 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
         List<AuthorVo> authorList = mapper.queryAuthorVoList(vo);
         int count = mapper.queryAuthorVoCount(vo);
         return ProTableObject.success(authorList, count);
+    }
+
+    @Override
+    public boolean isAuthorCanBeDelete(String id) {
+        long count = resourceRepository.count(
+                (root, query, builder) -> builder.equal(root.get(Resource_.AUTHOR_ID), id));
+        return count == 0;
     }
 }
