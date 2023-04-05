@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Validator;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +55,13 @@ public class ResourceController {
         Date date = new Date();
         resource.setCreateTime(date);
         resource.setSaveTime(date);
+        File file = new File(resource.getDir());
+        if (file.isFile()) {
+            resource.setFilename(file.getName());
+            resource.setDir(file.getParent());
+        } else {
+            resource.setDir(file.getParentFile().getAbsolutePath());
+        }
         Resource savedResource = service.save(resource);
         return ResponseData.success(savedResource);
     }
