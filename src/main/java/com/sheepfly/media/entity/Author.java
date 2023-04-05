@@ -1,6 +1,7 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ import java.util.Date;
  */
 @Table(schema = "MEDIA", name = "AUTHOR")
 @Entity
+@Data
 public class Author implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -66,74 +68,4 @@ public class Author implements Serializable, EntityInterface {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSiteId() {
-        return siteId;
-    }
-
-    public void setSiteId(String site) {
-        this.siteId = site;
-    }
-
-    public String getHomepage() {
-        return homepage;
-    }
-
-    public void setHomepage(String homepage) {
-        this.homepage = homepage;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", username=" + username +
-                ", site=" + siteId +
-                ", homepage=" + homepage +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
-    }
 }

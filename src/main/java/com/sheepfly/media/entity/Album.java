@@ -1,6 +1,7 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(schema = "MEDIA", name = "ALBUM")
+@Data
 public class Album implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -56,56 +58,4 @@ public class Album implements Serializable, EntityInterface {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAlbumName() {
-        return albumName;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
-
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Album{" +
-                "id=" + id +
-                ", albumName=" + albumName +
-                ", authorId=" + authorId +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
-    }
 }

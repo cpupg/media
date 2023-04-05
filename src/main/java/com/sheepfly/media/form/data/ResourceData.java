@@ -1,5 +1,7 @@
 package com.sheepfly.media.form.data;
 
+import lombok.Data;
+
 /**
  * 添加资源的表单。
  *
@@ -7,6 +9,7 @@ package com.sheepfly.media.form.data;
  * @date 2022.12.19
  * @since 0.0.1-SNAPSHOT
  */
+@Data
 public class ResourceData {
     /**
      * 作者id。
@@ -20,28 +23,4 @@ public class ResourceData {
      * 资源目录。
      */
     private String dir;
-
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getDir() {
-        return dir;
-    }
-
-    public void setDir(String dir) {
-        this.dir = dir;
-    }
 }

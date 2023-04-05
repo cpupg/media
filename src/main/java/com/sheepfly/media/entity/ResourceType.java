@@ -1,6 +1,7 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import java.util.Date;
  */
 @Entity
 @Table(schema = "MEDIA", name = "RESOURCE_TYPE")
+@Data
 public class ResourceType implements Serializable, EntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -52,56 +54,4 @@ public class ResourceType implements Serializable, EntityInterface {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(String resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public String getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "ResourceType{" +
-                "id=" + id +
-                ", resourceId=" + resourceId +
-                ", typeId=" + typeId +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                "}";
-    }
 }

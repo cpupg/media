@@ -1,5 +1,7 @@
 package com.sheepfly.media.form.data;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,15 +10,10 @@ import java.util.Date;
  * 站点
  * </p>
  */
+@Data
 public class SiteData implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * ID
-     */
-
-    private String id;
 
     /**
      * 网站名称
@@ -41,50 +38,4 @@ public class SiteData implements Serializable {
      */
 
     private Date updateTime;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSiteName() {
-        return siteName;
-    }
-
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-
-    public String toString() {
-        return "Site{" + "id=" + id + ", siteName=" + siteName + ", url=" + url + ", createTime=" + createTime + ", updateTime=" + updateTime + "}";
-    }
 }

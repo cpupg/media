@@ -1,6 +1,7 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import java.util.Date;
  * @since 2022-02-07
  */
 @Entity
+@Data
 @Table(schema = "MEDIA", name = "RESOURCE")
 public class Resource implements Serializable, EntityInterface {
 
@@ -85,83 +87,4 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Column(name = "SAVE_TIME")
     private Date saveTime;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getDir() {
-        return dir;
-    }
-
-    public void setDir(String dir) {
-        this.dir = dir;
-    }
-
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(String albumId) {
-        this.albumId = albumId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Date getSaveTime() {
-        return saveTime;
-    }
-
-    public void setSaveTime(Date saveTime) {
-        this.saveTime = saveTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Resource{" +
-                "id='" + id + '\'' +
-                ", filename='" + filename + '\'' +
-                ", dir='" + dir + '\'' +
-                ", authorId='" + authorId + '\'' +
-                ", albumId='" + albumId + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", saveTime=" + saveTime +
-                '}';
-    }
 }

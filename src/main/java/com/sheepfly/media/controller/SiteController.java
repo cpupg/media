@@ -83,7 +83,6 @@ public class SiteController {
     @ResponseBody
     public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData)
             throws InvocationTargetException, IllegalAccessException {
-        siteData.setId(null);
         Site site = new Site();
         BeanUtils.copyProperties(site, siteData);
         site.setCreateTime(new Date());
