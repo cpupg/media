@@ -79,4 +79,12 @@ public class Resource implements Serializable, EntityInterface {
      */
     @Column(name = "SAVE_TIME")
     private Date saveTime;
+
+    /**
+     * 是否有效，用于逻辑删除。
+     *
+     * 0无效1有效。
+     */
+    @Column(name = "VALID", length = 2)
+    private String valid;
 }

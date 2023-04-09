@@ -54,4 +54,12 @@ public class Site implements Serializable, EntityInterface {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
+
+    /**
+     * 是否有效，用于逻辑删除。
+     *
+     * 0无效1有效。
+     */
+    @Column(name = "VALID", length = 2)
+    private String valid;
 }
