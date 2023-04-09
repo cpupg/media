@@ -104,7 +104,7 @@ public class SiteController {
     @GetMapping("/delete")
     @ResponseBody
     public ResponseData<Object> deleteSite(@RequestParam("id") String siteId) throws BusinessException {
-        if (ValidateUtil.isEmptyString(siteId)) {
+        if (StringUtils.isEmpty(siteId)) {
             throw new BusinessException(ErrorCode.SITE_ID_CANT_NULL);
         }
         if (!service.existsById(siteId)) {
