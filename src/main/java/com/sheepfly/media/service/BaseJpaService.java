@@ -1,6 +1,7 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.vo.common.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,4 +71,21 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @param t 要删除的对象。
      */
     void delete(T t);
+
+    /**
+     * 将指定id的删除状态改为{@link LogicDelete#DELETED}
+     *
+     * @param id 主键id。
+     */
+
+    void logicDeleteById(String id);
+
+    /**
+     * 判断指定id的对象是否存在且未删除。
+     *
+     * @param id 主键id。
+     *
+     * @return 存在时返回true。
+     */
+    boolean logicExistById(String id);
 }

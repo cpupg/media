@@ -83,8 +83,8 @@ public class Resource implements Serializable, EntityInterface {
     /**
      * 是否有效，用于逻辑删除。
      *
-     * 0无效1有效。
+     * <p>0未删除1已删除。</p>
      */
-    @Column(name = "VALID", length = 2)
-    private String valid;
+    @Column(name = "DELETE_STATUS")
+    private Integer deleteStatus;
 }

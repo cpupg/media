@@ -1,6 +1,7 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 @Table(schema = "MEDIA", name = "SITE")
 @Data
-public class Site implements Serializable, EntityInterface {
+public class Site implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,8 +59,8 @@ public class Site implements Serializable, EntityInterface {
     /**
      * 是否有效，用于逻辑删除。
      *
-     * 0无效1有效。
+     * 0未删除1已删除。
      */
-    @Column(name = "VALID", length = 2)
-    private String valid;
+    @Column(name = "DELETE_STATUS")
+    private Integer deleteStatus;
 }

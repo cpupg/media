@@ -30,7 +30,7 @@ create table AUTHOR
   HOMEPAGE CHARACTER VARYING(90),
   CREATE_TIME TIMESTAMP not null,
   UPDATE_TIME TIMESTAMP,
-  VALID CHARACTER VARYING(2) default '1' not null
+  DELETE_STATUS INTEGER default 0 not null
 );
 
 comment on table AUTHOR is '创作人员';
@@ -49,7 +49,7 @@ comment on column AUTHOR.CREATE_TIME is '创建时间';
 
 comment on column AUTHOR.UPDATE_TIME is '更新时间';
 
-comment on column AUTHOR.VALID is '有效性0无效1有效';
+comment on column AUTHOR.DELETE_STATUS is '删除状态0未删除1删除';
 
 create index AUTHOR_1
   on AUTHOR (USER_ID);
@@ -77,7 +77,7 @@ create table RESOURCE
   CREATE_TIME TIMESTAMP not null,
   UPDATE_TIME TIMESTAMP,
   SAVE_TIME TIMESTAMP,
-  VALID CHARACTER VARYING(2) default '1' not null
+  DELETE_STATUS INTEGER default 0 not null
 );
 
 comment on table RESOURCE is '资源';
@@ -98,7 +98,7 @@ comment on column RESOURCE.UPDATE_TIME is '更新时间';
 
 comment on column RESOURCE.SAVE_TIME is '保存时间';
 
-comment on column RESOURCE.VALID is '有效性0无效1有效';
+comment on column RESOURCE.DELETE_STATUS is '删除状态0未删除1删除';
 
 create index RESOURCE_1
   on RESOURCE (CREATE_TIME desc);
@@ -186,7 +186,7 @@ create table SITE
   URL CHARACTER VARYING(90) not null,
   CREATE_TIME TIMESTAMP not null,
   UPDATE_TIME TIMESTAMP,
-  VALID CHARACTER VARYING(2) default '1' not null
+  DELETE_STATUS INTEGER default 0 not null
 );
 
 comment on table SITE is '站点';
@@ -201,7 +201,7 @@ comment on column SITE.CREATE_TIME is '创建时间';
 
 comment on column SITE.UPDATE_TIME is '更细时间';
 
-comment on column SITE.VALID is '有效性0无效1有效';
+comment on column SITE.DELETE_STATUS is '删除状态0未删除1删除';
 
 create index SITE_1
   on SITE (SITE_NAME);
