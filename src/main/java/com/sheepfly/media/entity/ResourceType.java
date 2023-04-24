@@ -1,6 +1,7 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 @Table(schema = "MEDIA", name = "RESOURCE_TYPE")
 @Data
-public class ResourceType implements Serializable, EntityInterface {
+public class ResourceType implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,4 +55,14 @@ public class ResourceType implements Serializable, EntityInterface {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
+
+    @Override
+    public Integer getDeleteStatus() {
+        return null;
+    }
+
+    @Override
+    public void setDeleteStatus(Integer deleteStatus) {
+
+    }
 }

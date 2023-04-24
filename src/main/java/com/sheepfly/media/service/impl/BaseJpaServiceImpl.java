@@ -18,7 +18,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.Optional;
 
 @Slf4j
-public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
+public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
         implements BaseJpaService<T, ID, D> {
     @Autowired
     private D d;

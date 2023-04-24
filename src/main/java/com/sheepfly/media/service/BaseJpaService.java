@@ -5,6 +5,7 @@ import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.vo.common.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * jpa增删改查。
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author sheepfly
  */
-public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepository<T, ID>> {
+public interface BaseJpaService<T extends EntityInterface & LogicDelete, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>> {
     /**
      * 根据id查找数据。
      *
