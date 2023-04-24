@@ -5,6 +5,7 @@ import com.sheepfly.media.config.LogicDeleteEntity;
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.exception.BusinessException;
+import com.sheepfly.media.exception.BusinessRunTimeException;
 import com.sheepfly.media.service.BaseJpaService;
 import com.sheepfly.media.vo.common.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -42,19 +43,16 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
 
     @Override
     public boolean existsById(ID id) {
-        // todo 判断是否可以逻辑删除
         return d.existsById(id);
     }
 
     @Override
     public void deleteById(ID id) {
-        // todo 判断是否可以逻辑删除
         d.deleteById(id);
     }
 
     @Override
-    public void deleteById(ID id, ErrorCode errorCode) throws BusinessException {
-        // todo 判断是否可以逻辑删除
+    public void safeDeleteById(ID id, ErrorCode errorCode) throws BusinessException {
         if (existsById(id)) {
             deleteById(id);
         } else {
@@ -63,42 +61,29 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     }
 
     @Override
-    public void delete(T t) {
-        // todo 测试
-        if (checkLogicDelete(t.getClass())) {
-            logicDeleteById(t.getId());
-        } else {
-            d.delete(t);
-        }
-    }
-
-    /**
-     * 检查是否可以进行逻辑删除。
-     *
-     * <p>若一个实体实现了{@link LogicDelete}接口，则可以进行逻辑删除。</p>
-     *
-     * @param clazz 要检查的实体。
-     *
-     * @return 可以逻辑删除时返回true。
-     */
-    private boolean checkLogicDelete(Class<? extends EntityInterface> clazz) {
-        Class<?>[] interfaces = clazz.getInterfaces();
-        for (Class<?> itf : interfaces) {
-            if (itf == LogicDelete.class) {
-                return true;
-            }
-        }
-        return false;
+    public T logicDelete(T t) {
+        return d.save(t);
     }
 
     @Override
-    public void logicDeleteById(String id) {
-        // todo 逻辑删除（更新）
-        Specification<T> specification = (root, query, builder) -> {
-            builder.equal(root.get("DELETE_STATUS"), LogicDelete.DELETED);
-            d.save(null);
-            return null;
-        };
+    public T logicDeleteById(String id, Class<T> clazz) {
+        try {
+            // todo 泛型实体类需要实现LogicDelete接口
+            T t = clazz.newInstance();
+            t.setId(id);
+            return d.save(t);
+        } catch (Exception e) {
+            throw new BusinessRunTimeException(ErrorCode.LOGIC_DELETE_CREATE_FAIL);
+        }
+    }
+
+    @Override
+    public T safeLogicDeleteById(String id, Class<T> entityType, ErrorCode errorCode) throws BusinessException {
+        if (logicExistById(id)) {
+            return logicDeleteById(id, entityType);
+        } else {
+            throw new BusinessException(errorCode);
+        }
     }
 
     @Override

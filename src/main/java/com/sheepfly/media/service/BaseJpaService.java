@@ -63,22 +63,41 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @param id 主键id。
      * @param errorCode 错误码。
      */
-    void deleteById(ID id, ErrorCode errorCode) throws BusinessException;
+    void safeDeleteById(ID id, ErrorCode errorCode) throws BusinessException;
 
     /**
-     * 删除对象。
+     * 逻辑删除一个对象。
+     *
+     * <p>为防止副作用，建议只设置主键id和删除状态两个字段。</p>
      *
      * @param t 要删除的对象。
+     *
+     * @return 已删除的对象。
      */
-    void delete(T t);
+    T logicDelete(T t);
 
     /**
      * 将指定id的删除状态改为{@link LogicDelete#DELETED}
      *
      * @param id 主键id。
+     * @param clazz 实体类型。
+     *
+     * @return 已删除的对象。
      */
+    T logicDeleteById(String id, Class<T> clazz);
 
-    void logicDeleteById(String id);
+    /**
+     * 将指定id的删除状态改为{@link LogicDelete#DELETED}。
+     *
+     * <p>删除前会判断对象是否存在，若不存在，则抛出异常。</p>
+     *
+     * @param id 主键id。
+     * @param entityType。
+     * @param errorCode 指定独享不存在时的错误码。
+     *
+     * @return 已删除的对象。
+     */
+    T safeLogicDeleteById(String id, Class<T> entityType, ErrorCode errorCode) throws BusinessException;
 
     /**
      * 判断指定id的对象是否存在且未删除。
