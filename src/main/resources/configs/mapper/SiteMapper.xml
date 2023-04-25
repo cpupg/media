@@ -25,6 +25,7 @@
     UPDATE_TIME
     from media.SITE
     <where>
+      delete_status = '0'
       <if test="siteName != null and !siteName.equals('')">SITE_NAME like #{siteName}</if>
     </where>
     order by create_time desc
@@ -35,6 +36,7 @@
     select count(1)
     from media.SITE
     <where>
+      delete_status = '0'
       <if test="siteName != null and siteName != ''">SITE_NAME like #{siteName}</if>
     </where>
   </select>

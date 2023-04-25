@@ -1,7 +1,6 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.config.LogicDeleteEntity;
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.exception.BusinessException;
@@ -15,6 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import javax.persistence.criteria.Predicate;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -24,8 +24,6 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
     private D d;
     @Autowired
     private Snowflake snowflake;
-    @Autowired
-    private LogicDeleteEntity logicDeleteEntity;
 
     @Override
     public T findById(ID id) {
@@ -62,23 +60,26 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
 
     @Override
     public T logicDelete(T t) {
+        if (t.getUpdateTime() == null) {
+            t.setUpdateTime(new Date());
+        }
         return d.save(t);
     }
 
     @Override
-    public T logicDeleteById(String id, Class<T> clazz) {
+    public T logicDeleteById(ID id, Class<T> clazz) {
         try {
-            // todo 泛型实体类需要实现LogicDelete接口
-            T t = clazz.newInstance();
-            t.setId(id);
+            T t = d.findById(id).orElse(null);
+            t.setUpdateTime(new Date());
+            t.setDeleteStatus(LogicDelete.DELETED);
             return d.save(t);
         } catch (Exception e) {
-            throw new BusinessRunTimeException(ErrorCode.LOGIC_DELETE_CREATE_FAIL);
+            throw new BusinessRunTimeException(ErrorCode.LOGIC_DELETE_CREATE_FAIL, e);
         }
     }
 
     @Override
-    public T safeLogicDeleteById(String id, Class<T> entityType, ErrorCode errorCode) throws BusinessException {
+    public T safeLogicDeleteById(ID id, Class<T> entityType, ErrorCode errorCode) throws BusinessException {
         if (logicExistById(id)) {
             return logicDeleteById(id, entityType);
         } else {
@@ -87,7 +88,7 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
     }
 
     @Override
-    public boolean logicExistById(String id) {
+    public boolean logicExistById(ID id) {
         Specification<T> specification = (root, query, builder) -> {
             Predicate pDeleteStatus = builder.equal(root.get(LogicDelete.DELETE_STATUS), LogicDelete.NOT_DELETED);
             Predicate pId = builder.equal(root.get(EntityInterface.ID), id);

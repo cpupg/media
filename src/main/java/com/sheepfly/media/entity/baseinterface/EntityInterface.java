@@ -1,5 +1,7 @@
 package com.sheepfly.media.entity.baseinterface;
 
+import java.util.Date;
+
 /**
  * 实体类接口。
  *
@@ -28,4 +30,18 @@ public interface EntityInterface {
      * @param id id。
      */
     void setId(String id);
+
+    /**
+     * 获取更新时间。
+     *
+     * @return 更新时间。
+     */
+    Date getUpdateTime();
+
+    /**
+     * 设置更新时间。
+     *
+     * @param date 更新时间。
+     */
+    void setUpdateTime(Date date);
 }

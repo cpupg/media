@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -73,6 +74,6 @@ public class Author implements Serializable, EntityInterface, LogicDelete {
      *
      * 0未删除1已删除。
      */
-    @Column(name = "DELETE_STATUS")
+    @Column(name = "DELETE_STATUS", insertable = false)
     private Integer deleteStatus;
 }

@@ -85,7 +85,7 @@ public interface BaseJpaService<T extends EntityInterface & LogicDelete, ID, D e
      *
      * @return 已删除的对象。
      */
-    T logicDeleteById(String id, Class<T> clazz);
+    T logicDeleteById(ID id, Class<T> clazz);
 
     /**
      * 将指定id的删除状态改为{@link LogicDelete#DELETED}。
@@ -94,11 +94,11 @@ public interface BaseJpaService<T extends EntityInterface & LogicDelete, ID, D e
      *
      * @param id 主键id。
      * @param entityType。
-     * @param errorCode 指定独享不存在时的错误码。
+     * @param errorCode 指定对象不存在时的错误码。
      *
      * @return 已删除的对象。
      */
-    T safeLogicDeleteById(String id, Class<T> entityType, ErrorCode errorCode) throws BusinessException;
+    T safeLogicDeleteById(ID id, Class<T> entityType, ErrorCode errorCode) throws BusinessException;
 
     /**
      * 判断指定id的对象是否存在且未删除。
@@ -107,5 +107,5 @@ public interface BaseJpaService<T extends EntityInterface & LogicDelete, ID, D e
      *
      * @return 存在时返回true。
      */
-    boolean logicExistById(String id);
+    boolean logicExistById(ID id);
 }

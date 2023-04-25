@@ -86,6 +86,6 @@ public class Resource implements Serializable, EntityInterface, LogicDelete {
      *
      * <p>0未删除1已删除。</p>
      */
-    @Column(name = "DELETE_STATUS")
+    @Column(name = "DELETE_STATUS", insertable = false)
     private Integer deleteStatus;
 }

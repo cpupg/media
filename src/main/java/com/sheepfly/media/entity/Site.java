@@ -61,6 +61,6 @@ public class Site implements Serializable, EntityInterface, LogicDelete {
      *
      * 0未删除1已删除。
      */
-    @Column(name = "DELETE_STATUS")
+    @Column(name = "DELETE_STATUS", insertable = false)
     private Integer deleteStatus;
 }
