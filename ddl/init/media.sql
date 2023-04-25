@@ -1,3 +1,25 @@
+create table MEDIA.ALBUM
+(
+  ID          CHARACTER VARYING(19) not null
+    primary key,
+  ALBUM_NAME  CHARACTER VARYING(90) not null,
+  AUTHOR_ID   CHARACTER VARYING(19) not null,
+  CREATE_TIME TIMESTAMP             not null,
+  UPDATE_TIME TIMESTAMP
+);
+
+comment on table MEDIA.ALBUM is '专辑';
+
+comment on column MEDIA.ALBUM.ID is 'ID';
+
+comment on column MEDIA.ALBUM.ALBUM_NAME is '专辑';
+
+comment on column MEDIA.ALBUM.AUTHOR_ID is '专辑作者';
+
+comment on column MEDIA.ALBUM.CREATE_TIME is '创建时间';
+
+comment on column MEDIA.ALBUM.UPDATE_TIME is '更新时间';
+
 create table MEDIA.AUTHOR
 (
   ID            CHARACTER VARYING(19) not null
