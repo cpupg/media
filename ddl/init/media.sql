@@ -1,106 +1,145 @@
--- 这个文件中的sql只能执行一次，如果在使用一段时间后执行，则会清空原来的数据。
--- 如果启动后没有在页面进行操作，则可以执行。
--- 这里的操作指：没有新增数据，页面查询结果都为空（配置类查询结果除外）
-drop schema  if exists MEDIA;
-create schema media;
-
-DROP TABLE IF exists media.RESOURCE_TYPE_MAP;
-CREATE TABLE MEDIA.RESOURCE_TYPE_MAP
+create table MEDIA.ALBUM
 (
-  ID VARCHAR(19) NOT NULL COMMENT '主键',
-  PARENT_ID VARCHAR(19) COMMENT '父类型',
-  NAME VARCHAR(90) NOT NULL COMMENT '名称',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更新时间',
-  PRIMARY KEY (ID)
+  ID          CHARACTER VARYING(19) not null
+    primary key,
+  ALBUM_NAME  CHARACTER VARYING(90) not null,
+  AUTHOR_ID   CHARACTER VARYING(19) not null,
+  CREATE_TIME TIMESTAMP             not null,
+  UPDATE_TIME TIMESTAMP
 );
-comment on table MEDIA.RESOURCE_TYPE_MAP is '资源类型映射';
-create index media.resource_type_map_1 on MEDIA.RESOURCE_TYPE_MAP(CREATE_TIME desc);
 
-DROP TABLE IF exists media.RESOURCE;
-CREATE TABLE MEDIA.RESOURCE
-(
-  ID VARCHAR(19) NOT NULL COMMENT 'ID',
-  FILENAME VARCHAR(90) NOT NULL COMMENT '文件名',
-  DIR VARCHAR(900) NOT NULL COMMENT '资源目录',
-  AUTHOR_ID VARCHAR(19) NOT NULL COMMENT '作者id',
-  ALBUM_ID VARCHAR(19) COMMENT '专辑id',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更新时间',
-  SAVE_TIME DATETIME COMMENT '保存时间',
-  PRIMARY KEY (ID)
-);
-comment on table MEDIA.RESOURCE is '资源';
-create index media.RESOURCE_1 on MEDIA.RESOURCE(CREATE_TIME desc);
-create index media.RESOURCE_2 on MEDIA.RESOURCE(UPDATE_TIME desc);
-create index media.RESOURCE_3 on MEDIA.RESOURCE(FILENAME);
-
-DROP TABLE IF exists media.RESOURCE_TYPE;
-CREATE TABLE MEDIA.RESOURCE_TYPE
-(
-  ID VARCHAR(19) NOT NULL COMMENT 'ID',
-  RESOURCE_ID VARCHAR(19) NOT NULL COMMENT '资源id',
-  TYPE_ID VARCHAR(19) NOT NULL COMMENT '类型id',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更新时间',
-  PRIMARY KEY (ID)
-);
-comment on table MEDIA.RESOURCE_TYPE is '资源和类型关联';
-
-DROP TABLE IF exists media.AUTHOR;
-CREATE TABLE MEDIA.AUTHOR
-(
-  ID VARCHAR(19) NOT NULL COMMENT 'ID',
-  USER_ID VARCHAR(90) COMMENT '用户在站点注册时的id',
-  USERNAME VARCHAR(90) NOT NULL COMMENT '用户名',
-  SITE_ID VARCHAR(19) NOT NULL COMMENT '注册站点ID',
-  HOMEPAGE VARCHAR(90) COMMENT '主页',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更新时间',
-  PRIMARY KEY (ID)
-);
-comment on table MEDIA.AUTHOR is '创作人员';
-create index media.author_1 on media.author(USER_ID);
-create index media.author_2 on media.author(USERNAME);
-create index media.author_3 on media.author(SITE_ID);
-create index media.author_4 on media.author(CREATE_TIME);
-create index media.author_5 on media.author(UPDATE_TIME);
-
-DROP TABLE IF exists media.SITE;
-CREATE TABLE MEDIA.SITE
-(
-  ID VARCHAR(19) NOT NULL COMMENT 'ID',
-  SITE_NAME VARCHAR(90) NOT NULL COMMENT '网站名称',
-  URL VARCHAR(90) NOT NULL COMMENT '网站地址',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更细时间',
-  PRIMARY KEY (ID)
-);
-comment on table MEDIA.SITE is '站点';
-create index media.site_1 on media.site(SITE_NAME);
-create index media.site_2 on media.site(CREATE_TIME);
-create index media.site_3 on media.site(UPDATE_TIME);
-
-DROP TABLE IF exists media.ALBUM;
-CREATE TABLE MEDIA.ALBUM
-(
-  ID VARCHAR(19) NOT NULL COMMENT 'ID',
-  ALBUM_NAME VARCHAR(90) NOT NULL COMMENT '专辑',
-  AUTHOR_ID VARCHAR(19) NOT NULL COMMENT '专辑作者',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更新时间',
-  PRIMARY KEY (ID)
-);
 comment on table MEDIA.ALBUM is '专辑';
 
-DROP TABLE IF exists media.RESOURCE_ALBUM;
-CREATE TABLE MEDIA.RESOURCE_ALBUM
+comment on column MEDIA.ALBUM.ID is 'ID';
+
+comment on column MEDIA.ALBUM.ALBUM_NAME is '专辑';
+
+comment on column MEDIA.ALBUM.AUTHOR_ID is '专辑作者';
+
+comment on column MEDIA.ALBUM.CREATE_TIME is '创建时间';
+
+comment on column MEDIA.ALBUM.UPDATE_TIME is '更新时间';
+
+create table MEDIA.AUTHOR
 (
-  ID VARCHAR(19) NOT NULL COMMENT 'ID',
-  CREATE_TIME DATETIME NOT NULL COMMENT '创建时间',
-  UPDATE_TIME DATETIME COMMENT '更新时间',
-  RESOURCE_ID VARCHAR(19) NOT NULL COMMENT '资源ID',
-  ALBUM_ID VARCHAR(19) NOT NULL COMMENT '专辑ID',
-  PRIMARY KEY (ID)
+  ID            CHARACTER VARYING(19) not null
+    primary key,
+  USER_ID       CHARACTER VARYING(90),
+  USERNAME      CHARACTER VARYING(90) not null,
+  SITE_ID       CHARACTER VARYING(19) not null,
+  HOMEPAGE      CHARACTER VARYING(90),
+  CREATE_TIME   TIMESTAMP             not null,
+  UPDATE_TIME   TIMESTAMP,
+  DELETE_STATUS INTEGER default 0     not null
 );
-comment on table MEDIA.RESOURCE_ALBUM is '资源所属专辑';
+
+comment on table MEDIA.AUTHOR is '创作人员';
+
+comment on column MEDIA.AUTHOR.ID is 'ID';
+
+comment on column MEDIA.AUTHOR.USER_ID is '用户在站点注册时的id';
+
+comment on column MEDIA.AUTHOR.USERNAME is '用户名';
+
+comment on column MEDIA.AUTHOR.SITE_ID is '注册站点ID';
+
+comment on column MEDIA.AUTHOR.HOMEPAGE is '主页';
+
+comment on column MEDIA.AUTHOR.CREATE_TIME is '创建时间';
+
+comment on column MEDIA.AUTHOR.UPDATE_TIME is '更新时间';
+
+comment on column MEDIA.AUTHOR.DELETE_STATUS is '删除状态0未删除1删除';
+
+create index MEDIA.AUTHOR_1
+  on MEDIA.AUTHOR (USER_ID);
+
+create index MEDIA.AUTHOR_2
+  on MEDIA.AUTHOR (USERNAME);
+
+create index MEDIA.AUTHOR_3
+  on MEDIA.AUTHOR (SITE_ID);
+
+create index MEDIA.AUTHOR_4
+  on MEDIA.AUTHOR (CREATE_TIME);
+
+create index MEDIA.AUTHOR_5
+  on MEDIA.AUTHOR (UPDATE_TIME);
+
+create table MEDIA.RESOURCE
+(
+  ID            CHARACTER VARYING(19)  not null
+    primary key,
+  FILENAME      CHARACTER VARYING(90)  not null,
+  DIR           CHARACTER VARYING(900) not null,
+  AUTHOR_ID     CHARACTER VARYING(19)  not null,
+  ALBUM_ID      CHARACTER VARYING(19),
+  CREATE_TIME   TIMESTAMP              not null,
+  UPDATE_TIME   TIMESTAMP,
+  SAVE_TIME     TIMESTAMP,
+  DELETE_STATUS INTEGER default 0      not null
+);
+
+comment on table MEDIA.RESOURCE is '资源';
+
+comment on column MEDIA.RESOURCE.ID is 'ID';
+
+comment on column MEDIA.RESOURCE.FILENAME is '文件名';
+
+comment on column MEDIA.RESOURCE.DIR is '资源目录';
+
+comment on column MEDIA.RESOURCE.AUTHOR_ID is '作者id';
+
+comment on column MEDIA.RESOURCE.ALBUM_ID is '专辑id';
+
+comment on column MEDIA.RESOURCE.CREATE_TIME is '创建时间';
+
+comment on column MEDIA.RESOURCE.UPDATE_TIME is '更新时间';
+
+comment on column MEDIA.RESOURCE.SAVE_TIME is '保存时间';
+
+comment on column MEDIA.RESOURCE.DELETE_STATUS is '删除状态0未删除1删除';
+
+create index MEDIA.RESOURCE_1
+  on MEDIA.RESOURCE (CREATE_TIME desc);
+
+create index MEDIA.RESOURCE_2
+  on MEDIA.RESOURCE (UPDATE_TIME desc);
+
+create index MEDIA.RESOURCE_3
+  on MEDIA.RESOURCE (FILENAME);
+
+create table MEDIA.SITE
+(
+  ID            CHARACTER VARYING(19) not null
+    primary key,
+  SITE_NAME     CHARACTER VARYING(90) not null,
+  URL           CHARACTER VARYING(90) not null,
+  CREATE_TIME   TIMESTAMP             not null,
+  UPDATE_TIME   TIMESTAMP,
+  DELETE_STATUS INTEGER default 0     not null
+);
+
+comment on table MEDIA.SITE is '站点';
+
+comment on column MEDIA.SITE.ID is 'ID';
+
+comment on column MEDIA.SITE.SITE_NAME is '网站名称';
+
+comment on column MEDIA.SITE.URL is '网站地址';
+
+comment on column MEDIA.SITE.CREATE_TIME is '创建时间';
+
+comment on column MEDIA.SITE.UPDATE_TIME is '更细时间';
+
+comment on column MEDIA.SITE.DELETE_STATUS is '删除状态0未删除1删除';
+
+create index MEDIA.SITE_1
+  on MEDIA.SITE (SITE_NAME);
+
+create index MEDIA.SITE_2
+  on MEDIA.SITE (CREATE_TIME);
+
+create index MEDIA.SITE_3
+  on MEDIA.SITE (UPDATE_TIME);
+

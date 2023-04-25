@@ -45,6 +45,7 @@
     on author.SITE_ID = SITE.ID
     <where>
       <include refid="params"/>
+      and author.delete_status = '0'
     </where>
   </select>
 
@@ -56,6 +57,7 @@
     on author.SITE_ID = SITE.ID
     <where>
       <include refid="params"/>
+      and author.delete_status = '0'
     </where>
   </select>
 </mapper>

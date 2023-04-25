@@ -1,12 +1,14 @@
 package com.sheepfly.media.entity;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.entity.baseinterface.LogicDelete;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,7 +23,7 @@ import java.util.Date;
 @Table(schema = "MEDIA", name = "AUTHOR")
 @Entity
 @Data
-public class Author implements Serializable, EntityInterface {
+public class Author implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,4 +68,12 @@ public class Author implements Serializable, EntityInterface {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
+
+    /**
+     * 是否有效，用于逻辑删除。
+     *
+     * 0未删除1已删除。
+     */
+    @Column(name = "DELETE_STATUS", insertable = false)
+    private Integer deleteStatus;
 }

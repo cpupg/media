@@ -2,6 +2,7 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.entity.Resource;
+import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.ResourceData;
 import com.sheepfly.media.service.IResourceService;
 import com.sheepfly.media.vo.ResourceVo;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Validator;
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
@@ -68,14 +70,9 @@ public class ResourceController {
 
     @PostMapping("/delete")
     @ResponseBody
-    public ResponseData<ResourceVo> delete(@RequestBody String id) {
-        Resource resource = service.findById(id);
-        if (resource == null) {
-            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
-        } else {
-            service.deleteById(id);
-            return ResponseData.success();
-        }
+    public ResponseData<ResourceVo> delete(@RequestBody @NotNull String id) throws BusinessException {
+        Resource resource = service.safeLogicDeleteById(id, Resource.class, ErrorCode.DELETE_NOT_EXIST_DATA);
+        return ResponseData.success(resource);
     }
 }
 

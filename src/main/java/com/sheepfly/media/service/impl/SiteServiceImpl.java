@@ -13,6 +13,7 @@ import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
 
     @Override
     public boolean validateSiteData(SiteData siteData) throws BusinessException {
-        if (ValidateUtil.isEmptyString(siteData.getSiteName()) || ValidateUtil.isEmptyString(siteData.getUrl())) {
+        if (StringUtils.isEmpty(siteData.getSiteName()) || StringUtils.isEmpty(siteData.getUrl())) {
             throw new BusinessException(ErrorCode.SITE_NAME_URL_CANT_BE_NULL);
         }
         String url = siteData.getUrl();

@@ -8,7 +8,6 @@ import com.sheepfly.media.form.data.AuthorData;
 import com.sheepfly.media.form.filter.AuthorFilter;
 import com.sheepfly.media.service.IAuthorService;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.AuthorVo;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
@@ -63,7 +62,7 @@ public class AuthorController {
             throws InvocationTargetException, IllegalAccessException {
         log.info("保存作者");
         String siteId = authorData.getSiteId();
-        if (ValidateUtil.isEmptyString(siteId) || !siteService.existsById(siteId)) {
+        if (StringUtils.isEmpty(siteId) || !siteService.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.AUTHOR_SITE_CANT_BE_NULL);
         }
         Author author = new Author();
@@ -77,19 +76,16 @@ public class AuthorController {
     @ResponseBody
     public ResponseData<Author> delete(@RequestParam("id") String id) throws BusinessException {
         log.info("删除作者");
-        if (ValidateUtil.isEmptyString(id)) {
+        if (StringUtils.isEmpty(id)) {
             throw new BusinessException(ErrorCode.AUTHOR_ID_CANT_BE_NULL);
         }
         if (service.isAuthorCanBeDelete(id)) {
-            throw new BusinessException(ErrorCode.AUTHOR_ASSOCIATE_RESOURCE);
-        }
-        if (service.existsById(id)) {
-            service.deleteById(id);
+            service.safeLogicDeleteById(id, Author.class, ErrorCode.DELETE_NOT_EXIST_DATA);
             log.info("删除完成");
             return ResponseData.success();
         } else {
             log.info("要删除的作者不存在");
-            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
+            return ResponseData.fail(ErrorCode.AUTHOR_ASSOCIATE_RESOURCE);
         }
     }
 

@@ -7,7 +7,6 @@ import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.SiteData;
 import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.util.ValidateUtil;
 import com.sheepfly.media.vo.common.ErrorCode;
 import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
@@ -104,14 +103,12 @@ public class SiteController {
     @GetMapping("/delete")
     @ResponseBody
     public ResponseData<Object> deleteSite(@RequestParam("id") String siteId) throws BusinessException {
-        if (ValidateUtil.isEmptyString(siteId)) {
+        if (StringUtils.isEmpty(siteId)) {
             throw new BusinessException(ErrorCode.SITE_ID_CANT_NULL);
         }
-        if (!service.existsById(siteId)) {
-            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA);
-        } else if (service.canSiteBeDelete(siteId)) {
-            service.deleteById(siteId);
-            return ResponseData.success();
+        if (service.canSiteBeDelete(siteId)) {
+            Site site = service.safeLogicDeleteById(siteId, Site.class, ErrorCode.DELETE_NOT_EXIST_DATA);
+            return ResponseData.success(site);
         } else {
             return ResponseData.fail(ErrorCode.SITE_CANT_BE_DELETE);
         }
