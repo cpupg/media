@@ -26,7 +26,7 @@
     from media.SITE
     <where>
       delete_status = '0'
-      <if test="siteName != null and !siteName.equals('')">SITE_NAME like #{siteName}</if>
+      <if test="siteName != null and !siteName.equals('')">and SITE_NAME like #{siteName}</if>
     </where>
     order by create_time desc
   </select>
@@ -37,7 +37,7 @@
     from media.SITE
     <where>
       delete_status = '0'
-      <if test="siteName != null and siteName != ''">SITE_NAME like #{siteName}</if>
+      <if test="siteName != null and siteName != ''">and SITE_NAME like #{siteName}</if>
     </where>
   </select>
 </mapper>
