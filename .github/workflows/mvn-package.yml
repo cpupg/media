@@ -1,0 +1,32 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: 自动打包
+on:
+  push:
+    branches: [ "master", "v*" ]
+  pull_request:
+    branches: [ "master", "v*" ]
+jobs:
+  build-jar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 设置jdk
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'adopt-hotspot'
+          cache: maven
+      - name: 打包
+        run: mvn -B -DskipTests=true package
+      - name: 上传制品
+        uses: actions/upload-artifact@v3
+        with:
+          name: 可执行jar包
+          path: target/media-*.jar
