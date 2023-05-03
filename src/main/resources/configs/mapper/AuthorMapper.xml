@@ -4,10 +4,10 @@
   <!--搜索条件-->
   <sql id="params">
     <if test="params.userId != null and params.userId != ''">
-      USER_ID like #{params.userId}
+      USER_ID like '%' || #{params.userId} || '%'
     </if>
     <if test="params.username != null and params.username != ''">
-      USERNAME like #{params.username}
+      USERNAME like '%' || #{params.username} || '%'
     </if>
     <if test="params.siteId != null and params.siteId != ''">
       SITE_ID = #{params.siteId}
