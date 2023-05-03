@@ -9,9 +9,9 @@
 name: 自动打包
 on:
   push:
-    branches: [ "master", "release-*" ]
+    branches: [ "master", "package-*" ]
   pull_request:
-    branches: [ "master", "release-*" ]
+    branches: [ "master", "package-*" ]
 jobs:
   build-jar:
     runs-on: ubuntu-latest
