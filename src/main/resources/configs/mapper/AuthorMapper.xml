@@ -47,6 +47,7 @@
       <include refid="params"/>
       and author.delete_status = '0'
     </where>
+    order by author.CREATE_TIME desc
   </select>
 
   <select id="queryAuthorVoCount" resultType="java.lang.Integer"
