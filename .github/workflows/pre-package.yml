@@ -5,11 +5,14 @@ on:
 jobs:
   clone-code:
     name: 拉取代码
+    env:
+      UI_BRANCH: build-0.2.0-alpha
+      SERVER_BRANCH: package-0.2.1-alpha
     runs-on: ubuntu-latest
     steps:
       - name: 拉取前台代码
         run: |
-          git clone --depth 1 https://github.com/wrote-code/media-ui.git
+          git clone --depth 1 -b $UI_BRANCH https://github.com/wrote-code/media-ui.git
 
       - name: 设置node环境
         uses: actions/setup-node@v3
@@ -30,7 +33,7 @@ jobs:
 
       - name: 拉取后台代码
         run: |
-          git clone --depth 1 https://github.com/wrote-code/media.git
+          git clone --depth 1 -b $SERVER_BRANCH https://github.com/wrote-code/media.git
 
       - name: 设置java环境
         uses: actions/setup-java@v3
