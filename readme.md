@@ -25,23 +25,23 @@
 
 首先打开命令行，方式是按 <kbd>win</kbd> + <kbd>r</kbd>，然后输入 cmd：
 
-![1683383634877](images/003 打开命令行.png)
+![1683383634877](./images/003 打开命令行.png)
 
 在弹框中输入 `java -version`，如果显示和下面相似的内容，则说明已安装 java，可以跳到部署章节。**注意，版本号会随项目进度变动，且不是中文**。
 
-![1683384142383](images/004 查看是否安装java.png)
+![1683384142383](./images/004 查看是否安装java.png)
 
 如果运行结果是下图，则说明没有安装 java，可以[点击下载jdk8](https://download.java.net/openjdk/jdk8u42/ri/openjdk-8u42-b03-windows-i586-14_jul_2022.zip)，然后参考以下内容进行部署。
 
-![1683384179369](images/005 未安装java.png)
+![1683384179369](./images/005 未安装java.png)
 
 下载 jdk8 后，解压后得到以下内容：
 
-![1683384393790](images/006 openjdk8.png)
+![1683384393790](./images/006 openjdk8.png)
 
 这个目录很长，我建议是将最里面的 `java-se-8u42-ri` 挪出来，比如挪到 `c:/users/你的用户名/downloads/media`下，然后改名 `openjdk8` ，之后将制品也下载到 `c:/users/你的用户名/downloads` 下面，然后你会得到下面的内容：
 
-![1683384701177](images/007 工作目录.png)
+![1683384701177](./images/007 工作目录.png)
 
 在这里新建一个文本文件，将下面的内容复制进去，然后将扩展名改为bat。
 
@@ -52,7 +52,7 @@ call cmd \k
 
 如果你的文件名是 新建文本文档.txt，则改完后应该是 `新建文本文档.bat` 。如果你的文件名是 `新建文本文档` 而不是 `新建文本文档.txt` ，请点击菜单栏的查看，然后勾选红线上面的框：
 
-![1683385163820](images/008 展示扩展名.png)
+![1683385163820](./images/008 展示扩展名.png)
 
 修改完成后，双击 `新建文本文档.bat` 就可以启动系统了。启动后你会看到多了一个 `data` 目录和 `logs` 目录，`data` 目录是存放系统数据的地方，最好不要动这个目录和里面的文件。`logs` 目录是日志目录，里面会保存两个月的日志文件，超过两个月的日志文件会自动删除。
 
@@ -60,11 +60,11 @@ call cmd \k
 
 下载 release 工作流的产物后，通过 `java -Dspring.profiles.active=prd -jar media-版本号.jar` 启动工程，启动后会多出一个 `data` 目录和 `logs` 目录，前者保存系统数据，最好不要动里面的文件，后者保存系统日志，60天后自动删除。启动后打开浏览器访问 `http://localhost:9001/api` 即可。如果是第一次启动，则会报错，此时需要访问 `http://localhost:9001/api/h2`，打开后会看到以下界面，在 password 栏输入 media.h2 后点击 connect 进入控制台。
 
-![](images/001 h2登录页面.png)
+![](./images/001 h2登录页面.png)
 
 进入控制台后，将后台仓库中的 `sql/initialize/media.sql` 复制到输入框 1，然后点击 2 run，之后就可以在 3 里看到运行结果。运行 sql 可以点 run 页可以点 run selected。
 
-![1683382551593](images/002 控制台.png)
+![1683382551593](./images/002 控制台.png)
 
 如果系统升级到下个版本后有数据库变动，则会将变动语句放在后台仓库的 `sql/update/版本号`，同时修改 `sql/initialize/media.sql` 中的建表语句。如果版本升级没有修改数据库，则不存在目录 `sql/update/版本号` 。
 
