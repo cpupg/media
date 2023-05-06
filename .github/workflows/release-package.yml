@@ -6,10 +6,10 @@ jobs:
   clone-code:
     name: 拉取代码
     env:
-      UI: https://github.com/wrote-code/media-ui.git
+      UI: wrote-code/media-ui.git
       UI_REF: build-0.2.0-alpha
       UI_PATH: media-ui
-      SERVER: https://github.com/wrote-code/media.git
+      SERVER: wrote-code/media.git
       SERVER_REF: package-0.2.1-alpha
       SERVER_PATH: media
     runs-on: ubuntu-latest
