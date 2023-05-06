@@ -1,18 +1,25 @@
 name: pre-package
 on:
   push:
-    branches: [package-*]
+    branches: [ master, package-* ]
 jobs:
   clone-code:
     name: 拉取代码
     env:
-      UI_BRANCH: build-0.2.0-alpha
-      SERVER_BRANCH: package-0.2.1-alpha
+      UI: https://github.com/wrote-code/media-ui.git
+      UI_REF: build-0.2.0-alpha
+      UI_PATH: media-ui
+      SERVER: https://github.com/wrote-code/media.git
+      SERVER_REF: package-0.2.1-alpha
+      SERVER_PATH: media
     runs-on: ubuntu-latest
     steps:
       - name: 拉取前台代码
-        run: |
-          git clone --depth 1 -b $UI_BRANCH https://github.com/wrote-code/media-ui.git
+        uses: actions/checkout@v3
+        with:
+          repository: $SERVER
+          ref: $SERVER_REF
+          path: $SERVER_PATH
 
       - name: 设置node环境
         uses: actions/setup-node@v3
@@ -32,8 +39,11 @@ jobs:
           yarn build
 
       - name: 拉取后台代码
-        run: |
-          git clone --depth 1 -b $SERVER_BRANCH https://github.com/wrote-code/media.git
+        uses: actions/checkout@v3
+        with:
+          repository: $UI
+          ref: $UI_REF
+          path: $UI_PATH
 
       - name: 设置java环境
         uses: actions/setup-java@v3
