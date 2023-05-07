@@ -2,6 +2,7 @@ package com.sheepfly.media.dao;
 
 import com.sheepfly.media.form.filter.ResourceFilter;
 import com.sheepfly.media.vo.ResourceVo;
+import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,5 +24,5 @@ public interface ResourceMapper {
      *
      * @return 资源列表。
      */
-    List<ResourceVo> selectResourceVoList(ResourceFilter form);
+    List<ResourceVo> selectResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form);
 }

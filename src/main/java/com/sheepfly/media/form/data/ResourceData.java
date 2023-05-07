@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 添加资源的表单。
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @since 0.0.1-SNAPSHOT
  */
 @Data
-public class ResourceData {
+public class ResourceData implements Serializable {
     /**
      * 文件名。
      */

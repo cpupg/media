@@ -4,6 +4,7 @@ import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.form.filter.ResourceFilter;
 import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.vo.ResourceVo;
+import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 
 import java.util.List;
 
@@ -23,5 +24,5 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      *
      * @return 满足条件的资源。
      */
-    List<ResourceVo> queryResourceVoList(ResourceFilter form);
+    List<ResourceVo> queryResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form);
 }
