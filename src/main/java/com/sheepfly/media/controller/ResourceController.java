@@ -4,9 +4,13 @@ package com.sheepfly.media.controller;
 import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.exception.BusinessException;
 import com.sheepfly.media.form.data.ResourceData;
+import com.sheepfly.media.form.data.SiteData;
+import com.sheepfly.media.form.filter.ResourceFilter;
+import com.sheepfly.media.form.filter.SiteFilter;
 import com.sheepfly.media.service.IResourceService;
 import com.sheepfly.media.vo.ResourceVo;
 import com.sheepfly.media.vo.common.ErrorCode;
+import com.sheepfly.media.vo.common.ProComponentsRequestVo;
 import com.sheepfly.media.vo.common.ProTableObject;
 import com.sheepfly.media.vo.common.ResponseData;
 import org.apache.commons.beanutils.BeanUtils;
@@ -38,13 +42,11 @@ import java.util.List;
 public class ResourceController {
     @Autowired
     private IResourceService service;
-    @Autowired
-    private Validator validator;
 
     @PostMapping("/queryResourceList")
     @ResponseBody
-    public ProTableObject<ResourceVo> queryResourceList() {
-        List<ResourceVo> resourceVoList = service.queryResourceVoList(null);
+    public ProTableObject<ResourceVo> queryResourceList(@RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
+        List<ResourceVo> resourceVoList = service.queryResourceVoList(form);
         return new ProTableObject<>(resourceVoList.size(), resourceVoList);
     }
 

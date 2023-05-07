@@ -8,8 +8,14 @@
                  columnPrefix="author_vo_"/>
   </resultMap>
 
+  <sql id="where_statement">
+    <if test="params.filename neq null and params.filename neq '' ">
+      and filename like '%' || #{params.filename} || '%'
+    </if>
+  </sql>
+
   <select id="selectResourceVoList"
-      parameterType="com.sheepfly.media.form.filter.ResourceFilter"
+      parameterType="com.sheepfly.media.vo.common.ProComponentsRequestVo"
       resultMap="ResourceVo">
     select res.id,
       res.dir,
@@ -23,5 +29,6 @@
     left join media.author author
         on author.id = res.author_id
     where res.DELETE_STATUS = '0'
+    <include refid="where_statement"/>
   </select>
 </mapper>
