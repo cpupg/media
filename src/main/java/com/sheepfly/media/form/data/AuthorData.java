@@ -44,6 +44,6 @@ public class AuthorData implements Serializable {
      * 主页
      */
     @URL(message = "{entity.author.homepage.url}")
-    @Length(max = 90, message = "{entity.author.homepage.length}")
+    @Length(max = 512, message = "{entity.author.homepage.length}")
     private String homepage;
 }
