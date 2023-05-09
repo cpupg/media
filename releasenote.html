@@ -16,7 +16,19 @@
     <ul>
         <li>作者查询表格的用户标识和用户名支持模糊搜索。</li>
         <li>资源查询表格默认按创建时间倒序。</li>
+        <li>资源查询表格增加文件名搜索功能（原来有搜索框但不生效）。</li>
     </ul>
+
+    <p>数据库改动：</p>
+    <ol>
+        <li>增加作者主页字段长度，同步更新hibernate-validate。</li>
+    </ol>
+
+    <p>其它改动：</p>
+    <ul>
+        <li>修改queryResourceList请求参数类型，同步修改service,dao,mapper</li>
+    </ul>
+
     <p>代码以外的改动：</p>
     <ul>
         <li>重写readme。</li>
