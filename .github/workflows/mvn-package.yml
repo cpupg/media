@@ -6,12 +6,12 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: 自动打包
+name: mvn-package
 on:
   push:
-    branches: [ "master", "release-*" ]
+    branches: [ "master", "package-*" ]
   pull_request:
-    branches: [ "master", "release-*" ]
+    branches: [ "master", "package-*" ]
 jobs:
   build-jar:
     runs-on: ubuntu-latest

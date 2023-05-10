@@ -1,10 +1,10 @@
 create table MEDIA.ALBUM
 (
-  ID          CHARACTER VARYING(19) not null
+  ID CHARACTER VARYING(19) not null
     primary key,
-  ALBUM_NAME  CHARACTER VARYING(90) not null,
-  AUTHOR_ID   CHARACTER VARYING(19) not null,
-  CREATE_TIME TIMESTAMP             not null,
+  ALBUM_NAME CHARACTER VARYING(90) not null,
+  AUTHOR_ID CHARACTER VARYING(19) not null,
+  CREATE_TIME TIMESTAMP not null,
   UPDATE_TIME TIMESTAMP
 );
 
@@ -22,15 +22,15 @@ comment on column MEDIA.ALBUM.UPDATE_TIME is '更新时间';
 
 create table MEDIA.AUTHOR
 (
-  ID            CHARACTER VARYING(19) not null
+  ID CHARACTER VARYING(19) not null
     primary key,
-  USER_ID       CHARACTER VARYING(90),
-  USERNAME      CHARACTER VARYING(90) not null,
-  SITE_ID       CHARACTER VARYING(19) not null,
-  HOMEPAGE      CHARACTER VARYING(90),
-  CREATE_TIME   TIMESTAMP             not null,
-  UPDATE_TIME   TIMESTAMP,
-  DELETE_STATUS INTEGER default 0     not null
+  USER_ID CHARACTER VARYING(90),
+  USERNAME CHARACTER VARYING(90) not null,
+  SITE_ID CHARACTER VARYING(19) not null,
+  HOMEPAGE CHARACTER VARYING(90),
+  CREATE_TIME TIMESTAMP not null,
+  UPDATE_TIME TIMESTAMP,
+  DELETE_STATUS INTEGER default 0 not null
 );
 
 comment on table MEDIA.AUTHOR is '创作人员';
@@ -68,16 +68,16 @@ create index MEDIA.AUTHOR_5
 
 create table MEDIA.RESOURCE
 (
-  ID            CHARACTER VARYING(19)  not null
+  ID CHARACTER VARYING(19) not null
     primary key,
-  FILENAME      CHARACTER VARYING(90)  not null,
-  DIR           CHARACTER VARYING(900) not null,
-  AUTHOR_ID     CHARACTER VARYING(19)  not null,
-  ALBUM_ID      CHARACTER VARYING(19),
-  CREATE_TIME   TIMESTAMP              not null,
-  UPDATE_TIME   TIMESTAMP,
-  SAVE_TIME     TIMESTAMP,
-  DELETE_STATUS INTEGER default 0      not null
+  FILENAME CHARACTER VARYING(90) not null,
+  DIR CHARACTER VARYING(900) not null,
+  AUTHOR_ID CHARACTER VARYING(19) not null,
+  ALBUM_ID CHARACTER VARYING(19),
+  CREATE_TIME TIMESTAMP not null,
+  UPDATE_TIME TIMESTAMP,
+  SAVE_TIME TIMESTAMP,
+  DELETE_STATUS INTEGER default 0 not null
 );
 
 comment on table MEDIA.RESOURCE is '资源';
@@ -111,13 +111,13 @@ create index MEDIA.RESOURCE_3
 
 create table MEDIA.SITE
 (
-  ID            CHARACTER VARYING(19) not null
+  ID CHARACTER VARYING(19) not null
     primary key,
-  SITE_NAME     CHARACTER VARYING(90) not null,
-  URL           CHARACTER VARYING(90) not null,
-  CREATE_TIME   TIMESTAMP             not null,
-  UPDATE_TIME   TIMESTAMP,
-  DELETE_STATUS INTEGER default 0     not null
+  SITE_NAME CHARACTER VARYING(90) not null,
+  URL CHARACTER VARYING(90) not null,
+  CREATE_TIME TIMESTAMP not null,
+  UPDATE_TIME TIMESTAMP,
+  DELETE_STATUS INTEGER default 0 not null
 );
 
 comment on table MEDIA.SITE is '站点';

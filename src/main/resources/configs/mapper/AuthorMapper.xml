@@ -4,13 +4,13 @@
   <!--搜索条件-->
   <sql id="params">
     <if test="params.userId != null and params.userId != ''">
-      USER_ID like #{params.userId}
+      and USER_ID like '%' || #{params.userId} || '%'
     </if>
     <if test="params.username != null and params.username != ''">
-      USERNAME like #{params.username}
+      and USERNAME like '%' || #{params.username} || '%'
     </if>
     <if test="params.siteId != null and params.siteId != ''">
-      SITE_ID = #{params.siteId}
+      and SITE_ID = #{params.siteId}
     </if>
   </sql>
 
@@ -47,6 +47,7 @@
       <include refid="params"/>
       and author.delete_status = '0'
     </where>
+    order by author.CREATE_TIME desc
   </select>
 
   <select id="queryAuthorVoCount" resultType="java.lang.Integer"

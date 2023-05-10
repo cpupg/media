@@ -4,12 +4,18 @@
   <resultMap id="ResourceVo" type="com.sheepfly.media.vo.ResourceVo" autoMapping="true">
     <id property="id" column="id"/>
     <association property="authorVo"
-                 resultMap="com.sheepfly.media.dao.AuthorMapper.AuthorVo"
-                 columnPrefix="author_vo_"/>
+        resultMap="com.sheepfly.media.dao.AuthorMapper.AuthorVo"
+        columnPrefix="author_vo_"/>
   </resultMap>
 
+  <sql id="where_statement">
+    <if test="params.filename neq null and params.filename neq '' ">
+      and filename like '%' || #{params.filename} || '%'
+    </if>
+  </sql>
+
   <select id="selectResourceVoList"
-      parameterType="com.sheepfly.media.form.filter.ResourceFilter"
+      parameterType="com.sheepfly.media.vo.common.ProComponentsRequestVo"
       resultMap="ResourceVo">
     select res.id,
       res.dir,
@@ -20,8 +26,10 @@
       res.author_id author_vo_id,
       author.username author_vo_username
     from media.resource res
-    left join media.author author
-        on author.id = res.author_id
+           left join media.author author
+                     on author.id = res.author_id
     where res.DELETE_STATUS = '0'
+    <include refid="where_statement"/>
+    order by res.CREATE_TIME desc
   </select>
 </mapper>
