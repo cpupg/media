@@ -70,11 +70,12 @@ jobs:
           echo ::group::复制前台产物
           mkdir src/main/resources/static
           cp -r ../media-ui/dist/* src/main/resources/static
+          ls -a src/main/resources/static
           echo ::endgroup::
 
           echo ::group::复制发行说明
-          cp releasenote.html src/main/resources/static
-          cp ../media-ui/releasenote-ui.html src/main/resources/static
+          cp -v releasenote.html src/main/resources/static
+          cp -v ../media-ui/releasenote-ui.html src/main/resources/static
           echo ::endgroup::
 
       - name: 设置git提交哈希值
@@ -91,9 +92,9 @@ jobs:
           echo ::group::后台代码版本
           cd ../media
           git log -1
-          touch src/main/resources/static/server-$(rev-parse ${{env.server-ref}})
-          git log -1 >> src/main/resources/static/server-$(rev-parse ${{env.server-ref}})
-          git branch --show-current >> src/main/resources/static/server-$(rev-parse ${{env.server-ref}})
+          touch src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
+          git log -1 >> src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
+          git branch --show-current >> src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
           echo ::endgroup::
 
       - name: 编译后台代码
@@ -113,7 +114,7 @@ jobs:
           echo ::endgroup::
 
           echo ::group::重命名jar包
-          mv target/media-${{env.version}}.jar target/${{env.jar-name}}
+          mv -v target/media-${{env.version}}.jar target/${{env.jar-name}}
           echo ::endgroup::
 
       - name: 上传完整制品
