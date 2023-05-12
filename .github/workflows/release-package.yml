@@ -7,7 +7,7 @@ env:
   ui-ref: master
   server-ref: master
   # 最终jar包名称
-  jar-name: media-2023.5-2.jar
+  jar-name: media-2023.5-1.jar
   # pom.xml中的工程版本
   version: 0.2.1-alpha
 on:
@@ -69,7 +69,7 @@ jobs:
           cd media
           echo ::group::复制前台产物
           mkdir src/main/resources/static
-          cp -r ../media-ui/dist/* src/main/resources/static
+          cp -rv ../media-ui/dist/* src/main/resources/static
           ls -a src/main/resources/static
           echo ::endgroup::
 
