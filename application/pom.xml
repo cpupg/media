@@ -17,4 +17,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+
+  <dependencies>
+    <dependency>
+      <groupId>com.sheepfly.media</groupId>
+      <artifactId>dataaccess</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>
