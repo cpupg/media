@@ -21,7 +21,7 @@
   <dependencies>
     <dependency>
       <groupId>com.sheepfly.media</groupId>
-      <artifactId>dataaccess</artifactId>
+      <artifactId>controller</artifactId>
     </dependency>
   </dependencies>
 
