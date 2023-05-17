@@ -21,8 +21,10 @@
     <dependency>
       <groupId>com.sheepfly.media</groupId>
       <artifactId>service</artifactId>
-      <exclusions>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.sheepfly.media</groupId>
+      <artifactId>config</artifactId>
     </dependency>
   </dependencies>
 </project>
