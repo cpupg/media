@@ -10,6 +10,7 @@
     <module>application</module>
     <module>dataaccess</module>
     <module>cli</module>
+    <module>config</module>
   </modules>
 
   <parent>
@@ -53,6 +54,11 @@
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>service</artifactId>
+        <version>0.2.1-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sheepfly.media</groupId>
+        <artifactId>config</artifactId>
         <version>0.2.1-alpha</version>
       </dependency>
     </dependencies>
