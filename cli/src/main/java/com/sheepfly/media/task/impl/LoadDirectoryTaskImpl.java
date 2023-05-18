@@ -1,8 +1,8 @@
-package com.sheepfly.task.impl;
+package com.sheepfly.media.task.impl;
 
-import com.sheepfly.config.LoadDirectoryConfig;
-import com.sheepfly.config.TaskConfig;
-import com.sheepfly.task.Task;
+import com.sheepfly.media.config.LoadDirectoryConfig;
+import com.sheepfly.media.config.TaskConfig;
+import com.sheepfly.media.task.Task;
 import lombok.extern.slf4j.Slf4j;
 
 /**

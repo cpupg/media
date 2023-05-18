@@ -1,4 +1,4 @@
-package com.sheepfly.config;
+package com.sheepfly.media.config;
 
 import lombok.Data;
 

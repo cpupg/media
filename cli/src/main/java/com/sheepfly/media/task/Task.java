@@ -1,6 +1,6 @@
-package com.sheepfly.task;
+package com.sheepfly.media.task;
 
-import com.sheepfly.config.TaskConfig;
+import com.sheepfly.media.config.TaskConfig;
 
 /**
  * 批量任务。
