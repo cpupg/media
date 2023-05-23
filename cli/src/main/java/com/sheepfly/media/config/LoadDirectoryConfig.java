@@ -39,4 +39,10 @@ public class LoadDirectoryConfig implements TaskConfig {
      * <p>默认result，文件类型根据实际情况指定。注意：命令行参数会忽略文件类型。</p>
      */
     private String resultFile;
+    /**
+     * 作者名称。
+     *
+     * <p>若传入此参数，则使用此作者名称，网站为默认网站。若不传入此参数，使用默认作者。</p>
+     */
+    private String authorName;
 }

@@ -10,6 +10,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -50,8 +51,11 @@ public class LoadDirectory {
         // 要扫描的目录
         Option targetDirOption = new Option("t", "targetDir", true, "要扫描的目录");
         targetDirOption.setRequired(true);
+        // 作者名称
+        Option author = new Option("a", "author", true, "作者名称");
 
         Options options = new Options();
+        options.addOption(author);
         options.addOption(targetDirOption);
         CommandLineParser parser = new DefaultParser();
         CommandLine cli = null;
@@ -66,6 +70,11 @@ public class LoadDirectory {
     }
 
     private static LoadDirectoryConfig config(LoadDirectoryConfig config, CommandLine cli) {
+        config.setTargetDir(cli.getOptionValue("targetDir"));
+        config.setAuthorName(cli.getOptionValue("author"));
+        if (StringUtils.isEmpty(config.getAuthorName())) {
+            config.setAuthorName("默认作者");
+        }
         return config;
     }
 
