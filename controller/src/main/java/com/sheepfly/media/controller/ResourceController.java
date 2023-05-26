@@ -43,8 +43,8 @@ public class ResourceController {
     @PostMapping("/queryResourceList")
     @ResponseBody
     public ProTableObject<ResourceVo> queryResourceList(@RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
-        List<ResourceVo> resourceVoList = service.queryResourceVoList(form);
-        return new ProTableObject<>(resourceVoList.size(), resourceVoList);
+
+        return service.queryResourceVoList(form);
     }
 
     @PostMapping("/add")

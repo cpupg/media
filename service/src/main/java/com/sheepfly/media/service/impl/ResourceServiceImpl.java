@@ -1,10 +1,12 @@
 package com.sheepfly.media.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.dao.ResourceMapper;
 import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.form.filter.ResourceFilter;
 import com.sheepfly.media.http.ProComponentsRequestVo;
+import com.sheepfly.media.http.ProTableObject;
 import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.service.IResourceService;
 import com.sheepfly.media.vo.ResourceVo;
@@ -32,9 +34,11 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     private ResourceMapper resourceMapper;
 
     @Override
-    public List<ResourceVo> queryResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
+    public ProTableObject<ResourceVo> queryResourceVoList(
+            ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
         ResourceFilter params = form.getParams();
-        PageHelper.startPage(params.getCurrent(), params.getPageSize());
-        return resourceMapper.selectResourceVoList(form);
+        Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
+        List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
+        return ProTableObject.success(list, (int) page.getTotal());
     }
 }
