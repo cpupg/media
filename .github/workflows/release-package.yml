@@ -69,14 +69,14 @@ jobs:
         run: |
           cd media
           echo ::group::复制前台产物
-          mkdir controller/src/main/resources/static
-          cp -rv ../media-ui/dist/* controller/src/main/resources/static
-          ls -a controller/src/main/resources/static
+          mkdir server-dir/src/main/resources/static
+          cp -rv ../media-ui/dist/* application/src/main/resources/static
+          ls -a application/src/main/resources/static
           echo ::endgroup::
 
           echo ::group::复制发行说明
-          cp -v releasenote.html controller/src/main/resources/static
-          cp -v ../media-ui/releasenote-ui.html controller/src/main/resources/static
+          cp -v releasenote.html application/src/main/resources/static
+          cp -v ../media-ui/releasenote-ui.html application/src/main/resources/static
           echo ::endgroup::
 
       - name: 设置git提交哈希值
@@ -85,17 +85,17 @@ jobs:
 
           echo ::group::前台代码版本
           git log -1
-          touch ../media/controller/src/main/resources/static/ui-$(git rev-parse ${{env.ui-ref}})
-          git log -1 >> ../media/controller/src/main/resources/static/ui-$(git rev-parse ${{env.ui-ref}})
-          git branch --show-current >> ../media/controller/src/main/resources/static/ui-$(git rev-parse ${{env.ui-ref}})
+          touch ../media/application/src/main/resources/static/ui-$(git rev-parse ${{env.ui-ref}})
+          git log -1 >> ../media/application/src/main/resources/static/ui-$(git rev-parse ${{env.ui-ref}})
+          git branch --show-current >> ../media/application/src/main/resources/static/ui-$(git rev-parse ${{env.ui-ref}})
           echo ::endgroup::
 
           echo ::group::后台代码版本
           cd ../media
           git log -1
-          touch controller/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
-          git log -1 >> controller/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
-          git branch --show-current >> controller/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
+          touch application/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
+          git log -1 >> application/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
+          git branch --show-current >> application/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
           echo ::endgroup::
 
       - name: 编译后台代码
@@ -115,7 +115,7 @@ jobs:
           echo ::endgroup::
 
           echo ::group::重命名jar包
-          mv -v controller/target/controller-${{env.version}}.jar ../${{env.application-name}}
+          mv -v application/target/application-${{env.version}}.jar ../${{env.application-name}}
           mv -v cli/target/cli-${{env.version}}.jar ../cli-${{env.cli-name}}
           echo ::endgroup::
 
