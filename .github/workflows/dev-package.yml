@@ -66,7 +66,7 @@ jobs:
         run: |
           cd media
           echo ::group::复制前台产物
-          mkdir controller/src/main/resources/static
+          mkdir -p controller/src/main/resources/static
           cp -rv ../media-ui/dist/* controller/src/main/resources/static
           ls -a controller/src/main/resources/static
           echo ::endgroup::
