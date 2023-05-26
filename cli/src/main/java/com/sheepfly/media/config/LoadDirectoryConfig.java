@@ -45,4 +45,8 @@ public class LoadDirectoryConfig implements TaskConfig {
      * <p>若传入此参数，则使用此作者名称，网站为默认网站。若不传入此参数，使用默认作者。</p>
      */
     private String authorName;
+    /**
+     * 作者对应的唯一标识。
+     */
+    private String authorId;
 }

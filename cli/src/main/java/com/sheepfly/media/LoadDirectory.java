@@ -41,6 +41,9 @@ public class LoadDirectory {
         Task task = context.getBean("loadDirectoryTaskImpl", Task.class);
         task.setTaskConfig(config);
         task.initializeTaskConfig();
+        if (!task.ready()) {
+            return;
+        }
         log.info("执行任务");
         task.executeTask();
         task.getExecuteResult();
@@ -53,12 +56,15 @@ public class LoadDirectory {
         targetDirOption.setRequired(true);
         // 作者名称
         Option author = new Option("a", "author", true, "作者名称");
+        // 作者主键，当有重名作者时需要传入此项。
+        Option authorId = new Option("ai", "authorId", true, "作者唯一标识");
 
         Options options = new Options();
         options.addOption(author);
         options.addOption(targetDirOption);
+        options.addOption(authorId);
         CommandLineParser parser = new DefaultParser();
-        CommandLine cli = null;
+        CommandLine cli;
         try {
             cli = parser.parse(options, args);
         } catch (ParseException e) {
@@ -72,6 +78,7 @@ public class LoadDirectory {
     private static LoadDirectoryConfig config(LoadDirectoryConfig config, CommandLine cli) {
         config.setTargetDir(cli.getOptionValue("targetDir"));
         config.setAuthorName(cli.getOptionValue("author"));
+        config.setAuthorId(cli.getOptionValue("ai"));
         if (StringUtils.isEmpty(config.getAuthorName())) {
             config.setAuthorName("默认作者");
         }

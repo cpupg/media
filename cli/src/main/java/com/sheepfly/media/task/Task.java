@@ -33,4 +33,13 @@ public interface Task {
      * <p>可以将执行结果以某种形式输出到文件，也可以输出到命令行，也可以什么都不做。</p>
      */
     void getExecuteResult();
+
+    /**
+     * 返回任务准备状态，放返回true时可以执行任务。
+     *
+     * <p>可以用来判断任务配置是否完成。</p>
+     *
+     * @return 是否可以执行任务。
+     */
+    boolean ready();
 }
