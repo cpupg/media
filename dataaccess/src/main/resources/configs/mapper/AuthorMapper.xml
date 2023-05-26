@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sheepfly.media.dao.AuthorMapper">
+  <!--搜索条件-->
+  <sql id="params">
+    <if test="params.userId != null and params.userId != ''">
+      and USER_ID like '%' || #{params.userId} || '%'
+    </if>
+    <if test="params.username != null and params.username != ''">
+      and USERNAME like '%' || #{params.username} || '%'
+    </if>
+    <if test="params.siteId != null and params.siteId != ''">
+      and SITE_ID = #{params.siteId}
+    </if>
+  </sql>
+
+  <resultMap id="AuthorVo"
+      type="com.sheepfly.media.vo.AuthorVo"
+      autoMapping="true">
+    <id property="id" column="id"/>
+    <association property="site"
+        resultMap="com.sheepfly.media.dao.SiteMapper.site"
+        columnPrefix="site2_"/>
+  </resultMap>
+
+  <select id="queryAuthorList" resultType="com.sheepfly.media.entity.Author"
+      parameterType="com.sheepfly.media.http.ProComponentsRequestVo">
+    select *
+    from media.AUTHOR
+    <where>
+      <include refid="params"/>
+    </where>
+  </select>
+
+  <select id="queryAuthorVoList" resultMap="AuthorVo"
+      parameterType="com.sheepfly.media.http.ProComponentsRequestVo">
+    select author.*,
+    <include refid="com.sheepfly.media.dao.SiteMapper.siteColumn_">
+      <property name="tbname" value="site"/>
+      <property name="prefix" value="site2"/>
+    </include>
+    ''
+    from media.AUTHOR
+    left join media.SITE
+    on author.SITE_ID = SITE.ID
+    <where>
+      <include refid="params"/>
+      and author.delete_status = '0'
+    </where>
+    order by author.CREATE_TIME desc
+  </select>
+
+  <select id="queryAuthorVoCount" resultType="java.lang.Integer"
+      parameterType="com.sheepfly.media.http.ProComponentsRequestVo">
+    select count(AUTHOR.ID)
+    from media.AUTHOR
+    left join media.SITE
+    on author.SITE_ID = SITE.ID
+    <where>
+      <include refid="params"/>
+      and author.delete_status = '0'
+    </where>
+  </select>
+</mapper>
