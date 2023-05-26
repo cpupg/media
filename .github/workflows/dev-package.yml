@@ -112,8 +112,8 @@ jobs:
           echo ::endgroup::
 
           echo ::group::重命名jar包
-          mv -v controller/target/controller-${{env.version}}.jar ./media-${{env.version}}.jar
-          mv -v cli/target/cli-${{env.version}}.jar ./cli-${{env.version}}.jar
+          mv -v controller/target/controller-${{env.version}}.jar ../media-${{env.version}}.jar
+          mv -v cli/target/cli-${{env.version}}.jar ../cli-${{env.version}}.jar
           echo ::endgroup::
 
       - name: 上传完整制品
