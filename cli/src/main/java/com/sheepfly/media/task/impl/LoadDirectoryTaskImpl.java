@@ -19,6 +19,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -54,6 +56,18 @@ public class LoadDirectoryTaskImpl implements Task {
      * 运行结果输出流。
      */
     private FileOutputStream resultOutputStream;
+    /**
+     * 录入失败的文件会存到这里。
+     */
+    private FileOutputStream failOutputStream;
+    /**
+     * 已录入文件。
+     */
+    private FileOutputStream duplicatedOutputStream;
+    /**
+     * 用于去重。
+     */
+    private ExampleMatcher matcher;
 
     @Override
     public void setTaskConfig(TaskConfig taskConfig) {
@@ -95,13 +109,23 @@ public class LoadDirectoryTaskImpl implements Task {
         Optional<Site> optionalSite = siteRepository.findOne(
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
+
+        // 查到就说明是相同文件。
+        matcher = ExampleMatcher.matchingAll()
+                .withMatcher("dir", ele -> ele.exact())
+                .withMatcher("filename", ele -> ele.exact());
+
         String resultPath = targetDir + File.separator + "result.txt";
         log.info("运行结果将保存到文件{}中", resultPath);
         // 初始化输出流，需要在afterTaskFinish中关闭。
         resultOutputStream = new FileOutputStream(resultPath, true);
-        writeMessage("===================");
-        writeMessage(String.format("开始时间:%s",
-                DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME)));
+        failOutputStream = new FileOutputStream(resultPath.replace(".txt", ".fail.txt"));
+        duplicatedOutputStream = new FileOutputStream(resultPath.replace(".txt", ".dup.txt"));
+        String time = String.format("--------->>>开始时间:%s<<<<<<----------",
+                DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME));
+        writeMessage(time);
+        writeFailMessage(time);
+        writeDuplicatedMessage(time);
         writeMessage(String.format("当前用户:%s", author.getUsername()));
         writeMessage(String.format("扫描目录:%s", targetDir));
     }
@@ -129,6 +153,12 @@ public class LoadDirectoryTaskImpl implements Task {
         if (resultOutputStream != null) {
             resultOutputStream.close();
         }
+        if (failOutputStream != null) {
+            failOutputStream.close();
+        }
+        if (duplicatedOutputStream != null) {
+            duplicatedOutputStream.close();
+        }
     }
 
     /**
@@ -144,14 +174,24 @@ public class LoadDirectoryTaskImpl implements Task {
             Resource resource = new Resource();
             resource.setDir(FileUtil.getParent(dir, 1));
             resource.setFilename(FileUtil.getName(dir));
+            long count = resourceRepository.count(Example.of(resource, matcher));
+            if (count > 0) {
+                log.info("已经存在资源{} -> {}", resource.getFilename(), resource.getDir());
+                writeDuplicatedMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+                return;
+            }
             resource.setCreateTime(new Date());
             resource.setDeleteStatus(0);
             resource.setAuthorId(author.getId());
             resource.setId(snowflake.nextIdStr());
-            resourceRepository.save(resource);
-            log.info("资源保存成功,文件名:{},作者:{},目录{}", resource.getFilename(), author.getUsername(),
-                    resource.getDir());
-            writeMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+            try {
+                resourceRepository.save(resource);
+                writeMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+            } catch (Exception e) {
+                // 不能影响后面资源的保存。
+                log.error("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir(), e);
+                writeFailMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+            }
             return;
         }
         String[] fileNameList = currentPath.list();
@@ -170,6 +210,24 @@ public class LoadDirectoryTaskImpl implements Task {
             IOUtils.write("\r\n", resultOutputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("写入运行结果失败", e);
+        }
+    }
+
+    private void writeFailMessage(String message) {
+        try {
+            IOUtils.write(message, failOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", failOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入失败结果失败", e);
+        }
+    }
+
+    private void writeDuplicatedMessage(String message) {
+        try {
+            IOUtils.write(message, duplicatedOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", duplicatedOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入重复结果失败", e);
         }
     }
 }
