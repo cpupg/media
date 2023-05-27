@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.config.LoadDirectoryConfig;
 import com.sheepfly.media.config.TaskConfig;
+import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.entity.Author_;
 import com.sheepfly.media.entity.Resource;
@@ -14,11 +15,17 @@ import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.repository.SiteRepository;
 import com.sheepfly.media.task.Task;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +50,10 @@ public class LoadDirectoryTaskImpl implements Task {
      * 命令行输入的作者。
      */
     private Author author;
+    /**
+     * 运行结果输出流。
+     */
+    private FileOutputStream resultOutputStream;
 
     @Override
     public void setTaskConfig(TaskConfig taskConfig) {
@@ -50,7 +61,7 @@ public class LoadDirectoryTaskImpl implements Task {
     }
 
     @Override
-    public void initializeTaskConfig() {
+    public void initializeTaskConfig() throws FileNotFoundException {
         String targetDir = config.getTargetDir();
         if (!FileUtil.isAbsolutePath(targetDir)) {
             log.warn("目标路径不是绝对路径");
@@ -84,6 +95,15 @@ public class LoadDirectoryTaskImpl implements Task {
         Optional<Site> optionalSite = siteRepository.findOne(
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
+        String resultPath = targetDir + File.separator + "result.txt";
+        log.info("运行结果将保存到文件{}中", resultPath);
+        // 初始化输出流，需要在afterTaskFinish中关闭。
+        resultOutputStream = new FileOutputStream(resultPath, true);
+        writeMessage("===================");
+        writeMessage(String.format("开始时间:%s",
+                DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME)));
+        writeMessage(String.format("当前用户:%s", author.getUsername()));
+        writeMessage(String.format("扫描目录:%s", targetDir));
     }
 
     @Override
@@ -95,13 +115,20 @@ public class LoadDirectoryTaskImpl implements Task {
 
     @Override
     public void getExecuteResult() {
-        // todo
+        // 暂时不需要
     }
 
     @Override
     public boolean ready() {
         // 其它参数已经通过setter设置，只有作者不确定，需要运行时判断。
         return author != null;
+    }
+
+    @Override
+    public void afterTaskFinish() throws IOException {
+        if (resultOutputStream != null) {
+            resultOutputStream.close();
+        }
     }
 
     /**
@@ -124,6 +151,7 @@ public class LoadDirectoryTaskImpl implements Task {
             resourceRepository.save(resource);
             log.info("资源保存成功,文件名:{},作者:{},目录{}", resource.getFilename(), author.getUsername(),
                     resource.getDir());
+            writeMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
             return;
         }
         String[] fileNameList = currentPath.list();
@@ -134,6 +162,14 @@ public class LoadDirectoryTaskImpl implements Task {
         for (String name : fileNameList) {
             scanAndLoadDirectory(currentPath + File.separator + name);
         }
+    }
 
+    private void writeMessage(String message) {
+        try {
+            IOUtils.write(message, resultOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", resultOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入运行结果失败", e);
+        }
     }
 }

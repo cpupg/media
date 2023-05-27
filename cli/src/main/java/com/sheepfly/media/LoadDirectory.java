@@ -23,7 +23,7 @@ import org.springframework.context.annotation.ImportResource;
 public class LoadDirectory {
     private static final String LOAD_DIRECTORY = "loadDirectory";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         log.info("解析程序参数");
         CommandLine commandLine = parseArgs(args);
         if (commandLine == null) {
@@ -47,6 +47,7 @@ public class LoadDirectory {
         log.info("执行任务");
         task.executeTask();
         task.getExecuteResult();
+        task.afterTaskFinish();
         log.info("任务完成");
     }
 
