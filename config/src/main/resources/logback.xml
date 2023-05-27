@@ -14,7 +14,7 @@
       </pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>logs/archive/${application}.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+      <fileNamePattern>logs/archive/%d{yyyyMMdd}/${application}.%i.log.zip</fileNamePattern>
       <maxFileSize>50MB</maxFileSize>
       <maxHistory>60</maxHistory>
       <totalSizeCap>1GB</totalSizeCap>
@@ -29,7 +29,7 @@
       </pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>logs/archive/${sqlFileName}.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+      <fileNamePattern>logs/archive/%d{yyyyMMdd}/${sqlFileName}.%i.log.zip</fileNamePattern>
       <maxFileSize>50MB</maxFileSize>
       <maxHistory>60</maxHistory>
       <totalSizeCap>1GB</totalSizeCap>
