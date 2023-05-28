@@ -10,6 +10,7 @@ import com.sheepfly.media.entity.Author_;
 import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.entity.Site_;
+import com.sheepfly.media.form.data.ResourceData;
 import com.sheepfly.media.repository.AuthorRepository;
 import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.repository.SiteRepository;
@@ -18,11 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 扫描目录任务。
@@ -46,6 +51,8 @@ public class LoadDirectoryTaskImpl implements Task {
     private ResourceRepository resourceRepository;
     @Autowired
     private Snowflake snowflake;
+    @Autowired
+    private Validator validator;
 
     private LoadDirectoryConfig config;
     /**
@@ -68,6 +75,10 @@ public class LoadDirectoryTaskImpl implements Task {
      * 用于去重。
      */
     private ExampleMatcher matcher;
+    /**
+     * 扫描到的资源数据，用来进行校验。
+     */
+    private ResourceData resourceData = new ResourceData();
 
     @Override
     public void setTaskConfig(TaskConfig taskConfig) {
@@ -111,16 +122,15 @@ public class LoadDirectoryTaskImpl implements Task {
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
 
         // 查到就说明是相同文件。
-        matcher = ExampleMatcher.matchingAll()
-                .withMatcher("dir", ele -> ele.exact())
+        matcher = ExampleMatcher.matchingAll().withMatcher("dir", ele -> ele.exact())
                 .withMatcher("filename", ele -> ele.exact());
 
         String resultPath = targetDir + File.separator + "result.txt";
         log.info("运行结果将保存到文件{}中", resultPath);
         // 初始化输出流，需要在afterTaskFinish中关闭。
         resultOutputStream = new FileOutputStream(resultPath, true);
-        failOutputStream = new FileOutputStream(resultPath.replace(".txt", ".fail.txt"));
-        duplicatedOutputStream = new FileOutputStream(resultPath.replace(".txt", ".dup.txt"));
+        failOutputStream = new FileOutputStream(resultPath.replace(".txt", ".fail.txt"), true);
+        duplicatedOutputStream = new FileOutputStream(resultPath.replace(".txt", ".dup.txt"), true);
         String time = String.format("--------->>>开始时间:%s<<<<<<----------",
                 DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME));
         writeMessage(time);
@@ -175,9 +185,10 @@ public class LoadDirectoryTaskImpl implements Task {
             resource.setDir(FileUtil.getParent(dir, 1));
             resource.setFilename(FileUtil.getName(dir));
             long count = resourceRepository.count(Example.of(resource, matcher));
+            String message = String.format("%s -> %s", resource.getFilename(), resource.getDir());
             if (count > 0) {
                 log.info("已经存在资源{} -> {}", resource.getFilename(), resource.getDir());
-                writeDuplicatedMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+                writeDuplicatedMessage(message);
                 return;
             }
             resource.setCreateTime(new Date());
@@ -185,12 +196,21 @@ public class LoadDirectoryTaskImpl implements Task {
             resource.setAuthorId(author.getId());
             resource.setId(snowflake.nextIdStr());
             try {
+                BeanUtils.copyProperties(resource, resourceData);
+                Set<ConstraintViolation<ResourceData>> result = validator.validate(resourceData);
+                if (!result.isEmpty()) {
+                    log.warn("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir());
+                    result.forEach(ele -> writeFailMessage(
+                            String.format("    | %s -> %s", ele.getMessage(), ele.getInvalidValue())));
+                    resourceData = null;
+                    return;
+                }
                 resourceRepository.save(resource);
-                writeMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+                writeMessage(message);
             } catch (Exception e) {
                 // 不能影响后面资源的保存。
                 log.error("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir(), e);
-                writeFailMessage(String.format("%s -> %s", resource.getFilename(), resource.getDir()));
+                writeFailMessage(message);
             }
             return;
         }
