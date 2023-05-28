@@ -200,9 +200,9 @@ public class LoadDirectoryTaskImpl implements Task {
                 Set<ConstraintViolation<ResourceData>> result = validator.validate(resourceData);
                 if (!result.isEmpty()) {
                     log.warn("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir());
+                    writeFailMessage(message);
                     result.forEach(ele -> writeFailMessage(
-                            String.format("    | %s -> %s", ele.getMessage(), ele.getInvalidValue())));
-                    resourceData = null;
+                            String.format("    | -> %s -> %s", ele.getMessage(), ele.getInvalidValue())));
                     return;
                 }
                 resourceRepository.save(resource);
