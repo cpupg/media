@@ -15,4 +15,5 @@ public interface Constant {
      * 空字符串。
      */
     String BLANK_STRING = "";
+    String STANDARD_TIME = "yyyy-MM-dd HH:mm:ss.sss";
 }

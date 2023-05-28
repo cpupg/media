@@ -4,24 +4,38 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.config.LoadDirectoryConfig;
 import com.sheepfly.media.config.TaskConfig;
+import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.entity.Author_;
 import com.sheepfly.media.entity.Resource;
 import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.entity.Site_;
+import com.sheepfly.media.form.data.ResourceData;
 import com.sheepfly.media.repository.AuthorRepository;
 import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.repository.SiteRepository;
 import com.sheepfly.media.task.Task;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 扫描目录任务。
@@ -37,12 +51,34 @@ public class LoadDirectoryTaskImpl implements Task {
     private ResourceRepository resourceRepository;
     @Autowired
     private Snowflake snowflake;
+    @Autowired
+    private Validator validator;
 
     private LoadDirectoryConfig config;
     /**
      * 命令行输入的作者。
      */
     private Author author;
+    /**
+     * 运行结果输出流。
+     */
+    private FileOutputStream resultOutputStream;
+    /**
+     * 录入失败的文件会存到这里。
+     */
+    private FileOutputStream failOutputStream;
+    /**
+     * 已录入文件。
+     */
+    private FileOutputStream duplicatedOutputStream;
+    /**
+     * 用于去重。
+     */
+    private ExampleMatcher matcher;
+    /**
+     * 扫描到的资源数据，用来进行校验。
+     */
+    private ResourceData resourceData = new ResourceData();
 
     @Override
     public void setTaskConfig(TaskConfig taskConfig) {
@@ -50,7 +86,7 @@ public class LoadDirectoryTaskImpl implements Task {
     }
 
     @Override
-    public void initializeTaskConfig() {
+    public void initializeTaskConfig() throws FileNotFoundException {
         String targetDir = config.getTargetDir();
         if (!FileUtil.isAbsolutePath(targetDir)) {
             log.warn("目标路径不是绝对路径");
@@ -84,6 +120,24 @@ public class LoadDirectoryTaskImpl implements Task {
         Optional<Site> optionalSite = siteRepository.findOne(
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
+
+        // 查到就说明是相同文件。
+        matcher = ExampleMatcher.matchingAll().withMatcher("dir", ele -> ele.exact())
+                .withMatcher("filename", ele -> ele.exact());
+
+        String resultPath = targetDir + File.separator + "result.txt";
+        log.info("运行结果将保存到文件{}中", resultPath);
+        // 初始化输出流，需要在afterTaskFinish中关闭。
+        resultOutputStream = new FileOutputStream(resultPath, true);
+        failOutputStream = new FileOutputStream(resultPath.replace(".txt", ".fail.txt"), true);
+        duplicatedOutputStream = new FileOutputStream(resultPath.replace(".txt", ".dup.txt"), true);
+        String time = String.format("--------->>>开始时间:%s<<<<<<----------",
+                DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME));
+        writeMessage(time);
+        writeFailMessage(time);
+        writeDuplicatedMessage(time);
+        writeMessage(String.format("当前用户:%s", author.getUsername()));
+        writeMessage(String.format("扫描目录:%s", targetDir));
     }
 
     @Override
@@ -95,13 +149,26 @@ public class LoadDirectoryTaskImpl implements Task {
 
     @Override
     public void getExecuteResult() {
-        // todo
+        // 暂时不需要
     }
 
     @Override
     public boolean ready() {
         // 其它参数已经通过setter设置，只有作者不确定，需要运行时判断。
         return author != null;
+    }
+
+    @Override
+    public void afterTaskFinish() throws IOException {
+        if (resultOutputStream != null) {
+            resultOutputStream.close();
+        }
+        if (failOutputStream != null) {
+            failOutputStream.close();
+        }
+        if (duplicatedOutputStream != null) {
+            duplicatedOutputStream.close();
+        }
     }
 
     /**
@@ -117,13 +184,34 @@ public class LoadDirectoryTaskImpl implements Task {
             Resource resource = new Resource();
             resource.setDir(FileUtil.getParent(dir, 1));
             resource.setFilename(FileUtil.getName(dir));
+            long count = resourceRepository.count(Example.of(resource, matcher));
+            String message = String.format("%s -> %s", resource.getFilename(), resource.getDir());
+            if (count > 0) {
+                log.info("已经存在资源{} -> {}", resource.getFilename(), resource.getDir());
+                writeDuplicatedMessage(message);
+                return;
+            }
             resource.setCreateTime(new Date());
             resource.setDeleteStatus(0);
             resource.setAuthorId(author.getId());
             resource.setId(snowflake.nextIdStr());
-            resourceRepository.save(resource);
-            log.info("资源保存成功,文件名:{},作者:{},目录{}", resource.getFilename(), author.getUsername(),
-                    resource.getDir());
+            try {
+                BeanUtils.copyProperties(resource, resourceData);
+                Set<ConstraintViolation<ResourceData>> result = validator.validate(resourceData);
+                if (!result.isEmpty()) {
+                    log.warn("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir());
+                    writeFailMessage(message);
+                    result.forEach(ele -> writeFailMessage(
+                            String.format("    | -> %s -> %s", ele.getMessage(), ele.getInvalidValue())));
+                    return;
+                }
+                resourceRepository.save(resource);
+                writeMessage(message);
+            } catch (Exception e) {
+                // 不能影响后面资源的保存。
+                log.error("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir(), e);
+                writeFailMessage(message);
+            }
             return;
         }
         String[] fileNameList = currentPath.list();
@@ -134,6 +222,32 @@ public class LoadDirectoryTaskImpl implements Task {
         for (String name : fileNameList) {
             scanAndLoadDirectory(currentPath + File.separator + name);
         }
+    }
 
+    private void writeMessage(String message) {
+        try {
+            IOUtils.write(message, resultOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", resultOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入运行结果失败", e);
+        }
+    }
+
+    private void writeFailMessage(String message) {
+        try {
+            IOUtils.write(message, failOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", failOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入失败结果失败", e);
+        }
+    }
+
+    private void writeDuplicatedMessage(String message) {
+        try {
+            IOUtils.write(message, duplicatedOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", duplicatedOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入重复结果失败", e);
+        }
     }
 }
