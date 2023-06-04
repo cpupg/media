@@ -10,6 +10,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -58,12 +59,20 @@ public class LoadDirectory {
         // 作者名称
         Option author = new Option("a", "author", true, "作者名称");
         // 作者主键，当有重名作者时需要传入此项。
-        Option authorId = new Option("ai", "authorId", true, "作者唯一标识");
+        Option authorId = new Option("ai", "author-id", true, "作者唯一标识");
+        // 要包含的路径正则表达式
+        Option inp = new Option("inp", "include-path", true, "要包含的路径正则表达式");
+        inp.setArgs(Option.UNLIMITED_VALUES);
+        // 要排除的路径正则表达式
+        Option exp = new Option("exp", "exclude-path", true, "要排除的路径正则表达式");
+        exp.setArgs(Option.UNLIMITED_VALUES);
 
         Options options = new Options();
         options.addOption(author);
         options.addOption(targetDirOption);
         options.addOption(authorId);
+        options.addOption(inp);
+        options.addOption(exp);
         CommandLineParser parser = new DefaultParser();
         CommandLine cli;
         try {
@@ -80,6 +89,12 @@ public class LoadDirectory {
         config.setTargetDir(cli.getOptionValue("targetDir"));
         config.setAuthorName(cli.getOptionValue("author"));
         config.setAuthorId(cli.getOptionValue("ai"));
+        if (ArrayUtils.isNotEmpty(cli.getOptionValues("inp"))) {
+            config.setIncludePathArray(cli.getOptionValues("inp"));
+        }
+        if (ArrayUtils.isNotEmpty(cli.getOptionValues("exp"))) {
+            config.setExcludePathArray(cli.getOptionValues("exp"));
+        }
         if (StringUtils.isEmpty(config.getAuthorName())) {
             config.setAuthorName("默认作者");
         }

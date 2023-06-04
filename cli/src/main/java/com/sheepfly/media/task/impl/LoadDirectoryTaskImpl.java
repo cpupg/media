@@ -30,6 +30,7 @@ import javax.validation.Validator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -43,6 +44,10 @@ import java.util.Set;
 @Slf4j
 @Component
 public class LoadDirectoryTaskImpl implements Task {
+    /**
+     * 扫描到的资源数据，用来进行校验。
+     */
+    private final ResourceData resourceData = new ResourceData();
     @Autowired
     private SiteRepository siteRepository;
     @Autowired
@@ -53,7 +58,6 @@ public class LoadDirectoryTaskImpl implements Task {
     private Snowflake snowflake;
     @Autowired
     private Validator validator;
-
     private LoadDirectoryConfig config;
     /**
      * 命令行输入的作者。
@@ -72,13 +76,21 @@ public class LoadDirectoryTaskImpl implements Task {
      */
     private FileOutputStream duplicatedOutputStream;
     /**
+     * 排除掉的路径。
+     */
+    private FileOutputStream excludedOutputStream;
+    /**
+     * 要包含的路径。
+     */
+    private FileOutputStream includedOutputStream;
+    /**
      * 用于去重。
      */
     private ExampleMatcher matcher;
     /**
-     * 扫描到的资源数据，用来进行校验。
+     * 文件名过滤器。
      */
-    private ResourceData resourceData = new ResourceData();
+    private FilenameFilter filenameFilter;
 
     @Override
     public void setTaskConfig(TaskConfig taskConfig) {
@@ -87,17 +99,31 @@ public class LoadDirectoryTaskImpl implements Task {
 
     @Override
     public void initializeTaskConfig() throws FileNotFoundException {
-        String targetDir = config.getTargetDir();
-        if (!FileUtil.isAbsolutePath(targetDir)) {
-            log.warn("目标路径不是绝对路径");
-            String absolutePath = new File(targetDir).getAbsolutePath();
-            log.info("绝对路径:{}", absolutePath);
-            config.setTargetDir(absolutePath);
-        }
+        configDirAndFile();
+        String time = String.format("--------->>>开始时间:%s<<<<<<----------",
+                DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME));
+        writeMessage(time);
+        writeFailMessage(time);
+        writeDuplicatedMessage(time);
+        writeExcludeMessage(time);
+        writeIncludeMessage(time);
+        writeMessage(String.format("扫描目录:%s", config.getTargetDir()));
+        configAuthor();
+        configIncludeAndExclude();
+        log.info("配置完成");
+        writeMessage("   ->配置完成<-");
+    }
+
+    /**
+     * 配置作者。
+     */
+    private void configAuthor() {
         if (StringUtils.isNotBlank(config.getAuthorId())) {
             Optional<Author> optionalAuthor = authorRepository.findOne(
                     (root, query, builder) -> builder.equal(root.get(Author_.id), config.getAuthorId()));
             author = optionalAuthor.orElse(null);
+        }
+        if (author != null) {
             return;
         }
         if (StringUtils.isNotBlank(config.getAuthorName())) {
@@ -116,28 +142,87 @@ public class LoadDirectoryTaskImpl implements Task {
                 log.warn("重名作者太多，请确定作者名称后重试");
                 return;
             }
+        } else {
+            // 没有作者
+            log.error("author-id和author至少需要输入一个");
+            return;
         }
         Optional<Site> optionalSite = siteRepository.findOne(
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
-
         // 查到就说明是相同文件。
-        matcher = ExampleMatcher.matchingAll().withMatcher("dir", ele -> ele.exact())
-                .withMatcher("filename", ele -> ele.exact());
+        matcher = ExampleMatcher.matchingAll().withMatcher("dir", ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher("filename", ExampleMatcher.GenericPropertyMatcher::exact);
 
-        String resultPath = targetDir + File.separator + "result.txt";
+        writeMessage(String.format("当前用户:%s", author.getUsername()));
+    }
+
+    /**
+     * 配置包含路径和排除路径。
+     *
+     * <p>若要扫描的目录里有很多文件/目录，不建议输入多个包含路径或排除路径，会影响性能。</p>
+     */
+    private void configIncludeAndExclude() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("要包含的路径:").append(System.lineSeparator());
+        for (String e : config.getExcludePathArray()) {
+            builder.append("    ->").append(e).append(System.lineSeparator());
+        }
+        builder.append("要排除的路径:").append(System.lineSeparator());
+        for (String e : config.getIncludePathArray()) {
+            builder.append("    ->").append(e).append(System.lineSeparator());
+        }
+        writeMessage(builder.toString());
+        // 1.排除优先级要比包含高。
+        // 2.如果输入了包含路径，则只有匹配包含路径的资源才会被添加
+        // 3.不建议同时输入包含和排除
+        filenameFilter = (dir, name) -> {
+            // 先校验排除路径，再校验包含路径
+            String path = dir.getAbsolutePath();
+            for (String e : config.getExcludePathArray()) {
+                if (path.matches(e) || name.matches(e)) {
+                    writeExcludeMessage(String.format("exclude: %s -> %s%s%s", e, path, File.separator, name));
+                    return false;
+                }
+            }
+            // 当包含条件不为空时，只有符合条件的才会列出，不符合条件的会忽略。
+            for (String e : config.getIncludePathArray()) {
+                if (path.matches(e) || name.matches(e)) {
+                    writeMessage(String.format("%s -> %s%s%s", e, path, File.separator, name));
+                    writeIncludeMessage(String.format("include: %s -> %s%s%s", e, path, File.separator, name));
+                    return true;
+                } else {
+                    writeExcludeMessage(String.format("not include: %s -> %s%s%s", e, path, File.separator, name));
+                    return false;
+                }
+            }
+            return true;
+        };
+    }
+
+    /**
+     * 配置目录和文件。
+     *
+     * <p>要扫描的目录，一级要包括和排除的文件和目录。</p>
+     *
+     * @throws FileNotFoundException 文件不存在。
+     */
+    private void configDirAndFile() throws FileNotFoundException {
+        String targetDir = config.getTargetDir();
+        if (!FileUtil.isAbsolutePath(targetDir)) {
+            log.warn("目标路径不是绝对路径");
+            String absolutePath = new File(targetDir).getAbsolutePath();
+            log.info("绝对路径:{}", absolutePath);
+            config.setTargetDir(absolutePath);
+        }
+        String resultPath = targetDir + File.separator + "result";
         log.info("运行结果将保存到文件{}中", resultPath);
         // 初始化输出流，需要在afterTaskFinish中关闭。
-        resultOutputStream = new FileOutputStream(resultPath, true);
-        failOutputStream = new FileOutputStream(resultPath.replace(".txt", ".fail.txt"), true);
-        duplicatedOutputStream = new FileOutputStream(resultPath.replace(".txt", ".dup.txt"), true);
-        String time = String.format("--------->>>开始时间:%s<<<<<<----------",
-                DateFormatUtils.format(System.currentTimeMillis(), Constant.STANDARD_TIME));
-        writeMessage(time);
-        writeFailMessage(time);
-        writeDuplicatedMessage(time);
-        writeMessage(String.format("当前用户:%s", author.getUsername()));
-        writeMessage(String.format("扫描目录:%s", targetDir));
+        resultOutputStream = new FileOutputStream(resultPath + ".txt", true);
+        failOutputStream = new FileOutputStream(resultPath + ".fail.txt", true);
+        duplicatedOutputStream = new FileOutputStream(resultPath + ".dup.txt", true);
+        excludedOutputStream = new FileOutputStream(resultPath + ".ex.txt", true);
+        includedOutputStream = new FileOutputStream(resultPath + ".inc.txt", true);
     }
 
     @Override
@@ -214,7 +299,11 @@ public class LoadDirectoryTaskImpl implements Task {
             }
             return;
         }
-        String[] fileNameList = currentPath.list();
+        String[] fileNameList = currentPath.list(filenameFilter);
+        String[] fullFileNameList = currentPath.list();
+        if (fileNameList.length < fullFileNameList.length) {
+            log.warn("路径{}下有文件被排除", dir);
+        }
         if (fileNameList.length == 0) {
             log.info("目录{}是空目录", currentPath);
             return;
@@ -248,6 +337,24 @@ public class LoadDirectoryTaskImpl implements Task {
             IOUtils.write("\r\n", duplicatedOutputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("写入重复结果失败", e);
+        }
+    }
+
+    private void writeExcludeMessage(String message) {
+        try {
+            IOUtils.write(message, excludedOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", excludedOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入排除结果失败", e);
+        }
+    }
+
+    private void writeIncludeMessage(String message) {
+        try {
+            IOUtils.write(message, includedOutputStream, StandardCharsets.UTF_8);
+            IOUtils.write("\r\n", includedOutputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("写入包含结果失败", e);
         }
     }
 }

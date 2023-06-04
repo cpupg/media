@@ -14,17 +14,13 @@ public class LoadDirectoryConfig implements TaskConfig {
      */
     private String targetDir;
     /**
-     * 需要排除的目录对应的正则表达式。
-     *
-     * <p>可以是相对于程序运行目录的相对路径，也可以是绝对路径。</p>
+     * 需要排除的路径对应的正则表达式。
      */
-    private String[] excludeDirPattern;
+    private String[] excludePathArray = {};
     /**
-     * 需要排除的文件对应的正则表达式。
-     *
-     * <p>可以是相对于运行目录的相对路径，也可以是绝对路径。</p>
+     * 需要包含的路径对应的正则表达式。
      */
-    private String[] excludeFilePattern;
+    private String[] includePathArray = {};
     /**
      * 运行结果保存目录。默认是运行目录。
      */
