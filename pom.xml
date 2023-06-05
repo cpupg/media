@@ -39,27 +39,27 @@
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>common</artifactId>
-        <version>0.2.1-alpha</version>
+        <version>0.3.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>controller</artifactId>
-        <version>0.2.1-alpha</version>
+        <version>0.3.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>dataaccess</artifactId>
-        <version>0.2.1-alpha</version>
+        <version>0.3.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>service</artifactId>
-        <version>0.2.1-alpha</version>
+        <version>0.3.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>config</artifactId>
-        <version>0.2.1-alpha</version>
+        <version>0.3.0-alpha</version>
       </dependency>
       <!--media结束-->
 
