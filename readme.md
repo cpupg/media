@@ -6,6 +6,8 @@
 
 一个用来管理本地素材的系统，目前处于开发阶段，所有发布版本都属于 alpha 版本。
 
+> 如果需要导入已有资源，可以查看本文的**导入已有资源**。
+
 ## 获取方式
 
 本系统是一个基于 springboot 和 antd-pro 的 web 系统，获取本系统有两种方式，第一种是拉代码到本地自己启动，第二种是在 actions 页面下载制品然后启动。如果拉代码到本地启动，则需要 jdk8 和 node14。在发布第一个 1.0.0 稳定版后会按实际需要逐步升级使用的框架。
@@ -23,17 +25,20 @@
 
 ## 启动和部署
 
-#### 运行环境
+### 运行环境
 
-如果拉代码后在本地启动，则需要 node14 和 java8+。注意：**前台的 ant-design-pro 版本是 4.5.0，因此不兼容高版本 node。我本地开发用的是 node14，如果用 node18 运行，则会抛出异常**。启动后台只需要 java8+。如果你使用的是 release 工作流的产物，则只需要 java8+ 。如果本地没有安装 jdk，可以[点击下载openjdk8](https://download.java.net/openjdk/jdk8u42/ri/openjdk-8u42-b03-windows-i586-14_jul_2022.zip)。
+如果拉代码后在本地启动，则需要 node14 和 java8+。注意：**前台的 ant-design-pro 版本是 4.5.0，因此不兼容高版本 node。我本地开发用的是
+node14，如果用 node18 运行，则会抛出异常
+**。启动后台只需要 java8+。如果你使用的是 release 工作流的产物，则只需要 java8+ 。如果本地没有安装 jdk，可以[点击下载openjdk8](https://download.java.net/openjdk/jdk8u42/ri/openjdk-8u42-b03-windows-i586-14_jul_2022.zip)。
 
-#### 检查是否安装jdk
+### 检查是否安装jdk
 
 首先打开命令行，方式是按 <kbd>win</kbd> + <kbd>r</kbd>，然后输入 cmd：
 
 ![1683383634877](./images/003_打开命令行.png)
 
-在弹框中输入 `java -version`，如果显示和下面相似的内容，则说明已安装 java，可以跳到部署章节。**注意，版本号会随项目进度变动，且不是中文**。
+在弹框中输入 `java -version`，如果显示和下面相似的内容，则说明已安装 java，可以跳到部署章节。**注意，版本号会随项目进度变动，且不是中文
+**。
 
 ![1683384142383](./images/004_查看是否安装java.png)
 
@@ -62,7 +67,7 @@ call cmd \k
 
 修改完成后，双击 `新建文本文档.bat` 就可以启动系统了。启动后你会看到多了一个 `data` 目录和 `logs` 目录，`data` 目录是存放系统数据的地方，最好不要动这个目录和里面的文件。`logs` 目录是日志目录，里面会保存两个月的日志文件，超过两个月的日志文件会自动删除。
 
-#### 部署
+### 部署
 
 下载 release 工作流的产物后，通过 `java -Dspring.profiles.active=prd -jar media-版本号.jar` 启动工程，启动后会多出一个 `data` 目录和 `logs` 目录，前者保存系统数据，最好不要动里面的文件，后者保存系统日志，60天后自动删除。启动后打开浏览器访问 `http://localhost:9001/api` 即可。如果是第一次启动，则会报错，此时需要访问 `http://localhost:9001/api/h2`，打开后会看到以下界面，在 password 栏输入 media.h2 后点击 connect 进入控制台。
 
@@ -100,3 +105,38 @@ call cmd \k
 1. 备份 `data` 目录。
 2. 运行后台仓库的 `sql/update/版本号` 中的 sql。
 3. 启动。
+
+## 导入已有资源
+
+本系统支持从指定目录导入资源，导入时可以使用[正则表达式](https://www.runoob.com/regexp/regexp-tutorial.html)来过滤或者包含指定资源。可以
+时目录，也可以是文件。
+
+### 步骤
+
+1. 解压从actions页面下载到的制品 `application-版本号.jar` 。
+2. 进入解压后的`BOOT-INF\lib`目录。
+3. 将actions页面下载的 `cli-版本号.jar` 复制到上面的 `BOOT-INF\lib` 目录。
+4. 打开控制台，通过运行下面的命令将资源导入系统：
+
+```
+java -cp .\* com.sheepfly.media.LoadDirectory -t 要导入的目录 -a 作者姓名
+```
+
+可以输入 `java -cp .\* com.sheepfly.media.LoadDirectory -h` 查看可以使用哪些参数。
+
+### 注意事项
+
+数据目录 `data` 必须和 *.jar 文件位于同一目录，建议操作之前先备份 `data` 目录。
+
+如果通过 `-t` 传入的作者不存在，则会报错，需要先在系统中录入此作者，然后执行导入。如果作者有重名，会输出重名的作者然后报错。这时候需要通过 `-ai` 传入唯一作者的唯一标识。
+
+通过 `-inp` 和 `-exp` 传入的正则表达式在使用时是全匹配，不是部分匹配。以本代码仓库目录结构为例，如果需要匹配 application 目录，需要传入 `.*application$`，而不是
+`application` 。对于文件，传入你希望匹配的正则表达式即可。 如果使用了 `-inp` 参数，则只有包含在该目录中的资源会被录入。
+
+运行后，当前目录会生成多个文本文件，文件名和作用分别为：
+
+- result.txt: 录入系统中的资源。
+- result.dup.txt: 重复资源。重复资源不会录入，判断重复的条件是资源目录和资源文件名相同。
+- result.ex.txt: 满足 `-exp` 参数的资源。
+- result.inc.txt: 满足 `-inp` 参数的资源。
+- result.fail.txt: 录入失败的资源。
