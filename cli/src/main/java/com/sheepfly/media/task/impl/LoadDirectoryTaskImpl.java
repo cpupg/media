@@ -8,6 +8,7 @@ import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.entity.Author_;
 import com.sheepfly.media.entity.Resource;
+import com.sheepfly.media.entity.Resource_;
 import com.sheepfly.media.entity.Site;
 import com.sheepfly.media.entity.Site_;
 import com.sheepfly.media.form.data.ResourceData;
@@ -151,8 +152,9 @@ public class LoadDirectoryTaskImpl implements Task {
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
         // 查到就说明是相同文件。
-        matcher = ExampleMatcher.matchingAll().withMatcher("dir", ExampleMatcher.GenericPropertyMatcher::exact)
-                .withMatcher("filename", ExampleMatcher.GenericPropertyMatcher::exact);
+        matcher = ExampleMatcher.matchingAll().withMatcher(Resource_.DIR, ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher(Resource_.FILENAME, ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher(Resource_.DELETE_STATUS, ExampleMatcher.GenericPropertyMatcher::exact);
 
         writeMessage(String.format("当前用户:%s", author.getUsername()));
     }
@@ -260,8 +262,6 @@ public class LoadDirectoryTaskImpl implements Task {
      * 加载指定目录下的资源，返回当前目录的子目录。
      *
      * @param dir 全路径。
-     *
-     * @return 子目录。
      */
     private void scanAndLoadDirectory(String dir) {
         File currentPath = new File(dir);
@@ -269,6 +269,7 @@ public class LoadDirectoryTaskImpl implements Task {
             Resource resource = new Resource();
             resource.setDir(FileUtil.getParent(dir, 1));
             resource.setFilename(FileUtil.getName(dir));
+            resource.setDeleteStatus(1);
             long count = resourceRepository.count(Example.of(resource, matcher));
             String message = String.format("%s -> %s", resource.getFilename(), resource.getDir());
             if (count > 0) {
