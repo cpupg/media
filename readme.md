@@ -10,7 +10,9 @@
 
 ## 获取方式
 
-本系统是一个基于 springboot 和 antd-pro 的 web 系统，获取本系统有两种方式，第一种是拉代码到本地自己启动，第二种是在 actions 页面下载制品然后启动。如果拉代码到本地启动，则需要 jdk8 和 node14。在发布第一个 1.0.0 稳定版后会按实际需要逐步升级使用的框架。
+本系统是一个基于 springboot 和 antd-pro 的 web 系统，获取本系统有两种方式，第一种是拉代码到本地自己启动，第二种是在 actions 页面下载制品然后启动。如果拉代码到本地启动，则需要 jdk8 和 
+node14。在发布第一个 1.0.0 稳定版后会按实际需要逐步升级使用的框架。鉴于不是所有用户都有 github 账号，因此所有发行版本都会通过[百度云链接](https://pan.baidu.
+com/s/1PG5RF-4ZDna0ZzOwoudFLg?pwd=ffaw)分享。
 
 ### github actions
 
