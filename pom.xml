@@ -6,7 +6,7 @@
   <modules>
     <module>common</module>
     <module>service</module>
-    <module>controller</module>
+    <module>web</module>
     <module>application</module>
     <module>dataaccess</module>
     <module>cli</module>
@@ -43,7 +43,7 @@
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
-        <artifactId>controller</artifactId>
+        <artifactId>web</artifactId>
         <version>0.3.0-alpha</version>
       </dependency>
       <dependency>
