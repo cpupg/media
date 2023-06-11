@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sheepfly.media.dao.SiteMapper">
+<mapper namespace="com.sheepfly.media.dataaccess.dao.SiteMapper">
 
   <resultMap id="site" type="com.sheepfly.media.dataaccess.entity.Site">
     <id property="id" column="id"/>

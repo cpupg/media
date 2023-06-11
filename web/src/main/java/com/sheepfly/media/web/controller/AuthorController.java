@@ -1,4 +1,4 @@
-package com.sheepfly.media.controller;
+package com.sheepfly.media.web.controller;
 
 
 import com.sheepfly.media.common.constant.Constant;
