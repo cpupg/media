@@ -1,4 +1,4 @@
-package com.sheepfly.media.repository;
+package com.sheepfly.media.dataaccess.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

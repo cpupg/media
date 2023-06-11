@@ -1,17 +1,17 @@
 package com.sheepfly.media.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.sheepfly.media.dao.AuthorMapper;
-import com.sheepfly.media.entity.Author;
-import com.sheepfly.media.entity.Resource_;
-import com.sheepfly.media.exception.BusinessException;
-import com.sheepfly.media.form.filter.AuthorFilter;
-import com.sheepfly.media.repository.AuthorRepository;
-import com.sheepfly.media.repository.ResourceRepository;
-import com.sheepfly.media.service.IAuthorService;
-import com.sheepfly.media.vo.AuthorVo;
-import com.sheepfly.media.http.ProComponentsRequestVo;
-import com.sheepfly.media.http.ProTableObject;
+import com.sheepfly.media.dataaccess.dao.AuthorMapper;
+import com.sheepfly.media.dataaccess.entity.Author;
+import com.sheepfly.media.dataaccess.entity.Resource_;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.filter.AuthorFilter;
+import com.sheepfly.media.dataaccess.repository.AuthorRepository;
+import com.sheepfly.media.dataaccess.repository.ResourceRepository;
+import com.sheepfly.media.service.base.IAuthorService;
+import com.sheepfly.media.dataaccess.vo.AuthorVo;
+import com.sheepfly.media.common.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.http.ProTableObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
