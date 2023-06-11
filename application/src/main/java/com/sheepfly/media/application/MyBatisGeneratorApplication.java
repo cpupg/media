@@ -1,4 +1,4 @@
-package com.sheepfly.media;
+package com.sheepfly.media.application;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

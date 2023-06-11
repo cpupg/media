@@ -1,4 +1,4 @@
-package com.sheepfly.media;
+package com.sheepfly.media.application;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

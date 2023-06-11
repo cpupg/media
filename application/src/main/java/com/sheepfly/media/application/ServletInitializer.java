@@ -1,4 +1,4 @@
-package com.sheepfly.media;
+package com.sheepfly.media.application;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
