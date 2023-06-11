@@ -1,30 +1,39 @@
-package com.sheepfly.media.vo;
+package com.sheepfly.media.dataaccess.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 专辑。
+ * 资源。
  *
  * @author sheepfly
  */
-public class AlbumVo implements Serializable {
+public class ResourceVo implements Serializable {
     private static final long serialVersionUID = 1L;
-
     /**
      * ID
      */
     private String id;
 
     /**
-     * 专辑
+     * 文件名
      */
-    private String albumName;
+    private String filename;
 
     /**
-     * 专辑作者
+     * 资源目录
+     */
+    private String dir;
+
+    /**
+     * 作者。
      */
     private AuthorVo authorVo;
+
+    /**
+     * 专辑。
+     */
+    private AlbumVo albumVo;
 
     /**
      * 创建时间
@@ -38,10 +47,12 @@ public class AlbumVo implements Serializable {
 
     @Override
     public String toString() {
-        return "AlbumVo{" +
+        return "ResourceVo{" +
                 "id='" + id + '\'' +
-                ", albumName='" + albumName + '\'' +
-                ", authorVo=" + authorVo +
+                ", filename='" + filename + '\'' +
+                ", dir='" + dir + '\'' +
+                ", author=" + authorVo +
+                ", albumVo=" + albumVo +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
@@ -55,12 +66,20 @@ public class AlbumVo implements Serializable {
         this.id = id;
     }
 
-    public String getAlbumName() {
-        return albumName;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
     }
 
     public AuthorVo getAuthorVo() {
@@ -69,6 +88,14 @@ public class AlbumVo implements Serializable {
 
     public void setAuthorVo(AuthorVo authorVo) {
         this.authorVo = authorVo;
+    }
+
+    public AlbumVo getAlbumVo() {
+        return albumVo;
+    }
+
+    public void setAlbumVo(AlbumVo albumVo) {
+        this.albumVo = albumVo;
     }
 
     public Date getCreateTime() {

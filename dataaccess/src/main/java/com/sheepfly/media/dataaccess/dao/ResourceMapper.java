@@ -1,7 +1,7 @@
-package com.sheepfly.media.dao;
+package com.sheepfly.media.dataaccess.dao;
 
 import com.sheepfly.media.common.form.filter.ResourceFilter;
-import com.sheepfly.media.vo.ResourceVo;
+import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import org.apache.ibatis.annotations.Mapper;
 

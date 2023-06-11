@@ -1,9 +1,9 @@
-package com.sheepfly.media.dao;
+package com.sheepfly.media.dataaccess.dao;
 
-import com.sheepfly.media.entity.Author;
+import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.filter.AuthorFilter;
-import com.sheepfly.media.vo.AuthorVo;
+import com.sheepfly.media.dataaccess.vo.AuthorVo;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import org.apache.ibatis.annotations.Mapper;
 

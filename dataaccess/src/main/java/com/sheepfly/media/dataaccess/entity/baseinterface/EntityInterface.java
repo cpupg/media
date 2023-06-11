@@ -1,4 +1,4 @@
-package com.sheepfly.media.entity.baseinterface;
+package com.sheepfly.media.dataaccess.entity.baseinterface;
 
 import java.util.Date;
 

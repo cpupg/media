@@ -1,7 +1,7 @@
-package com.sheepfly.media.entity;
+package com.sheepfly.media.dataaccess.entity;
 
-import com.sheepfly.media.entity.baseinterface.EntityInterface;
-import com.sheepfly.media.entity.baseinterface.LogicDelete;
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Data;
 
 import javax.persistence.Column;

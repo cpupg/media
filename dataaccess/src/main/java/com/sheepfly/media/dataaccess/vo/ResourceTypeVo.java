@@ -1,4 +1,4 @@
-package com.sheepfly.media.vo;
+package com.sheepfly.media.dataaccess.vo;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -15,15 +15,15 @@
   </sql>
 
   <resultMap id="AuthorVo"
-      type="com.sheepfly.media.vo.AuthorVo"
+      type="com.sheepfly.media.dataaccess.vo.AuthorVo"
       autoMapping="true">
     <id property="id" column="id"/>
     <association property="site"
-        resultMap="com.sheepfly.media.dao.SiteMapper.site"
+        resultMap="com.sheepfly.media.dataaccess.dao.SiteMapper.site"
         columnPrefix="site2_"/>
   </resultMap>
 
-  <select id="queryAuthorList" resultType="com.sheepfly.media.entity.Author"
+  <select id="queryAuthorList" resultType="com.sheepfly.media.dataaccess.entity.Author"
       parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo">
     select *
     from media.AUTHOR
@@ -35,7 +35,7 @@
   <select id="queryAuthorVoList" resultMap="AuthorVo"
       parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo">
     select author.*,
-    <include refid="com.sheepfly.media.dao.SiteMapper.siteColumn_">
+    <include refid="com.sheepfly.media.dataaccess.dao.SiteMapper.siteColumn_">
       <property name="tbname" value="site"/>
       <property name="prefix" value="site2"/>
     </include>

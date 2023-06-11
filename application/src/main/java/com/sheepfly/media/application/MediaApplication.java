@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 @ImportResource("classpath:configs/springboot.xml")
-@MapperScan("com.sheepfly.media.dao")
+@MapperScan("com.sheepfly.media.dataaccess.dao")
 public class MediaApplication {
 
     public static void main(String[] args) {

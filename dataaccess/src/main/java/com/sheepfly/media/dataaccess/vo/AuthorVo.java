@@ -1,6 +1,6 @@
-package com.sheepfly.media.vo;
+package com.sheepfly.media.dataaccess.vo;
 
-import com.sheepfly.media.entity.Site;
+import com.sheepfly.media.dataaccess.entity.Site;
 
 import java.io.Serializable;
 import java.util.Date;

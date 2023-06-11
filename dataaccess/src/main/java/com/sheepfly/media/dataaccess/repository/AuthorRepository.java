@@ -1,6 +1,6 @@
-package com.sheepfly.media.repository;
+package com.sheepfly.media.dataaccess.repository;
 
-import com.sheepfly.media.entity.Author;
+import com.sheepfly.media.dataaccess.entity.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.query.Param;

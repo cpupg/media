@@ -1,26 +1,30 @@
-package com.sheepfly.media.vo;
+package com.sheepfly.media.dataaccess.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ResourceTypeMapVo implements Serializable {
-
+/**
+ * 专辑。
+ *
+ * @author sheepfly
+ */
+public class AlbumVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * ID
      */
     private String id;
 
     /**
-     * 父类型
+     * 专辑
      */
-    private ResourceTypeMapVo parentResourceTypeMapVo;
+    private String albumName;
 
     /**
-     * 名称
+     * 专辑作者
      */
-    private String name;
+    private AuthorVo authorVo;
 
     /**
      * 创建时间
@@ -34,10 +38,10 @@ public class ResourceTypeMapVo implements Serializable {
 
     @Override
     public String toString() {
-        return "ResourceTypeMapVo{" +
+        return "AlbumVo{" +
                 "id='" + id + '\'' +
-                ", parentResourceTypeMapVo=" + parentResourceTypeMapVo +
-                ", name='" + name + '\'' +
+                ", albumName='" + albumName + '\'' +
+                ", authorVo=" + authorVo +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
@@ -51,20 +55,20 @@ public class ResourceTypeMapVo implements Serializable {
         this.id = id;
     }
 
-    public ResourceTypeMapVo getParentResourceTypeMapVo() {
-        return parentResourceTypeMapVo;
+    public String getAlbumName() {
+        return albumName;
     }
 
-    public void setParentResourceTypeMapVo(ResourceTypeMapVo parentResourceTypeMapVo) {
-        this.parentResourceTypeMapVo = parentResourceTypeMapVo;
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
     }
 
-    public String getName() {
-        return name;
+    public AuthorVo getAuthorVo() {
+        return authorVo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthorVo(AuthorVo authorVo) {
+        this.authorVo = authorVo;
     }
 
     public Date getCreateTime() {

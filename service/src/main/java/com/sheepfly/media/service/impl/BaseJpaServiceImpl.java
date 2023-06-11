@@ -1,8 +1,8 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.entity.baseinterface.EntityInterface;
-import com.sheepfly.media.entity.baseinterface.LogicDelete;
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.BusinessRunTimeException;
 import com.sheepfly.media.service.BaseJpaService;

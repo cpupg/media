@@ -2,7 +2,7 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.common.constant.Constant;
-import com.sheepfly.media.entity.Site;
+import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.filter.SiteFilter;

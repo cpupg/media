@@ -1,6 +1,6 @@
-package com.sheepfly.media.repository;
+package com.sheepfly.media.dataaccess.repository;
 
-import com.sheepfly.media.entity.Site;
+import com.sheepfly.media.dataaccess.entity.Site;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

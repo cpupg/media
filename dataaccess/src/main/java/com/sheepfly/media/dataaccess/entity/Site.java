@@ -1,29 +1,28 @@
-package com.sheepfly.media.entity;
+package com.sheepfly.media.dataaccess.entity;
 
-import com.sheepfly.media.entity.baseinterface.EntityInterface;
-import com.sheepfly.media.entity.baseinterface.LogicDelete;
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * <p>
- * 创作人员
+ * 站点
  * </p>
  *
  * @author sheepfly
  * @since 2022-02-07
  */
-@Table(schema = "MEDIA", name = "AUTHOR")
 @Entity
+@Table(schema = "MEDIA", name = "SITE")
 @Data
-public class Author implements Serializable, EntityInterface, LogicDelete {
+public class Site implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,28 +33,16 @@ public class Author implements Serializable, EntityInterface, LogicDelete {
     private String id;
 
     /**
-     * 用户在站点注册时的id
+     * 网站名称
      */
-    @Column(name = "USER_ID", length = 90)
-    private String userId;
+    @Column(name = "SITE_NAME", nullable = false, length = 90)
+    private String siteName;
 
     /**
-     * 用户名
+     * 网站地址
      */
-    @Column(name = "USERNAME", nullable = false, length = 90)
-    private String username;
-
-    /**
-     * 注册站点ID
-     */
-    @Column(name = "SITE_ID", nullable = false, length = 19)
-    private String siteId;
-
-    /**
-     * 主页
-     */
-    @Column(name = "HOMEPAGE", length = 90)
-    private String homepage;
+    @Column(name = "URL", nullable = false, length = 90)
+    private String url;
 
     /**
      * 创建时间
@@ -64,7 +51,7 @@ public class Author implements Serializable, EntityInterface, LogicDelete {
     private Date createTime;
 
     /**
-     * 更新时间
+     * 更细时间
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;

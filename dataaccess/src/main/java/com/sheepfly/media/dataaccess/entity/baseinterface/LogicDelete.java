@@ -1,4 +1,4 @@
-package com.sheepfly.media.entity.baseinterface;
+package com.sheepfly.media.dataaccess.entity.baseinterface;
 
 /**
  * 表示一个实体类可以进行逻辑删除。

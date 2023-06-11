@@ -2,13 +2,13 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.common.constant.Constant;
-import com.sheepfly.media.entity.Author;
+import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.AuthorData;
 import com.sheepfly.media.common.form.filter.AuthorFilter;
 import com.sheepfly.media.service.IAuthorService;
 import com.sheepfly.media.service.ISiteService;
-import com.sheepfly.media.vo.AuthorVo;
+import com.sheepfly.media.dataaccess.vo.AuthorVo;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
