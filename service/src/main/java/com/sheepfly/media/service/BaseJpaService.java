@@ -2,8 +2,8 @@ package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.entity.baseinterface.LogicDelete;
-import com.sheepfly.media.exception.BusinessException;
-import com.sheepfly.media.exception.ErrorCode;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

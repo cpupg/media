@@ -1,6 +1,6 @@
-package com.sheepfly.media.exception;
+package com.sheepfly.media.common.exception;
 
-import static com.sheepfly.media.exception.BusinessRunTimeException.createMessage;
+import static com.sheepfly.media.common.exception.BusinessRunTimeException.createMessage;
 
 /**
  * 业务异常。

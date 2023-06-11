@@ -1,12 +1,12 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.Author;
-import com.sheepfly.media.exception.BusinessException;
-import com.sheepfly.media.form.filter.AuthorFilter;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.filter.AuthorFilter;
 import com.sheepfly.media.repository.AuthorRepository;
 import com.sheepfly.media.vo.AuthorVo;
-import com.sheepfly.media.http.ProComponentsRequestVo;
-import com.sheepfly.media.http.ProTableObject;
+import com.sheepfly.media.common.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.http.ProTableObject;
 
 /**
  * <p>

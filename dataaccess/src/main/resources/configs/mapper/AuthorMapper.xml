@@ -24,7 +24,7 @@
   </resultMap>
 
   <select id="queryAuthorList" resultType="com.sheepfly.media.entity.Author"
-      parameterType="com.sheepfly.media.http.ProComponentsRequestVo">
+      parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo">
     select *
     from media.AUTHOR
     <where>
@@ -33,7 +33,7 @@
   </select>
 
   <select id="queryAuthorVoList" resultMap="AuthorVo"
-      parameterType="com.sheepfly.media.http.ProComponentsRequestVo">
+      parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo">
     select author.*,
     <include refid="com.sheepfly.media.dao.SiteMapper.siteColumn_">
       <property name="tbname" value="site"/>
@@ -51,7 +51,7 @@
   </select>
 
   <select id="queryAuthorVoCount" resultType="java.lang.Integer"
-      parameterType="com.sheepfly.media.http.ProComponentsRequestVo">
+      parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo">
     select count(AUTHOR.ID)
     from media.AUTHOR
     left join media.SITE

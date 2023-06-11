@@ -1,10 +1,10 @@
 package com.sheepfly.media.dao;
 
 import com.sheepfly.media.entity.Author;
-import com.sheepfly.media.exception.BusinessException;
-import com.sheepfly.media.form.filter.AuthorFilter;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.filter.AuthorFilter;
 import com.sheepfly.media.vo.AuthorVo;
-import com.sheepfly.media.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

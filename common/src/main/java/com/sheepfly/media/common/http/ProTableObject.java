@@ -1,4 +1,4 @@
-package com.sheepfly.media.http;
+package com.sheepfly.media.common.http;
 
 import java.util.List;
 

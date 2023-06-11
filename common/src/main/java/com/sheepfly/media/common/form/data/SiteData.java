@@ -1,4 +1,4 @@
-package com.sheepfly.media.form.data;
+package com.sheepfly.media.common.form.data;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

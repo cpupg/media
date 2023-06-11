@@ -1,6 +1,6 @@
-package com.sheepfly.media.http;
+package com.sheepfly.media.common.http;
 
-import com.sheepfly.media.exception.ErrorCode;
+import com.sheepfly.media.common.exception.ErrorCode;
 
 /**
  * 数据对象。

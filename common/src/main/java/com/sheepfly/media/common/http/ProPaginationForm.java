@@ -1,4 +1,4 @@
-package com.sheepfly.media.http;
+package com.sheepfly.media.common.http;
 
 /**
  * ProTable请求分页参数。

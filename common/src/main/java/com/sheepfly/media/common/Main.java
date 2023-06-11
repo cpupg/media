@@ -1,4 +1,4 @@
-package com.sheepfly.media;
+package com.sheepfly.media.common;
 
 public class Main {
     public static void main(String[] args) {

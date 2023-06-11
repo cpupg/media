@@ -1,6 +1,6 @@
-package com.sheepfly.media.exception;
+package com.sheepfly.media.common.exception;
 
-import com.sheepfly.media.http.ResponseData;
+import com.sheepfly.media.common.http.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;

@@ -1,4 +1,4 @@
-package com.sheepfly.media.constant;
+package com.sheepfly.media.common.constant;
 
 import java.text.SimpleDateFormat;
 

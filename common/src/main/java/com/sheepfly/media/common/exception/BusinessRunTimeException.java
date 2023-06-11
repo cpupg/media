@@ -1,4 +1,4 @@
-package com.sheepfly.media.exception;
+package com.sheepfly.media.common.exception;
 
 /**
  * 运行时会出现的业务异常。

@@ -1,4 +1,4 @@
-package com.sheepfly.media.http;
+package com.sheepfly.media.common.http;
 
 /**
  * ProComponent的Request回调参数。

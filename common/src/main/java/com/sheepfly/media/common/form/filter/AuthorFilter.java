@@ -1,6 +1,6 @@
-package com.sheepfly.media.form.filter;
+package com.sheepfly.media.common.form.filter;
 
-import com.sheepfly.media.http.ProPaginationForm;
+import com.sheepfly.media.common.http.ProPaginationForm;
 import lombok.Data;
 
 import java.io.Serializable;

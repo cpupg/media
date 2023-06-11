@@ -2,15 +2,15 @@ package com.sheepfly.media.controller;
 
 
 import com.sheepfly.media.entity.Resource;
-import com.sheepfly.media.exception.BusinessException;
-import com.sheepfly.media.form.data.ResourceData;
-import com.sheepfly.media.form.filter.ResourceFilter;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.data.ResourceData;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.service.IResourceService;
 import com.sheepfly.media.vo.ResourceVo;
-import com.sheepfly.media.exception.ErrorCode;
-import com.sheepfly.media.http.ProComponentsRequestVo;
-import com.sheepfly.media.http.ProTableObject;
-import com.sheepfly.media.http.ResponseData;
+import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.ResponseData;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,6 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>

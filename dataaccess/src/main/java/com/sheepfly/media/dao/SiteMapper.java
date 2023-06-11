@@ -1,7 +1,7 @@
 package com.sheepfly.media.dao;
 
 import com.sheepfly.media.entity.Site;
-import com.sheepfly.media.form.filter.SiteFilter;
+import com.sheepfly.media.common.form.filter.SiteFilter;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

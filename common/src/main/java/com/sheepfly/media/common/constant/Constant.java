@@ -1,4 +1,4 @@
-package com.sheepfly.media.constant;
+package com.sheepfly.media.common.constant;
 
 /**
  * 系统中的常量。

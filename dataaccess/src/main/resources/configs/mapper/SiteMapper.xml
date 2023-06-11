@@ -16,7 +16,7 @@
   </sql>
 
   <select id="querySiteList"
-      parameterType="com.sheepfly.media.form.filter.SiteFilter"
+      parameterType="com.sheepfly.media.common.form.filter.SiteFilter"
       resultType="com.sheepfly.media.entity.Site">
     select ID,
     SITE_NAME,
@@ -31,7 +31,7 @@
     order by create_time desc
   </select>
   <select id="countSiteList"
-      parameterType="com.sheepfly.media.form.filter.SiteFilter"
+      parameterType="com.sheepfly.media.common.form.filter.SiteFilter"
       resultType="int">
     select count(1)
     from media.SITE

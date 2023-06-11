@@ -15,7 +15,7 @@
   </sql>
 
   <select id="selectResourceVoList"
-      parameterType="com.sheepfly.media.http.ProComponentsRequestVo"
+      parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo"
       resultMap="ResourceVo">
     select res.id,
       res.dir,

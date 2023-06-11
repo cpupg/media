@@ -1,10 +1,10 @@
 package com.sheepfly.media.service;
 
 import com.sheepfly.media.entity.Resource;
-import com.sheepfly.media.form.filter.ResourceFilter;
-import com.sheepfly.media.http.ProTableObject;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.repository.ResourceRepository;
-import com.sheepfly.media.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.vo.ResourceVo;
 
 /**
