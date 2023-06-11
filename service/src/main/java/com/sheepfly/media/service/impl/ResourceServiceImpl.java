@@ -8,7 +8,7 @@ import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.service.IResourceService;
+import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

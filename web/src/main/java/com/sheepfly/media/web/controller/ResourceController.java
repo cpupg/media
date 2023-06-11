@@ -5,7 +5,7 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
-import com.sheepfly.media.service.IResourceService;
+import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;

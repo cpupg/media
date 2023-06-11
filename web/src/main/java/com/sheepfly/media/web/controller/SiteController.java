@@ -6,7 +6,7 @@ import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.filter.SiteFilter;
-import com.sheepfly.media.service.ISiteService;
+import com.sheepfly.media.service.base.ISiteService;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;

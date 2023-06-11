@@ -1,4 +1,4 @@
-package com.sheepfly.media.service;
+package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.common.form.filter.ResourceFilter;

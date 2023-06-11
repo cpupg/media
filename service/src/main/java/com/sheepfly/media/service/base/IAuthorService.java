@@ -1,4 +1,4 @@
-package com.sheepfly.media.service;
+package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;

@@ -5,7 +5,7 @@ import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.BusinessRunTimeException;
-import com.sheepfly.media.service.BaseJpaService;
+import com.sheepfly.media.service.base.BaseJpaService;
 import com.sheepfly.media.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
