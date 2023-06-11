@@ -1,4 +1,4 @@
-package com.sheepfly.media.util;
+package com.sheepfly.media.cli.util;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import org.apache.commons.cli.HelpFormatter;

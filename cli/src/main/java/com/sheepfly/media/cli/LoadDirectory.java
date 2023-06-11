@@ -1,8 +1,8 @@
-package com.sheepfly.media;
+package com.sheepfly.media.cli;
 
-import com.sheepfly.media.config.LoadDirectoryConfig;
-import com.sheepfly.media.task.Task;
-import com.sheepfly.media.util.CommandLineUtil;
+import com.sheepfly.media.cli.config.LoadDirectoryConfig;
+import com.sheepfly.media.cli.task.Task;
+import com.sheepfly.media.cli.util.CommandLineUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

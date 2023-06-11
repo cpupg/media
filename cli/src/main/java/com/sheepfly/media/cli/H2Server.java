@@ -1,4 +1,4 @@
-package com.sheepfly.media;
+package com.sheepfly.media.cli;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import com.alibaba.druid.pool.DruidDataSource;

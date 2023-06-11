@@ -1,9 +1,9 @@
-package com.sheepfly.media.task.impl;
+package com.sheepfly.media.cli.task.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.config.LoadDirectoryConfig;
-import com.sheepfly.media.config.TaskConfig;
+import com.sheepfly.media.cli.config.LoadDirectoryConfig;
+import com.sheepfly.media.cli.config.TaskConfig;
 import com.sheepfly.media.constant.Constant;
 import com.sheepfly.media.entity.Author;
 import com.sheepfly.media.entity.Author_;
@@ -15,7 +15,7 @@ import com.sheepfly.media.form.data.ResourceData;
 import com.sheepfly.media.repository.AuthorRepository;
 import com.sheepfly.media.repository.ResourceRepository;
 import com.sheepfly.media.repository.SiteRepository;
-import com.sheepfly.media.task.Task;
+import com.sheepfly.media.cli.task.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
