@@ -1,6 +1,6 @@
-package com.sheepfly.media.config;
+package com.sheepfly.media.web.config;
 
-import com.sheepfly.media.interceptor.LoggerInterceptor;
+import com.sheepfly.media.web.interceptor.LoggerInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

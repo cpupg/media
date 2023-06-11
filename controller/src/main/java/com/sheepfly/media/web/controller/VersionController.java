@@ -1,6 +1,6 @@
-package com.sheepfly.media.controller;
+package com.sheepfly.media.web.controller;
 
-import com.sheepfly.media.config.VersionProperty;
+import com.sheepfly.media.web.config.VersionProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

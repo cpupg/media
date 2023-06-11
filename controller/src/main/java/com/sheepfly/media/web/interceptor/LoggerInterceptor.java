@@ -1,4 +1,4 @@
-package com.sheepfly.media.interceptor;
+package com.sheepfly.media.web.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

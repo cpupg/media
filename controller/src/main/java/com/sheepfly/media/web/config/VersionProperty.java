@@ -1,4 +1,4 @@
-package com.sheepfly.media.config;
+package com.sheepfly.media.web.config;
 
 import lombok.Getter;
 import lombok.Setter;
