@@ -12,13 +12,17 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.sheepfly.media")
+@EnableJpaRepositories(basePackages = "com.sheepfly.media.dataaccess.repository")
+@MapperScan("com.sheepfly.media.dataaccess.dao")
 @ImportResource("classpath:configs/springboot.xml")
 @Slf4j
 public class LoadDirectory {
