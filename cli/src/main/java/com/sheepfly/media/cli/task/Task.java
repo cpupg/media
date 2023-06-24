@@ -22,10 +22,13 @@ public interface Task {
      *
      * @throws Exception e
      */
-    void initializeTaskConfig() throws Exception;
+    default void initializeTaskConfig() throws Exception {
+    }
 
     /**
-     * 开始执行任务。
+     * 执行任务。
+     *
+     * <p>所有字类都必须实现此方法。调用此方法说明任务已经配置完成，可以直接执行任务。</p>
      *
      * @throws Exception e
      */
@@ -38,7 +41,8 @@ public interface Task {
      *
      * @throws Exception e
      */
-    void getExecuteResult() throws Exception;
+    default void getExecuteResult() throws Exception {
+    }
 
     /**
      * 返回任务准备状态，放返回true时可以执行任务。
@@ -49,12 +53,15 @@ public interface Task {
      *
      * @throws Exception e
      */
-    boolean ready();
+    default boolean ready() {
+        return true;
+    }
 
     /**
      * 任务执行完成后调用，可以用来做做一些扫尾工作，也可以什么都不做。
      *
      * @throws Exception e
      */
-    void afterTaskFinish() throws Exception;
+    default void afterTaskFinish() throws Exception {
+    }
 }
