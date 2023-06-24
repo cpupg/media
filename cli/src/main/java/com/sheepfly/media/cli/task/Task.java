@@ -13,9 +13,12 @@ public interface Task {
     /**
      * 设置任务运行配置。
      *
+     * <p>可以跳过配置直接执行任务。</p>
+     *
      * @param taskConfig 任务配置。
      */
-    void setTaskConfig(TaskConfig taskConfig);
+    default void setTaskConfig(TaskConfig taskConfig) {
+    }
 
     /**
      * 初始化运行配置。可以是空方法，也可以做初始化操作。
