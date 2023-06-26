@@ -16,4 +16,12 @@ public interface Constant {
      */
     String BLANK_STRING = "";
     String STANDARD_TIME = "yyyy-MM-dd HH:mm:ss.sss";
+    /**
+     * 实体已删除。
+     */
+    int DELETED = 1;
+    /**
+     * 实体未删除。
+     */
+    int NOT_DELETED = 0;
 }

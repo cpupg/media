@@ -12,4 +12,8 @@ import org.springframework.data.repository.query.Param;
  */
 public interface AuthorRepository extends JpaRepository<Author, String>, JpaSpecificationExecutor<Author> {
     int countBySiteId(@Param("siteId") String siteId);
+
+    int countByUsername(String username);
+
+    Author findByUsername(String username);
 }
