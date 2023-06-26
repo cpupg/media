@@ -20,7 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>com.sheepfly.media</groupId>
-      <artifactId>service</artifactId>
+      <artifactId>dataaccess</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sheepfly.media</groupId>
