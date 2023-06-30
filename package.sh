@@ -1,9 +1,12 @@
+# 打包脚本，可以在git-bash或其它linux shell中运行
+# 如果你将git安装目录下的usr/bin加入到环境变量PATH中，你也可以直接在cmd中运行sh package.sh dev
+# 来打包
 UI="git@github.com:wrote-code/media-ui.git";
 SERVER="git@github.com:wrote-code/media.git";
 UI_DIR="media-ui";
 SERVER_DIR="media";
 WORK_DIR=$(pwd);
-
+echo $WORK_DIR;
 function log() {
     echo $*;
 }
