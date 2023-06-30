@@ -10,6 +10,7 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,8 +54,15 @@ public class LoadSingleFileTaskImpl implements Task {
             try {
                 // win下shift+右键复制的路径带双引号，读取到的路径也包含双引号，会导致路径异常。
                 // 比如："/a/b/c/d"读取带代码里是""/a/b/c/d""，最后得到的路径是"/a/b/c/d"/a/b/c/d"
-                // 需要移除路径中的引号
-                Resource resource = parseInputToResource(line.replaceAll("\"", "").split(" "));
+                // 1.移除路径中的引号
+                String lineNew = line.replace("\"", "");
+                // 2.分割
+                String[] arr = lineNew.split("\\|");
+                // 3.裁剪空白
+                for (int i = 0; i < arr.length; i++) {
+                    arr[i] = arr[i].trim();
+                }
+                Resource resource = parseInputToResource(arr);
                 log.info("保存成功:{} -> {}", resource.getFilename(), resource.getDir());
             } catch (IllegalCliStateException e) {
                 // 此异常不需要堆栈
