@@ -4,18 +4,18 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.cli.config.LoadDirectoryConfig;
 import com.sheepfly.media.cli.config.TaskConfig;
+import com.sheepfly.media.cli.task.Task;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.dataaccess.entity.Author_;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.dataaccess.entity.Site_;
-import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
-import com.sheepfly.media.cli.task.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +60,26 @@ public class LoadDirectoryTaskImpl implements Task {
     @Autowired
     private Validator validator;
     private LoadDirectoryConfig config;
+    /**
+     * 录入成功的资源数量。
+     */
+    private int successCount = 0;
+    /**
+     * 录入失败的资源数量。
+     */
+    private int failCount = 0;
+    /**
+     * 排除的资源数量。
+     */
+    private int excludeCount = 0;
+    /**
+     * 包含的资源数量。
+     */
+    private int includeCount = 0;
+    /**
+     * 重复资源数量。
+     */
+    private int duplicatedCount = 0;
     /**
      * 命令行输入的作者。
      */
@@ -183,6 +203,7 @@ public class LoadDirectoryTaskImpl implements Task {
             String path = dir.getAbsolutePath();
             for (String e : config.getExcludePathArray()) {
                 if (path.matches(e) || name.matches(e)) {
+                    excludeCount++;
                     writeExcludeMessage(String.format("exclude: %s -> %s%s%s", e, path, File.separator, name));
                     return false;
                 }
@@ -191,9 +212,11 @@ public class LoadDirectoryTaskImpl implements Task {
             for (String e : config.getIncludePathArray()) {
                 if (path.matches(e) || name.matches(e)) {
                     writeMessage(String.format("%s -> %s%s%s", e, path, File.separator, name));
+                    includeCount++;
                     writeIncludeMessage(String.format("include: %s -> %s%s%s", e, path, File.separator, name));
                     return true;
                 } else {
+                    excludeCount++;
                     writeExcludeMessage(String.format("not include: %s -> %s%s%s", e, path, File.separator, name));
                     return false;
                 }
@@ -236,7 +259,15 @@ public class LoadDirectoryTaskImpl implements Task {
 
     @Override
     public void getExecuteResult() {
-        // 暂时不需要
+        StringBuilder builder = new StringBuilder();
+        builder.append("任务执行完成，执行结果如下：")
+                .append(System.lineSeparator())
+                .append("录入成功的资源数量：").append(successCount).append(System.lineSeparator())
+                .append("录入失败的资源数量：").append(failCount).append(System.lineSeparator())
+                .append("排除的资源数量：").append(excludeCount).append(System.lineSeparator())
+                .append("包含的资源数量：").append(includeCount).append(System.lineSeparator())
+                .append("重复资源数量：").append(duplicatedCount).append(System.lineSeparator());
+        log.info(builder.toString());
     }
 
     @Override
@@ -269,11 +300,12 @@ public class LoadDirectoryTaskImpl implements Task {
             Resource resource = new Resource();
             resource.setDir(FileUtil.getParent(dir, 1));
             resource.setFilename(FileUtil.getName(dir));
-            resource.setDeleteStatus(1);
+            resource.setDeleteStatus(Constant.NOT_DELETED);
             long count = resourceRepository.count(Example.of(resource, matcher));
             String message = String.format("%s -> %s", resource.getFilename(), resource.getDir());
             if (count > 0) {
                 log.info("已经存在资源{} -> {}", resource.getFilename(), resource.getDir());
+                duplicatedCount++;
                 writeDuplicatedMessage(message);
                 return;
             }
@@ -292,10 +324,12 @@ public class LoadDirectoryTaskImpl implements Task {
                     return;
                 }
                 resourceRepository.save(resource);
+                successCount++;
                 writeMessage(message);
             } catch (Exception e) {
                 // 不能影响后面资源的保存。
                 log.error("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir(), e);
+                failCount++;
                 writeFailMessage(message);
             }
             return;
