@@ -1,4 +1,4 @@
-package com.sheepfly.media.exception;
+package com.sheepfly.media.common.exception;
 
 import org.junit.Test;
 

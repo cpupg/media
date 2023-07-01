@@ -1,12 +1,12 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.entity.baseinterface.EntityInterface;
-import com.sheepfly.media.entity.baseinterface.LogicDelete;
-import com.sheepfly.media.exception.BusinessException;
-import com.sheepfly.media.exception.BusinessRunTimeException;
-import com.sheepfly.media.service.BaseJpaService;
-import com.sheepfly.media.exception.ErrorCode;
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.BusinessRunTimeException;
+import com.sheepfly.media.service.base.BaseJpaService;
+import com.sheepfly.media.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
