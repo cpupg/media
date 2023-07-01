@@ -199,6 +199,10 @@ public class LoadDirectoryTaskImpl implements Task {
         // 2.如果输入了包含路径，则只有匹配包含路径的资源才会被添加
         // 3.不建议同时输入包含和排除
         filenameFilter = (dir, name) -> {
+            // 结果文件不需要扫描且不需要记录
+            if (name.matches("^result.*\\.txt$")) {
+                log.info("忽略结果文件{}", name);
+            }
             // 先校验排除路径，再校验包含路径
             String path = dir.getAbsolutePath();
             for (String e : config.getExcludePathArray()) {
