@@ -57,7 +57,7 @@ public class SiteController {
      *
      * @return 和输入参数中的条件匹配的站点。
      */
-    @PostMapping("/fetchSiteVoListPro")
+    @PostMapping("/querySiteList")
     @ResponseBody
     public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteFilter, Object> vo) {
         SiteFilter form = vo.getParams();
