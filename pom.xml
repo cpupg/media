@@ -6,7 +6,7 @@
   <modules>
     <module>common</module>
     <module>service</module>
-    <module>controller</module>
+    <module>web</module>
     <module>application</module>
     <module>dataaccess</module>
     <module>cli</module>
@@ -22,7 +22,7 @@
 
   <groupId>com.sheepfly.media</groupId>
   <artifactId>media</artifactId>
-  <version>0.3.0-alpha</version>
+  <version>0.4.0-alpha</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -31,6 +31,8 @@
     <maven.compile.encoding>UTF-8</maven.compile.encoding>
     <project.report.outputEncoding>UTF-8</project.report.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <version.media>0.4.0-alpha</version.media>
   </properties>
 
   <dependencyManagement>
@@ -39,27 +41,27 @@
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>common</artifactId>
-        <version>0.3.0-alpha</version>
+        <version>${version.media}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
-        <artifactId>controller</artifactId>
-        <version>0.3.0-alpha</version>
+        <artifactId>web</artifactId>
+        <version>${version.media}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>dataaccess</artifactId>
-        <version>0.3.0-alpha</version>
+        <version>${version.media}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>service</artifactId>
-        <version>0.3.0-alpha</version>
+        <version>${version.media}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>config</artifactId>
-        <version>0.3.0-alpha</version>
+        <version>${version.media}</version>
       </dependency>
       <!--media结束-->
 
