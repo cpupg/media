@@ -39,6 +39,11 @@ function execute() {
 # 分支名称
 branch=$1;
 hr "检查当前工作目录是否正常";
+if [ -e $UI_DIR/node_modules ]; then
+    log "存在node_modules目录，将改目录移动到父目录";
+    execute "mv -v $UI_DIR/node_modules $WORK_DIR";
+fi
+
 if [[ -e $UI_DIR ]]; then
     log "删除ui目录";
     rm -rfv $UI_DIR;
@@ -71,6 +76,10 @@ hr "设置前台代码版本"
 execute "cd $UI_DIR";
 execute "touch $WORK_DIR/$SERVER_DIR/application/src/main/resources/static/ui-$(git rev-parse $branch)":
 
+hr "设置系统版本"
+execute "cd $SERVER_DIR";
+echo "main=$(git branch --show-current)" > "config/src/main/resources/media-application.properties"
+
 hr "编译前台代码";
 execute "mv node_modules $UI_DIR";
 execute "cd $UI_DIR";
@@ -95,5 +104,5 @@ log "编译";
 execute "mvn -DskipTests=true package";
 
 hr "移动jar包";
-execute "mv -v $SERVER_DIR/application/target/*.jar ./media-$branch-$(date '+%Y.%m.%d').jar";
-execute "mv -v $SERVER_DIR/cli/target/*.jar ./cli-$branch-$(date '+%Y.%m.%d').jar";
+execute "mv -v $SERVER_DIR/application/target/*.jar ./media-$branch.jar";
+execute "mv -v $SERVER_DIR/cli/target/*.jar ./cli-$branch.jar";
