@@ -31,3 +31,5 @@ upload
 # 其他
 todo.txt
 dev-package.bat
+# 通过工作流或脚本生成，不需要提交到仓库中
+media-application.properties
