@@ -10,7 +10,6 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,8 +47,8 @@ public class LoadSingleFileTaskImpl implements Task {
     public void executeTask() {
         log.info("请输入作者用户名和资源全路径，用空格分隔。若输入了id，则会先使用id进行匹配");
         log.info("输入bye可以退出程序");
-        log.info(usage);
         Scanner scanner = new Scanner(System.in);
+        log.info(usage);
         for (String line = scanner.nextLine(); !"bye".equals(line); line = scanner.nextLine()) {
             try {
                 // win下shift+右键复制的路径带双引号，读取到的路径也包含双引号，会导致路径异常。
@@ -70,6 +69,7 @@ public class LoadSingleFileTaskImpl implements Task {
             } catch (Throwable t) {
                 log.error("发生异常", t);
             }
+            log.info(usage);
         }
     }
 
