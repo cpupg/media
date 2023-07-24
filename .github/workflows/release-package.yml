@@ -96,7 +96,7 @@ jobs:
           git branch --show-current >> application/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
 
           echo ::group::系统版本
-          echo "main=$(git branch --show-current)" > config/src/main/resources/media-application.properties
+          echo "main=v$(git branch --show-current)" > config/src/main/resources/media-application.properties
 
           git branch --show-current >> application/src/main/resources/static/server-$(git rev-parse ${{env.server-ref}})
 
