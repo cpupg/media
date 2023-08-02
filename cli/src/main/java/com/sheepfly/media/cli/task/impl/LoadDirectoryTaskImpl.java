@@ -202,6 +202,7 @@ public class LoadDirectoryTaskImpl implements Task {
             // 结果文件不需要扫描且不需要记录
             if (name.matches("^result.*\\.txt$")) {
                 log.info("忽略结果文件{}", name);
+                return false;
             }
             // 先校验排除路径，再校验包含路径
             String path = dir.getAbsolutePath();
