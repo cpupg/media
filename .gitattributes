@@ -3,3 +3,4 @@
 *.txt       text eol=crlf
 *.sql       text eol=crlf
 *.yaml      text eol=crlf
+*.properties text eol=crlf

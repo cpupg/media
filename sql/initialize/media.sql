@@ -162,13 +162,12 @@ comment on column MEDIA.directory.id is '主键id';
 comment on column MEDIA.directory.dir_code is '目录代码';
 comment on column MEDIA.directory.parent_code is '父目录代码';
 comment on column MEDIA.directory.name is '目录名';
-comment on column MEDIA.directory.code_list is '全路径对用的目录代码';
+comment on column MEDIA.directory.code_list is '全路径对用的目录代码清单';
 comment on column MEDIA.directory.level is '目录层级';
 comment on column MEDIA.directory.delete_status is '删除状态0未删除1删除';
 comment on column MEDIA.directory.create_time is '创建时间';
 comment on column MEDIA.directory.update_time is '更新时间';
 comment on column MEDIA.directory.delete_time is '删除时间';
 
-create index media_directory_1 on media.directory (dir_code);
-create index media_directory_2 on media.directory (code_list);
-
+create unique index media.media_directory_1 on media.directory (dir_code);
+create index media.media_directory_2 on media.directory (code_list);
