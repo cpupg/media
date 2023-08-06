@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
@@ -14,7 +15,15 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(schema = "MEDIA", name = "DIRECTORY")
+@Table(schema = "MEDIA", name = "DIRECTORY",
+        indexes = {@Index(
+                name = "media.media_directory_1",
+                columnList = "DIR_CODE",
+                unique = true
+        ), @Index(
+                name = "media.media_directory_2",
+                columnList = "CODE_LIST"
+        )})
 public class Directory implements Serializable {
 
     private static final long serialVersionUID = 1L;
