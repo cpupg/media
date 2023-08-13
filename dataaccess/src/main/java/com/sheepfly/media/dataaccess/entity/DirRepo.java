@@ -1,5 +1,7 @@
 package com.sheepfly.media.dataaccess.entity;
 
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -15,11 +17,8 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "MEDIA.DIR_REPO", indexes = {
-        @Index(name = "MEDIA.DIR_REPO_1",
-        columnList = "DIR_CODE", unique = true)
-})
-public class DirRepo implements Serializable {
+@Table(name = "MEDIA.DIR_REPO", indexes = {@Index(name = "MEDIA.DIR_REPO_1", columnList = "DIR_CODE", unique = true)})
+public class DirRepo implements Serializable, LogicDelete, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 

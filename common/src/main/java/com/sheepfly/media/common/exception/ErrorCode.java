@@ -97,6 +97,7 @@ public enum ErrorCode {
      * 缺少请求参数。
      */
     REQUEST_VALUE_IS_LOST("C0101006", "缺少请求参数"),
+    PAGINATION_ERROR("C0101007", "缺少分页参数"),
     // 公用错误结束101
 
     /**

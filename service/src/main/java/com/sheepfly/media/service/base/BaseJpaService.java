@@ -1,9 +1,9 @@
 package com.sheepfly.media.service.base;
 
-import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
-import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -31,7 +31,11 @@ public interface BaseJpaService<T extends EntityInterface & LogicDelete, ID, D e
     /**
      * 保存一个实体对象，需要自行设置主键。
      *
-     * <p>保存前会先检查是否设置了主键id，若没有设置主键id，则自动生成主键id。</p>
+     * <p>保存前会检查以下属性，如果没有，会生成默认值：</p>
+     * <ul>
+     *     <li>id:主键id，使用雪花算法生成。</li>
+     *     <li>deleteStatus:删除状态，默认值0。</li>
+     * </ul>
      *
      * @param t 实体对象。
      *
