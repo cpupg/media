@@ -54,6 +54,6 @@ public class DirRepoController {
     public ProTableObject<DirRepoVo> queryAllDirRepoList(@Validated @RequestBody DirRepoFilter filter) {
         Page<Object> page = PageMethod.startPage(filter.getCurrent(), filter.getPageSize());
         List<DirRepoVo> list = service.queryAllDirRepoList();
-        return ProTableObject.success(list, (int) page.getTotal());
+        return ProTableObject.success(list, page.getTotal());
     }
 }
