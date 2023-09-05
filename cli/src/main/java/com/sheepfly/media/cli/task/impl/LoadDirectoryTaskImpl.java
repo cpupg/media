@@ -130,6 +130,16 @@ public class LoadDirectoryTaskImpl implements Task {
         writeIncludeMessage(time);
         writeMessage(String.format("扫描目录:%s", config.getTargetDir()));
         configAuthor();
+
+        Optional<Site> optionalSite = siteRepository.findOne(
+                (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
+        log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
+        // 查到就说明是相同文件。
+        matcher = ExampleMatcher.matchingAll().withMatcher(Resource_.DIR, ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher(Resource_.FILENAME, ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher(Resource_.DELETE_STATUS, ExampleMatcher.GenericPropertyMatcher::exact);
+
+        writeMessage(String.format("当前用户:%s", author.getUsername()));
         configIncludeAndExclude();
         log.info("配置完成");
         writeMessage("   ->配置完成<-");
@@ -152,31 +162,18 @@ public class LoadDirectoryTaskImpl implements Task {
                     (root, query, builder) -> builder.equal(root.get(Author_.USERNAME), config.getAuthorName()));
             if (authorList.isEmpty()) {
                 log.warn("没有匹配的作者，请重试");
-                return;
             } else if (authorList.size() == 1) {
                 log.info("匹配到唯一作者");
                 author = authorList.get(0);
             } else if (authorList.size() <= 5) {
                 log.warn("有重名作者，请输入id后重试" + authorList);
-                return;
             } else {
                 log.warn("重名作者太多，请确定作者名称后重试");
-                return;
             }
         } else {
             // 没有作者
             log.error("author-id和author至少需要输入一个");
-            return;
         }
-        Optional<Site> optionalSite = siteRepository.findOne(
-                (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
-        log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
-        // 查到就说明是相同文件。
-        matcher = ExampleMatcher.matchingAll().withMatcher(Resource_.DIR, ExampleMatcher.GenericPropertyMatcher::exact)
-                .withMatcher(Resource_.FILENAME, ExampleMatcher.GenericPropertyMatcher::exact)
-                .withMatcher(Resource_.DELETE_STATUS, ExampleMatcher.GenericPropertyMatcher::exact);
-
-        writeMessage(String.format("当前用户:%s", author.getUsername()));
     }
 
     /**
