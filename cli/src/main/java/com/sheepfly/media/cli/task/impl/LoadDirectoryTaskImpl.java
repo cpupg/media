@@ -26,6 +26,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.Predicate;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.io.File;
@@ -159,7 +160,11 @@ public class LoadDirectoryTaskImpl implements Task {
         }
         if (StringUtils.isNotBlank(config.getAuthorName())) {
             List<Author> authorList = authorRepository.findAll(
-                    (root, query, builder) -> builder.equal(root.get(Author_.USERNAME), config.getAuthorName()));
+                    (root, query, builder) -> {
+                        Predicate p1 = builder.equal(root.get(Author_.USERNAME), config.getAuthorName());
+                        Predicate p2 = builder.equal(root.get(Author_.DELETE_STATUS), Constant.NOT_DELETED);
+                        return builder.or(p1, p2);
+                    });
             if (authorList.isEmpty()) {
                 log.warn("没有匹配的作者，请重试");
             } else if (authorList.size() == 1) {
