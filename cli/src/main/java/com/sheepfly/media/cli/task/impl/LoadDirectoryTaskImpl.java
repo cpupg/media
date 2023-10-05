@@ -163,7 +163,7 @@ public class LoadDirectoryTaskImpl implements Task {
                     (root, query, builder) -> {
                         Predicate p1 = builder.equal(root.get(Author_.USERNAME), config.getAuthorName());
                         Predicate p2 = builder.equal(root.get(Author_.DELETE_STATUS), Constant.NOT_DELETED);
-                        return builder.or(p1, p2);
+                        return builder.and(p1, p2);
                     });
             if (authorList.isEmpty()) {
                 log.warn("没有匹配的作者，请重试");
