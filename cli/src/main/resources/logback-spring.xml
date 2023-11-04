@@ -11,7 +11,7 @@
     <appender-ref ref="SQL"/>
   </logger>
 
-  <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="FALSE">
+  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="FALSE">
     <appender-ref ref="CLI_CONSOLE"/>
     <appender-ref ref="SQL"/>
   </logger>
