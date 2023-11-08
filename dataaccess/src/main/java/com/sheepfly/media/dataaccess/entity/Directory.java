@@ -32,7 +32,7 @@ public class Directory implements Serializable {
      * 主键id
      */
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID", nullable = false, length = 19)
     private String id;
 
     /**
@@ -50,8 +50,16 @@ public class Directory implements Serializable {
     /**
      * 目录名
      */
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = false, length = 500)
     private String name;
+
+    /**
+     * 全路径。
+     *
+     * <p>分隔符是斜杠/，不区分平台，且必须以一个斜杠结尾。</p>
+     */
+    @Column(name = "PATH", nullable = false, length = 1000)
+    private String path;
 
     /**
      * 全路径对应的目录代码清单。
@@ -60,7 +68,7 @@ public class Directory implements Serializable {
      * a是根目录，则a的目录代码是0，否则不能为0。此时，e的目录代码清单是1.2.3.4.5。若a是根目录，
      * 则目录代码清单是0.2.3.4.5</p>
      */
-    @Column(name = "CODE_LIST", nullable = false)
+    @Column(name = "CODE_LIST", nullable = false, length = 50)
     private String codeList;
 
     /**

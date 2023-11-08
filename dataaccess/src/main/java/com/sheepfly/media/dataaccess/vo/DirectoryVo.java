@@ -28,6 +28,13 @@ public class DirectoryVo {
     private String name;
 
     /**
+     * 全路径，分隔符为/，不区分平台。
+     *
+     * <p>分隔符是斜杠/，不区分平台，且必须以一个斜杠结尾。</p>
+     */
+    private String path;
+
+    /**
      * 全路径对应的目录代码清单。
      *
      * <p>假如现在有一个目录e有五个层级，全路径是 /a/b/c/d/e，对应的目录吗分别是1,2,3,4,5。若
