@@ -1,4 +1,4 @@
-
+drop table media.DIRECTORY;
 create table MEDIA.DIRECTORY
 (
   ID CHARACTER VARYING(19) not null
@@ -6,6 +6,7 @@ create table MEDIA.DIRECTORY
   DIR_CODE INTEGER not null,
   PARENT_CODE INTEGER not null,
   NAME CHARACTER VARYING(500) default '' not null,
+  PATH VARCHAR(1000) default '' not null,
   CODE_LIST CHARACTER VARYING(50) default '' not null,
   LEVEL TINYINT default '0' not null,
   DELETE_STATUS TINYINT default '0' not null,
@@ -23,6 +24,8 @@ comment on column MEDIA.DIRECTORY.DIR_CODE is '目录代码';
 comment on column MEDIA.DIRECTORY.PARENT_CODE is '父目录代码';
 
 comment on column MEDIA.DIRECTORY.NAME is '目录名';
+
+comment on column MEDIA.DIRECTORY.PATH is '全路径';
 
 comment on column MEDIA.DIRECTORY.CODE_LIST is '全路径对用的目录代码清单';
 
