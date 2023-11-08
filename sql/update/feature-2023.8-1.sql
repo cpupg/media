@@ -7,7 +7,7 @@ create table MEDIA.DIRECTORY
   PARENT_CODE INTEGER not null,
   NAME CHARACTER VARYING(500) default '' not null,
   PATH VARCHAR(1000) default '' not null,
-  CODE_LIST CHARACTER VARYING(50) default '' not null,
+  CODE_LIST CHARACTER VARYING(100) default '' not null,
   LEVEL TINYINT default '0' not null,
   DELETE_STATUS TINYINT default '0' not null,
   CREATE_TIME TIMESTAMP default CURRENT_TIMESTAMP,
@@ -84,3 +84,4 @@ alter table media.RESOURCE
 add column dir_code integer not null default '0';
 
 
+create sequence media.dir_code_seq

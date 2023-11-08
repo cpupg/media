@@ -68,7 +68,7 @@ public class Directory implements Serializable {
      * a是根目录，则a的目录代码是0，否则不能为0。此时，e的目录代码清单是1.2.3.4.5。若a是根目录，
      * 则目录代码清单是0.2.3.4.5</p>
      */
-    @Column(name = "CODE_LIST", nullable = false, length = 50)
+    @Column(name = "CODE_LIST", nullable = false, length = 100)
     private String codeList;
 
     /**
