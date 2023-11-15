@@ -24,4 +24,6 @@ public interface Constant {
      * 实体未删除。
      */
     int NOT_DELETED = 0;
+
+    String SEPERATOR = "/";
 }
