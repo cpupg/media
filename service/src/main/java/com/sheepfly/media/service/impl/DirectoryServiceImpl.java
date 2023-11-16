@@ -57,10 +57,6 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Override
     public Directory addDirectory(String path) {
         log.info("目标目录{}", path);
-        Optional<Directory> op = repository.findOne((root, query, builder) -> builder.equal(root.get("path"), path));
-        if (op.isPresent()) {
-            return op.orElse(null);
-        }
         // 将目录以/分隔，从最后一层依次查找目录表，查到后作为父目录依次简历后面的目录
         // 假设目标目录是/a/b/c/d/e/f/,库里保存的目录是/a/b/c
         String[] dirNames = path.split(Constant.SEPERATOR);

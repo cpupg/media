@@ -22,7 +22,10 @@ public interface DirectoryService {
     List<DirectoryVo> queryDirectoryList();
 
     /**
-     * 添加目录，若目录已存在，则返回目录。
+     * 添加目录。
+     *
+     * <p>调用此方法前必须手动判断目录是否存在，不能直接调用此方法，因为此方法内部是通过遍历
+     * 目录层级来添加目录。</p>
      *
      * <p>目录分隔符是/，如果传入的分隔符不是/，需要替换为/。</p>
      *
