@@ -24,6 +24,10 @@ public class ResourceVo implements Serializable {
      * 资源目录
      */
     private String dir;
+    /**
+     * 目录代码。
+     */
+    private Integer dirCode;
 
     /**
      * 作者。
@@ -112,5 +116,13 @@ public class ResourceVo implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getDirCode() {
+        return dirCode;
+    }
+
+    public void setDirCode(Integer dirCode) {
+        this.dirCode = dirCode;
     }
 }

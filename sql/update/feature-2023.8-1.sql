@@ -79,9 +79,12 @@ comment on column MEDIA.DIR_REPO.DELETE_TIME is '删除时间';
 create unique index MEDIA.DIR_REPO_1
   on MEDIA.DIR_REPO (DIR_CODE);
 
-
 alter table media.RESOURCE
 add column dir_code integer not null default '0';
 
+update media.RESOURCE
+set SAVE_TIME = CREATE_TIME
+where SAVE_TIME is null;
 
-create sequence media.dir_code_seq
+alter table media.RESOURCE
+alter column SAVE_TIME set not null;
