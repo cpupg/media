@@ -94,5 +94,5 @@ public class Resource implements Serializable, EntityInterface, LogicDelete {
      * <p>{@link Directory}</p>
      */
     @Column(name = "DIR_CODE", nullable = false)
-    private Integer dirCode;
+    private Long dirCode;
 }
