@@ -37,6 +37,9 @@ public class Directory implements Serializable {
 
     /**
      * 目录代码，每个目录都有一个全局唯一的目录代码。
+     *
+     * <p>根目录和盘符是两种特殊目录。根目录只有一个/，目录代码是0，盘符可以有多个，从0依次
+     * 递减，因此盘符的目录代码是负数。</p>
      */
     @Column(name = "DIR_CODE", nullable = false)
     private Long dirCode;
@@ -56,7 +59,7 @@ public class Directory implements Serializable {
     /**
      * 全路径。
      *
-     * <p>分隔符是斜杠/，不区分平台，且必须以一个斜杠结尾。</p>
+     * <p>分隔符是斜杠/，不区分平台，且必须以一个斜杠结尾。此外，目录区分大小写。</p>
      */
     @Column(name = "PATH", nullable = false, length = 1000)
     private String path;
@@ -64,9 +67,8 @@ public class Directory implements Serializable {
     /**
      * 全路径对应的目录代码清单。
      *
-     * <p>假如现在有一个目录e有五个层级，全路径是 /a/b/c/d/e，对应的目录吗分别是1,2,3,4,5。若
-     * a是根目录，则a的目录代码是0，否则不能为0。此时，e的目录代码清单是1.2.3.4.5。若a是根目录，
-     * 则目录代码清单是0.2.3.4.5</p>
+     * <p>假如现在有一个目录e有五个层级，全路径是 /a/b/c/d/e，对应的目录代码是/1/2/3/4/5，
+     * 则code_list的代码清单是0.1.2.3.4.5。如果目录带了盘符，则目录代码是-1.0.1.2.3.4.5</p>
      */
     @Column(name = "CODE_LIST", nullable = false, length = 100)
     private String codeList;
@@ -74,7 +76,7 @@ public class Directory implements Serializable {
     /**
      * 目录层级。
      *
-     * <p>目录代码清单按小数点分隔后得到的数字个数就是目录层级。</p>
+     * <p>目录代码清单按小数点分隔后得到的数字个数就是目录层级。盘符和根目录的层级是0，</p>
      */
     @Column(name = "LEVEL", nullable = false)
     private Integer level;

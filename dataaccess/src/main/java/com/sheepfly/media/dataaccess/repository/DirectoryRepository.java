@@ -12,4 +12,6 @@ public interface DirectoryRepository extends JpaRepository<Directory, String>, J
     List<Directory> queryByParentCodeAndDeleteStatus(Long parentCode, Integer deleteStatus);
 
     Directory findFirstByOrderByDirCodeDesc();
+
+    Directory findFirstByOrderByDirCode();
 }

@@ -2,13 +2,18 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.filter.DirectoryFilter;
 import com.sheepfly.media.dataaccess.entity.Directory;
+import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.dataaccess.vo.DirectoryVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -20,16 +25,21 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class DirectoryServiceImpl implements DirectoryService {
+public class DirectoryServiceImpl implements DirectoryService, InitializingBean {
     @Autowired
     private DirectoryRepository repository;
     @Autowired
     private Snowflake snowflake;
+    /**
+     * 根目录/。
+     */
+    private Directory root;
 
     @Override
     public List<Directory> queryDirectoryList(DirectoryFilter filter) {
         return null;
     }
+
 
     @Override
     public List<DirectoryVo> queryDirectoryList() {
@@ -55,8 +65,45 @@ public class DirectoryServiceImpl implements DirectoryService {
     }
 
     @Override
-    public Directory addDirectory(String path) {
+    public Directory addDirectory(String path) throws BusinessException {
+        path = FilenameUtils.normalize(path);
+        if (Constant.SEPERATOR.equals(path)) {
+            // 根目录直接返回
+            return root;
+        }
+        // todo 代码过长，需要拆分
+        log.info("格式化目录{}", path);
         log.info("目标目录{}", path);
+        String pathPrefix = FilenameUtils.getPrefix(path);
+        if (pathPrefix == null) {
+            log.info("目录格式错误，必须是绝对路径");
+            throw new BusinessException(ErrorCode.DIRECTORY_MUST_BE_ABSOLUTE);
+        }
+        String upperPathPrefix = pathPrefix.toUpperCase();
+        if (upperPathPrefix.matches("^[A-Z]:\\$")) {
+            // win的绝对路径的盘符后必须加根目录斜杠，比如c:/。
+            throw new BusinessException(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
+        }
+        if (upperPathPrefix.matches("^[A-Z]:\\\\$")) {
+            log.info("目录中带windows盘符");
+            long count = repository.count(
+                    // c:/a/b/c保存时按斜杠分割，盘符是c:，没有斜杠
+                    (r, q, b) -> b.equal(r.get(Directory_.PATH), upperPathPrefix.substring(0, 2)));
+            if (count == 0) {
+                log.warn("盘符{}不存在，创建盘符", upperPathPrefix);
+                Directory driver = new Directory();
+                driver.setId(snowflake.nextIdStr());
+                driver.setDirCode(createDriverCode());
+                driver.setName(upperPathPrefix);
+                driver.setPath(upperPathPrefix);
+                driver.setCodeList(String.valueOf(driver.getDirCode()) + ".0");
+                driver.setLevel(0);
+                driver.setDeleteStatus(Constant.NOT_DELETED);
+                driver.setCreateTime(new Date());
+                Directory save = repository.save(driver);
+                log.info("盘符{}保存完成，目录代码{}", save.getPath(), save.getDirCode());
+            }
+        }
         // 将目录以/分隔，从最后一层依次查找目录表，查到后作为父目录依次简历后面的目录
         // 假设目标目录是/a/b/c/d/e/f/,库里保存的目录是/a/b/c
         String[] dirNames = path.split(Constant.SEPERATOR);
@@ -143,13 +190,32 @@ public class DirectoryServiceImpl implements DirectoryService {
      * @return 目录代码。
      */
     private Long createDirCode() {
-        if (repository.count() == 0) {
-            // todo 只有第一次使用系统会用到，需要优化
-            return 1L;
-        }
         // 目录代码是唯一的，查询时不能加条件
         Directory directory = repository.findFirstByOrderByDirCodeDesc();
         log.info("当前最大目录代码:" + directory.getDirCode());
         return directory.getDirCode() + 1;
+    }
+
+    /**
+     * 创建盘符对应的目录代码。
+     *
+     * <p>盘符的目录代码小于0。</p>
+     *
+     * @return 目录代码。
+     */
+    private Long createDriverCode() {
+        Directory directory = repository.findFirstByOrderByDirCode();
+        log.info("当前最大盘符代码：{}", Math.abs(directory.getDirCode()));
+        return directory.getDirCode() - 1;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws BusinessException {
+        log.info("初始化根目录");
+        root = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), Constant.SEPERATOR)).orElse(null);
+        if (root == null) {
+            throw new BusinessException(ErrorCode.DIRECTORY_EMPTY_ROOT_DIRECTORY);
+        }
+        log.info("初始化成功:{}", root);
     }
 }

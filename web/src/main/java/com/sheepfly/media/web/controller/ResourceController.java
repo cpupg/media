@@ -15,7 +15,6 @@ import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class ResourceController {
     @PostMapping("/add")
     @ResponseBody
     public ResponseData add(@RequestBody @Validated ResourceData resourceData)
-            throws InvocationTargetException, IllegalAccessException {
+            throws InvocationTargetException, IllegalAccessException, BusinessException {
         Resource resource = new Resource();
         BeanUtils.copyProperties(resource, resourceData);
         Date date = new Date();
@@ -66,12 +65,12 @@ public class ResourceController {
         resource.setSaveTime(date);
         // 判断输入的路径是文件还是目录，方便直接复制全路径到表单
         File file = new File(resource.getDir());
-        String parentDir = FilenameUtils.normalize(file.getAbsolutePath(), true);
+        String parentDir = file.getAbsolutePath();
         log.info("文件目录{}", parentDir);
         if (file.isFile()) {
             log.info("当前资源是一个文件，计算父目录");
             resource.setFilename(file.getName());
-            parentDir = FilenameUtils.normalize(file.getParent(), true);
+            parentDir = file.getParent();
         }
         if (!parentDir.endsWith(Constant.SEPERATOR)) {
             parentDir = parentDir + Constant.SEPERATOR;
