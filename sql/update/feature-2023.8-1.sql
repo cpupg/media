@@ -88,3 +88,6 @@ where SAVE_TIME is null;
 
 alter table media.RESOURCE
 alter column SAVE_TIME set not null;
+
+insert into DIRECTORY (ID, DIR_CODE, NAME, PATH, CODE_LIST, LEVEL, CREATE_TIME, PARENT_CODE)
+values (0, 0, '/', '/', '0', 0, current_time(), 0);
