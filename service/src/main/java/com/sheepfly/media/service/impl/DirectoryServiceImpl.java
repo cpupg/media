@@ -66,42 +66,45 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
 
     @Override
     public Directory addDirectory(String path) throws BusinessException {
-        path = FilenameUtils.normalize(path);
+        // todo 代码过长，需要拆分
+        path = FilenameUtils.normalize(path, true);
         if (Constant.SEPERATOR.equals(path)) {
             // 根目录直接返回
             return root;
         }
-        // todo 代码过长，需要拆分
         log.info("格式化目录{}", path);
-        log.info("目标目录{}", path);
         String pathPrefix = FilenameUtils.getPrefix(path);
         if (pathPrefix == null) {
             log.info("目录格式错误，必须是绝对路径");
             throw new BusinessException(ErrorCode.DIRECTORY_MUST_BE_ABSOLUTE);
         }
         String upperPathPrefix = pathPrefix.toUpperCase();
-        if (upperPathPrefix.matches("^[A-Z]:\\$")) {
+        if (upperPathPrefix.matches("^[A-Z]:$")) {
             // win的绝对路径的盘符后必须加根目录斜杠，比如c:/。
             throw new BusinessException(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
         }
-        if (upperPathPrefix.matches("^[A-Z]:\\\\$")) {
+        Directory driver = null;
+        if (upperPathPrefix.matches("^[A-Z]:/$")) {
             log.info("目录中带windows盘符");
-            long count = repository.count(
+            Optional<Directory> d = repository.findOne(
                     // c:/a/b/c保存时按斜杠分割，盘符是c:，没有斜杠
-                    (r, q, b) -> b.equal(r.get(Directory_.PATH), upperPathPrefix.substring(0, 2)));
-            if (count == 0) {
+                    (r, q, b) -> b.equal(r.get(Directory_.PATH), upperPathPrefix));
+            if (!d.isPresent()) {
                 log.warn("盘符{}不存在，创建盘符", upperPathPrefix);
-                Directory driver = new Directory();
+                driver = new Directory();
                 driver.setId(snowflake.nextIdStr());
                 driver.setDirCode(createDriverCode());
-                driver.setName(upperPathPrefix);
+                driver.setParentCode(0L);
+                driver.setName(upperPathPrefix.substring(0, 2));
                 driver.setPath(upperPathPrefix);
-                driver.setCodeList(String.valueOf(driver.getDirCode()) + ".0");
+                driver.setCodeList(driver.getDirCode() + ".0");
                 driver.setLevel(0);
                 driver.setDeleteStatus(Constant.NOT_DELETED);
                 driver.setCreateTime(new Date());
-                Directory save = repository.save(driver);
+                Directory save = repository.saveAndFlush(driver);
                 log.info("盘符{}保存完成，目录代码{}", save.getPath(), save.getDirCode());
+            } else {
+                driver = d.orElse(null);
             }
         }
         // 将目录以/分隔，从最后一层依次查找目录表，查到后作为父目录依次简历后面的目录
@@ -120,6 +123,13 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
             rootDirectory.setDirCode(createDirCode());
             rootDirectory.setCodeList(0 + "." + rootDirectory.getDirCode());
             rootDirectory.setCreateTime(new Date());
+            if (upperPathPrefix.matches("^[A-Z]:/")) {
+                // 带盘符时，父目录代码是盘符的目录代码，目录代码清单要加上盘符
+                rootDirectory.setParentCode(driver.getDirCode());
+                rootDirectory.setCodeList(driver.getCodeList() + "." + rootDirectory.getDirCode());
+            } else {
+                rootDirectory.setParentCode(0L);
+            }
             rootDirectory.setParentCode(0L);
             rootDirectory.setDeleteStatus(Constant.NOT_DELETED);
             Directory save = repository.save(rootDirectory);
@@ -163,7 +173,6 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                     log.info("子目录创建成功：{}", resultDir);
                     parentCode = subDir.getDirCode();
                 }
-                return currentDir;
             }
             // 没找到父目录，currentPath=/a/b/c/d/e/f/，从后往前截取，直到变成/a/b/c/
             currentPath = currentPath.substring(0, currentPath.length() - 1 - dirName.length());
