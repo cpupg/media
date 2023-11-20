@@ -3,10 +3,8 @@ package com.sheepfly.media.service.impl;
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.filter.DirectoryFilter;
 import com.sheepfly.media.dataaccess.entity.Directory;
-import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.dataaccess.vo.DirectoryVo;
 import com.sheepfly.media.service.base.DirectoryService;
@@ -30,10 +28,6 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
     private DirectoryRepository repository;
     @Autowired
     private Snowflake snowflake;
-    /**
-     * 根目录/。
-     */
-    private Directory root;
 
     @Override
     public List<Directory> queryDirectoryList(DirectoryFilter filter) {
@@ -65,93 +59,30 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
     }
 
     @Override
-    public Directory addDirectory(String path) throws BusinessException {
-        // todo 代码过长，需要拆分
-        path = FilenameUtils.normalize(path, true);
-        if (Constant.SEPERATOR.equals(path)) {
-            // 根目录直接返回
-            return root;
-        }
-        log.info("格式化目录{}", path);
-        String pathPrefix = FilenameUtils.getPrefix(path);
-        if (pathPrefix == null) {
-            log.info("目录格式错误，必须是绝对路径");
-            throw new BusinessException(ErrorCode.DIRECTORY_MUST_BE_ABSOLUTE);
-        }
-        String upperPathPrefix = pathPrefix.toUpperCase();
-        if (upperPathPrefix.matches("^[A-Z]:$")) {
-            // win的绝对路径的盘符后必须加根目录斜杠，比如c:/。
-            throw new BusinessException(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
-        }
-        Directory driver = null;
-        if (upperPathPrefix.matches("^[A-Z]:/$")) {
-            log.info("目录中带windows盘符");
-            Optional<Directory> d = repository.findOne(
-                    // c:/a/b/c保存时按斜杠分割，盘符是c:，没有斜杠
-                    (r, q, b) -> b.equal(r.get(Directory_.PATH), upperPathPrefix));
-            if (!d.isPresent()) {
-                log.warn("盘符{}不存在，创建盘符", upperPathPrefix);
-                driver = new Directory();
-                driver.setId(snowflake.nextIdStr());
-                driver.setDirCode(createDriverCode());
-                driver.setParentCode(0L);
-                driver.setName(upperPathPrefix.substring(0, 2));
-                driver.setPath(upperPathPrefix);
-                driver.setCodeList(driver.getDirCode() + ".0");
-                driver.setLevel(0);
-                driver.setDeleteStatus(Constant.NOT_DELETED);
-                driver.setCreateTime(new Date());
-                Directory save = repository.saveAndFlush(driver);
-                log.info("盘符{}保存完成，目录代码{}", save.getPath(), save.getDirCode());
-            } else {
-                driver = d.orElse(null);
-            }
-        }
+    public Directory createDirectory(String path) throws BusinessException {
+        String pathPrefix = FilenameUtils.getPrefix(path).toUpperCase();
+        Directory driver = createDriver(pathPrefix);
+        log.info("盘符{},目录代码:{}", driver.getPath(), driver.getDirCode());
         // 将目录以/分隔，从最后一层依次查找目录表，查到后作为父目录依次简历后面的目录
-        // 假设目标目录是/a/b/c/d/e/f/,库里保存的目录是/a/b/c
+        // 假设目标目录是c:/a/b/c/d/e/f/,系统会按层级依次保存c:,a,b,c,d,e,f等7个目录。
         String[] dirNames = path.split(Constant.SEPERATOR);
-        Directory rootDirectory = new Directory();
-        // 第一个元素是空串
-        rootDirectory.setPath(Constant.SEPERATOR + dirNames[1] + Constant.SEPERATOR);
-        Example<Directory> example = Example.of(rootDirectory);
-        Optional<Directory> optRootDir = repository.findOne(example);
-        if (!optRootDir.isPresent()) {
-            log.warn("根目录{}不存在", dirNames[1]);
-            rootDirectory.setId(snowflake.nextIdStr());
-            rootDirectory.setName(dirNames[1]);
-            rootDirectory.setLevel(1);
-            rootDirectory.setDirCode(createDirCode());
-            rootDirectory.setCodeList(0 + "." + rootDirectory.getDirCode());
-            rootDirectory.setCreateTime(new Date());
-            if (upperPathPrefix.matches("^[A-Z]:/")) {
-                // 带盘符时，父目录代码是盘符的目录代码，目录代码清单要加上盘符
-                rootDirectory.setParentCode(driver.getDirCode());
-                rootDirectory.setCodeList(driver.getCodeList() + "." + rootDirectory.getDirCode());
-            } else {
-                rootDirectory.setParentCode(0L);
-            }
-            rootDirectory.setParentCode(0L);
-            rootDirectory.setDeleteStatus(Constant.NOT_DELETED);
-            Directory save = repository.save(rootDirectory);
-            log.info("根目录创建完成{}", save);
-        }
         // 当前查询的目录，从后往前依次查询
-        String currentPath = path;
+        path = pathPrefix + path.substring(3);
         // 返回用的目录
         Directory resultDir = null;
         // todo 优化搜索算法
-        for (int i = dirNames.length - 1; i > 0; i--) {
+        for (int i = dirNames.length - 1; i >= 0; i--) {
             String dirName = dirNames[i];
             // 搜索/a/b/c/d/e/f/对应的目录
-            Directory currentDir = queryDirectoryByPath(currentPath);
+            Directory currentDir = queryDirectoryByPath(path);
             if (currentDir != null) {
                 // 搜到父目录/a/b/c/，此时dirName=d
                 log.info("找到当前目录，开始创建子目录:{}", currentDir);
                 StringBuilder codeListBuilder = new StringBuilder(currentDir.getCodeList());
                 // 当前目录的层级就是子目录的下标
-                // 目录：/a/b/c/d/e
-                // 层级：/1/2/3/4/5
-                // 下表：/0/1/2/3/4
+                // 目录：c:/a/b/c/d/e
+                // 层级：0/1/2/3/4/5
+                // 下标：0/1/2/3/4/5
                 // 使用split分割后，下标0是空串，计算时下标要+1
                 StringBuilder pathBuilder = new StringBuilder(currentDir.getPath());
                 long parentCode = currentDir.getDirCode();
@@ -169,13 +100,13 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                     subDir.setLevel(j);
                     subDir.setDeleteStatus(Constant.NOT_DELETED);
                     subDir.setCreateTime(new Date());
-                    resultDir = repository.save(subDir);
+                    resultDir = repository.saveAndFlush(subDir);
                     log.info("子目录创建成功：{}", resultDir);
                     parentCode = subDir.getDirCode();
                 }
             }
             // 没找到父目录，currentPath=/a/b/c/d/e/f/，从后往前截取，直到变成/a/b/c/
-            currentPath = currentPath.substring(0, currentPath.length() - 1 - dirName.length());
+            path = path.substring(0, path.length() - 1 - dirName.length());
         }
         return resultDir;
     }
@@ -187,6 +118,36 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
         directory.setPath(path);
         // 全路径是唯一的
         return repository.findOne(Example.of(directory)).orElse(null);
+    }
+
+    /**
+     * 创建盘符目录。
+     *
+     * <p>传入的值应该是全路径的前缀，比如c:，且没有斜杠。</p>
+     *
+     * @param driverPath 盘符，比如c:。
+     *
+     * @return 盘符目录。
+     */
+    private Directory createDriver(String driverPath) {
+        Directory directory = new Directory();
+        directory.setPath(driverPath);
+        Example<Directory> example = Example.of(directory);
+        Optional<Directory> opt = repository.findOne(example);
+        if (opt.isPresent()) {
+            return opt.orElse(null);
+        } else {
+            directory.setId(snowflake.nextIdStr());
+            directory.setDirCode(createDriverCode());
+            directory.setParentCode(0L);
+            directory.setName(driverPath);
+            directory.setPath(driverPath);
+            directory.setCodeList(String.valueOf(directory.getDirCode()));
+            directory.setLevel(0);
+            directory.setDeleteStatus(Constant.NOT_DELETED);
+            directory.setCreateTime(new Date());
+            return repository.saveAndFlush(directory);
+        }
     }
 
     /**
@@ -221,10 +182,23 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
     @Override
     public void afterPropertiesSet() throws BusinessException {
         log.info("初始化根目录");
-        root = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), Constant.SEPERATOR)).orElse(null);
-        if (root == null) {
-            throw new BusinessException(ErrorCode.DIRECTORY_EMPTY_ROOT_DIRECTORY);
+        Directory root = new Directory();
+        root.setPath(Constant.SEPERATOR);
+        Example<Directory> example = Example.of(root);
+        Optional<Directory> opt = repository.findOne(example);
+        if (!opt.isPresent()) {
+            log.warn("没有根目录");
+            root.setId(snowflake.nextIdStr());
+            root.setDirCode(0L);
+            root.setParentCode(0L);
+            root.setName("/");
+            root.setPath("/");
+            root.setCodeList("0");
+            root.setLevel(0);
+            root.setDeleteStatus(Constant.NOT_DELETED);
+            root.setCreateTime(new Date());
+            repository.saveAndFlush(root);
         }
-        log.info("初始化成功:{}", root);
+        log.info("初始化成功");
     }
 }

@@ -24,12 +24,13 @@ public class DirectoryServiceImplTest {
 
     @Test
     public void testAddDirectory() throws Exception {
-        String path = "/media/service/src/main/java/";
-        Directory directory = service.addDirectory("/media/service/src/main/java/");
-        Assert.assertEquals(path, directory.getPath());
-        Assert.assertEquals(5, (long) directory.getLevel());
-        Optional<Directory> opt = repository.findOne(
-                (root, query, builder) -> builder.equal(root.get(Directory_.PARENT_CODE), directory.getParentCode()));
-        Assert.assertEquals(opt.orElse(null).getPath(), "/media/service/src/main/java/");
+        String path = "c:/media/service/src/main/java/";
+        String path2 = "C:/media/service/src/main/";
+        Directory directory = service.createDirectory(path);
+        Assert.assertEquals("目录层级错误", 5L, (long) directory.getLevel());
+        Long code = directory.getParentCode();
+        Optional<Directory> opt = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.DIR_CODE), code));
+        Assert.assertTrue("父目录不存在", opt.isPresent());
+        Assert.assertEquals(path2, opt.orElse(null).getPath());
     }
 }

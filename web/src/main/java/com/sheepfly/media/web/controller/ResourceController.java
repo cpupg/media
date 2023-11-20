@@ -15,6 +15,7 @@ import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,10 @@ public class ResourceController {
     @ResponseBody
     public ResponseData add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
+        String prefix = FilenameUtils.getPrefix(resourceData.getDir());
+        if (!prefix.matches("^[a-zA-Z]:/")) {
+            return ResponseData.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
+        }
         Resource resource = new Resource();
         BeanUtils.copyProperties(resource, resourceData);
         Date date = new Date();
@@ -77,7 +82,7 @@ public class ResourceController {
         }
         Directory directory = directoryService.queryDirectoryByPath(parentDir);
         if (directory == null) {
-            directory = directoryService.addDirectory(parentDir);
+            directory = directoryService.createDirectory(parentDir);
         }
         if (directory == null) {
             ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
