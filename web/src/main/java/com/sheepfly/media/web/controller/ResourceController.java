@@ -11,6 +11,8 @@ import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
+import com.sheepfly.media.dataaccess.entity.Resource_;
+import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
@@ -26,10 +28,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * <p>
@@ -47,6 +51,8 @@ public class ResourceController {
     private IResourceService service;
     @Autowired
     private DirectoryService directoryService;
+    @Autowired
+    private ResourceRepository repository;
 
     @PostMapping("/queryResourceList")
     @ResponseBody
@@ -60,7 +66,7 @@ public class ResourceController {
     public ResponseData add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
         String prefix = FilenameUtils.getPrefix(resourceData.getDir());
-        if (!prefix.matches("^[a-zA-Z]:/")) {
+        if (!prefix.matches("^[a-zA-Z]:(/|\\\\)$")) {
             return ResponseData.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
         }
         Resource resource = new Resource();
@@ -75,14 +81,27 @@ public class ResourceController {
         if (file.isFile()) {
             log.info("当前资源是一个文件，计算父目录");
             resource.setFilename(file.getName());
-            parentDir = file.getParent();
+            parentDir = FilenameUtils.normalize(file.getParent(), true);
         }
         if (!parentDir.endsWith(Constant.SEPERATOR)) {
             parentDir = parentDir + Constant.SEPERATOR;
         }
+        parentDir = FilenameUtils.normalize(parentDir, true);
+        resource.setDir(parentDir);
         Directory directory = directoryService.queryDirectoryByPath(parentDir);
         if (directory == null) {
             directory = directoryService.createDirectory(parentDir);
+        } else {
+            Directory d = directory;
+            Optional<Resource> opt = repository.findOne((r, q, b) -> {
+                Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
+                Predicate p2 = b.equal(r.get(Resource_.DELETE_STATUS), Constant.NOT_DELETED);
+                Predicate p3 = b.equal(r.get(Resource_.FILENAME), resource.getFilename());
+                return b.and(p1, p2, p3);
+            });
+            if (opt.isPresent()) {
+                return ResponseData.success(opt.orElse(null));
+            }
         }
         if (directory == null) {
             ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
