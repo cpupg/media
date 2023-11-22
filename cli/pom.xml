@@ -26,5 +26,9 @@
       <groupId>com.sheepfly.media</groupId>
       <artifactId>config</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.sheepfly.media</groupId>
+      <artifactId>service</artifactId>
+    </dependency>
   </dependencies>
 </project>

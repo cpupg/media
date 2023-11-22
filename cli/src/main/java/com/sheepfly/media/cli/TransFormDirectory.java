@@ -26,5 +26,6 @@ public class TransFormDirectory {
         TransFormDirectoryTaskImpl task = context.getBean(TransFormDirectoryTaskImpl.class);
         task.initializeTaskConfig();
         task.executeTask();
+        task.afterTaskFinish();
     }
 }

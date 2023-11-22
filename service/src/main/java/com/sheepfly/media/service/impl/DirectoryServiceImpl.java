@@ -68,8 +68,6 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
         String[] dirNames = path.split(Constant.SEPERATOR);
         // 当前查询的目录，从后往前依次查询
         path = pathPrefix + path.substring(3);
-        // 返回用的目录
-        Directory resultDir = null;
         // todo 优化搜索算法
         for (int i = dirNames.length - 1; i >= 0; i--) {
             String dirName = dirNames[i];
@@ -86,6 +84,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                 // 使用split分割后，下标0是空串，计算时下标要+1
                 StringBuilder pathBuilder = new StringBuilder(currentDir.getPath());
                 long parentCode = currentDir.getDirCode();
+                Directory resultDir = null;
                 for (int j = currentDir.getLevel() + 1; j < dirNames.length; j++) {
                     pathBuilder.append(dirNames[j]).append(Constant.SEPERATOR);
                     long code = createDirCode();
@@ -104,11 +103,12 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                     log.info("子目录创建成功：{}", resultDir);
                     parentCode = subDir.getDirCode();
                 }
+                return resultDir;
             }
             // 没找到父目录，currentPath=/a/b/c/d/e/f/，从后往前截取，直到变成/a/b/c/
             path = path.substring(0, path.length() - 1 - dirName.length());
         }
-        return resultDir;
+        return null;
     }
 
     @Override
