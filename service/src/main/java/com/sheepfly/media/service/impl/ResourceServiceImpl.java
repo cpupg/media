@@ -39,6 +39,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         ResourceFilter params = form.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
-        return ProTableObject.success(list, (int) page.getTotal());
+        return ProTableObject.success(list, page.getTotal());
     }
 }

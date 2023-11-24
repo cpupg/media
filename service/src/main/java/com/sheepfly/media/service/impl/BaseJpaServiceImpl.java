@@ -1,12 +1,13 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
-import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
+import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.BusinessRunTimeException;
-import com.sheepfly.media.service.base.BaseJpaService;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
+import com.sheepfly.media.service.base.BaseJpaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,6 +36,9 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
     public T save(T t) {
         if (t.getId() == null) {
             t.setId(snowflake.nextIdStr());
+        }
+        if (t.getDeleteStatus() == null) {
+            t.setDeleteStatus(Constant.NOT_DELETED);
         }
         return d.save(t);
     }

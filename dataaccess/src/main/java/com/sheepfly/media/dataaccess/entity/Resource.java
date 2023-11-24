@@ -78,7 +78,7 @@ public class Resource implements Serializable, EntityInterface, LogicDelete {
      *
      * <p>资源保存到数据库的时间。</p>
      */
-    @Column(name = "SAVE_TIME")
+    @Column(name = "SAVE_TIME", nullable = false)
     private Date saveTime;
 
     /**
@@ -86,6 +86,13 @@ public class Resource implements Serializable, EntityInterface, LogicDelete {
      *
      * <p>0未删除1已删除。</p>
      */
-    @Column(name = "DELETE_STATUS", insertable = false)
+    @Column(name = "DELETE_STATUS", nullable = false)
     private Integer deleteStatus;
+    /**
+     * 目录代码。
+     *
+     * <p>{@link Directory}</p>
+     */
+    @Column(name = "DIR_CODE", nullable = false)
+    private Long dirCode;
 }

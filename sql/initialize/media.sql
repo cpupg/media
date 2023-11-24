@@ -130,7 +130,7 @@ comment on column MEDIA.SITE.URL is '网站地址';
 
 comment on column MEDIA.SITE.CREATE_TIME is '创建时间';
 
-comment on column MEDIA.SITE.UPDATE_TIME is '更细时间';
+comment on column MEDIA.SITE.UPDATE_TIME is '更新时间';
 
 comment on column MEDIA.SITE.DELETE_STATUS is '删除状态0未删除1删除';
 
@@ -143,3 +143,31 @@ create index MEDIA.SITE_2
 create index MEDIA.SITE_3
   on MEDIA.SITE (UPDATE_TIME);
 
+create table media.directory
+(
+  id varchar(19) not null primary key,
+  dir_code integer not null,
+  parent_code integer not null,
+  name varchar(500) not null default '',
+  code_list varchar(50) not null default '',
+  level tinyint not null default '0',
+  delete_status tinyint not null default '0',
+  create_time timestamp default current_timestamp(),
+  update_time timestamp,
+  delete_time timestamp
+);
+
+comment on table media.directory is '资源目录';
+comment on column MEDIA.directory.id is '主键id';
+comment on column MEDIA.directory.dir_code is '目录代码';
+comment on column MEDIA.directory.parent_code is '父目录代码';
+comment on column MEDIA.directory.name is '目录名';
+comment on column MEDIA.directory.code_list is '全路径对用的目录代码清单';
+comment on column MEDIA.directory.level is '目录层级';
+comment on column MEDIA.directory.delete_status is '删除状态0未删除1删除';
+comment on column MEDIA.directory.create_time is '创建时间';
+comment on column MEDIA.directory.update_time is '更新时间';
+comment on column MEDIA.directory.delete_time is '删除时间';
+
+create unique index media.media_directory_1 on media.directory (dir_code);
+create index media.media_directory_2 on media.directory (code_list);

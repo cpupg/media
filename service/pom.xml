@@ -22,6 +22,11 @@
       <groupId>com.sheepfly.media</groupId>
       <artifactId>dataaccess</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.sheepfly.media</groupId>
+      <artifactId>config</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>
