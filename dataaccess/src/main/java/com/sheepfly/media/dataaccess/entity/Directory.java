@@ -68,7 +68,8 @@ public class Directory implements Serializable {
      * 全路径对应的目录代码清单。
      *
      * <p>假如现在有一个目录e有五个层级，全路径是 /a/b/c/d/e，对应的目录代码是/1/2/3/4/5，
-     * 则code_list的代码清单是0.1.2.3.4.5。如果目录带了盘符，则目录代码是-1.0.1.2.3.4.5</p>
+     * 则code_list的代码清单是0.1.2.3.4.5。如果目录带了盘符，则目录代码是-1.0.1.2.3.4.5。
+     * 注意，为了防止目录层级太多导致长度超过100，这里的目录代码使用的是16进制。</p>
      */
     @Column(name = "CODE_LIST", nullable = false, length = 100)
     private String codeList;
