@@ -1,24 +1,28 @@
 package com.sheepfly.media.cli.task.impl;
 
 import com.sheepfly.media.cli.task.Task;
+import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
+import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.service.base.DirectoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -38,14 +42,17 @@ public class TransFormDirectoryTaskImpl implements Task {
     private DirectoryService service;
     @Autowired
     private DirectoryRepository repository;
+    @Autowired
+    private ResourceRepository resourceRepository;
     private String dropTemp;
     private String createTemp;
     private String queryDirectory;
     private String queryResource;
     private String insertTemp;
     private List<String> dirList;
-    private List<Directory> completedDirList;
-    private List<String> uncompletedDirList;
+    private List<Resource> completedResourceList;
+    private List<Resource> uncompletedResourceList;
+    private Map<String, Directory> directoryMap;
 
     public TransFormDirectoryTaskImpl() throws IOException {
         log.info("加载sql");
@@ -57,9 +64,9 @@ public class TransFormDirectoryTaskImpl implements Task {
         queryResource = properties.getProperty("queryResource");
         insertTemp = properties.getProperty("insertTemp");
         log.info("sql加载完成");
-        completedDirList = new ArrayList<>();
-        uncompletedDirList = new ArrayList<>();
-
+        completedResourceList = new ArrayList<>();
+        uncompletedResourceList = new ArrayList<>();
+        directoryMap = new HashMap<>();
     }
 
     @Override
@@ -83,44 +90,124 @@ public class TransFormDirectoryTaskImpl implements Task {
     @Override
     public void executeTask() throws Exception {
         log.info("开始转换任务");
-        for (String dir : dirList) {
-            try {
-                log.info("当前目录:{}", dir);
-                if (!dir.endsWith("/")) {
-                    dir = dir + "/";
-                }
-                String finalDir = dir;
-                Optional<Directory> opt = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), finalDir));
-                if (opt.isPresent()) {
-                    log.info("目录{}已存在，跳过,详情:dirCode={}", dir, opt.orElse(null).getDirCode());
-                    continue;
-                }
-                dir = FilenameUtils.normalize(dir, true);
-                Directory directory = service.createDirectory(dir);
-                completedDirList.add(directory);
-                log.info("目录{}转换完成,dircode={}", directory.getPath(), directory.getDirCode());
-            } catch (Exception e) {
-                log.error("目录{}转换失败", dir, e);
-                uncompletedDirList.add(dir);
-            }
+        transForm();
+        log.info("转换完成，成功{}，失败{}", completedResourceList.size(), uncompletedResourceList.size());
+    }
+
+    private void transForm() throws CommonException {
+        long total = resourceRepository.count();
+        int pageSize = 20;
+        int pages = (int) (total / pageSize);
+        if (total % pageSize > 0) {
+            pages++;
         }
+        log.info("资源总数:{},每页容量{},总页数{}", total, pageSize, pages);
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 1; i <= pages; i++) {
+            log.info("------>>>当前页{}", i);
+            int offset = pageSize * (i - 1);
+            map.put("limit", pageSize);
+            map.put("offset", offset);
+            List<Resource> list = npJdbcTemplate.query(queryResource, map,
+                    BeanPropertyRowMapper.newInstance(Resource.class));
+            for (Resource res : list) {
+                log.info("处理资源{} -> {}", res.filename, res.dir);
+                if (!res.dir.endsWith("/")) {
+                    res.dir = res.dir + "/";
+                }
+                if (res.dir.endsWith(res.filename + "/")) {
+                    res.dir = res.dir.substring(0, res.dir.length() - res.filename.length() - 1);
+                }
+                Directory directory = getDirectory(res.dir);
+                DirCode dirCode = new DirCode();
+                dirCode.id = res.id;
+                dirCode.dirCode = directory.getDirCode();
+                int update = npJdbcTemplate.update(insertTemp, new BeanPropertySqlParameterSource(dirCode));
+                log.info("插入完成{}", update);
+                completedResourceList.add(res);
+            }
+            log.info("查询完成:{}", list.size());
+        }
+    }
+
+    private Directory getDirectory(String dir) throws CommonException {
+        log.info("当前目录:{}", dir);
+        dir = FilenameUtils.normalize(dir, true);
+        dir = dir.charAt(0) + dir.substring(1);
+        if (directoryMap.containsKey(dir)) {
+            log.info("缓存命中目录");
+            return directoryMap.get(dir);
+        }
+        String finalDir = dir;
+        Optional<Directory> one = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), finalDir));
+        if (one.isPresent()) {
+            log.info("数据库中有目录，加入缓存{}", dir);
+            directoryMap.put(dir, one.orElse(null));
+            return one.orElse(null);
+        }
+        log.info("创建目录:{}", dir);
+        Directory directory = service.createDirectory(dir);
+        if (directory == null) {
+            throw new CommonException("创建目录失败");
+        }
+        directoryMap.put(dir, directory);
+        log.info("目录加入缓存成功");
+        return directory;
     }
 
     @Override
     public void afterTaskFinish() throws Exception {
         Task.super.afterTaskFinish();
-        log.info("转换成功{}个，失败{}个", completedDirList.size(), uncompletedDirList.size());
-        IOUtils.writeLines(uncompletedDirList, "\r\n", new FileOutputStream("fail.txt"));
     }
 
     private static class DirCode {
         public String id;
         public Long dirCode;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public Long getDirCode() {
+            return dirCode;
+        }
+
+        public void setDirCode(Long dirCode) {
+            this.dirCode = dirCode;
+        }
     }
 
     private static class Resource {
         public String id;
         public String filename;
         public String dir;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getFilename() {
+            return filename;
+        }
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+        public String getDir() {
+            return dir;
+        }
+
+        public void setDir(String dir) {
+            this.dir = dir;
+        }
     }
 }

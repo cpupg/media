@@ -82,7 +82,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                 // 层级：0/1/2/3/4/5
                 // 下标：0/1/2/3/4/5
                 // 使用split分割后，下标0是空串，计算时下标要+1
-                StringBuilder pathBuilder = new StringBuilder(currentDir.getPath());
+                 StringBuilder pathBuilder = new StringBuilder(currentDir.getPath());
                 long parentCode = currentDir.getDirCode();
                 Directory resultDir = null;
                 for (int j = currentDir.getLevel() + 1; j < dirNames.length; j++) {
