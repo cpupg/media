@@ -1,7 +1,7 @@
 # 打包脚本，可以在git-bash或其它linux shell中运行
 # 如果你将git安装目录下的usr/bin加入到环境变量PATH中，你也可以直接在cmd中运行sh package.sh dev
 # 来打包
-# 默认使用gitlab，你可以手动改成github。
+# 默认使用coding。
 
 # 必须输入分支名
 if [[ $# -ne 1 ]]; then
@@ -12,8 +12,8 @@ fi
 branch=$1;
 ################################################################################
 
-UI_URL="git@jihulab.com:wrote-code/media-ui.git";
-SERVER_URL="git@jihulab.com:wrote-code/media.git";
+UI_URL="git@e.coding.net:wrote-code/mycode/media-ui.git";
+SERVER_URL="git@e.coding.net:wrote-code/mycode/media.git";
 WORK_DIR=$(pwd);
 UI_DIR=$WORK_DIR/media-ui;
 SERVER_DIR=$WORK_DIR/media;
