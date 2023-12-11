@@ -222,7 +222,7 @@ echo "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
 runStatus $?;
 log "创建命令行启动脚本";
 for item in $CLI_MAIN_CLASS; do
-    echo "$JAVA_COMMAND -cp $CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
+    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
     runStatus $?;
 done
 endWork "启动脚本创建完成";
