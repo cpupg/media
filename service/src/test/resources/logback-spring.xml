@@ -11,10 +11,10 @@
     <appender-ref ref="SQL"/>
   </logger>
 
-  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="FALSE">
-    <appender-ref ref="STDOUT"/>
-    <appender-ref ref="SQL"/>
-  </logger>
+  <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="FALSE">-->
+  <!--  <appender-ref ref="STDOUT"/>-->
+  <!--  <appender-ref ref="SQL"/>-->
+  <!--</logger>-->
 
   <!-- 根logger等级是INFO -->
   <root level="INFO">

@@ -7,6 +7,8 @@ import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.service.base.DirectoryService;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,7 @@ public class TransFormDirectoryTaskImpl implements Task {
     private String queryDirectory;
     private String queryResource;
     private String insertTemp;
+    private String updateResource;
     private List<String> dirList;
     private List<Resource> completedResourceList;
     private List<Resource> uncompletedResourceList;
@@ -63,6 +66,7 @@ public class TransFormDirectoryTaskImpl implements Task {
         queryDirectory = properties.getProperty("queryDirectory");
         queryResource = properties.getProperty("queryResource");
         insertTemp = properties.getProperty("insertTemp");
+        updateResource = properties.getProperty("updateResource");
         log.info("sql加载完成");
         completedResourceList = new ArrayList<>();
         uncompletedResourceList = new ArrayList<>();
@@ -123,7 +127,10 @@ public class TransFormDirectoryTaskImpl implements Task {
                 dirCode.id = res.id;
                 dirCode.dirCode = directory.getDirCode();
                 int update = npJdbcTemplate.update(insertTemp, new BeanPropertySqlParameterSource(dirCode));
-                log.info("插入完成{}", update);
+                log.info("插入完成{},开始更新源表", update);
+                res.dirCode = dirCode.dirCode;
+                update = npJdbcTemplate.update(updateResource, new BeanPropertySqlParameterSource(res));
+                log.info("更新完成{}", update);
                 completedResourceList.add(res);
             }
             log.info("查询完成:{}", list.size());
@@ -160,54 +167,19 @@ public class TransFormDirectoryTaskImpl implements Task {
         Task.super.afterTaskFinish();
     }
 
+    @Getter
+    @Setter
     private static class DirCode {
         public String id;
         public Long dirCode;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getDirCode() {
-            return dirCode;
-        }
-
-        public void setDirCode(Long dirCode) {
-            this.dirCode = dirCode;
-        }
     }
 
+    @Getter
+    @Setter
     private static class Resource {
         public String id;
         public String filename;
         public String dir;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getFilename() {
-            return filename;
-        }
-
-        public void setFilename(String filename) {
-            this.filename = filename;
-        }
-
-        public String getDir() {
-            return dir;
-        }
-
-        public void setDir(String dir) {
-            this.dir = dir;
-        }
+        public long dirCode;
     }
 }
