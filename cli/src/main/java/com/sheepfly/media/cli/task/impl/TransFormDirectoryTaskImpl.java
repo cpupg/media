@@ -1,6 +1,7 @@
 package com.sheepfly.media.cli.task.impl;
 
 import com.sheepfly.media.cli.task.Task;
+import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Directory_;
@@ -139,8 +140,14 @@ public class TransFormDirectoryTaskImpl implements Task {
 
     private Directory getDirectory(String dir) throws CommonException {
         log.info("当前目录:{}", dir);
+        // 格式化
         dir = FilenameUtils.normalize(dir, true);
-        dir = dir.charAt(0) + dir.substring(1);
+        // 盘符大写
+        dir = dir.substring(0, 1).toUpperCase() + dir.substring(1);
+        // 加后缀
+        if (!dir.endsWith(Constant.SEPERATOR)) {
+            dir = dir + Constant.SEPERATOR;
+        }
         if (directoryMap.containsKey(dir)) {
             log.info("缓存命中目录");
             return directoryMap.get(dir);
