@@ -1,8 +1,10 @@
 package com.sheepfly.media.cli.util;
 
+import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
+import com.sheepfly.media.service.base.DirectoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DirectoryCache {
     @Autowired
     private DirectoryRepository repository;
+    @Autowired
+    private DirectoryService service;
     /**
      * 目录缓存。
      */
@@ -62,5 +66,41 @@ public class DirectoryCache {
 
     public void put(String path, Directory directory) {
         directoryMap.put(path, directory);
+    }
+
+    /**
+     * 获取或创建目录。
+     *
+     * <p>先从缓存和数据库中获取目录对象，如果没有获取到，就创建一个新对象并返回，同时加入
+     * 缓存。一个目录对象最多可以在缓存中对应两个key，一个key是原始路径，一个key是格式化后
+     * 的路径。格式化是指将盘符大写，使用/分隔符，同时目录以/结尾。</p>
+     *
+     * @param dir 目录路径。
+     *
+     * @return 路径对应的目录对象。
+     *
+     * @throws CommonException 异常。
+     */
+    public Directory getOrCreateDirectory(String dir) throws CommonException {
+        String rawDir = dir;
+        Directory directory = get(rawDir);
+        if (directory != null) {
+            return directory;
+        }
+        // 盘符大写
+        dir = dir.substring(0, 1).toUpperCase() + dir.substring(1);
+        directory = get(dir);
+        if (directory != null) {
+            put(rawDir, directory);
+            return directory;
+        }
+        directory = service.createDirectory(dir);
+        if (directory == null) {
+            throw new CommonException("创建目录失败:" + dir);
+        }
+        log.info("目录创建完成，将目录{}和{}加入缓存", rawDir, dir);
+        put(rawDir, directory);
+        put(dir, directory);
+        return directory;
     }
 }

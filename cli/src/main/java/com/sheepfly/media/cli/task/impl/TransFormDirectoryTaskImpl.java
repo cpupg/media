@@ -128,7 +128,7 @@ public class TransFormDirectoryTaskImpl implements Task {
                     log.warn("资源目录保存的是文件:{}", res.dir);
                     res.dir = res.dir.substring(0, res.dir.length() - res.filename.length() - 1);
                 }
-                Directory directory = getDirectory(res.dir);
+                Directory directory = cache.getOrCreateDirectory(res.dir);
                 DirCode dirCode = new DirCode();
                 dirCode.id = res.id;
                 dirCode.dirCode = directory.getDirCode();
@@ -141,30 +141,6 @@ public class TransFormDirectoryTaskImpl implements Task {
             }
             log.info("查询完成:{}", list.size());
         }
-    }
-
-    private Directory getDirectory(String dir) throws CommonException {
-        String rawDir = dir;
-        Directory directory = cache.get(rawDir);
-        if (directory != null) {
-            return directory;
-        }
-        // 盘符大写
-        dir = dir.substring(0, 1).toUpperCase() + dir.substring(1);
-        directory = cache.get(dir);
-        if (directory != null) {
-            cache.put(rawDir, directory);
-            return directory;
-        }
-        log.info("数据库中不存在目录{}，创建新目录", dir);
-        directory = service.createDirectory(dir);
-        if (directory == null) {
-            throw new CommonException("创建目录失败:" + dir);
-        }
-        log.info("将目录{}和{}加入缓存", rawDir, dir);
-        cache.put(rawDir, directory);
-        cache.put(dir, directory);
-        return directory;
     }
 
     @Override
