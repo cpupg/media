@@ -4,9 +4,7 @@ import com.sheepfly.media.cli.task.Task;
 import com.sheepfly.media.cli.util.DirectoryCache;
 import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Directory;
-import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.service.base.DirectoryService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +37,6 @@ public class TransFormDirectoryTaskImpl implements Task {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private NamedParameterJdbcTemplate npJdbcTemplate;
-    @Autowired
-    private DirectoryService service;
-    @Autowired
-    private DirectoryRepository repository;
     @Autowired
     private ResourceRepository resourceRepository;
     /**
