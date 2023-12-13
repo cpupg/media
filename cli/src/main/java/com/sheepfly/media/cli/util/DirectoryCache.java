@@ -42,9 +42,13 @@ public class DirectoryCache {
      * @return 路径对应的目录对象。
      */
     public Directory get(String path) {
-        log.info("获取path{}目录", path);
+        if (log.isDebugEnabled()) {
+            log.info("从缓存中获取目录:{}", path);
+        }
         if (directoryMap.containsKey(path)) {
-            log.info("名中缓存:{}", path);
+            if (log.isDebugEnabled()) {
+                log.info("命中缓存:{}", path);
+            }
             return directoryMap.get(path);
         }
         Optional<Directory> one = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), path));
@@ -52,7 +56,7 @@ public class DirectoryCache {
             put(path, one.orElse(null));
             return one.orElse(null);
         }
-        log.info("数据库中不存在指定目录{}", path);
+        log.warn("数据库中不存在指定目录{}", path);
         return null;
     }
 
