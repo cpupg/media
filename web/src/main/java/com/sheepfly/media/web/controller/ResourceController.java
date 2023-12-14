@@ -75,7 +75,7 @@ public class ResourceController {
         resource.setCreateTime(date);
         resource.setSaveTime(date);
         // 判断输入的路径是文件还是目录，方便直接复制全路径到表单
-        File file = new File(resource.getDir());
+        File file = new File(resourceData.getDir());
         String parentDir = file.getAbsolutePath();
         log.info("文件目录{}", parentDir);
         if (file.isFile()) {

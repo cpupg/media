@@ -39,12 +39,6 @@ public class Resource implements Serializable, EntityInterface, LogicDelete {
     private String filename;
 
     /**
-     * 资源目录
-     */
-    @Column(name = "DIR", length = 900, nullable = false)
-    private String dir;
-
-    /**
      * 作者id
      */
     @Column(name = "AUTHOR_ID", nullable = false, length = 19)
