@@ -1,12 +1,10 @@
 package com.sheepfly.media.cli.task.impl;
 
 import com.sheepfly.media.cli.task.Task;
+import com.sheepfly.media.cli.util.DirectoryCache;
 import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Directory;
-import com.sheepfly.media.dataaccess.entity.Directory_;
-import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.service.base.DirectoryService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -41,11 +38,14 @@ public class TransFormDirectoryTaskImpl implements Task {
     @Autowired
     private NamedParameterJdbcTemplate npJdbcTemplate;
     @Autowired
-    private DirectoryService service;
-    @Autowired
-    private DirectoryRepository repository;
-    @Autowired
     private ResourceRepository resourceRepository;
+    /**
+     * 目录缓存。
+     *
+     * <p>一个目录有两个缓存，原始路径一个，格式化后的路径一个。</p>
+     */
+    @Autowired
+    private DirectoryCache cache;
     private String dropTemp;
     private String createTemp;
     private String queryDirectory;
@@ -55,7 +55,6 @@ public class TransFormDirectoryTaskImpl implements Task {
     private List<String> dirList;
     private List<Resource> completedResourceList;
     private List<Resource> uncompletedResourceList;
-    private Map<String, Directory> directoryMap;
 
     public TransFormDirectoryTaskImpl() throws IOException {
         log.info("加载sql");
@@ -70,7 +69,6 @@ public class TransFormDirectoryTaskImpl implements Task {
         log.info("sql加载完成");
         completedResourceList = new ArrayList<>();
         uncompletedResourceList = new ArrayList<>();
-        directoryMap = new HashMap<>();
     }
 
     @Override
@@ -115,14 +113,16 @@ public class TransFormDirectoryTaskImpl implements Task {
             List<Resource> list = npJdbcTemplate.query(queryResource, map,
                     BeanPropertyRowMapper.newInstance(Resource.class));
             for (Resource res : list) {
-                log.info("处理资源{} -> {}", res.filename, res.dir);
+                log.info("处理资源:{} -> {}", res.filename, res.dir);
+                res.dir = FilenameUtils.normalize(res.dir, true);
                 if (!res.dir.endsWith("/")) {
                     res.dir = res.dir + "/";
                 }
                 if (res.dir.endsWith(res.filename + "/")) {
+                    log.warn("资源目录保存的是文件:{}", res.dir);
                     res.dir = res.dir.substring(0, res.dir.length() - res.filename.length() - 1);
                 }
-                Directory directory = getDirectory(res.dir);
+                Directory directory = cache.getOrCreateDirectory(res.dir);
                 DirCode dirCode = new DirCode();
                 dirCode.id = res.id;
                 dirCode.dirCode = directory.getDirCode();
@@ -135,31 +135,6 @@ public class TransFormDirectoryTaskImpl implements Task {
             }
             log.info("查询完成:{}", list.size());
         }
-    }
-
-    private Directory getDirectory(String dir) throws CommonException {
-        log.info("当前目录:{}", dir);
-        dir = FilenameUtils.normalize(dir, true);
-        dir = dir.charAt(0) + dir.substring(1);
-        if (directoryMap.containsKey(dir)) {
-            log.info("缓存命中目录");
-            return directoryMap.get(dir);
-        }
-        String finalDir = dir;
-        Optional<Directory> one = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), finalDir));
-        if (one.isPresent()) {
-            log.info("数据库中有目录，加入缓存{}", dir);
-            directoryMap.put(dir, one.orElse(null));
-            return one.orElse(null);
-        }
-        log.info("创建目录:{}", dir);
-        Directory directory = service.createDirectory(dir);
-        if (directory == null) {
-            throw new CommonException("创建目录失败");
-        }
-        directoryMap.put(dir, directory);
-        log.info("目录加入缓存成功");
-        return directory;
     }
 
     @Override

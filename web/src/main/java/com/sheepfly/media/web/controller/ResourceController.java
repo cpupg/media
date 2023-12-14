@@ -83,15 +83,17 @@ public class ResourceController {
             resource.setFilename(file.getName());
             parentDir = FilenameUtils.normalize(file.getParent(), true);
         }
+        parentDir = FilenameUtils.normalize(parentDir, true);
         if (!parentDir.endsWith(Constant.SEPERATOR)) {
             parentDir = parentDir + Constant.SEPERATOR;
         }
-        parentDir = FilenameUtils.normalize(parentDir, true);
-        resource.setDir(parentDir);
+        // 盘符大写
+        parentDir = parentDir.substring(0, 1).toUpperCase() + parentDir.substring(1);
         Directory directory = directoryService.queryDirectoryByPath(parentDir);
         if (directory == null) {
             directory = directoryService.createDirectory(parentDir);
         } else {
+            // 检查重复文件
             Directory d = directory;
             Optional<Resource> opt = repository.findOne((r, q, b) -> {
                 Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
@@ -100,7 +102,7 @@ public class ResourceController {
                 return b.and(p1, p2, p3);
             });
             if (opt.isPresent()) {
-                return ResponseData.success(opt.orElse(null));
+                return ResponseData.fail(ErrorCode.RES_ADD_FAIL_BY_DUPLICATED);
             }
         }
         if (directory == null) {

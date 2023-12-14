@@ -18,16 +18,19 @@
       parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo"
       resultMap="ResourceVo">
     select res.id,
-      res.dir,
+      dir.path as dir,
       res.filename,
       res.album_id,
       res.create_time,
       res.update_time,
       res.author_id author_vo_id,
+      res.dir_code,
       author.username author_vo_username
     from media.resource res
            left join media.author author
                      on author.id = res.author_id
+           left join media.directory dir
+                     on res.dir_code = dir.dir_code
     where res.DELETE_STATUS = '0'
     <include refid="where_statement"/>
     order by res.CREATE_TIME desc
