@@ -85,6 +85,12 @@ if [[ -e $APP_DIR ]]; then
 fi
 
 endWork "目录检查完成";
+
+log "创建目录";
+mkdir $APP_DIR;
+mkdir $MODULE_LIB_DIR;
+mkdir $MAVEN_LIB_DIR;
+
 ################################################################################
 
 ################################################################################
@@ -121,11 +127,15 @@ touch "application/src/main/resources/static/server-$(git rev-parse $branch)";
 runStatus $?;
 touch "cli/src/main/resources/cli-$(git rev-parse $branch)";
 runStatus $?;
+touch "$WORK_DIR/$APP_DIR/revision-server-$(git rev-parse $branch)";
+runStatus $?;
 
 log "设置前台代码版本"
 cd $UI_DIR;
 runStatus $?;
 touch "$SERVER_DIR/application/src/main/resources/static/ui-$(git rev-parse $branch)";
+runStatus $?;
+touch "$WORK_DIR/$APP_DIR/revision-ui-$(git rev-parse $branch)";
 runStatus $?;
 
 log "设置系统版本";
@@ -175,11 +185,6 @@ endWork "编译打包";
 
 ################################################################################
 startWork "复制依赖包";
-
-log "创建目录";
-mkdir $APP_DIR;
-mkdir $MODULE_LIB_DIR;
-mkdir $MAVEN_LIB_DIR;
 
 log "移动jar包";
 mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR;
