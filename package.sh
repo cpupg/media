@@ -24,12 +24,17 @@ VERBOSE_LOG_FILE=$WORK_DIR/verbose.log;
 MODULE_LIST="common config dataaccess service web";
 MODULE_LIB_DIR=$APP_DIR/lib_module;
 MAVEN_LIB_DIR=$APP_DIR/lib_maven;
-CLI_JAR=cli-$branch-$(date '+%Y.%m.%d').jar;
-APP_JAR=media-$branch-$(date '+%Y.%m.%d').jar;
+CURRENT_DATE=$(date '+%Y.%m.%d');
+CLI_JAR=cli-$branch.jar;
+APP_JAR=media-$branch.jar;
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
 CLASSPATH="$CLI_JAR;lib_module/*;lib_maven/*";
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
 PACKAGE_NAME=com.sheepfly.media.cli;
+#前台版本
+REVISION_UI=;
+#后台版本
+REVISION_SERVER=;
 ################################################################################
 # 预定义函数
 # 输出日志，同时在控制台和文件中展示
@@ -123,19 +128,17 @@ runStatus $?;
 log "设置后台代码版本";
 cd $SERVER_DIR;
 runStatus $?;
-touch "application/src/main/resources/static/server-$(git rev-parse $branch)";
+REVISION_SERVER=$(git rev-parse --short $branch);
+touch "application/src/main/resources/static/server-$REVISION_SERVER";
 runStatus $?;
-touch "cli/src/main/resources/cli-$(git rev-parse $branch)";
-runStatus $?;
-touch "$WORK_DIR/$APP_DIR/revision-server-$(git rev-parse $branch)";
+touch "cli/src/main/resources/cli-$REVISION_SERVER";
 runStatus $?;
 
 log "设置前台代码版本"
 cd $UI_DIR;
 runStatus $?;
-touch "$SERVER_DIR/application/src/main/resources/static/ui-$(git rev-parse $branch)";
-runStatus $?;
-touch "$WORK_DIR/$APP_DIR/revision-ui-$(git rev-parse $branch)";
+REVISION_UI=$(git rev-parse --short $branch);
+touch "$SERVER_DIR/application/src/main/resources/static/ui-$REVISION_UI";
 runStatus $?;
 
 log "设置系统版本";
@@ -187,9 +190,9 @@ endWork "编译打包";
 startWork "复制依赖包";
 
 log "移动jar包";
-mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR;
+mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
 runStatus $?;
-mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR;
+mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR-$REVISION_SERVER-$CURRENT_DATE.jar;
 runStatus $?;
 
 log "移动模块依赖";
@@ -197,7 +200,7 @@ for dir in $MODULE_LIST;do
     mv -v $SERVER_DIR/$dir/target/*.jar $MODULE_LIB_DIR;
 done
 log "解压jar包";
-unzip $APP_DIR/$APP_JAR -d app >> $VERBOSE_LOG_FILE;
+unzip $APP_DIR/$APP_DIR/$APP_JAR-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar -d app >> $VERBOSE_LOG_FILE;
 runStatus $?;
 
 mv -v $APP_DIR/BOOT-INF/lib/* $MAVEN_LIB_DIR >> $VERBOSE_LOG_FILE;
