@@ -5,10 +5,13 @@ import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.cli.config.LoadDirectoryConfig;
 import com.sheepfly.media.cli.config.TaskConfig;
 import com.sheepfly.media.cli.task.Task;
+import com.sheepfly.media.cli.util.DirectoryCache;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.dataaccess.entity.Author_;
+import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.entity.Site;
@@ -17,6 +20,7 @@ import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -49,7 +53,7 @@ public class LoadDirectoryTaskImpl implements Task {
     /**
      * 扫描到的资源数据，用来进行校验。
      */
-    private final ResourceData resourceData = new ResourceData();
+    private ResourceData resourceData = new ResourceData();
     @Autowired
     private SiteRepository siteRepository;
     @Autowired
@@ -60,6 +64,8 @@ public class LoadDirectoryTaskImpl implements Task {
     private Snowflake snowflake;
     @Autowired
     private Validator validator;
+    @Autowired
+    private DirectoryCache cache;
     private LoadDirectoryConfig config;
     /**
      * 录入成功的资源数量。
@@ -302,12 +308,30 @@ public class LoadDirectoryTaskImpl implements Task {
      * @param dir 全路径。
      */
     private void scanAndLoadDirectory(String dir) {
+        log.info("当前路径:{}", dir);
         File currentPath = new File(dir);
         if (FileUtil.isFile(dir)) {
             Resource resource = new Resource();
-            resource.setDir(FileUtil.getParent(dir, 1));
+            String parent = FileUtil.getParent(dir, 1);
+            parent = FilenameUtils.normalize(parent, true);
+            if (!parent.endsWith(Constant.SEPERATOR)) {
+                parent = parent + Constant.SEPERATOR;
+            }
+            resource.setDir(parent);
+            Directory d = null;
+            try {
+                d = cache.getOrCreateDirectory(parent);
+            } catch (CommonException e) {
+                log.error("获取目录失败:{}", d.getPath(), e);
+                failCount++;
+                writeFailMessage(String.format("获取目录失败:%s,exception=%s,cause=%s", dir, e.getMessage(),
+                        e.getCause().getMessage()));
+                // 目录获取失败意味着dirCode无法获取，无法满足数据库校验
+                return;
+            }
             resource.setFilename(FileUtil.getName(dir));
             resource.setDeleteStatus(Constant.NOT_DELETED);
+            resource.setDirCode(d.getDirCode());
             long count = resourceRepository.count(Example.of(resource, matcher));
             String message = String.format("%s -> %s", resource.getFilename(), resource.getDir());
             if (count > 0) {
@@ -316,7 +340,8 @@ public class LoadDirectoryTaskImpl implements Task {
                 writeDuplicatedMessage(message);
                 return;
             }
-            resource.setCreateTime(new Date());
+            resource.setSaveTime(new Date());
+            resource.setCreateTime(resource.getSaveTime());
             resource.setDeleteStatus(0);
             resource.setAuthorId(author.getId());
             resource.setId(snowflake.nextIdStr());
@@ -325,6 +350,7 @@ public class LoadDirectoryTaskImpl implements Task {
                 Set<ConstraintViolation<ResourceData>> result = validator.validate(resourceData);
                 if (!result.isEmpty()) {
                     log.warn("资源保存失败:{} -> {}", resource.getFilename(), resource.getDir());
+                    failCount++;
                     writeFailMessage(message);
                     result.forEach(ele -> writeFailMessage(
                             String.format("    | -> %s -> %s", ele.getMessage(), ele.getInvalidValue())));
@@ -350,6 +376,7 @@ public class LoadDirectoryTaskImpl implements Task {
             log.info("目录{}是空目录", currentPath);
             return;
         }
+        log.info("当前路径是目录，有{}个子路径", fileNameList.length);
         for (String name : fileNameList) {
             scanAndLoadDirectory(currentPath + File.separator + name);
         }

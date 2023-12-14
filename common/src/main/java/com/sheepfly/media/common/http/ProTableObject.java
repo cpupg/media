@@ -19,7 +19,7 @@ public class ProTableObject<T> {
     /**
      * 总条数。
      */
-    private Integer total;
+    private Long total;
     /**
      * 数据列表。
      */
@@ -29,7 +29,7 @@ public class ProTableObject<T> {
     public ProTableObject() {
     }
 
-    public ProTableObject(Integer total, List<T> data) {
+    public ProTableObject(Long total, List<T> data) {
         this.total = total;
         this.data = data;
     }
@@ -43,7 +43,7 @@ public class ProTableObject<T> {
      *
      * @return 查询结果。
      */
-    public static <T> ProTableObject success(List<T> list, int total) {
+    public static <T> ProTableObject success(List<T> list, Long total) {
         return new ProTableObject<>(total, list);
     }
 
@@ -63,11 +63,11 @@ public class ProTableObject<T> {
         this.pageSize = pageSize;
     }
 
-    public Integer getTotal() {
+    public Long getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Long total) {
         this.total = total;
     }
 

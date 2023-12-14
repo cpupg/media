@@ -1,5 +1,6 @@
 package com.sheepfly.media.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.dataaccess.dao.SiteMapper;
 import com.sheepfly.media.dataaccess.entity.Site;
@@ -41,10 +42,9 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
     @Override
     public ProTableObject<Site> querySiteList(ProComponentsRequestVo<Object, SiteFilter, Object> vo) {
         SiteFilter form = vo.getParams();
-        PageHelper.startPage(form.getCurrent(), form.getPageSize());
+        Page<Object> page = PageHelper.startPage(form.getCurrent(), form.getPageSize());
         List<Site> siteList = mapper.querySiteList(form);
-        int count = mapper.countSiteList(form);
-        return ProTableObject.success(siteList, count);
+        return ProTableObject.success(siteList, page.getTotal());
     }
 
     @Override

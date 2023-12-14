@@ -1,13 +1,17 @@
 package com.sheepfly.media.dataaccess.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 资源。
- *
  * @author sheepfly
  */
+@Getter
+@Setter
 public class ResourceVo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
@@ -24,6 +28,10 @@ public class ResourceVo implements Serializable {
      * 资源目录
      */
     private String dir;
+    /**
+     * 目录代码。
+     */
+    private Long dirCode;
 
     /**
      * 作者。
@@ -56,61 +64,5 @@ public class ResourceVo implements Serializable {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getDir() {
-        return dir;
-    }
-
-    public void setDir(String dir) {
-        this.dir = dir;
-    }
-
-    public AuthorVo getAuthorVo() {
-        return authorVo;
-    }
-
-    public void setAuthorVo(AuthorVo authorVo) {
-        this.authorVo = authorVo;
-    }
-
-    public AlbumVo getAlbumVo() {
-        return albumVo;
-    }
-
-    public void setAlbumVo(AlbumVo albumVo) {
-        this.albumVo = albumVo;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

@@ -10,7 +10,7 @@ import static com.sheepfly.media.common.exception.BusinessRunTimeException.creat
  *
  * @author wrote-code
  */
-public class BusinessException extends Exception {
+public class BusinessException extends CommonException {
     /**
      * 错误码表。
      */

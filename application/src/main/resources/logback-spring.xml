@@ -11,9 +11,14 @@
     <appender-ref ref="SQL"/>
   </logger>
 
-  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="FALSE">
-    <appender-ref ref="STDOUT"/>
-    <appender-ref ref="SQL"/>
+  <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="FALSE">-->
+  <!--  <appender-ref ref="STDOUT"/>-->
+  <!--  <appender-ref ref="SQL"/>-->
+  <!--</logger>-->
+
+  <logger name="com.sheepfly.media.web.interceptor.LoggerInterceptor" additivity="FALSE">
+    <appender-ref ref="WEB_REQ_STD_OUT"/>
+    <appender-ref ref="WEB_REQ"/>
   </logger>
 
   <!-- 根logger等级是INFO -->

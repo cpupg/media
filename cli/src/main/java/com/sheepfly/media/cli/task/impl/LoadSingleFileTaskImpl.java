@@ -1,15 +1,20 @@
 package com.sheepfly.media.cli.task.impl;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.cli.exception.IllegalCliStateException;
 import com.sheepfly.media.cli.task.Task;
+import com.sheepfly.media.cli.util.DirectoryCache;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Author;
+import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +36,8 @@ public class LoadSingleFileTaskImpl implements Task {
     private ResourceRepository resourceRepository;
     @Autowired
     private Snowflake snowflake;
+    @Autowired
+    private DirectoryCache cache;
 
     public LoadSingleFileTaskImpl() {
         InputStream inputStream = ResourceUtil.getStream("config/commandline.properties");
@@ -82,8 +89,11 @@ public class LoadSingleFileTaskImpl implements Task {
      * @param input 命令行输入内容。
      *
      * @return 输入内容对应的资源。
+     *
+     * @throws CommonException 异常。
+     * @throws IllegalCliStateException 异常。
      */
-    private Resource parseInputToResource(String[] input) throws IllegalCliStateException {
+    private Resource parseInputToResource(String[] input) throws IllegalCliStateException, CommonException {
         Resource resource = new Resource();
         Author author;
         String username;
@@ -102,21 +112,32 @@ public class LoadSingleFileTaskImpl implements Task {
         author = findAuthor(username, id);
         resource.setAuthorId(author.getId());
         File file = new File(path);
-        int count = resourceRepository.countByDirAndFilenameAndDeleteStatus(file.getParent(), file.getName(),
-                Constant.NOT_DELETED);
-        if (count > 0) {
-            throw new IllegalCliStateException("资源重复，请重试");
+        if (!file.exists()) {
+            throw new IllegalCliStateException("路径不存在:" + file.getAbsolutePath());
         }
-        if (file.isFile() && file.exists()) {
-            resource.setCreateTime(new Date());
-            resource.setDeleteStatus(Constant.NOT_DELETED);
-            resource.setDir(file.getParent());
-            resource.setFilename(file.getName());
-            resource.setId(snowflake.nextIdStr());
-            resourceRepository.save(resource);
-        } else {
-            throw new IllegalCliStateException("文件不存在:" + file.getAbsolutePath());
+        String parent = file.getAbsolutePath();
+        if (file.isFile()) {
+            parent = FileUtil.getParent(file.getAbsolutePath(), 1);
         }
+        parent = FilenameUtils.normalize(parent, true);
+        if (!parent.endsWith(Constant.SEPERATOR)) {
+            parent = parent + Constant.SEPERATOR;
+        }
+        Directory d;
+        try {
+            d = cache.getOrCreateDirectory(parent);
+        } catch (CommonException e) {
+            throw new CommonException("获取目录失败", e);
+        }
+        resource.setDirCode(d.getDirCode());
+        resource.setDir(path);
+        resource.setSaveTime(new Date());
+        resource.setCreateTime(resource.getSaveTime());
+        resource.setDeleteStatus(Constant.NOT_DELETED);
+        resource.setDir(file.getParent());
+        resource.setFilename(file.getName());
+        resource.setId(snowflake.nextIdStr());
+        resourceRepository.save(resource);
         return resource;
     }
 
