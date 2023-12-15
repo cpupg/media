@@ -105,6 +105,9 @@ log "分支名称:$branch";
 
 git clone -b $branch --depth 1 $UI_URL;
 runStatus $?;
+# 手动复制demo文件
+cp -v $UI_DIR/src/pages/demo/index.tsx.backup $UI_DIR/src/pages/demo/index.tsx
+runStatus $?;
 
 git clone -b $branch --depth 1 $SERVER_URL;
 runStatus $?;
