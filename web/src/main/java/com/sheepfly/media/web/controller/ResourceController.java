@@ -58,6 +58,11 @@ public class ResourceController {
     @ResponseBody
     public ProTableObject<ResourceVo> queryResourceList(
             @RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
+        String dir = form.getParams().getDir();
+        if (dir != null && !dir.matches("^[a-zA-Z]:(/|\\\\)$")) {
+            log.info(ErrorCode.DIRECTORY_ILLEGAL_DRIVER.toString());
+            return ProTableObject.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER.getMessage());
+        }
         return service.queryResourceVoList(form);
     }
 

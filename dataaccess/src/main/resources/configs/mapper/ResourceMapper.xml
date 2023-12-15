@@ -12,6 +12,9 @@
     <if test="params.filename neq null and params.filename neq '' ">
       and filename like '%' || #{params.filename} || '%'
     </if>
+    <if test="params.dir neq null and params.dir neq '' ">
+      and dir.path like '%' || #{params.dir} || '%'
+    </if>
   </sql>
 
   <select id="selectResourceVoList"

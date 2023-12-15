@@ -16,4 +16,5 @@ public class ResourceFilter extends ProPaginationForm implements Serializable {
      * 文件名。
      */
     private String filename;
+    private String dir;
 }
