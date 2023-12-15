@@ -15,6 +15,9 @@
     <if test="params.dir neq null and params.dir neq '' ">
       and lower(dir.path) like '%' || #{params.dir} || '%'
     </if>
+    <if test="params.authorId neq null and params.authorId neq '' ">
+      and author.id = #{params.authorId}
+    </if>
   </sql>
 
   <select id="selectResourceVoList"
