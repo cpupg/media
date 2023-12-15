@@ -25,10 +25,12 @@ MODULE_LIST="common config dataaccess service web";
 MODULE_LIB_DIR=$APP_DIR/lib_module;
 MAVEN_LIB_DIR=$APP_DIR/lib_maven;
 CURRENT_DATE=$(date '+%Y.%m.%d');
-CLI_JAR=cli-$branch.jar;
-APP_JAR=media-$branch.jar;
+CLI_JAR_NAME=cli-$branch;
+CLI_JAR=;
+APP_JAR_NAME=media-$branch;
+APP_JAR=;
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
-CLASSPATH="$CLI_JAR;lib_module/*;lib_maven/*";
+CLASSPATH="lib_module/*;lib_maven/*";
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
 PACKAGE_NAME=com.sheepfly.media.cli;
 #前台版本
@@ -193,17 +195,21 @@ endWork "编译打包";
 startWork "复制依赖包";
 
 log "移动jar包";
-mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
+mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR_NAME-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
 runStatus $?;
-mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR-$REVISION_SERVER-$CURRENT_DATE.jar;
+APP_JAR=$APP_JAR_NAME-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
+mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR_NAME-$REVISION_SERVER-$CURRENT_DATE.jar;
+echo "web程序jar包:$APP_JAR";
 runStatus $?;
+CLI_JAR=$CLI_JAR_NAME-$REVISION_SERVER-$CURRENT_DATE.jar;
+echo "命令行程序jar包:$CLI_JAR";
 
 log "移动模块依赖";
 for dir in $MODULE_LIST;do
     mv -v $SERVER_DIR/$dir/target/*.jar $MODULE_LIB_DIR;
 done
 log "解压jar包";
-unzip $APP_DIR/$APP_DIR/$APP_JAR-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar -d app >> $VERBOSE_LOG_FILE;
+unzip $APP_DIR/$APP_JAR -d app >> $VERBOSE_LOG_FILE;
 runStatus $?;
 
 mv -v $APP_DIR/BOOT-INF/lib/* $MAVEN_LIB_DIR >> $VERBOSE_LOG_FILE;
@@ -233,7 +239,7 @@ echo "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
 runStatus $?;
 log "创建命令行启动脚本";
 for item in $CLI_MAIN_CLASS; do
-    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
+    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLI_JAR;$CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
     runStatus $?;
 done
 endWork "启动脚本创建完成";
