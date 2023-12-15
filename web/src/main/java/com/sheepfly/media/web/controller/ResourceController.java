@@ -18,6 +18,7 @@ import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +59,12 @@ public class ResourceController {
     @ResponseBody
     public ProTableObject<ResourceVo> queryResourceList(
             @RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
-        String dir = form.getParams().getDir();
-        if (dir != null && !dir.matches("^[a-zA-Z]:(/|\\\\)$")) {
-            log.info(ErrorCode.DIRECTORY_ILLEGAL_DRIVER.toString());
-            return ProTableObject.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER.getMessage());
+        ResourceFilter params = form.getParams();
+        if (StringUtils.isNotBlank(params.getDir())) {
+            params.setDir(params.getDir().toLowerCase());
+        }
+        if (StringUtils.isNotBlank(params.getFilename())) {
+            params.setFilename(params.getFilename().toLowerCase());
         }
         return service.queryResourceVoList(form);
     }
