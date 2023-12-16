@@ -2,7 +2,7 @@ package com.sheepfly.media.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sheepfly.media.dataaccess.dao.ResourceMapper;
+import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;

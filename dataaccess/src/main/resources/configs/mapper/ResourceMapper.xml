@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sheepfly.media.dataaccess.dao.ResourceMapper">
+<mapper namespace="com.sheepfly.media.dataaccess.mapper.ResourceMapper">
   <resultMap id="ResourceVo" type="com.sheepfly.media.dataaccess.vo.ResourceVo" autoMapping="true">
     <id property="id" column="id"/>
     <association property="authorVo"
-        resultMap="com.sheepfly.media.dataaccess.dao.AuthorMapper.AuthorVo"
+        resultMap="com.sheepfly.media.dataaccess.mapper.AuthorMapper.AuthorVo"
         columnPrefix="author_vo_"/>
   </resultMap>
 

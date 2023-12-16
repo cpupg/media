@@ -24,4 +24,6 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @return 满足条件的资源。
      */
     ProTableObject<ResourceVo> queryResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form);
+
+
 }

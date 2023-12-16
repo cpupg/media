@@ -1,4 +1,4 @@
-package com.sheepfly.media.dataaccess.dao;
+package com.sheepfly.media.dataaccess.mapper;
 
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
