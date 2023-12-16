@@ -39,7 +39,7 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
     /**
      * 删除资源标签。
      *
-     * @param id 引用关系主键。。
+     * @param tagReferenceId 引用关系主键。。
      */
-    void deleteResourceTag(String id);
+    void deleteResourceTag(String tagReferenceId);
 }

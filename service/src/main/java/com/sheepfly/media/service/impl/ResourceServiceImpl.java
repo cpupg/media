@@ -89,7 +89,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
-    public void deleteResourceTag(String id) {
-        tagReferenceRepository.deleteById(id);
+    public void deleteResourceTag(String tagReferenceId) {
+        tagReferenceRepository.deleteById(tagReferenceId);
     }
 }

@@ -1,5 +1,7 @@
 package com.sheepfly.media.dataaccess.entity;
 
+import com.sheepfly.media.common.util.BeanCopier;
+import com.sheepfly.media.dataaccess.entity.baseinterface.BaseBean;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Getter;
@@ -21,7 +23,7 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "MEDIA.TAG")
-public class Tag implements Serializable, LogicDelete, EntityInterface {
+public class Tag implements Serializable, LogicDelete, EntityInterface, BaseBean {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,6 +51,16 @@ public class Tag implements Serializable, LogicDelete, EntityInterface {
      */
     @Column(name = "DELETE_TIME")
     private Date deleteTime;
+
+    @Override
+    public void copyFrom(Object source) {
+        BeanCopier.copyFrom(source, this);
+    }
+
+    @Override
+    public void copyTo(Object target) {
+        BeanCopier.copyTo(this, target);
+    }
 
     @Override
     public Integer getDeleteStatus() {
