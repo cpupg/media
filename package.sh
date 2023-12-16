@@ -24,12 +24,19 @@ VERBOSE_LOG_FILE=$WORK_DIR/verbose.log;
 MODULE_LIST="common config dataaccess service web";
 MODULE_LIB_DIR=$APP_DIR/lib_module;
 MAVEN_LIB_DIR=$APP_DIR/lib_maven;
-CLI_JAR=cli-$branch-$(date '+%Y.%m.%d').jar;
-APP_JAR=media-$branch-$(date '+%Y.%m.%d').jar;
+CURRENT_DATE=$(date '+%Y.%m.%d');
+CLI_JAR_NAME=cli-$branch;
+CLI_JAR=;
+APP_JAR_NAME=media-$branch;
+APP_JAR=;
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
-CLASSPATH="$CLI_JAR;lib_module/*;lib_maven/*";
+CLASSPATH="lib_module/*;lib_maven/*";
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
 PACKAGE_NAME=com.sheepfly.media.cli;
+#前台版本
+REVISION_UI=;
+#后台版本
+REVISION_SERVER=;
 ################################################################################
 # 预定义函数
 # 输出日志，同时在控制台和文件中展示
@@ -85,6 +92,12 @@ if [[ -e $APP_DIR ]]; then
 fi
 
 endWork "目录检查完成";
+
+log "创建目录";
+mkdir $APP_DIR;
+mkdir $MODULE_LIB_DIR;
+mkdir $MAVEN_LIB_DIR;
+
 ################################################################################
 
 ################################################################################
@@ -93,6 +106,9 @@ startWork "拉取代码";
 log "分支名称:$branch";
 
 git clone -b $branch --depth 1 $UI_URL;
+runStatus $?;
+# 手动复制demo文件
+cp -v $UI_DIR/src/pages/demo/index.tsx.backup $UI_DIR/src/pages/demo/index.tsx
 runStatus $?;
 
 git clone -b $branch --depth 1 $SERVER_URL;
@@ -117,15 +133,17 @@ runStatus $?;
 log "设置后台代码版本";
 cd $SERVER_DIR;
 runStatus $?;
-touch "application/src/main/resources/static/server-$(git rev-parse $branch)";
+REVISION_SERVER=$(git rev-parse --short $branch);
+touch "application/src/main/resources/static/server-$REVISION_SERVER";
 runStatus $?;
-touch "cli/src/main/resources/cli-$(git rev-parse $branch)";
+touch "cli/src/main/resources/cli-$REVISION_SERVER";
 runStatus $?;
 
 log "设置前台代码版本"
 cd $UI_DIR;
 runStatus $?;
-touch "$SERVER_DIR/application/src/main/resources/static/ui-$(git rev-parse $branch)";
+REVISION_UI=$(git rev-parse --short $branch);
+touch "$SERVER_DIR/application/src/main/resources/static/ui-$REVISION_UI";
 runStatus $?;
 
 log "设置系统版本";
@@ -176,16 +194,15 @@ endWork "编译打包";
 ################################################################################
 startWork "复制依赖包";
 
-log "创建目录";
-mkdir $APP_DIR;
-mkdir $MODULE_LIB_DIR;
-mkdir $MAVEN_LIB_DIR;
-
 log "移动jar包";
-mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR;
+mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR_NAME-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
 runStatus $?;
-mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR;
+APP_JAR=$APP_JAR_NAME-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
+mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR_NAME-$REVISION_SERVER-$CURRENT_DATE.jar;
+echo "web程序jar包:$APP_JAR";
 runStatus $?;
+CLI_JAR=$CLI_JAR_NAME-$REVISION_SERVER-$CURRENT_DATE.jar;
+echo "命令行程序jar包:$CLI_JAR";
 
 log "移动模块依赖";
 for dir in $MODULE_LIST;do
@@ -222,7 +239,7 @@ echo "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
 runStatus $?;
 log "创建命令行启动脚本";
 for item in $CLI_MAIN_CLASS; do
-    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
+    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLI_JAR;$CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
     runStatus $?;
 done
 endWork "启动脚本创建完成";
