@@ -20,7 +20,7 @@ import java.util.Date;
 @Setter
 @ToString
 @Entity
-@Table(name = "MEDIA.TAGS")
+@Table(name = "MEDIA.TAG")
 public class Tag implements Serializable, LogicDelete, EntityInterface {
 
     private static final long serialVersionUID = 1L;
