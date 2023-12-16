@@ -1,5 +1,7 @@
 package com.sheepfly.media.dataaccess.entity;
 
+import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,7 +21,7 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "MEDIA.TAGS")
-public class Tags implements Serializable {
+public class Tag implements Serializable, LogicDelete, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,4 +50,25 @@ public class Tags implements Serializable {
     @Column(name = "DELETE_TIME")
     private Date deleteTime;
 
+    @Override
+    public Integer getDeleteStatus() {
+        // 应付语法检查，没有实际用途
+        return null;
+    }
+
+    @Override
+    public void setDeleteStatus(Integer deleteStatus) {
+        // 应付语法检查，没有实际用途
+    }
+
+    @Override
+    public Date getUpdateTime() {
+        // 应付语法检查，没有实际用途
+        return null;
+    }
+
+    @Override
+    public void setUpdateTime(Date date) {
+        // 应付语法检查，没有实际用途
+    }
 }
