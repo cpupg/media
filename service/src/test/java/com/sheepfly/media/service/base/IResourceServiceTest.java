@@ -21,7 +21,7 @@ public class IResourceServiceTest {
     @Autowired
 
     @Test
-    public void testCreateAndDeleteTagReference() {
+    public void createAndDeleteTagReference() {
         ResourceFilter filter = new ResourceFilter();
         filter.setCurrent(1);
         filter.setPageSize(1);
