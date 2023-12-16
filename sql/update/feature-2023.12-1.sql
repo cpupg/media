@@ -1,7 +1,7 @@
 alter table media.resource
 drop column dir;
 
-create table media.tags
+create table media.tag
 (
   id varchar(19) not null primary key,
   name varchar(10) not null default '',
@@ -9,13 +9,13 @@ create table media.tags
   delete_time timestamp
 );
 
-create index media_tags_1 on media.tags (name);
+create index media.media_tag_1 on media.tag (name);
 
-comment on table media.tags is '标签';
-comment on column media.tags.id is '主键';
-comment on column media.tags.name is '名称';
-comment on column media.tags.create_time is '创建时间';
-comment on column media.tags.delete_time is '删除时间';
+comment on table media.tag is '标签';
+comment on column media.tag.id is '主键';
+comment on column media.tag.name is '名称';
+comment on column media.tag.create_time is '创建时间';
+comment on column media.tag.delete_time is '删除时间';
 
 create table media.tag_reference
 (
