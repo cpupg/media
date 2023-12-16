@@ -69,7 +69,7 @@ public class LoadSingleFileTaskImpl implements Task {
                     arr[i] = arr[i].trim();
                 }
                 Resource resource = parseInputToResource(arr);
-                log.info("保存成功:{} -> {}", resource.getFilename(), resource.getDir());
+                log.info("保存成功:{} -> dirCode({})", resource.getFilename(), resource.getDirCode());
             } catch (IllegalCliStateException e) {
                 // 此异常不需要堆栈
                 log.error("任务异常:{}", e.getMessage());
@@ -130,11 +130,9 @@ public class LoadSingleFileTaskImpl implements Task {
             throw new CommonException("获取目录失败", e);
         }
         resource.setDirCode(d.getDirCode());
-        resource.setDir(path);
         resource.setSaveTime(new Date());
         resource.setCreateTime(resource.getSaveTime());
         resource.setDeleteStatus(Constant.NOT_DELETED);
-        resource.setDir(file.getParent());
         resource.setFilename(file.getName());
         resource.setId(snowflake.nextIdStr());
         resourceRepository.save(resource);
