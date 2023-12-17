@@ -7,6 +7,9 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
+import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -42,4 +45,13 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @param tagReferenceId 引用关系主键。。
      */
     void deleteResourceTag(String tagReferenceId);
+
+    /**
+     * 查询资源对应的标签。
+     *
+     * @param resourceId 资源主键。
+     *
+     * @return 标签列表。
+     */
+    List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId);
 }

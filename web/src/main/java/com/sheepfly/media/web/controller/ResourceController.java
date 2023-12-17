@@ -39,6 +39,7 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -165,6 +166,12 @@ public class ResourceController {
         tag.copyTo(tagVo);
         log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
         return ResponseData.success(tagVo);
+    }
+
+    @PostMapping("/queryTags")
+    public ResponseData<List<TagReferenceVo>> queryTags(@RequestParam("resourceId") String resourceId) {
+        List<TagReferenceVo> list = service.queryTagReferenceByResourceId(resourceId);
+        return ResponseData.success(list);
     }
 }
 

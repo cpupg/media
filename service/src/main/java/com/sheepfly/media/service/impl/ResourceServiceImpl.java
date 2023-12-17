@@ -14,6 +14,7 @@ import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
 import com.sheepfly.media.dataaccess.repository.TagRepository;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
+import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import org.slf4j.Logger;
@@ -91,5 +92,10 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Override
     public void deleteResourceTag(String tagReferenceId) {
         tagReferenceRepository.deleteById(tagReferenceId);
+    }
+
+    @Override
+    public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
+        return resourceMapper.selectTagReferenceByResourceId(resourceId);
     }
 }
