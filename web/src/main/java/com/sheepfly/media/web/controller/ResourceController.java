@@ -140,6 +140,9 @@ public class ResourceController {
     public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId,
             @RequestParam("tagName") String tagName) {
         log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
+        if (StringUtils.isBlank(tagName)) {
+            return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
+        }
         TagReference tagReference = service.createResourceTag(resourceId, tagName);
         TagReferenceVo vo = new TagReferenceVo();
         tagReference.copyTo(vo);
@@ -156,10 +159,10 @@ public class ResourceController {
             @RequestParam("resourceId") String resourceId) {
         TagReference tagReference = tagReferenceService.findById(referenceId);
         if (tagReference == null) {
-            return ResponseData.fail("删除失败,标签不存在");
+            return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
         }
         if (!resourceId.equals(tagReference.getResourceId())) {
-            return ResponseData.fail("删除失败，资源和标签不匹配");
+            return ResponseData.fail(ErrorCode.RES_DONT_HAVE_THIS_TAG);
         }
         service.deleteResourceTag(referenceId);
         Tag tag = tagService.findById(tagReference.getTagId());
@@ -173,7 +176,7 @@ public class ResourceController {
     public ResponseData<List<TagReferenceVo>> queryTags(HttpServletRequest request) {
         String resourceId = request.getParameter("resourceId");
         if (StringUtils.isBlank(resourceId)) {
-            return ResponseData.fail("缺少请求参数");
+            return ResponseData.fail(ErrorCode.REQUEST_VALUE_IS_LOST);
         }
         List<TagReferenceVo> list = service.queryTagReferenceByResourceId(resourceId);
         return ResponseData.success(list);
