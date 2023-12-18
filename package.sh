@@ -154,7 +154,7 @@ runStatus $?;
 MAIN_VERSION=$(cat main-version);
 runStatus $?;
 echo "主版本:$MAIN_VERSION";
-echo $MAIN_VERSION > "config/src/main/resources/media-application.properties";
+echo "main=v$MAIN_VERSION" > "config/src/main/resources/media-application.properties";
 
 endWork "设置完成";
 ################################################################################
