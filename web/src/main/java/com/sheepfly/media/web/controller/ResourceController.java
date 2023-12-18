@@ -12,28 +12,35 @@ import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
+import com.sheepfly.media.dataaccess.entity.Tag;
+import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
+import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.dataaccess.vo.TagVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
+import com.sheepfly.media.service.base.TagReferenceService;
+import com.sheepfly.media.service.base.TagService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,19 +51,22 @@ import java.util.Optional;
  * @author sheepfly
  * @since 2022-02-07
  */
-@Controller
+@RestController
 @RequestMapping(value = "/resource", produces = "application/json;charset=utf-8")
+@Slf4j
 public class ResourceController {
-    private static final Logger log = LoggerFactory.getLogger(ResourceController.class);
     @Autowired
     private IResourceService service;
     @Autowired
     private DirectoryService directoryService;
     @Autowired
     private ResourceRepository repository;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private TagReferenceService tagReferenceService;
 
     @PostMapping("/queryResourceList")
-    @ResponseBody
     public ProTableObject<ResourceVo> queryResourceList(
             @RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
         ResourceFilter params = form.getParams();
@@ -70,7 +80,6 @@ public class ResourceController {
     }
 
     @PostMapping("/add")
-    @ResponseBody
     public ResponseData add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
         String prefix = FilenameUtils.getPrefix(resourceData.getDir());
@@ -122,10 +131,52 @@ public class ResourceController {
     }
 
     @PostMapping("/delete")
-    @ResponseBody
     public ResponseData<ResourceVo> delete(@RequestBody @NotNull String id) throws BusinessException {
         Resource resource = service.safeLogicDeleteById(id, Resource.class, ErrorCode.DELETE_NOT_EXIST_DATA);
         return ResponseData.success(resource);
+    }
+
+    @PostMapping("addTag")
+    public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId,
+            @RequestParam("tagName") String tagName) {
+        log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
+        TagReference tagReference = service.createResourceTag(resourceId, tagName);
+        TagReferenceVo vo = new TagReferenceVo();
+        tagReference.copyTo(vo);
+        Tag tag = tagService.findById(tagReference.getTagId());
+        TagVo tagVo = new TagVo();
+        tag.copyTo(tagVo);
+        vo.setTagVo(tagVo);
+        log.info("添加完成");
+        return ResponseData.success(vo);
+    }
+
+    @PostMapping("deleteTag")
+    public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId,
+            @RequestParam("resourceId") String resourceId) {
+        TagReference tagReference = tagReferenceService.findById(referenceId);
+        if (tagReference == null) {
+            return ResponseData.fail("删除失败,标签不存在");
+        }
+        if (!resourceId.equals(tagReference.getResourceId())) {
+            return ResponseData.fail("删除失败，资源和标签不匹配");
+        }
+        service.deleteResourceTag(referenceId);
+        Tag tag = tagService.findById(tagReference.getTagId());
+        TagVo tagVo = new TagVo();
+        tag.copyTo(tagVo);
+        log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
+        return ResponseData.success(tagVo);
+    }
+
+    @PostMapping("/queryTags")
+    public ResponseData<List<TagReferenceVo>> queryTags(HttpServletRequest request) {
+        String resourceId = request.getParameter("resourceId");
+        if (StringUtils.isBlank(resourceId)) {
+            return ResponseData.fail("缺少请求参数");
+        }
+        List<TagReferenceVo> list = service.queryTagReferenceByResourceId(resourceId);
+        return ResponseData.success(list);
     }
 }
 

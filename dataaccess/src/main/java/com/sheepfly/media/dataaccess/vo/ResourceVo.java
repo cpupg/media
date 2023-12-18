@@ -2,16 +2,20 @@ package com.sheepfly.media.dataaccess.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 资源。
+ *
  * @author sheepfly
  */
 @Getter
 @Setter
+@ToString
 public class ResourceVo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
@@ -52,17 +56,8 @@ public class ResourceVo implements Serializable {
      * 更新时间
      */
     private Date updateTime;
-
-    @Override
-    public String toString() {
-        return "ResourceVo{" +
-                "id='" + id + '\'' +
-                ", filename='" + filename + '\'' +
-                ", dir='" + dir + '\'' +
-                ", author=" + authorVo +
-                ", albumVo=" + albumVo +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
-    }
+    /**
+     * 资源拥有的标签。
+     */
+    private List<TagReferenceVo> tagReferenceVoList;
 }

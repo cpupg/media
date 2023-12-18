@@ -16,14 +16,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 标签引用
+ * 标签
  */
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "MEDIA.TAG_REFERENCE")
-public class TagReference implements Serializable, LogicDelete, EntityInterface, BaseBean {
+@Table(name = "MEDIA.TAG")
+public class Tag implements Serializable, LogicDelete, EntityInterface, BaseBean {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,44 +35,31 @@ public class TagReference implements Serializable, LogicDelete, EntityInterface,
     private String id;
 
     /**
-     * 资源id
+     * 名称
      */
-    @Column(name = "RESOURCE_ID", nullable = false)
-    private String resourceId;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
     /**
-     * 标签id
+     * 创建时间
      */
-    @Column(name = "TAG_ID", nullable = false)
-    private String tagId;
+    @Column(name = "CREATE_TIME", nullable = false)
+    private Date createTime;
 
     /**
-     * 引用类型1:资源
+     * 删除时间
      */
-    @Column(name = "REFERENCE_TYPE", nullable = false)
-    private Integer referenceType;
-
-    /**
-     * 引用时间
-     */
-    @Column(name = "REFER_TIME", nullable = false)
-    private Date referTime;
-
-    /**
-     * 取消引用的时间
-     */
-    @Column(name = "UN_REFER_TIME")
-    private Date unReferTime;
+    @Column(name = "DELETE_TIME")
+    private Date deleteTime;
 
     @Override
-    public Date getUpdateTime() {
-        // 应付语法检查，没有实际用途
-        return null;
+    public void copyFrom(Object source) {
+        BeanCopier.copyFrom(source, this);
     }
 
     @Override
-    public void setUpdateTime(Date date) {
-        // 应付语法检查，没有实际用途
+    public void copyTo(Object target) {
+        BeanCopier.copyTo(this, target);
     }
 
     @Override
@@ -87,12 +74,13 @@ public class TagReference implements Serializable, LogicDelete, EntityInterface,
     }
 
     @Override
-    public void copyFrom(Object source) {
-        BeanCopier.copyFrom(source, this);
+    public Date getUpdateTime() {
+        // 应付语法检查，没有实际用途
+        return null;
     }
 
     @Override
-    public void copyTo(Object target) {
-        BeanCopier.copyTo(this, target);
+    public void setUpdateTime(Date date) {
+        // 应付语法检查，没有实际用途
     }
 }

@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(scanBasePackages = "com.sheepfly.media")
 @ImportResource("classpath:configs/springboot.xml")
 @EnableJpaRepositories(basePackages = "com.sheepfly.media.dataaccess.repository")
-@MapperScan("com.sheepfly.media.dataaccess.dao")
+@MapperScan("com.sheepfly.media.dataaccess.mapper")
 public class DataAccessTestConfiguration {
 }

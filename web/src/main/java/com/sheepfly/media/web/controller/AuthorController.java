@@ -2,30 +2,29 @@ package com.sheepfly.media.web.controller;
 
 
 import com.sheepfly.media.common.constant.Constant;
-import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.AuthorData;
 import com.sheepfly.media.common.form.filter.AuthorFilter;
-import com.sheepfly.media.service.base.IAuthorService;
-import com.sheepfly.media.service.base.ISiteService;
-import com.sheepfly.media.dataaccess.vo.AuthorVo;
-import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.common.http.ResponseData;
+import com.sheepfly.media.dataaccess.entity.Author;
+import com.sheepfly.media.dataaccess.vo.AuthorVo;
+import com.sheepfly.media.service.base.IAuthorService;
+import com.sheepfly.media.service.base.ISiteService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
@@ -38,7 +37,7 @@ import java.util.Date;
  * @author sheepfly
  * @since 2022-02-07
  */
-@Controller
+@RestController
 @RequestMapping("/author")
 public class AuthorController {
     private static final Logger log = LoggerFactory.getLogger(AuthorController.class);
@@ -57,7 +56,6 @@ public class AuthorController {
      * @return 新作者。
      */
     @PostMapping("/add")
-    @ResponseBody
     public ResponseData<Author> add(@RequestBody @Validated AuthorData authorData)
             throws InvocationTargetException, IllegalAccessException {
         log.info("保存作者");
@@ -73,7 +71,6 @@ public class AuthorController {
     }
 
     @GetMapping("/delete")
-    @ResponseBody
     public ResponseData<Author> delete(@RequestParam("id") String id) throws BusinessException {
         log.info("删除作者");
         if (StringUtils.isEmpty(id)) {
@@ -90,7 +87,6 @@ public class AuthorController {
     }
 
     @PostMapping("/queryList")
-    @ResponseBody
     public ProTableObject<AuthorVo> queryList(
             @RequestBody ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
         AuthorFilter params = vo.getParams();

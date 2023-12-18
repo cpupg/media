@@ -1,4 +1,4 @@
-package com.sheepfly.media.dataaccess.dao;
+package com.sheepfly.media.dataaccess.mapper;
 
 import com.sheepfly.media.dataaccess.vo.DirRepoVo;
 import org.apache.ibatis.annotations.Mapper;

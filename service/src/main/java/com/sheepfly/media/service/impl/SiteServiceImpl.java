@@ -2,7 +2,7 @@ package com.sheepfly.media.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sheepfly.media.dataaccess.dao.SiteMapper;
+import com.sheepfly.media.dataaccess.mapper.SiteMapper;
 import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.SiteData;
