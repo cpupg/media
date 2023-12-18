@@ -149,7 +149,7 @@ runStatus $?;
 log "设置系统版本";
 cd $SERVER_DIR;
 runStatus $?;
-echo "main=v$(git branch --show-current)" > "config/src/main/resources/media-application.properties";
+echo "main=v$(cat main-version)" > "config/src/main/resources/media-application.properties";
 
 endWork "设置完成";
 ################################################################################
