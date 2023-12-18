@@ -37,6 +37,8 @@ PACKAGE_NAME=com.sheepfly.media.cli;
 REVISION_UI=;
 #后台版本
 REVISION_SERVER=;
+#主版本号
+MAIN_VERSION=;
 ################################################################################
 # 预定义函数
 # 输出日志，同时在控制台和文件中展示
@@ -146,10 +148,13 @@ REVISION_UI=$(git rev-parse --short $branch);
 touch "$SERVER_DIR/application/src/main/resources/static/ui-$REVISION_UI";
 runStatus $?;
 
-log "设置系统版本";
+log "设置主版本";
 cd $SERVER_DIR;
 runStatus $?;
-echo "main=v$(cat main-version)" > "config/src/main/resources/media-application.properties";
+MAIN_VERSION=$(cat main-version);
+runStatus $?;
+echo "主版本:$MAIN_VERSION";
+echo $MAIN_VERSION > "config/src/main/resources/media-application.properties";
 
 endWork "设置完成";
 ################################################################################
@@ -195,14 +200,14 @@ endWork "编译打包";
 startWork "复制依赖包";
 
 log "移动jar包";
-mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR_NAME-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
-runStatus $?;
-APP_JAR=$APP_JAR_NAME-$REVISION_SERVER_$REVISION_UI-$CURRENT_DATE.jar;
-mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR_NAME-$REVISION_SERVER-$CURRENT_DATE.jar;
+APP_JAR=$APP_JAR_NAME-$MAIN_VERSION-$REVISION_SERVER-$REVISION_UI-$CURRENT_DATE.jar;
 echo "web程序jar包:$APP_JAR";
-runStatus $?;
-CLI_JAR=$CLI_JAR_NAME-$REVISION_SERVER-$CURRENT_DATE.jar;
+CLI_JAR=$CLI_JAR_NAME-$MAIN_VERSION-$REVISION_SERVER-$CURRENT_DATE.jar;
 echo "命令行程序jar包:$CLI_JAR";
+mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR;
+runStatus $?;
+mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR;
+runStatus $?;
 
 log "移动模块依赖";
 for dir in $MODULE_LIST;do
