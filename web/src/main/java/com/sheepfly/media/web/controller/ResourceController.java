@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -169,7 +170,11 @@ public class ResourceController {
     }
 
     @PostMapping("/queryTags")
-    public ResponseData<List<TagReferenceVo>> queryTags(@RequestParam("resourceId") String resourceId) {
+    public ResponseData<List<TagReferenceVo>> queryTags(HttpServletRequest request) {
+        String resourceId = request.getParameter("resourceId");
+        if (StringUtils.isBlank(resourceId)) {
+            return ResponseData.fail("缺少请求参数");
+        }
         List<TagReferenceVo> list = service.queryTagReferenceByResourceId(resourceId);
         return ResponseData.success(list);
     }
