@@ -1,6 +1,6 @@
 package com.sheepfly.media.service.impl;
 
-import com.sheepfly.media.dataaccess.dao.DirRepoMapper;
+import com.sheepfly.media.dataaccess.mapper.DirRepoMapper;
 import com.sheepfly.media.dataaccess.entity.DirRepo;
 import com.sheepfly.media.dataaccess.repository.DirRepoRepository;
 import com.sheepfly.media.dataaccess.vo.DirRepoVo;

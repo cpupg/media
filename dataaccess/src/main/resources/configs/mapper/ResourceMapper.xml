@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sheepfly.media.dataaccess.dao.ResourceMapper">
+<mapper namespace="com.sheepfly.media.dataaccess.mapper.ResourceMapper">
   <resultMap id="ResourceVo" type="com.sheepfly.media.dataaccess.vo.ResourceVo" autoMapping="true">
     <id property="id" column="id"/>
     <association property="authorVo"
-        resultMap="com.sheepfly.media.dataaccess.dao.AuthorMapper.AuthorVo"
+        resultMap="com.sheepfly.media.dataaccess.mapper.AuthorMapper.AuthorVo"
         columnPrefix="author_vo_"/>
   </resultMap>
 
   <sql id="where_statement">
     <if test="params.filename neq null and params.filename neq '' ">
-      and filename like '%' || #{params.filename} || '%'
+      and lower(filename) like '%' || #{params.filename} || '%'
+    </if>
+    <if test="params.dir neq null and params.dir neq '' ">
+      and lower(dir.path) like '%' || #{params.dir} || '%'
+    </if>
+    <if test="params.authorId neq null and params.authorId neq '' ">
+      and author.id = #{params.authorId}
     </if>
   </sql>
 
@@ -34,5 +40,15 @@
     where res.DELETE_STATUS = '0'
     <include refid="where_statement"/>
     order by res.CREATE_TIME desc
+  </select>
+
+  <select id="selectTagReferenceByResourceId"
+      resultMap="com.sheepfly.media.dataaccess.mapper.TagReferenceMapper.tagReferenceVo">
+    select tf.id, tf.resource_id, tf.reference_type, tf.REFER_TIME, tag.id as tag_id, tag.name as tag_name
+    from media.TAG_REFERENCE tf
+      left join media.tag tag
+    on tf.TAG_ID = tag.Id
+    where tf.resource_id = #{resourcdId}
+    order by tf.REFER_TIME;
   </select>
 </mapper>

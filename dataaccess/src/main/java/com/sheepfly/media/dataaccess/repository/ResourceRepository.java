@@ -10,5 +10,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author wrote-code
  */
 public interface ResourceRepository extends JpaRepository<Resource, String>, JpaSpecificationExecutor<Resource> {
-    int countByDirAndFilenameAndDeleteStatus(String dir, String filename, Integer deleteStatus);
 }

@@ -106,6 +106,9 @@ public enum ErrorCode {
      */
     RESOURCE_MKDIR_FAIL("D0202001", "创建目录失败，请重试"),
     RES_ADD_FAIL_BY_DUPLICATED("D0202002", "资源重复，添加失败"),
+    RES_TAG_NAME_CANT_NULL("D0202003", "标签名称不能为空"),
+    RES_TAG_NOT_FOUND("D0202004", "标签不存在"),
+    RES_DONT_HAVE_THIS_TAG("D0202005", "指定资源没有设置此标签"),
     /*
      * 模块[资源][res]结束[203]
      ***************************************************************************

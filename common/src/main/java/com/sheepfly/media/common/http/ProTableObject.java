@@ -1,5 +1,8 @@
 package com.sheepfly.media.common.http;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
@@ -7,7 +10,10 @@ import java.util.List;
  *
  * @author sheepfly
  */
+@Getter
+@Setter
 public class ProTableObject<T> {
+    private static final String QUERY_SUCCESS = "查询数据成功";
     /**
      * 当前页。
      */
@@ -24,7 +30,8 @@ public class ProTableObject<T> {
      * 数据列表。
      */
     private List<T> data;
-    private String errorMessage;
+    private String message;
+    private boolean success;
 
     public ProTableObject() {
     }
@@ -32,6 +39,13 @@ public class ProTableObject<T> {
     public ProTableObject(Long total, List<T> data) {
         this.total = total;
         this.data = data;
+        this.success = true;
+        this.message = QUERY_SUCCESS;
+    }
+
+    public ProTableObject(String message) {
+        this.success = false;
+        this.message = message;
     }
 
     /**
@@ -47,35 +61,7 @@ public class ProTableObject<T> {
         return new ProTableObject<>(total, list);
     }
 
-    public Integer getPage() {
-        return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Long getTotal() {
-        return total;
-    }
-
-    public void setTotal(Long total) {
-        this.total = total;
-    }
-
-    public List<T> getData() {
-        return data;
-    }
-
-    public void setData(List<T> data) {
-        this.data = data;
+    public static <T> ProTableObject fail(String message) {
+        return new ProTableObject(message);
     }
 }

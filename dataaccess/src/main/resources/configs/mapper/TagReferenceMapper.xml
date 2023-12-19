@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sheepfly.media.dataaccess.mapper.TagReferenceMapper">
+  <resultMap id="tagReferenceVo" type="com.sheepfly.media.dataaccess.vo.TagReferenceVo">
+    <id property="id" column="ID"/>
+    <result property="resourceId" column="RESOURCE_ID"/>
+    <result property="referenceType" column="REFERENCE_TYPE"/>
+    <result property="referTime" column="REFER_TIME"/>
+    <association property="tagVo" columnPrefix="tag_" javaType="com.sheepfly.media.dataaccess.vo.TagVo">
+      <result property="id" column="ID"/>
+      <result property="name" column="NAME"/>
+      <result property="createTime" column="CREATE_TIME"/>
+    </association>
+    <!--这个字段目前没有值，不需要映射-->
+    <!--<result property="unReferTime" column="UN_REFER_TIME"/>-->
+  </resultMap>
+</mapper>

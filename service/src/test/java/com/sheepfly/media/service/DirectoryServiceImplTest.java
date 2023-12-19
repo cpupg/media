@@ -1,9 +1,8 @@
-package com.sheepfly.media.service.impl;
+package com.sheepfly.media.service;
 
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
-import com.sheepfly.media.service.ServiceTestConfiguration;
 import com.sheepfly.media.service.base.DirectoryService;
 import org.junit.Assert;
 import org.junit.Test;

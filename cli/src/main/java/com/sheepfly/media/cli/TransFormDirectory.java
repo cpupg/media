@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = "com.sheepfly.media")
 @EnableJpaRepositories(basePackages = "com.sheepfly.media.dataaccess.repository")
-@MapperScan("com.sheepfly.media.dataaccess.dao")
+@MapperScan("com.sheepfly.media.dataaccess.mapper")
 @ImportResource("classpath:configs/springboot.xml")
 @Slf4j
 public class TransFormDirectory {

@@ -1,12 +1,13 @@
 package com.sheepfly.media.dataaccess.repository;
 
+import com.sheepfly.media.dataaccess.DataAccessTestConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
+@SpringBootTest(classes = DataAccessTestConfiguration.class)
 @RunWith(SpringRunner.class)
 public class AuthorRepositoryTest {
     @Autowired
