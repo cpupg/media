@@ -5,8 +5,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class SetVersion {
     public static void main(String[] args) throws Exception {
@@ -23,7 +26,8 @@ public class SetVersion {
         String type = args[2];
         SAXReader saxReader = new SAXReader();
         InputStream is = new FileInputStream(path);
-        Document doc = saxReader.read(is);
+        InputStreamReader isr = new InputStreamReader(is, "utf-8");
+        Document doc = saxReader.read(isr);
         Element rootElement = doc.getRootElement();
         Element versionElement;
         Element versionProperty = null;
@@ -45,11 +49,12 @@ public class SetVersion {
         }
         versionElement.setText(version);
         is.close();
-        FileWriter fw = new FileWriter(path);
-        doc.write(fw);
-        fw.write("\r\n");
-        fw.flush();
-        fw.close();
+        OutputStream os = new FileOutputStream(path);
+        OutputStreamWriter osw = new OutputStreamWriter(os, "utf-8");
+        doc.write(osw);
+        osw.write("\r\n");
+        osw.flush();
+        osw.close();
     }
 
 }
