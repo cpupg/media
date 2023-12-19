@@ -10,6 +10,11 @@ import java.io.InputStream;
 
 public class SetVersion {
     public static void main(String[] args) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        for (String e : args) {
+            builder.append(e).append(" ");
+        }
+        System.out.println("运行参数:" + builder);
         if (args.length != 3) {
             throw new Exception("参数错误，必须输入pom.xml全路径和新版本号");
         }
