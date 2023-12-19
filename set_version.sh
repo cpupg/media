@@ -7,7 +7,7 @@ SUB_MODULE="common service web application dataaccess cli config";
 CLASSPATH="target/classes;target/dependency/dom4j-2.1.4.jar";
 MAIN="com.wrotecode.maven.wrapper.SetVersion";
 VERSION=$1;
-ENCODING="-Dfile.encoding=GBK";
+ENCODING="-Dfile.encoding=UTF-8";
 
 PROJECT_DIR=$(pwd);
 echo "项目目录:$PROJECT_DIR";
