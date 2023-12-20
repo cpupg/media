@@ -4,3 +4,5 @@
 *.sql       text eol=crlf
 *.yaml      text eol=crlf
 *.properties text eol=crlf
+
+commit.template=message.txt
