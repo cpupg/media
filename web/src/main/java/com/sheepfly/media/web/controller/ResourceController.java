@@ -80,10 +80,9 @@ public class ResourceController {
     }
 
     @PostMapping("/add")
-    public ResponseData add(@RequestBody @Validated ResourceData resourceData)
+    public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
-        String prefix = FilenameUtils.getPrefix(resourceData.getDir());
-        if (!prefix.matches("^[a-zA-Z]:(/|\\\\)$")) {
+        if (!resourceData.getDir().matches("^\"?[a-zA-Z]:(.*(?=[/\\\\])?)+\"?$")) {
             return ResponseData.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
         }
         Resource resource = new Resource();
@@ -166,6 +165,10 @@ public class ResourceController {
         }
         service.deleteResourceTag(referenceId);
         Tag tag = tagService.findById(tagReference.getTagId());
+        if (tag == null) {
+            log.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
+            ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
+        }
         TagVo tagVo = new TagVo();
         tag.copyTo(tagVo);
         log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
