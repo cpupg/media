@@ -1,3 +1,3 @@
-alter table
-  media.AUTHOR
-alter column HOMEPAGE set data type varchar(512);
+ALTER TABLE
+  MEDIA.AUTHOR
+ALTER COLUMN HOMEPAGE SET DATA TYPE VARCHAR(512);

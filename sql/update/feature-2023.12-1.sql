@@ -1,39 +1,39 @@
-alter table media.resource
-drop column dir;
+ALTER TABLE MEDIA.RESOURCE
+DROP COLUMN DIR;
 
-create table media.tag
+CREATE TABLE MEDIA.TAG
 (
-  id varchar(19) not null primary key,
-  name varchar(10) not null default '',
-  create_time timestamp not null default current_timestamp(),
-  delete_time timestamp
+  ID VARCHAR(19) NOT NULL PRIMARY KEY,
+  NAME VARCHAR(10) NOT NULL DEFAULT '',
+  CREATE_TIME TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  DELETE_TIME TIMESTAMP
 );
 
-create index media.media_tag_1 on media.tag (name);
+CREATE INDEX MEDIA.MEDIA_TAG_1 ON MEDIA.TAG (NAME);
 
-comment on table media.tag is '标签';
-comment on column media.tag.id is '主键';
-comment on column media.tag.name is '名称';
-comment on column media.tag.create_time is '创建时间';
-comment on column media.tag.delete_time is '删除时间';
+COMMENT ON TABLE MEDIA.TAG IS '标签';
+COMMENT ON COLUMN MEDIA.TAG.ID IS '主键';
+COMMENT ON COLUMN MEDIA.TAG.NAME IS '名称';
+COMMENT ON COLUMN MEDIA.TAG.CREATE_TIME IS '创建时间';
+COMMENT ON COLUMN MEDIA.TAG.DELETE_TIME IS '删除时间';
 
-create table media.tag_reference
+CREATE TABLE MEDIA.TAG_REFERENCE
 (
-  id varchar(19) not null primary key,
-  resource_id varchar(19) not null default '',
-  tag_id varchar(19) not null default '',
-  reference_type tinyint not null default 0,
-  refer_time timestamp not null default current_timestamp(),
-  un_refer_time timestamp
+  ID VARCHAR(19) NOT NULL PRIMARY KEY,
+  RESOURCE_ID VARCHAR(19) NOT NULL DEFAULT '',
+  TAG_ID VARCHAR(19) NOT NULL DEFAULT '',
+  REFERENCE_TYPE TINYINT NOT NULL DEFAULT 0,
+  REFER_TIME TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  UN_REFER_TIME TIMESTAMP
 );
 
-create index media_tag_reference_1 on media.tag_reference (resource_id);
-create index media_tag_reference_2 on media.tag_reference (tag_id);
+CREATE INDEX MEDIA_TAG_REFERENCE_1 ON MEDIA.TAG_REFERENCE (RESOURCE_ID);
+CREATE INDEX MEDIA_TAG_REFERENCE_2 ON MEDIA.TAG_REFERENCE (TAG_ID);
 
-comment on table media.tag_reference is '标签引用';
-comment on column media.tag_reference.id is '主键';
-comment on column media.tag_reference.resource_id is '资源id';
-comment on column media.tag_reference.tag_id is '标签id';
-comment on column media.tag_reference.reference_type is '引用类型1:资源';
-comment on column media.tag_reference.refer_time is '引用时间';
-comment on column media.tag_reference.un_refer_time is '取消引用的时间';
+COMMENT ON TABLE MEDIA.TAG_REFERENCE IS '标签引用';
+COMMENT ON COLUMN MEDIA.TAG_REFERENCE.ID IS '主键';
+COMMENT ON COLUMN MEDIA.TAG_REFERENCE.RESOURCE_ID IS '资源ID';
+COMMENT ON COLUMN MEDIA.TAG_REFERENCE.TAG_ID IS '标签ID';
+COMMENT ON COLUMN MEDIA.TAG_REFERENCE.REFERENCE_TYPE IS '引用类型1:资源';
+COMMENT ON COLUMN MEDIA.TAG_REFERENCE.REFER_TIME IS '引用时间';
+COMMENT ON COLUMN MEDIA.TAG_REFERENCE.UN_REFER_TIME IS '取消引用的时间';
