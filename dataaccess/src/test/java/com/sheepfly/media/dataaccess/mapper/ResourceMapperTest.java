@@ -41,4 +41,10 @@ public class ResourceMapperTest {
         List<TagReferenceVo> list = mapper.selectTagReferenceByResourceId("1735347059734609920");
         list.forEach(System.out::println);
     }
+
+    @Test
+    public void testSelectTagReferenceByResourceIdAndLimitCount() {
+        List<TagReferenceVo> list = mapper.queryTagReferenceByResourceIdAndCount("12345", 10);
+        System.out.println(list.isEmpty());
+    }
 }

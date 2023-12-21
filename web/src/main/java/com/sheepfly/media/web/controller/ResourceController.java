@@ -80,10 +80,9 @@ public class ResourceController {
     }
 
     @PostMapping("/add")
-    public ResponseData add(@RequestBody @Validated ResourceData resourceData)
+    public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
-        String prefix = FilenameUtils.getPrefix(resourceData.getDir());
-        if (!prefix.matches("^[a-zA-Z]:(/|\\\\)$")) {
+        if (!resourceData.getDir().matches("^\"?[a-zA-Z]:(.*(?=[/\\\\])?)+\"?$")) {
             return ResponseData.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
         }
         Resource resource = new Resource();
@@ -131,9 +130,12 @@ public class ResourceController {
     }
 
     @PostMapping("/delete")
-    public ResponseData<ResourceVo> delete(@RequestBody @NotNull String id) throws BusinessException {
-        Resource resource = service.safeLogicDeleteById(id, Resource.class, ErrorCode.DELETE_NOT_EXIST_DATA);
-        return ResponseData.success(resource);
+    public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
+        if (!service.logicExistById(id)) {
+            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA, "资源不存在", null);
+        }
+        Resource res = service.deleteResource(id);
+        return ResponseData.success(res);
     }
 
     @PostMapping("addTag")
@@ -142,6 +144,9 @@ public class ResourceController {
         log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
         if (StringUtils.isBlank(tagName)) {
             return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
+        }
+        if (tagName.length() > 10) {
+            return ResponseData.fail(ErrorCode.TAG_NAME_TOO_LONG);
         }
         TagReference tagReference = service.createResourceTag(resourceId, tagName);
         TagReferenceVo vo = new TagReferenceVo();
@@ -166,6 +171,10 @@ public class ResourceController {
         }
         service.deleteResourceTag(referenceId);
         Tag tag = tagService.findById(tagReference.getTagId());
+        if (tag == null) {
+            log.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
+            ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
+        }
         TagVo tagVo = new TagVo();
         tag.copyTo(tagVo);
         log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);

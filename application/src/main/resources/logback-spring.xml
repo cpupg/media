@@ -19,6 +19,8 @@
   <logger name="com.sheepfly.media.web.interceptor.LoggerInterceptor" additivity="FALSE">
     <appender-ref ref="WEB_REQ_STD_OUT"/>
     <appender-ref ref="WEB_REQ"/>
+    <appender-ref ref="ALL"/>
+    <appender-ref ref="STDOUT"/>
   </logger>
 
   <!-- 根logger等级是INFO -->

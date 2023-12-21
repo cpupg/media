@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface TagReferenceRepository
         extends JpaRepository<TagReference, String>, JpaSpecificationExecutor<TagReference> {
+    long deleteByResourceId(String resourceId);
 
 }
