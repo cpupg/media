@@ -1,10 +1,11 @@
 package com.sheepfly.media.dataaccess.mapper;
 
 import com.sheepfly.media.common.form.filter.ResourceFilter;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
+import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -28,4 +29,7 @@ public interface ResourceMapper {
     List<ResourceVo> selectResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form);
 
     List<TagReferenceVo> selectTagReferenceByResourceId(String resourceId);
+
+    List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(@Param("resourceId") String resourceId,
+            @Param("limitCount") Integer limitCount);
 }

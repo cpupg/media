@@ -130,9 +130,12 @@ public class ResourceController {
     }
 
     @PostMapping("/delete")
-    public ResponseData<ResourceVo> delete(@RequestBody @NotNull String id) throws BusinessException {
-        Resource resource = service.safeLogicDeleteById(id, Resource.class, ErrorCode.DELETE_NOT_EXIST_DATA);
-        return ResponseData.success(resource);
+    public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
+        if (!service.logicExistById(id)) {
+            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA, "资源不存在", null);
+        }
+        Resource res = service.deleteResource(id);
+        return ResponseData.success(res);
     }
 
     @PostMapping("addTag")
@@ -141,6 +144,9 @@ public class ResourceController {
         log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
         if (StringUtils.isBlank(tagName)) {
             return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
+        }
+        if (tagName.length() > 10) {
+            return ResponseData.fail(ErrorCode.TAG_NAME_TOO_LONG);
         }
         TagReference tagReference = service.createResourceTag(resourceId, tagName);
         TagReferenceVo vo = new TagReferenceVo();

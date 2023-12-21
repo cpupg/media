@@ -49,6 +49,17 @@
       left join media.tag tag
     on tf.TAG_ID = tag.Id
     where tf.resource_id = #{resourcdId}
-    order by tf.REFER_TIME;
+    order by tf.REFER_TIME
+  </select>
+
+  <select id="queryTagReferenceByResourceIdAndCount"
+      resultMap="com.sheepfly.media.dataaccess.mapper.TagReferenceMapper.tagReferenceVo">
+    select tf.id, tf.resource_id, tf.reference_type, tf.REFER_TIME, tag.id as tag_id, tag.name as tag_name
+    from media.TAG_REFERENCE tf
+      left join media.tag tag
+    on tf.TAG_ID = tag.Id
+    where tf.resource_id = #{resourceId}
+    order by tf.REFER_TIME
+    limit #{limitCount}
   </select>
 </mapper>

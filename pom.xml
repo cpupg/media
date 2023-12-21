@@ -20,7 +20,7 @@
 
   <groupId>com.sheepfly.media</groupId>
   <artifactId>media</artifactId>
-  <version>0.5.2</version>
+  <version>0.5.3</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -30,7 +30,7 @@
     <project.report.outputEncoding>UTF-8</project.report.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <version.media>0.5.2</version.media>
+    <version.media>0.5.3</version.media>
   </properties>
 
   <dependencyManagement>
@@ -199,36 +199,39 @@
     </dependency>
     <!--apache commons结束-->
 
-    <!--druid开始-->
+    <!--数据库开始-->
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>druid-spring-boot-starter</artifactId>
       <version>1.2.9</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-core</artifactId>
-      <version>5.5.8</version>
-    </dependency>
-
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>2.1.210</version>
     </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    <!--数据库结束-->
 
+    <!--工具类开始-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-core</artifactId>
+      <version>5.5.8</version>
+    </dependency>
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
       <version>1.6.1</version>
     </dependency>
-    <!--其他单独依赖结束-->
+    <!--工具类结束-->
 
     <!-- test -->
     <dependency>

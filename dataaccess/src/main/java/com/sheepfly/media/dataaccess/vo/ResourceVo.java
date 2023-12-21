@@ -60,4 +60,8 @@ public class ResourceVo implements Serializable {
      * 资源拥有的标签。
      */
     private List<TagReferenceVo> tagReferenceVoList;
+    /**
+     * 标签数量。
+     */
+    private Long tagCount;
 }
