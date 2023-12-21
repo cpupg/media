@@ -142,6 +142,9 @@ public class ResourceController {
         if (StringUtils.isBlank(tagName)) {
             return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
         }
+        if (tagName.length() > 10) {
+            return ResponseData.fail(ErrorCode.TAG_NAME_TOO_LONG);
+        }
         TagReference tagReference = service.createResourceTag(resourceId, tagName);
         TagReferenceVo vo = new TagReferenceVo();
         tagReference.copyTo(vo);

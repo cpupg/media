@@ -25,6 +25,6 @@ public class TagController {
         if (StringUtils.isBlank(name)) {
             return ProTableObject.fail(ErrorCode.TAG_NAME_CANT_BE_EMPTY.getMessage());
         }
-        return service.queryTagList("测试");
+        return service.queryTagList(name);
     }
 }
