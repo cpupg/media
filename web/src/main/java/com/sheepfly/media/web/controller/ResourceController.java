@@ -130,9 +130,12 @@ public class ResourceController {
     }
 
     @PostMapping("/delete")
-    public ResponseData<ResourceVo> delete(@RequestBody @NotNull String id) throws BusinessException {
-        Resource resource = service.safeLogicDeleteById(id, Resource.class, ErrorCode.DELETE_NOT_EXIST_DATA);
-        return ResponseData.success(resource);
+    public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
+        if (!service.logicExistById(id)) {
+            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA, "资源不存在", null);
+        }
+        Resource res = service.deleteResource(id);
+        return ResponseData.success(res);
     }
 
     @PostMapping("addTag")

@@ -3,12 +3,16 @@ package com.sheepfly.media.service.impl;
 import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
+import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
@@ -101,5 +105,18 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
         return resourceMapper.selectTagReferenceByResourceId(resourceId);
+    }
+
+    @Override
+    public Resource deleteResource(String id) throws BusinessException {
+        if (Constant.DELETED != logicDeleteById(id, Resource.class).getDeleteStatus()) {
+            throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
+        }
+        log.info("删除资源{}的标签");
+        List<TagReference> list = tagReferenceRepository.findAll(
+                (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
+        long l = tagReferenceRepository.deleteByResourceId(id);
+        log.info("删除{}个标签", l);
+        return findById(id);
     }
 }

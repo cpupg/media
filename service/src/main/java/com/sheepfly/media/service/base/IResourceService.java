@@ -1,5 +1,6 @@
 package com.sheepfly.media.service.base;
 
+import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
@@ -54,4 +55,13 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @return 标签列表。
      */
     List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId);
+
+    /**
+     * 删除资源和关联表。
+     *
+     * @param id 资源主键。
+     *
+     * @return 被删除的资源。
+     */
+    Resource deleteResource(String id) throws BusinessException;
 }
