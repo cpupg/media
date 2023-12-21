@@ -13,11 +13,7 @@
     <!--<property name="transactionFactory" ref=""/>-->
     <property name="plugins">
       <array>
-        <bean class="com.github.pagehelper.PageInterceptor">
-          <property name="properties">
-            <value>helperDialect=h2</value>
-          </property>
-        </bean>
+        <bean class="com.github.pagehelper.PageInterceptor"/>
       </array>
     </property>
   </bean>
