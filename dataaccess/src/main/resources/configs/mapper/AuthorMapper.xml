@@ -39,7 +39,7 @@
       <property name="tbname" value="site"/>
       <property name="prefix" value="site2"/>
     </include>
-    '' as end
+    '' as col_end
     from media.AUTHOR
     left join media.SITE
     on author.SITE_ID = SITE.ID
