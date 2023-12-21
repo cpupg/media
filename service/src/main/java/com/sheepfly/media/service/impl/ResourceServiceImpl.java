@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -60,8 +61,15 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
         // todo 1+n查询方案优化
-        for (ResourceVo vo : list) {
-            vo.setTagReferenceVoList(queryTagReferenceByResourceId(vo.getId()));
+        // todo 临时优化：生产环境标签多，查询时只返回3个以优化性能
+        for (int i = 0; i < list.size(); i++) {
+            ResourceVo vo = list.get(i);
+            if (i >= 5) {
+                vo.setTagReferenceVoList(Collections.emptyList());
+            }
+            vo.setTagReferenceVoList(queryTagReferenceByResourceIdAndCount(vo.getId()));
+            long count = tagReferenceRepository.count((r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), vo.getId()));
+            vo.setTagCount(count);
         }
         return ProTableObject.success(list, page.getTotal());
     }
@@ -105,6 +113,11 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
         return resourceMapper.selectTagReferenceByResourceId(resourceId);
+    }
+
+    @Override
+    public List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(String resourceId) {
+        return resourceMapper.queryTagReferenceByResourceIdAndCount(resourceId, 5);
     }
 
     @Override

@@ -64,4 +64,13 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @return 被删除的资源。
      */
     Resource deleteResource(String id) throws BusinessException;
+
+    /**
+     * 查询指定数量的标签。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 标签列表。
+     */
+    List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(String resourceId);
 }
