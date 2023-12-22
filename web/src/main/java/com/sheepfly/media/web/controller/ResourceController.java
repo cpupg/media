@@ -71,7 +71,7 @@ public class ResourceController {
             @RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
         ResourceFilter params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase());
+            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());

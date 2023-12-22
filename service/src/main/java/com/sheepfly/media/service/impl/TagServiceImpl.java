@@ -1,5 +1,6 @@
 package com.sheepfly.media.service.impl;
 
+import com.sheepfly.media.common.form.data.TagData;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.mapper.TagMapper;
@@ -17,8 +18,8 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
     private TagMapper mapper;
 
     @Override
-    public ProTableObject<TagVo> queryTagList(String name) {
-        List<TagVo> list = mapper.queryTagListByName(name);
+    public ProTableObject<TagVo> queryTagList(TagData tagData) {
+        List<TagVo> list = mapper.queryTagListBy(tagData);
         return ProTableObject.success(list, (long) list.size());
     }
 }

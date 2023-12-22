@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.TagMapper">
-  <select id="queryTagListByName" resultType="com.sheepfly.media.dataaccess.vo.TagVo"
-      parameterType="string">
+  <select id="queryTagListBy" resultType="com.sheepfly.media.dataaccess.vo.TagVo"
+      parameterType="com.sheepfly.media.common.form.data.TagData">
     select *
-
     from MEDIA.tag
     where lower(name) like '%' || #{name} || '%'
+    <if test="rate == true">
+      and name in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
+    </if>
+    <if test="favourite == true">
+      and name = '收藏'
+    </if>
   </select>
 </mapper>
