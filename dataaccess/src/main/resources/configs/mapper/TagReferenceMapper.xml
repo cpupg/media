@@ -14,4 +14,13 @@
     <!--这个字段目前没有值，不需要映射-->
     <!--<result property="unReferTime" column="UN_REFER_TIME"/>-->
   </resultMap>
+  <select id="queryTagReferenceList" parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo"
+      resultType="com.sheepfly.media.dataaccess.vo.TagReferenceVo">
+    select tf.id, tf.RESOURCE_ID, tf.TAG_ID, tag.NAME
+    from media.TAG_REFERENCE tf
+           left join media.tag tag
+                     on tag.id = tf.TAG_ID
+    where tf.RESOURCE_ID = #{params.resourceId}
+    <if test="params.tagName != null and params.tagName != ''">and tag.NAME = #{params.tagName}</if>
+  </select>
 </mapper>
