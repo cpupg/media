@@ -241,7 +241,7 @@ log "创建应用启动脚本";
 
 cd $APP_DIR;
 runStatus $?;
-log "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
+echo "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
 runStatus $?;
 log "创建命令行启动脚本";
 log "拼接模块依赖";
