@@ -13,4 +13,6 @@ public class TagReferenceParam extends ProPaginationForm {
     private String resourceId;
     private String tagId;
     private String tagName;
+    private boolean rate;
+    private boolean favorite;
 }
