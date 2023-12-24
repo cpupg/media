@@ -50,8 +50,8 @@ public class TagController {
     /**
      * 增加标签。
      *
-     * <p>使用tagId和resourceId直接增加标签，若tagReferenceId不为空，则说明是在添加评分，
-     * 需要删掉旧评分然后再添加新评分，也就是新标签。</p>
+     * <p>使用tagId和resourceId直接增加标签，若tagReferenceId不为空，说明要添加同名标签，
+     * 需要先删掉旧标签再添加新标签。</p>
      *
      * @param tagId 标签主键。
      * @param resourceId 资源主键。
@@ -63,6 +63,9 @@ public class TagController {
     public ResponseData<TagReferenceVo> addTag(@RequestParam("tagId") String tagId,
             @RequestParam("resourceId") String resourceId,
             @RequestParam(value = "tagReferenceId", required = false) String tagReferenceId) {
+        if (StringUtils.isBlank(tagId) || StringUtils.isBlank(resourceId)) {
+            return ResponseData.fail(ErrorCode.TAG_RES_ID_AND_TAG_ID_CANT_BE_NULL);
+        }
         if (StringUtils.isNotBlank(tagReferenceId)) {
             trfService.deleteById(tagReferenceId);
         }

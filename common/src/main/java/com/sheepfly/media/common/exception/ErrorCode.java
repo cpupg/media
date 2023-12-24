@@ -132,6 +132,7 @@ public enum ErrorCode {
     TAG_NAME_CANT_BE_EMPTY("C0204001",  "标签名不能为空"),
     TAG_NAME_TOO_LONG("D0204001","标签名太长"),
     TAG_RES_ID_CANT_BE_NULL("D0204002","缺少资源标识"),
+    TAG_RES_ID_AND_TAG_ID_CANT_BE_NULL("D0204003","资源标识或标签标识为空"),
     /*
      * 模块[标签][tag]结束[204]
      ***************************************************************************
