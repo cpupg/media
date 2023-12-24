@@ -8,4 +8,5 @@ import com.sheepfly.media.dataaccess.vo.TagVo;
 
 public interface TagService extends BaseJpaService<Tag, String, TagRepository> {
     ProTableObject<TagVo> queryTagList(TagData tagData);
+
 }

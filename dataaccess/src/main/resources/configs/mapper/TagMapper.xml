@@ -5,12 +5,16 @@
       parameterType="com.sheepfly.media.common.form.data.TagData">
     select *
     from MEDIA.tag
-    where lower(name) like '%' || #{name} || '%'
+    where 1=1
+    <if test="name != null and name != ''">lower(name) like '%' || lower(#{name}) || '%'</if>
     <if test="rate == true">
       and name in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
     </if>
     <if test="favourite == true">
       and name = '收藏'
+    </if>
+    <if test="rate == true">
+      order by cast(name as integer)
     </if>
   </select>
 </mapper>

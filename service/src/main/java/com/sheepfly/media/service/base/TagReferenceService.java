@@ -7,8 +7,6 @@ import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 
-import java.util.List;
-
 public interface TagReferenceService extends BaseJpaService<TagReference, String, TagReferenceRepository> {
     /**
      * 引用类型1，资源。
@@ -17,4 +15,7 @@ public interface TagReferenceService extends BaseJpaService<TagReference, String
 
     ProTableObject<TagReferenceVo> queryTagReferenceList(
             ProComponentsRequestVo<Object, TagReferenceParam, Object> form);
+
+
+    TagReference addTag(String tagId, String resourceId);
 }

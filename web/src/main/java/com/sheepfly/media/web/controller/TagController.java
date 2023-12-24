@@ -5,6 +5,8 @@ import com.sheepfly.media.common.form.data.TagData;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.ResponseData;
+import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.vo.TagVo;
 import com.sheepfly.media.service.base.TagReferenceService;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +31,7 @@ public class TagController {
 
     @PostMapping("/queryTagList")
     public ProTableObject<TagVo> queryTagList(@RequestBody TagData tagData) {
-        if (StringUtils.isBlank(tagData.getName())) {
+        if (StringUtils.isBlank(tagData.getName()) && !(tagData.isRate() || tagData.isFavourite())) {
             return ProTableObject.fail(ErrorCode.TAG_NAME_CANT_BE_EMPTY.getMessage());
         }
         log.info("查询相似标签{}", tagData.getName());
@@ -42,5 +45,33 @@ public class TagController {
             return ProTableObject.fail(ErrorCode.TAG_RES_ID_CANT_BE_NULL.getMessage());
         }
         return trfService.queryTagReferenceList(form);
+    }
+
+    /**
+     * 增加标签。
+     *
+     * <p>使用tagId和resourceId直接增加标签，若tagReferenceId不为空，则说明是在添加评分，
+     * 需要删掉旧评分然后再添加新评分，也就是新标签。</p>
+     *
+     * @param tagId 标签主键。
+     * @param resourceId 资源主键。
+     * @param tagReferenceId 标签引用。
+     *
+     * @return 标签引用。
+     */
+    @PostMapping("/addTag")
+    public ResponseData<TagReferenceVo> addTag(@RequestParam("tagId") String tagId,
+            @RequestParam("resourceId") String resourceId,
+            @RequestParam(value = "tagReferenceId", required = false) String tagReferenceId) {
+        if (StringUtils.isNotBlank(tagReferenceId)) {
+            trfService.deleteById(tagReferenceId);
+        }
+        TagReference tagReference = trfService.addTag(tagId, resourceId);
+        TagVo tagVo = new TagVo();
+        tagVo.setId(tagId);
+        TagReferenceVo vo = new TagReferenceVo();
+        tagReference.copyTo(vo);
+        vo.setTagVo(tagVo);
+        return ResponseData.success(vo);
     }
 }
