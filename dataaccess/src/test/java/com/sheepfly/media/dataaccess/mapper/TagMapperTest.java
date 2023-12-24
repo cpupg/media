@@ -1,5 +1,6 @@
 package com.sheepfly.media.dataaccess.mapper;
 
+import com.sheepfly.media.common.form.data.TagData;
 import com.sheepfly.media.dataaccess.DataAccessTestConfiguration;
 import com.sheepfly.media.dataaccess.vo.TagVo;
 import org.junit.Test;
@@ -18,7 +19,14 @@ public class TagMapperTest {
 
     @Test
     public void testQueryTagListByName() {
-        List<TagVo> list = mapper.queryTagListByName("测试");
+        TagData tagData = new TagData();
+        tagData.setName("测试");
+        List<TagVo> list = mapper.queryTagListBy(tagData);
+        System.out.println(list.size());
+        list.forEach(System.out::println);
+        tagData.setName(null);
+        tagData.setRate(true );
+        list = mapper.queryTagListBy(tagData);
         System.out.println(list.size());
         list.forEach(System.out::println);
     }

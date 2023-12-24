@@ -10,8 +10,17 @@ package com.sheepfly.media.common.http;
  * @author sheepfly
  */
 public class ProComponentsRequestVo<F, P, S> {
+    /**
+     * 表头过滤参数。
+     */
     private F filter;
+    /**
+     * 表格上方搜索框。
+     */
     private P params;
+    /**
+     * 表头排序参数。
+     */
     private S sort;
 
     public F getFilter() {

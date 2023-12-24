@@ -14,4 +14,20 @@
     <!--这个字段目前没有值，不需要映射-->
     <!--<result property="unReferTime" column="UN_REFER_TIME"/>-->
   </resultMap>
+  <select id="queryTagReferenceList" parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo"
+      resultMap="tagReferenceVo">
+    select tf.id, tf.RESOURCE_ID, tf.TAG_ID, tag.NAME as tag_name
+    from media.TAG_REFERENCE tf
+           left join media.tag tag
+                     on tag.id = tf.TAG_ID
+    where 1=1
+    <if test="params.resourceId != null and params.resourceId != ''">and tf.RESOURCE_ID = #{params.resourceId}</if>
+    <if test="params.tagName != null and params.tagName != ''">and lower(tag.NAME) = lower(#{params.tagName})</if>
+    <if test="params.rate == true">
+      and tag.name in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
+    </if>
+    <if test="params.favorite == true">
+      and tag.name = '收藏'
+    </if>
+  </select>
 </mapper>
