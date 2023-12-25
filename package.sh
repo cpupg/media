@@ -31,7 +31,7 @@ APP_JAR_NAME=media-$branch;
 APP_JAR=;
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
 CLASSPATH="lib_module/*;lib_maven/*";
-CLI_CLASSPATH="lib_module/*";
+CLI_CLASSPATH="lib_maven/*";
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
 PACKAGE_NAME=com.sheepfly.media.cli;
 #前台版本
