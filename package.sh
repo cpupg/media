@@ -31,6 +31,7 @@ APP_JAR_NAME=media-$branch;
 APP_JAR=;
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
 CLASSPATH="lib_module/*;lib_maven/*";
+CLI_CLASSPATH="lib_maven/*";
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
 PACKAGE_NAME=com.sheepfly.media.cli;
 #前台版本
@@ -243,8 +244,14 @@ runStatus $?;
 echo "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
 runStatus $?;
 log "创建命令行启动脚本";
+log "拼接模块依赖";
+for item in $(ls lib_module); do
+    CLI_CLASSPATH="lib_module/$item;$CLI_CLASSPATH";
+    runStatus $?;
+done
+log "$CLI_CLASSPATH";
 for item in $CLI_MAIN_CLASS; do
-    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLI_JAR;$CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
+    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLI_JAR;$CLI_CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
     runStatus $?;
 done
 endWork "启动脚本创建完成";
