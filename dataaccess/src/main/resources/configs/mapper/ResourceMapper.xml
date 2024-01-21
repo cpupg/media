@@ -39,7 +39,7 @@
                      on res.dir_code = dir.dir_code
     where res.DELETE_STATUS = '0'
     <include refid="where_statement"/>
-    order by res.CREATE_TIME desc
+    order by dir.PATH, res.FILENAME
   </select>
 
   <select id="selectTagReferenceByResourceId"
