@@ -20,7 +20,7 @@
 
   <groupId>com.sheepfly.media</groupId>
   <artifactId>media</artifactId>
-  <version>0.5.4</version>
+  <version>0.5.5</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -30,7 +30,7 @@
     <project.report.outputEncoding>UTF-8</project.report.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <version.media>0.5.4</version.media>
+    <version.media>0.5.5</version.media>
   </properties>
 
   <dependencyManagement>
