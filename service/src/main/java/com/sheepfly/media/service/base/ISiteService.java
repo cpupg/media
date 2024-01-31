@@ -5,8 +5,8 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.param.SiteParam;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 
 /**
  * <p>
@@ -41,7 +41,7 @@ public interface ISiteService extends BaseJpaService<Site, String, SiteRepositor
      *
      * @return 查询结果。
      */
-    ProTableObject<Site> querySiteList(ProComponentsRequestVo<Object, SiteParam, Object> vo);
+    TableResponse<Site> querySiteList(TableRequest<Object, SiteParam, Object> vo);
 
     /**
      * 验证网站是否可以被删除。

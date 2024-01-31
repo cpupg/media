@@ -3,8 +3,8 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.TagData;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
@@ -30,19 +30,19 @@ public class TagController {
     private TagReferenceService trfService;
 
     @PostMapping("/queryTagList")
-    public ProTableObject<TagVo> queryTagList(@RequestBody TagData tagData) {
+    public TableResponse<TagVo> queryTagList(@RequestBody TagData tagData) {
         if (StringUtils.isBlank(tagData.getName()) && !(tagData.isRate() || tagData.isFavourite())) {
-            return ProTableObject.fail(ErrorCode.TAG_NAME_CANT_BE_EMPTY.getMessage());
+            return TableResponse.fail(ErrorCode.TAG_NAME_CANT_BE_EMPTY.getMessage());
         }
         log.info("查询相似标签{}", tagData.getName());
         return service.queryTagList(tagData);
     }
 
     @PostMapping("/queryTagReferenceList")
-    public ProTableObject<TagReferenceVo> queryTagReferenceList(
-            @RequestBody ProComponentsRequestVo<Object, TagReferenceParam, Object> form) {
+    public TableResponse<TagReferenceVo> queryTagReferenceList(
+            @RequestBody TableRequest<Object, TagReferenceParam, Object> form) {
         if (StringUtils.isBlank(form.getParams().getResourceId())) {
-            return ProTableObject.fail(ErrorCode.TAG_RES_ID_CANT_BE_NULL.getMessage());
+            return TableResponse.fail(ErrorCode.TAG_RES_ID_CANT_BE_NULL.getMessage());
         }
         return trfService.queryTagReferenceList(form);
     }

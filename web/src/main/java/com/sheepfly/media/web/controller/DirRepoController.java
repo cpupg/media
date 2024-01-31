@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.form.data.DirRepoData;
 import com.sheepfly.media.common.form.param.DirRepoParam;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.DirRepo;
 import com.sheepfly.media.dataaccess.vo.DirRepoVo;
@@ -51,9 +51,9 @@ public class DirRepoController {
      * @return 符合条件的清单。
      */
     @PostMapping("queryAllDirRepoList")
-    public ProTableObject<DirRepoVo> queryAllDirRepoList(@Validated @RequestBody DirRepoParam filter) {
+    public TableResponse<DirRepoVo> queryAllDirRepoList(@Validated @RequestBody DirRepoParam filter) {
         Page<Object> page = PageMethod.startPage(filter.getCurrent(), filter.getPageSize());
         List<DirRepoVo> list = service.queryAllDirRepoList();
-        return ProTableObject.success(list, page.getTotal());
+        return TableResponse.success(list, page.getTotal());
     }
 }

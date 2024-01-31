@@ -7,8 +7,8 @@ import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.param.ResourceParam;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
@@ -55,8 +55,8 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     private ResourceMapper resourceMapper;
 
     @Override
-    public ProTableObject<ResourceVo> queryResourceVoList(
-            ProComponentsRequestVo<ResourceParam, ResourceParam, Object> form) {
+    public TableResponse<ResourceVo> queryResourceVoList(
+            TableRequest<ResourceParam, ResourceParam, Object> form) {
         ResourceParam params = form.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
@@ -71,7 +71,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             long count = tagReferenceRepository.count((r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), vo.getId()));
             vo.setTagCount(count);
         }
-        return ProTableObject.success(list, page.getTotal());
+        return TableResponse.success(list, page.getTotal());
     }
 
     @Override

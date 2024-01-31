@@ -6,8 +6,8 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.param.ResourceParam;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
@@ -67,8 +67,8 @@ public class ResourceController {
     private TagReferenceService tagReferenceService;
 
     @PostMapping("/queryResourceList")
-    public ProTableObject<ResourceVo> queryResourceList(
-            @RequestBody ProComponentsRequestVo<ResourceParam, ResourceParam, Object> form) {
+    public TableResponse<ResourceVo> queryResourceList(
+            @RequestBody TableRequest<ResourceParam, ResourceParam, Object> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
             params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));

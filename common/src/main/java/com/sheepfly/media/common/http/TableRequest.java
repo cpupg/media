@@ -9,7 +9,7 @@ package com.sheepfly.media.common.http;
  *
  * @author sheepfly
  */
-public class ProComponentsRequestVo<F, P, S> {
+public class TableRequest<F, P, S> {
     /**
      * 表头过滤参数。
      */

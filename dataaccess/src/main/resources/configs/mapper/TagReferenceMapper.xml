@@ -14,7 +14,7 @@
     <!--这个字段目前没有值，不需要映射-->
     <!--<result property="unReferTime" column="UN_REFER_TIME"/>-->
   </resultMap>
-  <select id="queryTagReferenceList" parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo"
+  <select id="queryTagReferenceList" parameterType="com.sheepfly.media.common.http.TableRequest"
       resultMap="tagReferenceVo">
     select tf.id, tf.RESOURCE_ID, tf.TAG_ID, tag.NAME as tag_name
     from media.TAG_REFERENCE tf

@@ -6,8 +6,8 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.param.SiteParam;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.service.base.ISiteService;
@@ -57,7 +57,7 @@ public class SiteController {
      * @return 和输入参数中的条件匹配的站点。
      */
     @PostMapping("/querySiteList")
-    public ProTableObject<Site> querySiteList(@RequestBody ProComponentsRequestVo<Object, SiteParam, Object> vo) {
+    public TableResponse<Site> querySiteList(@RequestBody TableRequest<Object, SiteParam, Object> vo) {
         SiteParam form = vo.getParams();
         if (form.getSiteName() != null && !StringUtils.isBlank(form.getSiteName())) {
             // todo spring security

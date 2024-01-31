@@ -6,8 +6,8 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.AuthorData;
 import com.sheepfly.media.common.form.param.AuthorParam;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.dataaccess.vo.AuthorVo;
@@ -87,8 +87,8 @@ public class AuthorController {
     }
 
     @PostMapping("/queryList")
-    public ProTableObject<AuthorVo> queryList(
-            @RequestBody ProComponentsRequestVo<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
+    public TableResponse<AuthorVo> queryList(
+            @RequestBody TableRequest<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
         AuthorParam params = vo.getParams();
         String username = params.getUsername();
         if (username != null && !StringUtils.isBlank(username)) {

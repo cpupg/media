@@ -11,8 +11,8 @@ import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.dataaccess.vo.AuthorVo;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +34,12 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
     private ResourceRepository resourceRepository;
 
     @Override
-    public ProTableObject<AuthorVo> queryForAuthorList(
-            ProComponentsRequestVo<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
+    public TableResponse<AuthorVo> queryForAuthorList(
+            TableRequest<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
         AuthorParam params = vo.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<AuthorVo> authorList = mapper.queryAuthorVoList(vo);
-        return ProTableObject.success(authorList, page.getTotal());
+        return TableResponse.success(authorList, page.getTotal());
     }
 
     @Override
