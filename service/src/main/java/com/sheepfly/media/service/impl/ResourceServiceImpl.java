@@ -6,7 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
-import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.dataaccess.entity.Resource;
@@ -56,8 +56,8 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
 
     @Override
     public ProTableObject<ResourceVo> queryResourceVoList(
-            ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
-        ResourceFilter params = form.getParams();
+            ProComponentsRequestVo<ResourceParam, ResourceParam, Object> form) {
+        ResourceParam params = form.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
         // todo 1+n查询方案优化

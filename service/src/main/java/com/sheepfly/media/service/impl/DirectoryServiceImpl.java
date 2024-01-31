@@ -3,7 +3,7 @@ package com.sheepfly.media.service.impl;
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.form.filter.DirectoryFilter;
+import com.sheepfly.media.common.form.param.DirectoryParam;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.dataaccess.vo.DirectoryVo;
@@ -30,7 +30,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
     private Snowflake snowflake;
 
     @Override
-    public List<Directory> queryDirectoryList(DirectoryFilter filter) {
+    public List<Directory> queryDirectoryList(DirectoryParam filter) {
         return null;
     }
 

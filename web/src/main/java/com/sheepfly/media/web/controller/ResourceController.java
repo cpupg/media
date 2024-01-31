@@ -5,7 +5,7 @@ import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.ResourceData;
-import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.common.http.ResponseData;
@@ -68,8 +68,8 @@ public class ResourceController {
 
     @PostMapping("/queryResourceList")
     public ProTableObject<ResourceVo> queryResourceList(
-            @RequestBody ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form) {
-        ResourceFilter params = form.getParams();
+            @RequestBody ProComponentsRequestVo<ResourceParam, ResourceParam, Object> form) {
+        ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
             params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
         }

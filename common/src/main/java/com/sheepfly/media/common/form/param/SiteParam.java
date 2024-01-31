@@ -1,4 +1,4 @@
-package com.sheepfly.media.common.form.filter;
+package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.ProPaginationForm;
 import lombok.Data;
@@ -11,6 +11,6 @@ import java.io.Serializable;
  * @author sheepfly
  */
 @Data
-public class SiteFilter extends ProPaginationForm implements Serializable {
+public class SiteParam extends ProPaginationForm implements Serializable {
     private String siteName;
 }

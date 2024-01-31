@@ -1,6 +1,6 @@
 package com.sheepfly.media.service.base;
 
-import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.dataaccess.entity.TagReference;
@@ -22,10 +22,10 @@ public class IResourceServiceTest {
 
     @Test
     public void createAndDeleteTagReference() {
-        ResourceFilter filter = new ResourceFilter();
+        ResourceParam filter = new ResourceParam();
         filter.setCurrent(1);
         filter.setPageSize(1);
-        ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> req = new ProComponentsRequestVo<>();
+        ProComponentsRequestVo<ResourceParam, ResourceParam, Object> req = new ProComponentsRequestVo<>();
         req.setParams(filter);
         ProTableObject<ResourceVo> obj = service.queryResourceVoList(req);
         ResourceVo resourceVo = obj.getData().get(0);

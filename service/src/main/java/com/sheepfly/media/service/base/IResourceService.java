@@ -1,7 +1,7 @@
 package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.dataaccess.entity.Resource;
@@ -28,7 +28,7 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      *
      * @return 满足条件的资源。
      */
-    ProTableObject<ResourceVo> queryResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form);
+    ProTableObject<ResourceVo> queryResourceVoList(ProComponentsRequestVo<ResourceParam, ResourceParam, Object> form);
 
     /**
      * 给资源创建标签。

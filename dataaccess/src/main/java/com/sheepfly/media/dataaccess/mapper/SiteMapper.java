@@ -1,7 +1,7 @@
 package com.sheepfly.media.dataaccess.mapper;
 
 import com.sheepfly.media.dataaccess.entity.Site;
-import com.sheepfly.media.common.form.filter.SiteFilter;
+import com.sheepfly.media.common.form.param.SiteParam;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface SiteMapper {
      *
      * @return 查询结果。
      */
-    List<Site> querySiteList(SiteFilter siteFilter);
+    List<Site> querySiteList(SiteParam siteFilter);
 
     /**
      * 查询网站数量。
@@ -32,5 +32,5 @@ public interface SiteMapper {
      *
      * @return 数量。
      */
-    int countSiteList(SiteFilter siteFilter);
+    int countSiteList(SiteParam siteFilter);
 }

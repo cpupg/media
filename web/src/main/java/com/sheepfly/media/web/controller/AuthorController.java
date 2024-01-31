@@ -5,7 +5,7 @@ import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.AuthorData;
-import com.sheepfly.media.common.form.filter.AuthorFilter;
+import com.sheepfly.media.common.form.param.AuthorParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.common.http.ProTableObject;
 import com.sheepfly.media.common.http.ResponseData;
@@ -88,8 +88,8 @@ public class AuthorController {
 
     @PostMapping("/queryList")
     public ProTableObject<AuthorVo> queryList(
-            @RequestBody ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
-        AuthorFilter params = vo.getParams();
+            @RequestBody ProComponentsRequestVo<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
+        AuthorParam params = vo.getParams();
         String username = params.getUsername();
         if (username != null && !StringUtils.isBlank(username)) {
             // todo spring security

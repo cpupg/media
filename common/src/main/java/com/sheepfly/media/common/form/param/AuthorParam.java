@@ -1,4 +1,4 @@
-package com.sheepfly.media.common.form.filter;
+package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.ProPaginationForm;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author wrote-code
  */
 @Data
-public class AuthorFilter extends ProPaginationForm implements Serializable {
+public class AuthorParam extends ProPaginationForm implements Serializable {
     /**
      * ID
      */

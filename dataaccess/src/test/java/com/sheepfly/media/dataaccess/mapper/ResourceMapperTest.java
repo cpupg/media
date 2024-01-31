@@ -1,6 +1,6 @@
 package com.sheepfly.media.dataaccess.mapper;
 
-import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
 import com.sheepfly.media.dataaccess.DataAccessTestConfiguration;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
@@ -27,8 +27,8 @@ public class ResourceMapperTest {
 
     @Test
     public void testSelectResourceVoList2() {
-        ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form = new ProComponentsRequestVo<>();
-        ResourceFilter params = new ResourceFilter();
+        ProComponentsRequestVo<ResourceParam, ResourceParam, Object> form = new ProComponentsRequestVo<>();
+        ResourceParam params = new ResourceParam();
         params.setFilename("测试文件");
         params.setDir("C:/hello/");
         form.setParams(params);

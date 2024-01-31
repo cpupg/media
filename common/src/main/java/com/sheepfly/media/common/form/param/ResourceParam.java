@@ -1,4 +1,4 @@
-package com.sheepfly.media.common.form.filter;
+package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.ProPaginationForm;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author sheepfly
  */
 @Data
-public class ResourceFilter extends ProPaginationForm implements Serializable {
+public class ResourceParam extends ProPaginationForm implements Serializable {
     /**
      * 文件名。
      */

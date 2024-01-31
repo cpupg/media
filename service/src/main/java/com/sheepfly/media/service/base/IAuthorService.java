@@ -2,7 +2,7 @@ package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.form.filter.AuthorFilter;
+import com.sheepfly.media.common.form.param.AuthorParam;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.vo.AuthorVo;
 import com.sheepfly.media.common.http.ProComponentsRequestVo;
@@ -26,7 +26,7 @@ public interface IAuthorService extends BaseJpaService<Author, String, AuthorRep
      *
      * @throws BusinessException 业务异常。
      */
-    ProTableObject<AuthorVo> queryForAuthorList(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo)
+    ProTableObject<AuthorVo> queryForAuthorList(ProComponentsRequestVo<AuthorParam, AuthorParam, AuthorParam> vo)
             throws BusinessException;
 
 

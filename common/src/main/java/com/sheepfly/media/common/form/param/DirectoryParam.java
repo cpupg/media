@@ -1,10 +1,9 @@
-package com.sheepfly.media.common.form.filter;
+package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.ProPaginationForm;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 目录过滤器。
@@ -12,7 +11,7 @@ import java.util.Date;
  * @author wrote-code
  */
 @Data
-public class DirectoryFilter extends ProPaginationForm implements Serializable {
+public class DirectoryParam extends ProPaginationForm implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**

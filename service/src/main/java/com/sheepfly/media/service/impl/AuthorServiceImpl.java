@@ -6,7 +6,7 @@ import com.sheepfly.media.dataaccess.mapper.AuthorMapper;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.form.filter.AuthorFilter;
+import com.sheepfly.media.common.form.param.AuthorParam;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.service.base.IAuthorService;
@@ -35,8 +35,8 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
 
     @Override
     public ProTableObject<AuthorVo> queryForAuthorList(
-            ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo) throws BusinessException {
-        AuthorFilter params = vo.getParams();
+            ProComponentsRequestVo<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
+        AuthorParam params = vo.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<AuthorVo> authorList = mapper.queryAuthorVoList(vo);
         return ProTableObject.success(authorList, page.getTotal());
