@@ -1,6 +1,6 @@
 package com.sheepfly.media.common.form.param;
 
-import com.sheepfly.media.common.http.ProPaginationForm;
+import com.sheepfly.media.common.http.TablePagination;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author wrote-code
  */
 @Data
-public class DirectoryParam extends ProPaginationForm implements Serializable {
+public class DirectoryParam extends TablePagination implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**

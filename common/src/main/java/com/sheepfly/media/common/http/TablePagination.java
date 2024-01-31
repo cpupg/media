@@ -9,13 +9,13 @@ package com.sheepfly.media.common.http;
  *
  * @author sheepfly
  */
-public class ProPaginationForm {
+public class TablePagination {
     private int pageSize;
     private int current;
 
     @Override
     public String toString() {
-        return "ProPaginationForm{" + "pageSize=" + pageSize + ", current=" + current + '}';
+        return "TablePagination{" + "pageSize=" + pageSize + ", current=" + current + '}';
     }
 
     public int getPageSize() {

@@ -1,6 +1,6 @@
 package com.sheepfly.media.common.form.param;
 
-import com.sheepfly.media.common.http.ProPaginationForm;
+import com.sheepfly.media.common.http.TablePagination;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class TagReferenceParam extends ProPaginationForm {
+public class TagReferenceParam extends TablePagination {
     private String id;
     private String resourceId;
     private String tagId;
