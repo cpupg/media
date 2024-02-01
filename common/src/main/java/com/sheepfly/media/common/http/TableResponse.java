@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ProTableObject<T> {
+public class TableResponse<T> {
     private static final String QUERY_SUCCESS = "查询数据成功";
     /**
      * 当前页。
@@ -33,17 +33,17 @@ public class ProTableObject<T> {
     private String message;
     private boolean success;
 
-    public ProTableObject() {
+    public TableResponse() {
     }
 
-    public ProTableObject(Long total, List<T> data) {
+    public TableResponse(Long total, List<T> data) {
         this.total = total;
         this.data = data;
         this.success = true;
         this.message = QUERY_SUCCESS;
     }
 
-    public ProTableObject(String message) {
+    public TableResponse(String message) {
         this.success = false;
         this.message = message;
     }
@@ -57,11 +57,11 @@ public class ProTableObject<T> {
      *
      * @return 查询结果。
      */
-    public static <T> ProTableObject success(List<T> list, Long total) {
-        return new ProTableObject<>(total, list);
+    public static <T> TableResponse success(List<T> list, Long total) {
+        return new TableResponse<>(total, list);
     }
 
-    public static <T> ProTableObject fail(String message) {
-        return new ProTableObject(message);
+    public static <T> TableResponse fail(String message) {
+        return new TableResponse(message);
     }
 }

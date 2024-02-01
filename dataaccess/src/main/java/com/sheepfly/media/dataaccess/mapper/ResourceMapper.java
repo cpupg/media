@@ -1,7 +1,7 @@
 package com.sheepfly.media.dataaccess.mapper;
 
-import com.sheepfly.media.common.form.filter.ResourceFilter;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,7 +26,7 @@ public interface ResourceMapper {
      *
      * @return 资源列表。
      */
-    List<ResourceVo> selectResourceVoList(ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> form);
+    List<ResourceVo> selectResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form);
 
     List<TagReferenceVo> selectTagReferenceByResourceId(String resourceId);
 

@@ -4,8 +4,8 @@ import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.mapper.TagReferenceMapper;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
@@ -28,12 +28,12 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
     private TagReferenceRepository repository;
 
     @Override
-    public ProTableObject<TagReferenceVo> queryTagReferenceList(
-            ProComponentsRequestVo<Object, TagReferenceParam, Object> form) {
+    public TableResponse<TagReferenceVo> queryTagReferenceList(
+            TableRequest<Object, TagReferenceParam, Object> form) {
         TagReferenceParam param = form.getParams();
         Page<Object> page = PageMethod.startPage(param.getCurrent(), param.getPageSize());
         List<TagReferenceVo> list = mapper.queryTagReferenceList(form);
-        return ProTableObject.success(list, page.getTotal());
+        return TableResponse.success(list, page.getTotal());
     }
 
 

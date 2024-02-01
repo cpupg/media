@@ -1,8 +1,8 @@
 package com.sheepfly.media.service.base;
 
-import com.sheepfly.media.common.form.filter.ResourceFilter;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.service.ServiceTestConfiguration;
@@ -22,12 +22,12 @@ public class IResourceServiceTest {
 
     @Test
     public void createAndDeleteTagReference() {
-        ResourceFilter filter = new ResourceFilter();
+        ResourceParam filter = new ResourceParam();
         filter.setCurrent(1);
         filter.setPageSize(1);
-        ProComponentsRequestVo<ResourceFilter, ResourceFilter, Object> req = new ProComponentsRequestVo<>();
+        TableRequest<ResourceParam, ResourceParam, Object> req = new TableRequest<>();
         req.setParams(filter);
-        ProTableObject<ResourceVo> obj = service.queryResourceVoList(req);
+        TableResponse<ResourceVo> obj = service.queryResourceVoList(req);
         ResourceVo resourceVo = obj.getData().get(0);
         TagReference tagReference = service.createResourceTag(resourceVo.getId(), "测试用例");
         System.out.println(tagReference);

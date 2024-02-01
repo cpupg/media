@@ -2,7 +2,7 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.form.data.TagData;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.mapper.TagMapper;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
@@ -24,9 +24,9 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
     private TagReferenceRepository trfRepository;
 
     @Override
-    public ProTableObject<TagVo> queryTagList(TagData tagData) {
+    public TableResponse<TagVo> queryTagList(TagData tagData) {
         List<TagVo> list = mapper.queryTagListBy(tagData);
-        return ProTableObject.success(list, (long) list.size());
+        return TableResponse.success(list, (long) list.size());
     }
 
 }

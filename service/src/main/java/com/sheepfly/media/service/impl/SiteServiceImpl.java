@@ -6,13 +6,13 @@ import com.sheepfly.media.dataaccess.mapper.SiteMapper;
 import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.SiteData;
-import com.sheepfly.media.common.form.filter.SiteFilter;
+import com.sheepfly.media.common.form.param.SiteParam;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
 import com.sheepfly.media.service.base.ISiteService;
 import com.sheepfly.media.common.exception.ErrorCode;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
-import com.sheepfly.media.common.http.ProTableObject;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +40,11 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
     private SiteMapper mapper;
 
     @Override
-    public ProTableObject<Site> querySiteList(ProComponentsRequestVo<Object, SiteFilter, Object> vo) {
-        SiteFilter form = vo.getParams();
+    public TableResponse<Site> querySiteList(TableRequest<Object, SiteParam, Object> vo) {
+        SiteParam form = vo.getParams();
         Page<Object> page = PageHelper.startPage(form.getCurrent(), form.getPageSize());
         List<Site> siteList = mapper.querySiteList(form);
-        return ProTableObject.success(siteList, page.getTotal());
+        return TableResponse.success(siteList, page.getTotal());
     }
 
     @Override

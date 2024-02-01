@@ -21,7 +21,7 @@
   </sql>
 
   <select id="selectResourceVoList"
-      parameterType="com.sheepfly.media.common.http.ProComponentsRequestVo"
+      parameterType="com.sheepfly.media.common.http.TableRequest"
       resultMap="ResourceVo">
     select res.id,
       dir.path as dir,

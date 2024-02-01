@@ -2,9 +2,9 @@ package com.sheepfly.media.dataaccess.mapper;
 
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.form.filter.AuthorFilter;
+import com.sheepfly.media.common.form.param.AuthorParam;
 import com.sheepfly.media.dataaccess.vo.AuthorVo;
-import com.sheepfly.media.common.http.ProComponentsRequestVo;
+import com.sheepfly.media.common.http.TableRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public interface AuthorMapper {
      *
      * @throws BusinessException 业务异常。
      */
-    List<Author> queryAuthorList(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo)
+    List<Author> queryAuthorList(TableRequest<AuthorParam, AuthorParam, AuthorParam> vo)
             throws BusinessException;
 
     /**
@@ -40,10 +40,10 @@ public interface AuthorMapper {
      *
      * @throws BusinessException 业务异常。
      */
-    List<AuthorVo> queryAuthorVoList(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo)
+    List<AuthorVo> queryAuthorVoList(TableRequest<AuthorParam, AuthorParam, AuthorParam> vo)
             throws BusinessException;
 
-    int queryAuthorVoCount(ProComponentsRequestVo<AuthorFilter, AuthorFilter, AuthorFilter> vo);
+    int queryAuthorVoCount(TableRequest<AuthorParam, AuthorParam, AuthorParam> vo);
 
 
 }
