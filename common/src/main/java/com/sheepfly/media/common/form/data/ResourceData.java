@@ -16,6 +16,11 @@ import java.io.Serializable;
 @Data
 public class ResourceData implements Serializable {
     /**
+     * 资源标识。
+     */
+    @Length(max = 90)
+    private String id;
+    /**
      * 文件名。
      */
     @NotNull(message = "{entity.resource.filename.notNull}")

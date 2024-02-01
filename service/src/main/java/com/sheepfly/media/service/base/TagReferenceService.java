@@ -18,4 +18,22 @@ public interface TagReferenceService extends BaseJpaService<TagReference, String
 
 
     TagReference addTag(String tagId, String resourceId);
+
+    /**
+     * 获取资源评分，如果没有评分，返回-1。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 评分。
+     */
+    int getRate(String resourceId);
+
+    /**
+     * 获取收藏状态。已收藏返回true，否则返回false。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 收藏状态。
+     */
+    boolean getFavorite(String resourceId);
 }

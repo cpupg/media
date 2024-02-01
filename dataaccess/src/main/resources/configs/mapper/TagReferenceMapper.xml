@@ -30,4 +30,22 @@
       and tag.name = '收藏'
     </if>
   </select>
+  <select id="queryFavorite" resultMap="tagReferenceVo" parameterType="string">
+    select tf.id, tf.RESOURCE_ID, tf.TAG_ID, tag.NAME as tag_name
+    from media.TAG_REFERENCE tf
+           left join media.tag tag
+                     on tag.id = tf.TAG_ID
+    where 1=1
+      and tf.RESOURCE_ID = #{resourceId}
+      and tag.name = '收藏'
+  </select>
+  <select id="queryRate" resultMap="tagReferenceVo" parameterType="string">
+    select tf.id, tf.RESOURCE_ID, tf.TAG_ID, tag.NAME as tag_name
+    from media.TAG_REFERENCE tf
+           left join media.tag tag
+                     on tag.id = tf.TAG_ID
+    where 1=1
+      and tf.RESOURCE_ID = #{resourceId}
+      and tag.name in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
+  </select>
 </mapper>
