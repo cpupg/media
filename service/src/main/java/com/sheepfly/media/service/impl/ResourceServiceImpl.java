@@ -49,27 +49,33 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Autowired
     private TagReferenceRepository tagReferenceRepository;
     @Autowired
+    private TagReferenceService trfService;
+    @Autowired
     private Snowflake snowflake;
 
     @Autowired
     private ResourceMapper resourceMapper;
 
     @Override
-    public TableResponse<ResourceVo> queryResourceVoList(
-            TableRequest<ResourceParam, ResourceParam, Object> form) {
+    public TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form) {
         ResourceParam params = form.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
-        // todo 1+n查询方案优化
-        // todo 临时优化：生产环境标签多，查询时只返回3个以优化性能
         for (int i = 0; i < list.size(); i++) {
             ResourceVo vo = list.get(i);
+            String id = vo.getId();
+
+            // todo 1+n查询方案优化
+            // todo 临时优化：生产环境标签多，查询时只返回3个以优化性能
             if (i >= 5) {
                 vo.setTagReferenceVoList(Collections.emptyList());
             }
-            vo.setTagReferenceVoList(queryTagReferenceByResourceIdAndCount(vo.getId()));
-            long count = tagReferenceRepository.count((r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), vo.getId()));
+            vo.setTagReferenceVoList(queryTagReferenceByResourceIdAndCount(id));
+            long count = tagReferenceRepository.count(
+                    (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
             vo.setTagCount(count);
+            vo.setFavorite(trfService.getFavorite(id));
+            vo.setRate(trfService.getRate(id));
         }
         return TableResponse.success(list, page.getTotal());
     }

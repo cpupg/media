@@ -64,4 +64,12 @@ public class ResourceVo implements Serializable {
      * 标签数量。
      */
     private Long tagCount;
+    /**
+     * 收藏。
+     */
+    private boolean favorite;
+    /**
+     * 评分。
+     */
+    private int rate;
 }
