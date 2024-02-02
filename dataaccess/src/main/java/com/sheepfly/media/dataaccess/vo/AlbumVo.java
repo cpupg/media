@@ -1,30 +1,36 @@
 package com.sheepfly.media.dataaccess.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 专辑。
  *
- * @author sheepfly
+ * @author wrote-code
  */
+@Getter
+@Setter
+@ToString
 public class AlbumVo implements Serializable {
     private static final long serialVersionUID = 1L;
-
     /**
-     * ID
+     * 主键
      */
     private String id;
 
     /**
-     * 专辑
+     * 专辑名称
      */
-    private String albumName;
+    private String name;
 
     /**
-     * 专辑作者
+     * 删除状态
      */
-    private AuthorVo authorVo;
+    private Integer deleteStatus;
 
     /**
      * 创建时间
@@ -36,54 +42,8 @@ public class AlbumVo implements Serializable {
      */
     private Date updateTime;
 
-    @Override
-    public String toString() {
-        return "AlbumVo{" +
-                "id='" + id + '\'' +
-                ", albumName='" + albumName + '\'' +
-                ", authorVo=" + authorVo +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAlbumName() {
-        return albumName;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
-
-    public AuthorVo getAuthorVo() {
-        return authorVo;
-    }
-
-    public void setAuthorVo(AuthorVo authorVo) {
-        this.authorVo = authorVo;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+    /**
+     * 删除时间
+     */
+    private Date deleteTime;
 }
