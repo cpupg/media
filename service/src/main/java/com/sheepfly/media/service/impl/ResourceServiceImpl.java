@@ -132,8 +132,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
         log.info("删除资源{}的标签");
-        List<TagReference> list = tagReferenceRepository.findAll(
-                (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
         long l = tagReferenceRepository.deleteByResourceId(id);
         log.info("删除{}个标签", l);
         return findById(id);

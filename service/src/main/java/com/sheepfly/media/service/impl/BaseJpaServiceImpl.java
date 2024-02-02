@@ -1,7 +1,6 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.BusinessRunTimeException;
 import com.sheepfly.media.common.exception.ErrorCode;
@@ -16,10 +15,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
-import java.util.Optional;
 
 @Slf4j
-public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
+public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
         implements BaseJpaService<T, ID, D> {
     @Autowired
     private D d;
@@ -28,7 +26,6 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
 
     @Override
     public T findById(ID id) {
-        Optional<T> byId = d.findById(id);
         return d.findById(id).orElse(null);
     }
 
@@ -37,8 +34,11 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
         if (t.getId() == null) {
             t.setId(snowflake.nextIdStr());
         }
-        if (t.getDeleteStatus() == null) {
-            t.setDeleteStatus(Constant.NOT_DELETED);
+        if (t instanceof LogicDelete) {
+            LogicDelete e = (LogicDelete) t;
+            if (e.getDeleteStatus() == null) {
+                e.setDeleteStatus(LogicDelete.NOT_DELETED);
+            }
         }
         return d.save(t);
     }
@@ -74,8 +74,12 @@ public class BaseJpaServiceImpl<T extends EntityInterface & LogicDelete, ID, D e
     public T logicDeleteById(ID id, Class<T> clazz) {
         try {
             T t = d.findById(id).orElse(null);
+            if (!(t instanceof LogicDelete)) {
+                throw new BusinessRunTimeException(ErrorCode.LOGIC_DELETE_NOT_SUPPORT);
+            }
             t.setUpdateTime(new Date());
-            t.setDeleteStatus(LogicDelete.DELETED);
+            LogicDelete e = (LogicDelete) t;
+            e.setDeleteStatus(LogicDelete.DELETED);
             return d.save(t);
         } catch (Exception e) {
             throw new BusinessRunTimeException(ErrorCode.LOGIC_DELETE_CREATE_FAIL, e);

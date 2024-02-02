@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  *
  * @author sheepfly
  */
-public interface BaseJpaService<T extends EntityInterface & LogicDelete, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>> {
+public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>> {
     /**
      * 根据id查找数据。
      *

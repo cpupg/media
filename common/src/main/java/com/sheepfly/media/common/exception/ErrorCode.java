@@ -172,6 +172,7 @@ public enum ErrorCode {
      * 逻辑删除失败：调用反射创建实例失败。
      */
     LOGIC_DELETE_CREATE_FAIL("Z0103001", "逻辑删除失败：创建实例失败"),
+    LOGIC_DELETE_NOT_SUPPORT("Z0103002", "目标实例不支持逻辑删除"),
     /**
      * 未知错误，请联系管理员。
      */
