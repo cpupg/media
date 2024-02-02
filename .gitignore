@@ -1,38 +1,11 @@
-# sqlite
-database.sqlite
+#idea
+**/.idea
+**/*.iml
+**/out
 
-# idea
-.idea
-*.iml
+#maven
+**/target
 
-# maven
-target
-
-# other
-**/Application.java
-**/ApplicationTest.java
-**/App.java
-**/AppTest.java
-**/SpringApplicationTest.java
-**/SpringApp.java
-**/SpringTest.java
-src/main/resources/static
-
-# 忽略数据源配置，防止泄露数据库
-datasource.properties
-*.db
-
-.jpb
-
-# logs
-logs/
-upload
-
-# 其他
-todo.txt
-dev-package.bat
-# 通过工作流或脚本生成，不需要提交到仓库中
-media-application.properties
-
-# 本地启动数据库用，不需要提交道仓库
-bin
+#项目运行
+**/logs
+data/
