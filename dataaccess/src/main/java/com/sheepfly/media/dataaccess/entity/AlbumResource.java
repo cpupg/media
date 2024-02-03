@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@Entity
 public class AlbumResource implements Serializable, LogicDelete, EntityInterface {
     private static final long serialVersionUID = 1L;
     /**

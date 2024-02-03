@@ -4,8 +4,10 @@ import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -18,6 +20,8 @@ import java.util.Date;
  */
 @Table(name = "ALBUM", schema = "MEDIA")
 @Getter
+@Entity
+@ToString
 @Setter
 public class Album implements Serializable, EntityInterface, LogicDelete {
     private static final long serialVersionUID = 1L;
