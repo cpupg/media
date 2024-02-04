@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.AlbumMapper">
 
-    <resultMap id="BaseResultMap" type="com.sheepfly.media.dataaccess.entity.Album">
-            <id property="id" column="ID" jdbcType="VARCHAR"/>
-            <result property="name" column="NAME" jdbcType="VARCHAR"/>
-            <result property="deleteStatus" column="DELETE_STATUS" jdbcType="TINYINT"/>
-            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
-            <result property="deleteTime" column="DELETE_TIME" jdbcType="TIMESTAMP"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.sheepfly.media.dataaccess.entity.Album">
+    <id property="id" column="ID" jdbcType="VARCHAR"/>
+    <result property="name" column="NAME" jdbcType="VARCHAR"/>
+    <result property="deleteStatus" column="DELETE_STATUS" jdbcType="TINYINT"/>
+    <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="deleteTime" column="DELETE_TIME" jdbcType="TIMESTAMP"/>
+  </resultMap>
 
-    <sql id="Base_Column_List">
-        ID,NAME,DELETE_STATUS,
+  <sql id="Base_Column_List">
+    ID,NAME,DELETE_STATUS,
         CREATE_TIME,UPDATE_TIME,DELETE_TIME
-    </sql>
+  </sql>
 </mapper>
