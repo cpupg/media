@@ -9,4 +9,7 @@
     <setting name="mapUnderscoreToCamelCase" value="true"/>
     <setting name="defaultStatementTimeout" value="10"/>
   </settings>
+  <typeAliases>
+    <typeAlias type="com.sheepfly.media.common.http.TableRequest" alias="TableRequest"/>
+  </typeAliases>
 </configuration>
