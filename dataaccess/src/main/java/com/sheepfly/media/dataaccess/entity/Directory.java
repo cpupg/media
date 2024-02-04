@@ -1,6 +1,7 @@
 package com.sheepfly.media.dataaccess.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,9 @@ import java.util.Date;
 /**
  * 资源目录
  */
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(schema = "MEDIA", name = "DIRECTORY",
         indexes = {@Index(

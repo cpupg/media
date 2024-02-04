@@ -1,7 +1,8 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -10,7 +11,9 @@ import java.io.Serializable;
  *
  * @author sheepfly
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class ResourceParam extends TablePagination implements Serializable {
     /**
      * 文件名。

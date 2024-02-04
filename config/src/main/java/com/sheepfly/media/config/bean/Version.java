@@ -1,13 +1,16 @@
 package com.sheepfly.media.config.bean;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 /**
  * 应用版本。
  *
  * @author wrote-code
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class Version {
     /**
      * 主版本号。

@@ -1,13 +1,16 @@
 package com.sheepfly.media.cli.config;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 /**
  * 扫描指定目录的配置。
  *
  * @author wrote-code
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class LoadDirectoryConfig implements TaskConfig {
     /**
      * 要扫描的目录。
