@@ -1,7 +1,8 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,7 +12,9 @@ import java.util.Date;
  *
  * @author wrote-code
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class AuthorParam extends TablePagination implements Serializable {
     /**
      * ID

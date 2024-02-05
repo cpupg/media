@@ -5,13 +5,15 @@ package com.sheepfly.media.common.http;
  *
  * <p>报表页面查询Form可以继承这个类。</p>
  *
+ * <p>分页参数增加了默认值，防止全表查询。</p>
+ *
  * @param <T> 查询参数，用来做过滤，搜索和排序。
  *
  * @author sheepfly
  */
 public class TablePagination {
-    private int pageSize;
-    private int current;
+    private int pageSize = 20;
+    private int current = 1;
 
     @Override
     public String toString() {

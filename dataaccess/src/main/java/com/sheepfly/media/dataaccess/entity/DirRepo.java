@@ -2,7 +2,8 @@ package com.sheepfly.media.dataaccess.entity;
 
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,9 @@ import java.util.Date;
 /**
  * 仓库表
  */
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "MEDIA.DIR_REPO", indexes = {@Index(name = "MEDIA.DIR_REPO_1", columnList = "DIR_CODE", unique = true)})
 public class DirRepo implements Serializable, LogicDelete, EntityInterface {

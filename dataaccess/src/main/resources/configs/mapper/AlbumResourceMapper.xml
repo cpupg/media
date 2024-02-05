@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sheepfly.media.dataaccess.mapper.AlbumResourceMapper">
+
+  <resultMap id="BaseResultMap" type="com.sheepfly.media.dataaccess.entity.AlbumResource">
+    <id property="id" column="ID" jdbcType="VARCHAR"/>
+    <result property="albumId" column="ALBUM_ID" jdbcType="VARCHAR"/>
+    <result property="resourceId" column="RESOURCE_ID" jdbcType="VARCHAR"/>
+    <result property="deleteStatus" column="DELETE_STATUS" jdbcType="TINYINT"/>
+    <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="deleteTime" column="DELETE_TIME" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID,ALBUM_ID,RESOURCE_ID,
+        DELETE_STATUS,CREATE_TIME,UPDATE_TIME,
+        DELETE_TIME
+  </sql>
+
+  <select id="selectAlbumResourceList" parameterType="TableRequest"
+      resultType="com.sheepfly.media.dataaccess.vo.AlbumResourceVo">
+    select ar.ID,
+      ar.ALBUM_ID,
+      a.name as album_name,
+      ar.RESOURCE_ID,
+      res.filename as resource_name,
+      dir.path as resource_dir
+    from media.ALBUM_RESOURCE ar
+           LEFT JOIN MEDIA.RESOURCE res
+                     on ar.RESOURCE_ID = res.ID
+           left join media.album a
+                     on ar.ALBUM_ID = a.ID
+           left join media.directory dir
+                     on res.dir_code = dir.dir_code
+    where ar.DELETE_STATUS = 0
+    <if test="params.resourceId != null and params.resourceId != ''">and ar.RESOURCE_ID = #{params.resourceId}</if>
+    <if test="params.albumName != null and params.albumName != ''">
+      and a.name like '%' || #{params.albumName} || '%'
+    </if>
+    order by ar.CREATE_TIME desc
+  </select>
+</mapper>

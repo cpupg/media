@@ -3,7 +3,8 @@ package com.sheepfly.media.dataaccess.entity;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,57 +14,58 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>
- * 站点
- * </p>
+ * 资源专辑
  *
- * @author sheepfly
- * @since 2022-02-07
+ * @TableName ALBUM_RESOURCE
  */
-@Entity
-@Table(schema = "MEDIA", name = "SITE")
+@Table(name = "ALBUM_RESOURCE", schema = "MEDIA")
 @Getter
 @Setter
 @ToString
-public class Site implements Serializable, EntityInterface, LogicDelete {
-
+@Entity
+public class AlbumResource implements Serializable, LogicDelete, EntityInterface {
     private static final long serialVersionUID = 1L;
-
     /**
-     * ID
+     * 主键
      */
     @Id
+    @Column(name = "ID")
     private String id;
 
     /**
-     * 网站名称
+     *
      */
-    @Column(name = "SITE_NAME", nullable = false, length = 90)
-    private String siteName;
+    @Column(name = "ALBUM_ID")
+    private String albumId;
 
     /**
-     * 网站地址
+     *
      */
-    @Column(name = "URL", nullable = false, length = 90)
-    private String url;
+    @Column(name = "RESOURCE_ID")
+    private String resourceId;
+
+    /**
+     * 删除状态
+     */
+    @Column(name = "DELETE_STATUS")
+    private Integer deleteStatus;
 
     /**
      * 创建时间
      */
-    @Column(name = "CREATE_TIME", nullable = false)
+    @Column(name = "CREATE_TIME")
     private Date createTime;
 
     /**
-     * 更细时间
+     * 更新时间
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
 
     /**
-     * 是否有效，用于逻辑删除。
-     *
-     * 0未删除1已删除。
+     * 删除时间
      */
-    @Column(name = "DELETE_STATUS", insertable = false)
-    private Integer deleteStatus;
+    @Column(name = "DELETE_TIME")
+    private Date deleteTime;
+
 }

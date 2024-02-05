@@ -197,6 +197,12 @@
       <artifactId>commons-cli</artifactId>
       <version>1.5.0</version>
     </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.5</version>
+    </dependency>
+
     <!--apache commons结束-->
 
     <!--数据库开始-->
