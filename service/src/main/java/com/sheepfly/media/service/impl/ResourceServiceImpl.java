@@ -5,20 +5,24 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.BusinessRunTimeException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
+import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
 import com.sheepfly.media.dataaccess.repository.TagRepository;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import org.slf4j.Logger;
@@ -52,6 +56,10 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     private TagReferenceService trfService;
     @Autowired
     private Snowflake snowflake;
+    @Autowired
+    private AlbumService albumService;
+    @Autowired
+    private AlbumResourceRepository arRepository;
 
     @Autowired
     private ResourceMapper resourceMapper;
@@ -124,6 +132,22 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(String resourceId) {
         return resourceMapper.queryTagReferenceByResourceIdAndCount(resourceId, 5);
+    }
+
+    @Override
+    public AlbumResource setAlbum(String resourceId, String albumId) {
+        if (!logicExistById(resourceId)) {
+            throw new BusinessRunTimeException(ErrorCode.RES_RA_RES_NOT_EXISTS);
+        }
+        if (!albumService.logicExistById(albumId)) {
+            throw new BusinessRunTimeException(ErrorCode.RES_RA_ALBUM_EXISTS);
+        }
+        AlbumResource ar = new AlbumResource();
+        ar.setId(snowflake.nextIdStr());
+        ar.setResourceId(resourceId);
+        ar.setAlbumId(albumId);
+        ar.setCreateTime(new Date());
+        return arRepository.saveAndFlush(ar);
     }
 
     @Override

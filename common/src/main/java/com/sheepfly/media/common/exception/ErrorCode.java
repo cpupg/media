@@ -98,6 +98,8 @@ public enum ErrorCode {
     RES_TAG_NAME_CANT_NULL("E0202003", "标签名称不能为空"),
     RES_TAG_NOT_FOUND("E0202004", "标签不存在"),
     RES_DONT_HAVE_THIS_TAG("E0202005", "指定资源没有设置此标签"),
+    RES_RA_RES_NOT_EXISTS("E0202006", "无法为不存在的资源设置专辑"),
+    RES_RA_ALBUM_EXISTS("E0202007", "无法为资源设置不存在的专辑"),
     /*
      * 模块[资源][res]结束[203]
      ***************************************************************************
