@@ -40,6 +40,13 @@ public class BusinessExceptionHandler {
         return ResponseData.fail(e.getError());
     }
 
+    @ResponseBody
+    @ExceptionHandler(BusinessRunTimeException.class)
+    public ResponseData<BusinessException> handleBusinessRuntimeException(BusinessException e) {
+        log.error("发生业务异常", e);
+        return ResponseData.fail(e.getError());
+    }
+
     /**
      * 解析捕捉到的非业务异常（未知异常）。
      *
