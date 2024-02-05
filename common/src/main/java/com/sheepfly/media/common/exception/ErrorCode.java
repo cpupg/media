@@ -42,7 +42,7 @@ public enum ErrorCode {
     /**
      * 操作成功。
      */
-    OPERATION_SUCCESS("E0000000", "操作成功"),
+    OPERATION_SUCCESS("00000000", "操作成功"),
     /**
      * 用户未登录。
      */
