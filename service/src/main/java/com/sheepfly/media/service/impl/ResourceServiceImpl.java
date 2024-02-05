@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -143,9 +144,13 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             throw new BusinessException(ErrorCode.RES_RA_ALBUM_EXISTS);
         }
         AlbumResource ar = new AlbumResource();
-        ar.setId(snowflake.nextIdStr());
         ar.setResourceId(resourceId);
         ar.setAlbumId(albumId);
+        ExampleMatcher matcher = ExampleMatcher.matchingAll();
+        if (arRepository.count(Example.of(ar, matcher)) > 0) {
+            throw new BusinessException(ErrorCode.RES_RA_NOT_REPEATED_AR);
+        }
+        ar.setId(snowflake.nextIdStr());
         ar.setCreateTime(new Date());
         ar.setDeleteStatus(LogicDelete.NOT_DELETED);
         return arRepository.saveAndFlush(ar);
