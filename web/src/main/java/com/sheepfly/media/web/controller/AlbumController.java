@@ -1,5 +1,6 @@
 package com.sheepfly.media.web.controller;
 
+import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
@@ -12,6 +13,7 @@ import com.sheepfly.media.dataaccess.vo.AlbumVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +39,13 @@ public class AlbumController {
     }
 
     @PostMapping("/addAlbum")
-    public ResponseData<Album> addAlbum(@RequestParam String albumName) {
+    public ResponseData<Album> addAlbum(@RequestParam String albumName) throws BusinessException {
+        if (StringUtils.isEmpty(albumName)) {
+            throw new BusinessException(ErrorCode.ALBUM_EMPTY_NAME);
+        }
+        if (albumName.length() > 32) {
+            throw new BusinessException(ErrorCode.TAG_NAME_TOO_LONG);
+        }
         Album album = new Album();
         album.setName(albumName);
         if (service.checkRepeat(album)) {
