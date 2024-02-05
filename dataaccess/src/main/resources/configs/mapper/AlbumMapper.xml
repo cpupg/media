@@ -17,4 +17,12 @@
     ID,NAME,DELETE_STATUS,
         CREATE_TIME,UPDATE_TIME,DELETE_TIME
   </sql>
+
+  <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.dataaccess.vo.AlbumVo">
+    select <include refid="Base_Column_List"/>
+    from media.ALBUM
+    <if test="params.albumName != null and params.albumName != ''">
+      where name like '%' || #{params.albumName} || '%'
+    </if>
+  </select>
 </mapper>

@@ -1,8 +1,11 @@
 package com.sheepfly.media.web.controller;
 
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
+import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.http.ResponseData;
+import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.vo.AlbumVo;
@@ -28,8 +31,9 @@ public class AlbumController {
     private AlbumResourceService arService;
 
     @PostMapping("/queryAlbumList")
-    public TableResponse<AlbumVo> queryAlbumList(@RequestBody AlbumParam albumParam) {
-        return null;
+    public TableResponse<AlbumVo> queryAlbumList(
+            @RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
+        return service.queryAlbumList(tableRequest);
     }
 
     @PostMapping("/addAlbum")
