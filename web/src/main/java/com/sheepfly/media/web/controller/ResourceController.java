@@ -212,5 +212,12 @@ public class ResourceController {
         AlbumResource albumResource = service.setAlbum(resourceId, albumId);
         return ResponseData.success(albumResource);
     }
+
+    @PostMapping("/unsetAlbum")
+    public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
+        log.info("移除专辑和资源关联关系{}", albumResourceId);
+        AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
+        return ResponseData.success(albumResource);
+    }
 }
 

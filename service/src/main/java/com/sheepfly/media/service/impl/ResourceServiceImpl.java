@@ -5,7 +5,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
-import com.sheepfly.media.common.exception.BusinessRunTimeException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.TableRequest;
@@ -15,6 +14,7 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.entity.TagReference_;
+import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
@@ -135,18 +135,19 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
-    public AlbumResource setAlbum(String resourceId, String albumId) {
+    public AlbumResource setAlbum(String resourceId, String albumId) throws BusinessException {
         if (!logicExistById(resourceId)) {
-            throw new BusinessRunTimeException(ErrorCode.RES_RA_RES_NOT_EXISTS);
+            throw new BusinessException(ErrorCode.RES_RA_RES_NOT_EXISTS);
         }
         if (!albumService.logicExistById(albumId)) {
-            throw new BusinessRunTimeException(ErrorCode.RES_RA_ALBUM_EXISTS);
+            throw new BusinessException(ErrorCode.RES_RA_ALBUM_EXISTS);
         }
         AlbumResource ar = new AlbumResource();
         ar.setId(snowflake.nextIdStr());
         ar.setResourceId(resourceId);
         ar.setAlbumId(albumId);
         ar.setCreateTime(new Date());
+        ar.setDeleteStatus(LogicDelete.NOT_DELETED);
         return arRepository.saveAndFlush(ar);
     }
 

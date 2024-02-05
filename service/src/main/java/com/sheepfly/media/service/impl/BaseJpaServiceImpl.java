@@ -9,6 +9,8 @@ import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.service.base.BaseJpaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -104,5 +106,12 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
         };
         long count = d.count(specification);
         return count > 0;
+    }
+
+    @Override
+    public boolean checkRepeat(T t) {
+        ExampleMatcher matcher = ExampleMatcher.matchingAll();
+        Example<T> e = Example.of(t, matcher);
+        return d.count(e) > 0;
     }
 }

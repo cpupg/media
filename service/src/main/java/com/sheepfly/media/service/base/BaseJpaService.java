@@ -112,4 +112,13 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @return 存在时返回true。
      */
     boolean logicExistById(ID id);
+
+    /**
+     * 检查要保存的实体是否重复，如果重复，返回true，否则返回false。
+     *
+     * @param t 去重参数。
+     *
+     * @return 是否重复。
+     */
+    boolean checkRepeat(T t);
 }
