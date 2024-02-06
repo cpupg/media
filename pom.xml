@@ -20,7 +20,7 @@
 
   <groupId>com.sheepfly.media</groupId>
   <artifactId>media</artifactId>
-  <version>0.5.5</version>
+  <version>0.6.0</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -30,7 +30,7 @@
     <project.report.outputEncoding>UTF-8</project.report.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <version.media>0.5.5</version.media>
+    <version.media>0.6.0</version.media>
   </properties>
 
   <dependencyManagement>
@@ -197,6 +197,12 @@
       <artifactId>commons-cli</artifactId>
       <version>1.5.0</version>
     </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.5</version>
+    </dependency>
+
     <!--apache commons结束-->
 
     <!--数据库开始-->

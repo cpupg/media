@@ -4,7 +4,8 @@ import com.sheepfly.media.common.util.BeanCopier;
 import com.sheepfly.media.dataaccess.entity.baseinterface.Copy;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +23,9 @@ import java.util.Date;
  * @since 2022-02-07
  */
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @Table(schema = "MEDIA", name = "RESOURCE")
 public class Resource implements Serializable, EntityInterface, LogicDelete, Copy {
 

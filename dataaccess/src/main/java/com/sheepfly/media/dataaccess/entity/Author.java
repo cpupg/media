@@ -2,7 +2,8 @@ package com.sheepfly.media.dataaccess.entity;
 
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,9 @@ import java.util.Date;
  */
 @Table(schema = "MEDIA", name = "AUTHOR")
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 public class Author implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;

@@ -28,8 +28,7 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
     private TagReferenceRepository repository;
 
     @Override
-    public TableResponse<TagReferenceVo> queryTagReferenceList(
-            TableRequest<Object, TagReferenceParam, Object> form) {
+    public TableResponse<TagReferenceVo> queryTagReferenceList(TableRequest<Object, TagReferenceParam, Object> form) {
         TagReferenceParam param = form.getParams();
         Page<Object> page = PageMethod.startPage(param.getCurrent(), param.getPageSize());
         List<TagReferenceVo> list = mapper.queryTagReferenceList(form);
@@ -46,5 +45,18 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
         tagReference.setReferenceType(TagReferenceService.REF_TYPE_RESOURCE);
         tagReference.setReferTime(new Date());
         return repository.saveAndFlush(tagReference);
+    }
+
+    @Override
+    public int getRate(String resourceId) {
+        TagReferenceVo trf = mapper.queryRate(resourceId);
+        // note trf表是逻辑删除，trf.getTagVo() == null?
+        return trf == null ? -1 : Integer.parseInt(trf.getTagVo().getName());
+    }
+
+    @Override
+    public boolean getFavorite(String resourceId) {
+        TagReferenceVo trf = mapper.queryFavorite(resourceId);
+        return trf != null;
     }
 }

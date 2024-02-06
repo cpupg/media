@@ -17,5 +17,7 @@
 
 ## cicd/代码扫描/代码规范
 
+- [ ] BaseJpaService增加基础方法。
+- [ ] service中只能注入自己的仓库和mapper，查询其他表需要注入service而不能注入mapper和repository。
 - [x] 将form包的类移动到params包。
 - [x] 接收前台请求的类型改动：增加sort包接收排序参数，param包接收查询参数，data包接收其他参数，filter包接收表头过滤参数。

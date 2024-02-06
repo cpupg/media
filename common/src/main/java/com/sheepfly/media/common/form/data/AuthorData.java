@@ -1,6 +1,7 @@
 package com.sheepfly.media.common.form.data;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
@@ -15,7 +16,9 @@ import java.io.Serializable;
  * @author wrote-code
  * @since 2022.10.18
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class AuthorData implements Serializable {
 
     private static final long serialVersionUID = 1L;

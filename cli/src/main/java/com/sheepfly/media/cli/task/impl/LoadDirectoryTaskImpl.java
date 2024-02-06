@@ -346,6 +346,7 @@ public class LoadDirectoryTaskImpl implements Task {
             resource.setId(snowflake.nextIdStr());
             try {
                 BeanUtils.copyProperties(resource, resourceData);
+                resourceData.setDir("");
                 Set<ConstraintViolation<ResourceData>> result = validator.validate(resourceData);
                 if (!result.isEmpty()) {
                     log.warn("资源保存失败:{} -> {}", resource.getFilename(), parent);

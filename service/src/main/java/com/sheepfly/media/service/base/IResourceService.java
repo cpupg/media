@@ -4,6 +4,7 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
@@ -73,4 +74,14 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @return 标签列表。
      */
     List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(String resourceId);
+
+    /**
+     * 给资源设置专辑。
+     *
+     * @param resourceId 资源标识。
+     * @param albumId 专辑标识。
+     *
+     * @return 关联对象。
+     */
+    AlbumResource setAlbum(String resourceId, String albumId) throws BusinessException;
 }

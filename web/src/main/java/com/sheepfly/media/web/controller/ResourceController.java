@@ -5,19 +5,25 @@ import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.ResourceData;
+import com.sheepfly.media.common.form.filter.AlbumFilter;
+import com.sheepfly.media.common.form.param.AlbumParam;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.sort.AlbumSort;
+import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
-import com.sheepfly.media.common.http.ResponseData;
+import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
+import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.vo.TagVo;
+import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
@@ -65,6 +71,8 @@ public class ResourceController {
     private TagService tagService;
     @Autowired
     private TagReferenceService tagReferenceService;
+    @Autowired
+    private AlbumResourceService arService;
 
     @PostMapping("/queryResourceList")
     public TableResponse<ResourceVo> queryResourceList(
@@ -173,7 +181,7 @@ public class ResourceController {
         Tag tag = tagService.findById(tagReference.getTagId());
         if (tag == null) {
             log.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
-            ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
+            return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
         }
         TagVo tagVo = new TagVo();
         tag.copyTo(tagVo);
@@ -189,6 +197,27 @@ public class ResourceController {
         }
         List<TagReferenceVo> list = service.queryTagReferenceByResourceId(resourceId);
         return ResponseData.success(list);
+    }
+
+    @PostMapping("/queryAlbumList")
+    public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam,
+            AlbumSort> tableRequest) {
+        return arService.queryAlbumResourceList(tableRequest);
+    }
+
+    @PostMapping("/setAlbum")
+    public ResponseData<AlbumResource> setAlbum(@RequestParam String resourceId, @RequestParam String albumId)
+            throws BusinessException {
+        log.info("为资源{}设置专辑{}", resourceId, albumId);
+        AlbumResource albumResource = service.setAlbum(resourceId, albumId);
+        return ResponseData.success(albumResource);
+    }
+
+    @PostMapping("/unsetAlbum")
+    public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
+        log.info("移除专辑和资源关联关系{}", albumResourceId);
+        AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
+        return ResponseData.success(albumResource);
     }
 }
 

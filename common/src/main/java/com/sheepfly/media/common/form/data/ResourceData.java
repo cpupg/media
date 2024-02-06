@@ -1,6 +1,7 @@
 package com.sheepfly.media.common.form.data;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -13,8 +14,15 @@ import java.io.Serializable;
  * @date 2022.12.19
  * @since 0.0.1-SNAPSHOT
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class ResourceData implements Serializable {
+    /**
+     * 资源标识。
+     */
+    @Length(max = 90)
+    private String id;
     /**
      * 文件名。
      */

@@ -1,13 +1,16 @@
 package com.sheepfly.media.dataaccess.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;import lombok.ToString;
 
 import java.util.List;
 
 /**
  * 目录视图，和antd Select组件的TreeNode对应。
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class DirectoryVo {
 
     private static final long serialVersionUID = 1L;

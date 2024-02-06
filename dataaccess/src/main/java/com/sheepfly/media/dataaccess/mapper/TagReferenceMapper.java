@@ -9,4 +9,8 @@ import java.util.List;
 public interface TagReferenceMapper {
     List<TagReferenceVo> queryTagReferenceList(
             TableRequest<Object, TagReferenceParam, Object> form);
+
+    TagReferenceVo queryFavorite(String resourceId);
+
+    TagReferenceVo queryRate(String resourceId);
 }
