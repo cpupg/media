@@ -11,6 +11,7 @@ import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
+import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.Predicate;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -130,6 +132,14 @@ public class LoadSingleFileTaskImpl implements Task {
             throw new CommonException("获取目录失败", e);
         }
         resource.setDirCode(d.getDirCode());
+        long count = resourceRepository.count((r, q, b) -> {
+            Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
+            Predicate p2 = b.equal(r.get(Resource_.FILENAME), file.getName());
+            return b.and(p1, p2);
+        });
+        if (count > 0) {
+            throw new CommonException("重复资源无法录入");
+        }
         resource.setSaveTime(new Date());
         resource.setCreateTime(resource.getSaveTime());
         resource.setDeleteStatus(Constant.NOT_DELETED);
