@@ -4,6 +4,7 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.data.BatchTag;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
@@ -45,8 +46,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -219,5 +223,38 @@ public class ResourceController {
         AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
         return ResponseData.success(albumResource);
     }
+
+    /**
+     * 临时请求，将来会删除。
+     *
+     * @param batchTag 数据。
+     *
+     * @return 数据。
+     */
+    @PostMapping("/batchSetTag")
+    public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody BatchTag batchTag) {
+        String[] tags = batchTag.getTags().split(",");
+        String[] ids = batchTag.getResourceIds().split(",");
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (String id : ids) {
+            log.info("当前资源:{}----", id);
+            Map<String, Object> tagMap = new HashMap<>();
+            for (String tag : tags) {
+                log.info("当前标签:{}", tag);
+                try {
+                    ResponseData<TagReferenceVo> data = addTag(id, tag);
+                    tagMap.put(tag, data);
+                } catch (Exception e) {
+                    log.error("资源{}添加标签{}失败", id, tag, e);
+                    tagMap.put(tag, e.getMessage());
+                }
+            }
+            Map<String, Object> idMap = new HashMap<>();
+            idMap.put(id, tagMap);
+            list.add(idMap);
+        }
+        return ResponseData.success(list);
+    }
+
 }
 
