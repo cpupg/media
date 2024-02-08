@@ -146,6 +146,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         AlbumResource ar = new AlbumResource();
         ar.setResourceId(resourceId);
         ar.setAlbumId(albumId);
+        ar.setDeleteStatus(Constant.NOT_DELETED);
         ExampleMatcher matcher = ExampleMatcher.matchingAll();
         if (arRepository.count(Example.of(ar, matcher)) > 0) {
             throw new BusinessException(ErrorCode.RES_RA_NOT_REPEATED_AR);
