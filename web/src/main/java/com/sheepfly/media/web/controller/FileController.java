@@ -47,6 +47,7 @@ public class FileController {
         OutputStream os = new FileOutputStream(f);
         byte[] bytes = IOUtils.readFully(is, is.available());
         IOUtils.write(bytes, os);
+        os.close();
         log.info("上传完成");
         return ResponseData.success();
     }
