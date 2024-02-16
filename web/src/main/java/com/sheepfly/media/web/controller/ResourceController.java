@@ -123,13 +123,13 @@ public class ResourceController {
         } else {
             // 检查重复文件
             Directory d = directory;
-            Optional<Resource> opt = repository.findOne((r, q, b) -> {
+            boolean repeat = service.checkRepeat((r, q, b) -> {
                 Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
                 Predicate p2 = b.equal(r.get(Resource_.DELETE_STATUS), Constant.NOT_DELETED);
                 Predicate p3 = b.equal(r.get(Resource_.FILENAME), resource.getFilename());
                 return b.and(p1, p2, p3);
             });
-            if (opt.isPresent()) {
+            if (repeat) {
                 return ResponseData.fail(ErrorCode.RES_ADD_FAIL_BY_DUPLICATED);
             }
         }

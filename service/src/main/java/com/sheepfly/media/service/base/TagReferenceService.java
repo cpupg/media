@@ -36,4 +36,6 @@ public interface TagReferenceService extends BaseJpaService<TagReference, String
      * @return 收藏状态。
      */
     boolean getFavorite(String resourceId);
+
+    long deleteByResourceId(String id);
 }

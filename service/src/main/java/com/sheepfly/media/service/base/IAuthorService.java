@@ -38,4 +38,6 @@ public interface IAuthorService extends BaseJpaService<Author, String, AuthorRep
      * @return 可以删除返回true。
      */
     boolean isAuthorCanBeDelete(String id);
+
+    int countBySiteId(String siteId);
 }

@@ -7,8 +7,8 @@ import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.param.SiteParam;
-import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
+import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.TableRequest;
@@ -35,7 +35,7 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
     @Resource(name = "siteRepository")
     private SiteRepository repository;
     @Resource(name = "authorRepository")
-    private AuthorRepository authorRepository;
+    private IAuthorService authorService;
     @Resource(name = "siteMapper")
     private SiteMapper mapper;
 
@@ -49,7 +49,7 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
 
     @Override
     public boolean canSiteBeDelete(String siteId) throws BusinessException {
-        return authorRepository.countBySiteId(siteId) == 0;
+        return authorService.countBySiteId(siteId) == 0;
     }
 
     @Override

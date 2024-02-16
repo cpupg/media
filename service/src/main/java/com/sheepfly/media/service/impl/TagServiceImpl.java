@@ -18,10 +18,6 @@ import java.util.List;
 public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepository> implements TagService {
     @Autowired
     private TagMapper mapper;
-    @Autowired
-    private Snowflake snowflake;
-    @Autowired
-    private TagReferenceRepository trfRepository;
 
     @Override
     public TableResponse<TagVo> queryTagList(TagData tagData) {

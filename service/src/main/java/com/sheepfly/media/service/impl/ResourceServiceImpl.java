@@ -16,15 +16,14 @@ import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
-import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
-import com.sheepfly.media.dataaccess.repository.TagRepository;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
+import com.sheepfly.media.service.base.TagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +49,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         implements IResourceService {
     private static final Logger log = LoggerFactory.getLogger(ResourceServiceImpl.class);
     @Autowired
-    private TagRepository tagRepository;
-    @Autowired
-    private TagReferenceRepository tagReferenceRepository;
+    private TagService tagService;
     @Autowired
     private TagReferenceService trfService;
     @Autowired
@@ -60,16 +57,16 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Autowired
     private AlbumService albumService;
     @Autowired
-    private AlbumResourceRepository arRepository;
+    private AlbumResourceService arService;
 
     @Autowired
-    private ResourceMapper resourceMapper;
+    private ResourceMapper mapper;
 
     @Override
     public TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form) {
         ResourceParam params = form.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
-        List<ResourceVo> list = resourceMapper.selectResourceVoList(form);
+        List<ResourceVo> list = mapper.selectResourceVoList(form);
         for (int i = 0; i < list.size(); i++) {
             ResourceVo vo = list.get(i);
             String id = vo.getId();
@@ -80,7 +77,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
                 vo.setTagReferenceVoList(Collections.emptyList());
             }
             vo.setTagReferenceVoList(queryTagReferenceByResourceIdAndCount(id));
-            long count = tagReferenceRepository.count(
+            long count = trfService.count(
                     (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
             vo.setTagCount(count);
             vo.setFavorite(trfService.getFavorite(id));
@@ -93,12 +90,13 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     public TagReference createResourceTag(String resourceId, String name) {
         Tag tag = new Tag();
         tag.setName(name);
-        Optional<Tag> tagOpt = tagRepository.findOne(Example.of(tag));
+        Optional<Tag> tagOpt = tagService.findOne(Example.of(tag));
         if (!tagOpt.isPresent()) {
             log.info("标签{{}}不存在，创建新标签", name);
             tag.setCreateTime(new Date());
             tag.setId(snowflake.nextIdStr());
-            tag = tagRepository.saveAndFlush(tag);
+            tag = tagService.save(tag);
+            tagService.flush();
             log.info("新标签{} -> {}创建完成", tag.getId(), tag.getName());
         } else {
             tag = tagOpt.orElse(null);
@@ -107,12 +105,13 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         tagReference.setResourceId(resourceId);
         tagReference.setTagId(tag.getId());
         tagReference.setReferenceType(TagReferenceService.REF_TYPE_RESOURCE);
-        Optional<TagReference> tagRefOpt = tagReferenceRepository.findOne(Example.of(tagReference));
+        Optional<TagReference> tagRefOpt = trfService.findOne(Example.of(tagReference));
         if (!tagRefOpt.isPresent()) {
             log.warn("给资源{{}}设置标签{} -> {}", resourceId, tag.getId(), tag.getName());
             tagReference.setId(snowflake.nextIdStr());
             tagReference.setReferTime(new Date());
-            tagReference = tagReferenceRepository.saveAndFlush(tagReference);
+            tagReference = trfService.save(tagReference);
+            trfService.flush();
             log.info("给资源{{}}设置标签{{}}完成", resourceId, tag.getName());
         } else {
             tagReference = tagRefOpt.orElse(null);
@@ -122,17 +121,17 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
 
     @Override
     public void deleteResourceTag(String tagReferenceId) {
-        tagReferenceRepository.deleteById(tagReferenceId);
+        trfService.deleteById(tagReferenceId);
     }
 
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
-        return resourceMapper.selectTagReferenceByResourceId(resourceId);
+        return mapper.selectTagReferenceByResourceId(resourceId);
     }
 
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(String resourceId) {
-        return resourceMapper.queryTagReferenceByResourceIdAndCount(resourceId, 5);
+        return mapper.queryTagReferenceByResourceIdAndCount(resourceId, 5);
     }
 
     @Override
@@ -148,13 +147,15 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         ar.setAlbumId(albumId);
         ar.setDeleteStatus(Constant.NOT_DELETED);
         ExampleMatcher matcher = ExampleMatcher.matchingAll();
-        if (arRepository.count(Example.of(ar, matcher)) > 0) {
+        if (arService.count(Example.of(ar, matcher)) > 0) {
             throw new BusinessException(ErrorCode.RES_RA_NOT_REPEATED_AR);
         }
         ar.setId(snowflake.nextIdStr());
         ar.setCreateTime(new Date());
         ar.setDeleteStatus(LogicDelete.NOT_DELETED);
-        return arRepository.saveAndFlush(ar);
+        AlbumResource save = arService.save(ar);
+        arService.flush();
+        return save;
     }
 
     @Override
@@ -163,7 +164,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
         log.info("删除资源{}的标签");
-        long l = tagReferenceRepository.deleteByResourceId(id);
+        long l = trfService.deleteByResourceId(id);
         log.info("删除{}个标签", l);
         return findById(id);
     }
