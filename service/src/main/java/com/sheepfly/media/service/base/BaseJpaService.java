@@ -151,4 +151,26 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
     void flush();
 
     void delete(T t);
+
+    /**
+     * 获取仓库对象。
+     *
+     * @return 仓库对象。
+     */
+    D getRepository();
+
+    /**
+     * 使用雪花算法获取id。
+     *
+     * @return id
+     */
+    String nextStringId();
+
+    /**
+     * 使用雪花算法获取id。
+     *
+     * @return id
+     */
+    long nextId();
+
 }

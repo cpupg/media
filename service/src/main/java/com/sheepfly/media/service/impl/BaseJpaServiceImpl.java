@@ -170,4 +170,19 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     public void delete(T t) {
         d.delete(t);
     }
+
+    @Override
+    public D getRepository() {
+        return d;
+    }
+
+    @Override
+    public String nextStringId() {
+        return snowflake.nextIdStr();
+    }
+
+    @Override
+    public long nextId() {
+        return snowflake.nextId();
+    }
 }
