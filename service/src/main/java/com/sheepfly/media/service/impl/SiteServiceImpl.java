@@ -2,20 +2,21 @@ package com.sheepfly.media.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sheepfly.media.dataaccess.mapper.SiteMapper;
-import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.param.SiteParam;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.dataaccess.entity.Site;
+import com.sheepfly.media.dataaccess.mapper.SiteMapper;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
-import com.sheepfly.media.common.exception.ErrorCode;
-import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.common.http.TableResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,7 +35,7 @@ public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteReposi
     private static final Logger log = LoggerFactory.getLogger(SiteServiceImpl.class);
     @Resource(name = "siteRepository")
     private SiteRepository repository;
-    @Resource(name = "authorRepository")
+    @Autowired
     private IAuthorService authorService;
     @Resource(name = "siteMapper")
     private SiteMapper mapper;
