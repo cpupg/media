@@ -1,6 +1,7 @@
 package com.sheepfly.media.web.controller;
 
 import com.sheepfly.media.common.http.ResponseData;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -17,19 +18,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/file")
+@Slf4j
 public class FileController {
-    /**
-     * 文件上传临时目录。
-     *
-     * <p>上传完成后springboot自动删除文件。</p>
-     */
-    @Value("${media.file.temp-dir}")
-    private String tempDir;
     /**
      * 文件保存目录。
      *
@@ -40,21 +34,20 @@ public class FileController {
     private String fileDir;
 
     @PostMapping("/upload")
-    public ResponseData<Map<String, Object>> upload(@RequestParam("bid") String bid,
+    public ResponseData<Map> upload(@RequestParam(value = "businessId", required = false) String businessId,
             @RequestParam("file") MultipartFile file) throws IOException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("file", file.toString());
-        map.put("bid", bid);
-        InputStream is = file.getInputStream();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd HHmmss");
         String originalFilename = file.getOriginalFilename();
         String ext = FilenameUtils.getExtension(originalFilename);
         String filename = format.format(System.currentTimeMillis());
-        File f = new File(fileDir + "/" + bid + "/" + filename + "." + ext);
+        log.info("上传文件{}", originalFilename);
+        File f = new File(fileDir + "/" + filename + "." + ext);
+        InputStream is = file.getInputStream();
         FileUtils.createParentDirectories(f);
         OutputStream os = new FileOutputStream(f);
         byte[] bytes = IOUtils.readFully(is, is.available());
         IOUtils.write(bytes, os);
-        return ResponseData.success(map);
+        log.info("上传完成");
+        return ResponseData.success();
     }
 }
