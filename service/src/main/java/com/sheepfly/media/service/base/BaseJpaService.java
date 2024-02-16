@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * jpa增删改查。
@@ -132,9 +133,9 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
 
     List<T> findList(Example<T> example);
 
-    T findOne(Specification<T> specification);
+    Optional<T> findOne(Specification<T> specification);
 
-    T findOne(Example<T> example);
+    Optional<T> findOne(Example<T> example);
 
     long count(Specification<T> specification);
 

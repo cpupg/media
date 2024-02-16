@@ -18,6 +18,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
@@ -132,13 +133,13 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     }
 
     @Override
-    public T findOne(Specification<T> specification) {
-        return d.findOne(specification).orElse(null);
+    public Optional<T> findOne(Specification<T> specification) {
+        return d.findOne(specification);
     }
 
     @Override
-    public T findOne(Example<T> example) {
-        return d.findOne(example).orElse(null);
+    public Optional<T> findOne(Example<T> example) {
+        return d.findOne(example);
     }
 
     @Override
