@@ -149,4 +149,6 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * <p>不是所有的save场景都需要刷新，因此不需要添加saveAndFlush方法。</p>
      */
     void flush();
+
+    void delete(T t);
 }

@@ -165,4 +165,9 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     public void flush() {
         d.flush();
     }
+
+    @Override
+    public void delete(T t) {
+        d.delete(t);
+    }
 }
