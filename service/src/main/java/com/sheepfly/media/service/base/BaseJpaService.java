@@ -4,8 +4,12 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
+import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.List;
 
 /**
  * jpa增删改查。
@@ -121,4 +125,20 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @return 是否重复。
      */
     boolean checkRepeat(T t);
+
+    boolean checkRepeat(Specification<T> specification);
+
+    List<T> findList(Specification<T> specification);
+
+    List<T> findList(Example<T> example);
+
+    T findOne(Specification<T> specification);
+
+    T findOne(Example<T> example);
+
+    long count(Specification<T> specification);
+
+    long count(Example<T> example);
+
+    void update(T t);
 }

@@ -17,6 +17,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
@@ -113,5 +114,46 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
         ExampleMatcher matcher = ExampleMatcher.matchingAll();
         Example<T> e = Example.of(t, matcher);
         return d.count(e) > 0;
+    }
+
+    @Override
+    public boolean checkRepeat(Specification<T> specification) {
+        return count(specification) > 1;
+    }
+
+    @Override
+    public List<T> findList(Specification<T> specification) {
+        return d.findAll(specification);
+    }
+
+    @Override
+    public List<T> findList(Example<T> example) {
+        return d.findAll(example);
+    }
+
+    @Override
+    public T findOne(Specification<T> specification) {
+        return d.findOne(specification).orElse(null);
+    }
+
+    @Override
+    public T findOne(Example<T> example) {
+        return d.findOne(example).orElse(null);
+    }
+
+    @Override
+    public long count(Specification<T> specification) {
+        return d.count(specification);
+    }
+
+    @Override
+    public long count(Example<T> example) {
+        return d.count(example);
+    }
+
+    @Override
+    public void update(T t) {
+        t.setUpdateTime(new Date());
+        d.save(t);
     }
 }
