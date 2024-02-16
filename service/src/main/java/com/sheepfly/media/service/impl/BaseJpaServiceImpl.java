@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,8 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     private D d;
     @Autowired
     private Snowflake snowflake;
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public T findById(ID id) {
@@ -156,5 +159,10 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     public void update(T t) {
         t.setUpdateTime(new Date());
         d.save(t);
+    }
+
+    @Override
+    public void flush() {
+        d.flush();
     }
 }

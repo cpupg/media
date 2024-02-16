@@ -142,4 +142,11 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
     long count(Example<T> example);
 
     void update(T t);
+
+    /**
+     * 刷新实体管理器上下文。
+     *
+     * <p>不是所有的save场景都需要刷新，因此不需要添加saveAndFlush方法。</p>
+     */
+    void flush();
 }
