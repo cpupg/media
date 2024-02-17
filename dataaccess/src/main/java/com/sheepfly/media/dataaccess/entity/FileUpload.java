@@ -52,7 +52,7 @@ public class FileUpload implements Serializable, LogicDelete {
     private Integer businessType;
 
     /**
-     * 上传状态0开始上传1生成业务代码2确认业务代码3上传完成
+     * 上传状态1开始上传2上传完成。
      */
     @Column(name = "UPLOAD_STATUS", nullable = false)
     private Integer uploadStatus;
