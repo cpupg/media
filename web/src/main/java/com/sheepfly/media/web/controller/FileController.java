@@ -3,6 +3,7 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ResponseData;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.vo.file.FileInfo;
 import com.sheepfly.media.service.base.FileService;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -73,5 +75,15 @@ public class FileController {
         FileInfo fileInfo = service.uploadFile(fileUpload);
         log.info("上传完成");
         return ResponseData.success(fileInfo);
+    }
+
+    @PostMapping("/queryFileList")
+    public TableResponse<List<FileInfo>> queryFileList(@RequestParam("businessCode") String businessCode)
+            throws BusinessException {
+        log.info("获取文件列表，业务代码{}", businessCode);
+        if (StringUtils.isEmpty(businessCode)) {
+            throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE);
+        }
+        return service.queryFileList(businessCode);
     }
 }

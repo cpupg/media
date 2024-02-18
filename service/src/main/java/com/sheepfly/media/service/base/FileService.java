@@ -1,7 +1,10 @@
 package com.sheepfly.media.service.base;
 
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.vo.file.FileInfo;
+
+import java.util.List;
 
 /**
  * 文件服务。
@@ -28,5 +31,14 @@ public interface FileService {
      * @return 文件信息。
      */
     FileInfo uploadFile(FileUpload fileUploadInfo);
+
+    /**
+     * 根据业务代码查询上传的文件。
+     *
+     * @param businessCode 业务代码。
+     *
+     * @return 文件列表。
+     */
+    TableResponse<List<FileInfo>> queryFileList(String businessCode);
 
 }

@@ -2,7 +2,9 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
+import com.sheepfly.media.dataaccess.mapper.FileMapper;
 import com.sheepfly.media.dataaccess.repository.FileUploadRepository;
 import com.sheepfly.media.dataaccess.vo.file.FileInfo;
 import com.sheepfly.media.service.base.FileService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -21,6 +24,8 @@ public class FileServiceImpl implements FileService {
     private FileUploadRepository repository;
     @Autowired
     private Snowflake snowflake;
+    @Autowired
+    private FileMapper mapper;
 
     @Override
     public FileInfo uploadFile(FileUpload fileUploadInfo) {
@@ -45,5 +50,12 @@ public class FileServiceImpl implements FileService {
         log.info("上传完成{}", save);
         BeanUtils.copyProperties(save, fileInfo);
         return fileInfo;
+    }
+
+    @Override
+    public TableResponse<List<FileInfo>> queryFileList(String businessCode) {
+        // todo 分页
+        List<FileInfo> list = mapper.queryFileList(businessCode);
+        return TableResponse.success(list, (long) list.size());
     }
 }
