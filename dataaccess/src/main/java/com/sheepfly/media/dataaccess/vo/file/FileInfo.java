@@ -20,7 +20,7 @@ public class FileInfo {
     /**
      * 业务类型。
      */
-    private String businessType;
+    private Integer businessType;
     /**
      * 原始文件名。
      */
