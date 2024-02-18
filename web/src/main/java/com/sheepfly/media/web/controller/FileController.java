@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,5 +88,14 @@ public class FileController {
             throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE);
         }
         return service.queryFileList(businessCode);
+    }
+
+    @GetMapping("/getFile")
+    public void getFile(@RequestParam("filename") String filename, HttpServletResponse response) throws IOException {
+        try (InputStream is = new FileInputStream("data/file/file_dir/" + filename);
+             OutputStream os = response.getOutputStream()) {
+            byte[] bytes = IOUtils.readFully(is, is.available());
+            os.write(bytes);
+        }
     }
 }

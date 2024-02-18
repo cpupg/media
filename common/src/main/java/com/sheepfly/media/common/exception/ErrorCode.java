@@ -146,6 +146,7 @@ public enum ErrorCode {
      */
     FILE_EMPTY_BUSINESS_CODE_TYPE("E0206001", "缺少业务代码和业务类型"),
     FILE_EMPTY_BUSINESS_CODE("E0206002", "缺少业务代码"),
+    FILE_EMPTY_FILENAME("E0206003", "文件名不能为空"),
     /*
      * 模块[文件][file]结束[300]
      ***************************************************************************
