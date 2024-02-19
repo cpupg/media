@@ -3,6 +3,8 @@ package com.sheepfly.media.dataaccess.vo.file;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 /**
  * 文件信息。
  */
@@ -29,4 +31,20 @@ public class FileInfo {
      * 实际文件名。
      */
     private String filename;
+    /**
+     * 上传组件使用的uid。
+     */
+    private String uid;
+    /**
+     * 下载链接。
+     */
+    private String url;
+    /**
+     * 扩展名。
+     */
+    private String extension;
+    /**
+     * 上传时间。
+     */
+    private Date uploadTime;
 }

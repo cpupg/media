@@ -3,7 +3,7 @@
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.FileMapper">
   <select id="queryFileList" parameterType="string"
       resultType="com.sheepfly.media.dataaccess.vo.file.FileInfo">
-    select id, original_filename, filename, business_code, business_type
+    select id, original_filename, filename, business_code, business_type, id as uid, EXTENSION, UPLOAD_TIME
     from media.FILE_UPLOAD
     where BUSINESS_CODE = #{businessCode}
       and DELETE_STATUS = 0

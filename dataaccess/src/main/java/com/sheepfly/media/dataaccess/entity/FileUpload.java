@@ -52,6 +52,12 @@ public class FileUpload implements Serializable, LogicDelete {
     private Integer businessType;
 
     /**
+     * 扩展名。
+     */
+    @Column(name = "EXTENSION", nullable = false)
+    private String extension;
+
+    /**
      * 上传状态1开始上传2上传完成。
      */
     @Column(name = "UPLOAD_STATUS", nullable = false)
