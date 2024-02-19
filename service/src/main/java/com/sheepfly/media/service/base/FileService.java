@@ -1,6 +1,8 @@
 package com.sheepfly.media.service.base;
 
+import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.vo.file.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,5 +66,14 @@ public interface FileService {
      * @return 全路径。
      */
     String getFileDir(String businessType, Date date);
+
+    /**
+     * 删除文件。
+     *
+     * @param id 文件标识。
+     *
+     * @return 被删除的文件。
+     */
+    FileUpload deleteFile(String id) throws BusinessException;
 
 }

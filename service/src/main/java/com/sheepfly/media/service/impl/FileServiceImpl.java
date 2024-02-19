@@ -2,6 +2,8 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.mapper.FileMapper;
@@ -127,6 +129,19 @@ public class FileServiceImpl implements FileService {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         return String.format("%s/%s/%s", year, month, day);
+    }
+
+    @Override
+    public FileUpload deleteFile(String id) throws BusinessException {
+        Optional<FileUpload> opt = repository.findById(id);
+        if (!opt.isPresent() || opt.orElse(null).getDeleteStatus() == Constant.DELETED) {
+            throw new BusinessException(ErrorCode.FILE_NOT_FOUND_ERROR);
+        }
+        FileUpload fileUpload = opt.orElse(null);
+        fileUpload.setId(id);
+        fileUpload.setDeleteTime(new Date());
+        fileUpload.setDeleteStatus(Constant.DELETED);
+        return repository.save(fileUpload);
     }
 
 

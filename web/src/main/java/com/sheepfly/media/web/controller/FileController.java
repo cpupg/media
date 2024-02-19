@@ -4,11 +4,13 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.vo.file.FileInfo;
 import com.sheepfly.media.service.base.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +69,13 @@ public class FileController {
             byte[] bytes = IOUtils.readFully(is, is.available());
             os.write(bytes);
         }
+    }
+
+    @PostMapping("/deleteFile")
+    public ResponseData<FileInfo> deleteFile(@RequestParam("id") String id) throws BusinessException {
+        FileUpload fileUpload = service.deleteFile(id);
+        FileInfo fileInfo = new FileInfo();
+        BeanUtils.copyProperties(fileUpload, fileInfo);
+        return ResponseData.success(fileInfo);
     }
 }
