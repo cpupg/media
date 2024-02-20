@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileInfo uploadFile(MultipartFile file, String businessCode, String businessType) throws IOException {
         log.info("上传文件:{}", file.getName());
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd HHmmsssss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmsssss");
         Date date = new Date();
         String originalFilename = file.getOriginalFilename();
         String ext = FilenameUtils.getExtension(originalFilename);
@@ -85,7 +85,7 @@ public class FileServiceImpl implements FileService {
         fileUpload.setBusinessType(Integer.parseInt(businessType));
         fileUpload.setOriginalFilename(originalFilename);
         fileUpload.setFilename(f.getName());
-        fileUpload.setExtension(FilenameUtils.getExtension(filename));
+        fileUpload.setExtension(FilenameUtils.getExtension(originalFilename));
 
         FileInfo fileInfo = new FileInfo();
         // if (!StringUtils.isEmpty(fileUpload.getId())) {
@@ -153,10 +153,6 @@ public class FileServiceImpl implements FileService {
         }
         FileUpload fileUpload = opt.orElse(null);
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
-        String extension = fileUpload.getExtension();
-        if (extension.length() > 0) {
-            extension = "." + extension;
-        }
-        return new File(String.format("%s/%s/%s%s", fileDir, dir, fileUpload.getFilename(), extension));
+        return new File(String.format("%s/%s/%s", fileDir, dir, fileUpload.getFilename()));
     }
 }
