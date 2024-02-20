@@ -45,7 +45,6 @@ public class FileController {
         if (StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(businessType)) {
             throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE_TYPE);
         }
-
         FileInfo fileInfo = service.uploadFile(file, businessCode, businessType);
         log.info("上传完成");
         return ResponseData.success(fileInfo);

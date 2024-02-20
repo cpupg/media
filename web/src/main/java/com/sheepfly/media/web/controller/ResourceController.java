@@ -51,7 +51,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * <p>
@@ -137,6 +136,9 @@ public class ResourceController {
             ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
         }
         resource.setDirCode(directory.getDirCode());
+        if (resource.getCoverId() == null) {
+            resource.setCoverId("");
+        }
         Resource savedResource = service.save(resource);
         return ResponseData.success(savedResource);
     }

@@ -142,7 +142,8 @@ public class LoadDirectoryTaskImpl implements Task {
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
         log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
         // 查到就说明是相同文件。
-        matcher = ExampleMatcher.matchingAll().withMatcher(Resource_.DIR_CODE, ExampleMatcher.GenericPropertyMatcher::exact)
+        matcher = ExampleMatcher.matchingAll()
+                .withMatcher(Resource_.DIR_CODE, ExampleMatcher.GenericPropertyMatcher::exact)
                 .withMatcher(Resource_.FILENAME, ExampleMatcher.GenericPropertyMatcher::exact)
                 .withMatcher(Resource_.DELETE_STATUS, ExampleMatcher.GenericPropertyMatcher::exact);
 
@@ -344,6 +345,7 @@ public class LoadDirectoryTaskImpl implements Task {
             resource.setDeleteStatus(0);
             resource.setAuthorId(author.getId());
             resource.setId(snowflake.nextIdStr());
+            resource.setCoverId("");
             try {
                 BeanUtils.copyProperties(resource, resourceData);
                 resourceData.setDir("");
