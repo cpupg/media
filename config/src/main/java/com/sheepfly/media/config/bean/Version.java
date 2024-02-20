@@ -30,11 +30,13 @@ public class Version extends Properties {
     public synchronized void load(InputStream inStream) throws IOException {
         super.load(inStream);
         mainVersion = getProperty("main");
-        if (StringUtils.isEmpty(getProperty("server"))) {
-            serverVersion = getProperty("server");
+        String vs = getProperty("server");
+        String vc = getProperty("client");
+        if (!(StringUtils.isEmpty(vs) || "v".equals(vs))) {
+            serverVersion = vs;
         }
-        if (StringUtils.isEmpty(getProperty("client"))) {
-            clientVersion = getProperty("client");
+        if (!(StringUtils.isEmpty(vc) || "v".equals(vc))) {
+            clientVersion = vc;
         }
     }
 }
