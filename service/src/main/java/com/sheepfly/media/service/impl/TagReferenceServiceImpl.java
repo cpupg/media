@@ -59,4 +59,9 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
         TagReferenceVo trf = mapper.queryFavorite(resourceId);
         return trf != null;
     }
+
+    @Override
+    public long deleteByResourceId(String id) {
+        return repository.deleteByResourceId(id);
+    }
 }

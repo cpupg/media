@@ -4,6 +4,7 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.data.BatchTag;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
@@ -45,9 +46,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 /**
  * <p>
@@ -119,13 +122,13 @@ public class ResourceController {
         } else {
             // 检查重复文件
             Directory d = directory;
-            Optional<Resource> opt = repository.findOne((r, q, b) -> {
+            boolean repeat = service.checkRepeat((r, q, b) -> {
                 Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
                 Predicate p2 = b.equal(r.get(Resource_.DELETE_STATUS), Constant.NOT_DELETED);
                 Predicate p3 = b.equal(r.get(Resource_.FILENAME), resource.getFilename());
                 return b.and(p1, p2, p3);
             });
-            if (opt.isPresent()) {
+            if (repeat) {
                 return ResponseData.fail(ErrorCode.RES_ADD_FAIL_BY_DUPLICATED);
             }
         }
@@ -133,6 +136,9 @@ public class ResourceController {
             ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
         }
         resource.setDirCode(directory.getDirCode());
+        if (resource.getCoverId() == null) {
+            resource.setCoverId("");
+        }
         Resource savedResource = service.save(resource);
         return ResponseData.success(savedResource);
     }
@@ -219,5 +225,38 @@ public class ResourceController {
         AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
         return ResponseData.success(albumResource);
     }
+
+    /**
+     * 临时请求，将来会删除。
+     *
+     * @param batchTag 数据。
+     *
+     * @return 数据。
+     */
+    @PostMapping("/batchSetTag")
+    public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody BatchTag batchTag) {
+        String[] tags = batchTag.getTags().split(",");
+        String[] ids = batchTag.getResourceIds().split(",");
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (String id : ids) {
+            log.info("当前资源:{}----", id);
+            Map<String, Object> tagMap = new HashMap<>();
+            for (String tag : tags) {
+                log.info("当前标签:{}", tag);
+                try {
+                    ResponseData<TagReferenceVo> data = addTag(id, tag);
+                    tagMap.put(tag, data);
+                } catch (Exception e) {
+                    log.error("资源{}添加标签{}失败", id, tag, e);
+                    tagMap.put(tag, e.getMessage());
+                }
+            }
+            Map<String, Object> idMap = new HashMap<>();
+            idMap.put(id, tagMap);
+            list.add(idMap);
+        }
+        return ResponseData.success(list);
+    }
+
 }
 

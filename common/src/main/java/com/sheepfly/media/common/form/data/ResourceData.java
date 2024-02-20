@@ -1,7 +1,8 @@
 package com.sheepfly.media.common.form.data;
 
 import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -41,4 +42,9 @@ public class ResourceData implements Serializable {
     @NotNull(message = "{entity.resource.authorId.notNull}")
     @Length(max = 19, message = "{entity.resource.authorId.length}")
     private String authorId;
+    /**
+     * 封面文件id。
+     */
+    @Length(max = 19, message = "{entity.resource.coverId.length}")
+    private String coverId;
 }

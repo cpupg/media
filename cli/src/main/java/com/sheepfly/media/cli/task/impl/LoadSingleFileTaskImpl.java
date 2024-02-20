@@ -145,6 +145,7 @@ public class LoadSingleFileTaskImpl implements Task {
         resource.setDeleteStatus(Constant.NOT_DELETED);
         resource.setFilename(file.getName());
         resource.setId(snowflake.nextIdStr());
+        resource.setCoverId("");
         resourceRepository.save(resource);
         return resource;
     }

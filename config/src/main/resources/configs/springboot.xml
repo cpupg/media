@@ -1,7 +1,10 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.springframework.org/schema/beans"
+    xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
-          http://www.springframework.org/schema/beans/spring-beans.xsd"
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/util
+          http://www.springframework.org/schema/util/spring-util.xsd"
 >
   <!--jpa配置-->
   <import resource="jpa.xml"/>
@@ -16,4 +19,8 @@
     <constructor-arg index="0" value="0"/>
     <constructor-arg index="1" value="0"/>
   </bean>
+
+  <!--文件上传时的业务类型-->
+  <util:properties id="businessType" location="classpath:configs/business-type.properties"/>
+  <util:properties id="businessType2" location="classpath:configs/business-type.properties"/>
 </beans>

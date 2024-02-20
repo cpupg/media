@@ -4,8 +4,13 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
+import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * jpa增删改查。
@@ -121,4 +126,51 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @return 是否重复。
      */
     boolean checkRepeat(T t);
+
+    boolean checkRepeat(Specification<T> specification);
+
+    List<T> findList(Specification<T> specification);
+
+    List<T> findList(Example<T> example);
+
+    Optional<T> findOne(Specification<T> specification);
+
+    Optional<T> findOne(Example<T> example);
+
+    long count(Specification<T> specification);
+
+    long count(Example<T> example);
+
+    void update(T t);
+
+    /**
+     * 刷新实体管理器上下文。
+     *
+     * <p>不是所有的save场景都需要刷新，因此不需要添加saveAndFlush方法。</p>
+     */
+    void flush();
+
+    void delete(T t);
+
+    /**
+     * 获取仓库对象。
+     *
+     * @return 仓库对象。
+     */
+    D getRepository();
+
+    /**
+     * 使用雪花算法获取id。
+     *
+     * @return id
+     */
+    String nextStringId();
+
+    /**
+     * 使用雪花算法获取id。
+     *
+     * @return id
+     */
+    long nextId();
+
 }

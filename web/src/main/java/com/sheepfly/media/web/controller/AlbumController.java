@@ -10,8 +10,8 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.vo.AlbumVo;
-import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
+import com.sheepfly.media.service.base.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,8 @@ public class AlbumController {
     }
 
     @PostMapping("/addAlbum")
-    public ResponseData<Album> addAlbum(@RequestParam String albumName) throws BusinessException {
+    public ResponseData<Album> addAlbum(@RequestParam String albumName, @RequestParam("coverId") String coverId)
+            throws BusinessException {
         if (StringUtils.isEmpty(albumName)) {
             throw new BusinessException(ErrorCode.ALBUM_EMPTY_NAME);
         }
@@ -52,6 +53,10 @@ public class AlbumController {
             return ResponseData.fail(ErrorCode.ALBUM_REPEATED_ALBUM);
         }
         album.setCreateTime(new Date());
+        if (!StringUtils.isEmpty(coverId)) {
+            // todo 检查文件是否存在
+            album.setCoverId(coverId);
+        }
         Album save = service.save(album);
         return ResponseData.success(save);
     }

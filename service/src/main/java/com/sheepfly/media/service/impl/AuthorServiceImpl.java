@@ -8,11 +8,11 @@ import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.param.AuthorParam;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
-import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.dataaccess.vo.AuthorVo;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.service.base.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
     @Autowired
     private AuthorMapper mapper;
     @Autowired
-    private ResourceRepository resourceRepository;
+    private IResourceService resourceService;
 
     @Override
     public TableResponse<AuthorVo> queryForAuthorList(
@@ -44,8 +44,13 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
 
     @Override
     public boolean isAuthorCanBeDelete(String id) {
-        long count = resourceRepository.count(
+        long count = resourceService.count(
                 (root, query, builder) -> builder.equal(root.get(Resource_.AUTHOR_ID), id));
         return count == 0;
+    }
+
+    @Override
+    public int countBySiteId(String siteId) {
+        return getRepository().countBySiteId(siteId);
     }
 }

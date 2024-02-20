@@ -94,6 +94,11 @@ public class Resource implements Serializable, EntityInterface, LogicDelete, Cop
      */
     @Column(name = "DIR_CODE", nullable = false)
     private Long dirCode;
+    /**
+     * 封面文件id。
+     */
+    @Column(name = "COVER_ID", nullable = false)
+    private String coverId;
 
     @Override
     public void copyFrom(Object source) {
