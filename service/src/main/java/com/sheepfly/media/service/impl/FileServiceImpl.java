@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 @Service
 @Slf4j
@@ -40,6 +41,8 @@ public class FileServiceImpl implements FileService {
     private Snowflake snowflake;
     @Autowired
     private FileMapper mapper;
+    @Autowired
+    private Properties businessType;
     /**
      * 文件保存目录。
      *
@@ -159,6 +162,11 @@ public class FileServiceImpl implements FileService {
         fileUpload.setDeleteTime(new Date());
         fileUpload.setDeleteStatus(Constant.DELETED);
         return repository.save(fileUpload);
+    }
+
+    @Override
+    public String getBusinessType(String key) {
+        return businessType.getProperty(key);
     }
 
 

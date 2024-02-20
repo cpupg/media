@@ -77,4 +77,9 @@ public class FileController {
         BeanUtils.copyProperties(fileUpload, fileInfo);
         return ResponseData.success(fileInfo);
     }
+
+    @PostMapping("/getBusinessType")
+    public ResponseData<String> getBusinessType(@RequestParam("key") String key) {
+        return ResponseData.success(service.getBusinessType(key));
+    }
 }

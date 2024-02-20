@@ -76,4 +76,15 @@ public interface FileService {
      */
     FileUpload deleteFile(String id) throws BusinessException;
 
+    /**
+     * 获取业务类型。
+     *
+     * <p>业务类新在business-type.properties中。</p>
+     *
+     * @param key key
+     *
+     * @return 业务类型。
+     */
+    String getBusinessType(String key);
+
 }
