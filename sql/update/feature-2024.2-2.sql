@@ -1,4 +1,4 @@
-drop table media.FILE_UPLOAD;
+-- drop table media.FILE_UPLOAD;
 create table media.file_upload
 (
   id varchar(19) not null primary key,
