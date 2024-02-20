@@ -26,20 +26,22 @@ MODULE_LIB_DIR=$APP_DIR/lib_module;
 MAVEN_LIB_DIR=$APP_DIR/lib_maven;
 CURRENT_DATE=$(date '+%Y.%m.%d');
 CLI_JAR_NAME=cli-$branch;
-CLI_JAR=;
+CLI_JAR="";
 APP_JAR_NAME=media-$branch;
-APP_JAR=;
+APP_JAR="";
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
 CLASSPATH="lib_module/*;lib_maven/*";
 CLI_CLASSPATH="lib_maven/*";
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
 PACKAGE_NAME=com.sheepfly.media.cli;
 #前台版本
-REVISION_UI=;
+REVISION_UI="";
+VERSION_CLIENT="";
 #后台版本
-REVISION_SERVER=;
+REVISION_SERVER="";
+VERSION_SERVER="";
 #主版本号
-MAIN_VERSION=;
+MAIN_VERSION="";
 ################################################################################
 # 预定义函数
 # 输出日志，同时在控制台和文件中展示
@@ -137,6 +139,7 @@ log "设置后台代码版本";
 cd $SERVER_DIR;
 runStatus $?;
 REVISION_SERVER=$(git rev-parse --short $branch);
+VERSION_SERVER=$(git tag --contains $REVISION_SERVER);
 touch "application/src/main/resources/static/server-$REVISION_SERVER";
 runStatus $?;
 touch "cli/src/main/resources/cli-$REVISION_SERVER";
@@ -146,16 +149,19 @@ log "设置前台代码版本"
 cd $UI_DIR;
 runStatus $?;
 REVISION_UI=$(git rev-parse --short $branch);
+VERSION_CLIENT=$(git tag --contains $REVISION_UI);
 touch "$SERVER_DIR/application/src/main/resources/static/ui-$REVISION_UI";
 runStatus $?;
 
-log "设置主版本";
+log "设置版本号";
 cd $SERVER_DIR;
 runStatus $?;
 MAIN_VERSION=$(cat main-version);
 runStatus $?;
-echo "主版本:$MAIN_VERSION";
-echo "main=v$MAIN_VERSION" > "config/src/main/resources/media-application.properties";
+echo "main=v$MAIN_VERSION" >> "config/src/main/resources/version.properties";
+echo "server=v$VERSION_SERVER" >> "config/src/main/resources/version.properties";
+echo "client=v$VERSION_CLIENT" >> "config/src/main/resources/version.properties";
+more config/src/main/resources/version.properties;
 
 endWork "设置完成";
 ################################################################################
