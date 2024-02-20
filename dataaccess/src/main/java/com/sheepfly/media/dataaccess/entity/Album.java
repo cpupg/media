@@ -61,4 +61,9 @@ public class Album implements Serializable, EntityInterface, LogicDelete {
      */
     @Column(name = "DELETE_TIME")
     private Date deleteTime;
+    /**
+     * 封面文件id。
+     */
+    @Column(name = "COVER_ID", nullable = false)
+    private String coverId;
 }

@@ -46,4 +46,8 @@ public class AlbumVo implements Serializable {
      * 删除时间
      */
     private Date deleteTime;
+    /**
+     * 封面文件id。
+     */
+    private String coverId;
 }
