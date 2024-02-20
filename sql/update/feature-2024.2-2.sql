@@ -26,3 +26,13 @@ comment on column media.file_upload.upload_status is '上传状态1开始上传2
 comment on column media.file_upload.delete_status is '删除状态';
 comment on column media.file_upload.upload_time is '上传时间';
 comment on column media.file_upload.delete_time is '删除时间';
+
+alter table media.resource
+add column cover_id varchar(19) not null default '';
+
+comment on column media.resource.cover_id is '封面文件id';
+
+alter table media.album
+add column cover_id varchar(19) not null default '';
+
+comment on column media.album.cover_id is '封面文件id';
