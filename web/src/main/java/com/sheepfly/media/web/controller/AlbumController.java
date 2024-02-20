@@ -11,7 +11,6 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.vo.AlbumVo;
 import com.sheepfly.media.service.base.AlbumService;
-import com.sheepfly.media.service.base.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ import java.util.Date;
 public class AlbumController {
     @Autowired
     private AlbumService service;
-    @Autowired
-    private AlbumResourceService arService;
 
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumVo> queryAlbumList(
