@@ -53,6 +53,11 @@ public class FileServiceImpl implements FileService {
      */
     @Value("${media.file.temp-dir}")
     private String tempDir;
+    /**
+     * 回收站。
+     */
+    @Value("${media.file.recycle-bin}")
+    private String recycleBin;
 
     @Override
     public FileInfo uploadFile(MultipartFile file, String businessCode, String businessType) throws IOException {
@@ -126,9 +131,9 @@ public class FileServiceImpl implements FileService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return String.format("%s/%s/%s", year, month, day);
+        return String.format("%s/%s/%s/%s", businessType, year, month, day);
     }
 
     @Override
@@ -138,6 +143,18 @@ public class FileServiceImpl implements FileService {
             throw new BusinessException(ErrorCode.FILE_NOT_FOUND_ERROR);
         }
         FileUpload fileUpload = opt.orElse(null);
+        File file = getFile(id);
+        if (file == null || !file.exists()) {
+            throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
+        }
+        log.info("删除文件:{}", file);
+        String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
+        File file2 = new File(String.format("%s/%s/%s", recycleBin, dir, fileUpload.getFilename()));
+        try {
+            FileUtils.moveFile(file, file2);
+        } catch (IOException e) {
+            throw new BusinessException(ErrorCode.UNEXPECT_ERROR, e);
+        }
         fileUpload.setId(id);
         fileUpload.setDeleteTime(new Date());
         fileUpload.setDeleteStatus(Constant.DELETED);
