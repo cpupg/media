@@ -159,8 +159,8 @@ runStatus $?;
 MAIN_VERSION=$(cat main-version);
 runStatus $?;
 echo "main=v$MAIN_VERSION" >> "config/src/main/resources/version.properties";
-echo "server=v$VERSION_SERVER" >> "config/src/main/resources/version.properties";
-echo "client=v$VERSION_CLIENT" >> "config/src/main/resources/version.properties";
+echo "server=$VERSION_SERVER" >> "config/src/main/resources/version.properties";
+echo "client=$VERSION_CLIENT" >> "config/src/main/resources/version.properties";
 more config/src/main/resources/version.properties;
 
 endWork "设置完成";
