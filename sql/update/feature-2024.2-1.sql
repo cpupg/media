@@ -1,4 +1,4 @@
-drop table media.album;
+-- drop table media.album;
 
 create table media.album
 (

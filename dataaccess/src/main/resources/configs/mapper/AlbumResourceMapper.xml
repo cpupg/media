@@ -40,6 +40,9 @@
     <if test="params.albumName != null and params.albumName != ''">
       and a.name like '%' || #{params.albumName} || '%'
     </if>
+    <if test="params.albumId != null and params.albumId != ''">
+      and a.id = #{params.albumId}
+    </if>
     order by ar.CREATE_TIME desc
   </select>
 </mapper>

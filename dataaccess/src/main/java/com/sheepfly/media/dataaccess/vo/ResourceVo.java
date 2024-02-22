@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -72,4 +73,8 @@ public class ResourceVo implements Serializable {
      * 评分。
      */
     private int rate;
+    /**
+     * 封面文件id。
+     */
+    private String coverId;
 }

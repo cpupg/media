@@ -17,4 +17,8 @@ public class AlbumParam extends TablePagination implements Serializable {
      * 专辑名称。
      */
     private String albumName;
+    /**
+     * 专辑标识。
+     */
+    private String albumId;
 }
