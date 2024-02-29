@@ -24,5 +24,6 @@
     <if test="params.albumName != null and params.albumName != ''">
       where name like '%' || #{params.albumName} || '%'
     </if>
+    order by CREATE_TIME desc
   </select>
 </mapper>
