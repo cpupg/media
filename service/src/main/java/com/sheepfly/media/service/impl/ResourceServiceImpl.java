@@ -21,6 +21,7 @@ import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
+import com.sheepfly.media.service.base.FileService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
@@ -58,6 +59,8 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     private AlbumService albumService;
     @Autowired
     private AlbumResourceService arService;
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private ResourceMapper mapper;
@@ -163,9 +166,11 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         if (Constant.DELETED != logicDeleteById(id, Resource.class).getDeleteStatus()) {
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
-        log.info("删除资源{}的标签");
+        log.info("删除资源{}的标签", id);
         long l = trfService.deleteByResourceId(id);
         log.info("删除{}个标签", l);
+        int i = fileService.deleteFileByBusinessCode(id);
+        log.info("删除资源{}的预览图count={}", id, i);
         return findById(id);
     }
 }

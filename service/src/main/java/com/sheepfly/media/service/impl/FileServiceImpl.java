@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -169,6 +170,36 @@ public class FileServiceImpl implements FileService {
         return businessType.getProperty(key);
     }
 
+    @Override
+    public int deleteFileByBusinessCode(String businessCode) throws BusinessException {
+        List<FileInfo> list = mapper.queryFileList(businessCode);
+        log.info("业务代码{}下有{}个文件", businessCode, list.size());
+        // 先判断文件是否存在，然后再删除
+        // 若中途删除失败，则已删除的文件只能手动删除
+        List<File> fileList = new ArrayList<>();
+        for (FileInfo fileInfo : list) {
+            String dir = getFileDir(String.valueOf(fileInfo.getBusinessType()), fileInfo.getUploadTime());
+            File file = new File(dir, fileInfo.getFilename());
+            if (file.exists()) {
+                fileList.add(file);
+            } else {
+                log.warn("文件不存在:{}", fileInfo);
+                throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
+            }
+        }
+        int count = 0;
+        for (File file : fileList) {
+            if (file.delete()) {
+                count++;
+                log.info("文件{}删除完成", file);
+            } else {
+                log.warn("文件{}删除失败", file);
+                throw new BusinessException(ErrorCode.UNEXPECT_ERROR);
+            }
+        }
+        return count;
+    }
+
 
     @Override
     public File getFile(String id) {
@@ -180,4 +211,5 @@ public class FileServiceImpl implements FileService {
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
         return new File(String.format("%s/%s/%s", fileDir, dir, fileUpload.getFilename()));
     }
+
 }

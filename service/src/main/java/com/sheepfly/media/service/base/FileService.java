@@ -86,4 +86,15 @@ public interface FileService {
      */
     String getBusinessType(String key);
 
+    /**
+     * 删除业务代码下的所有文件。
+     *
+     * @param businessCode 业务代码。
+     *
+     * @return 删除结果。
+     *
+     * @throws BusinessException e。
+     */
+    int deleteFileByBusinessCode(String businessCode) throws BusinessException;
+
 }
