@@ -30,7 +30,7 @@
       <tx:method name="insert*" rollback-for="Throwable"/>
       <tx:method name="add*" rollback-for="Throwable"/>
       <tx:method name="save*" rollback-for="Throwable"/>
-      <tx:method name="creat*" rollback-for="Throwable"/>
+      <tx:method name="create*" rollback-for="Throwable"/>
 
       <!--删除操作，以delete，remove开头的方法-->
       <tx:method name="delete*" rollback-for="Throwable"/>
