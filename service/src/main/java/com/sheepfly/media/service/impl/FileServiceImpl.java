@@ -122,7 +122,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public TableResponse<List<FileInfo>> queryFileList(String businessCode) {
+    public TableResponse<FileInfo> queryFileList(String businessCode) {
         // todo 分页
         List<FileInfo> list = mapper.queryFileList(businessCode);
         return TableResponse.success(list, (long) list.size());

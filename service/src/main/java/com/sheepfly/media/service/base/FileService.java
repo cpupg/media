@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 文件服务。
@@ -44,7 +43,7 @@ public interface FileService {
      *
      * @return 文件列表。
      */
-    TableResponse<List<FileInfo>> queryFileList(String businessCode);
+    TableResponse<FileInfo> queryFileList(String businessCode);
 
     /**
      * 根据id获取文件对象。
