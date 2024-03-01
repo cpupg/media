@@ -1,23 +1,40 @@
 const { Button, Table, Input } = antd;
 
+const url = "http://localhost:9000/album/queryAlbumList"
+
 function MyApp() {
   const [count, setCount] = React.useState(0);
   const [data, setData] = React.useState([]);
   const [name, setName] = React.useState('');
 
-  const dSetData = _.debounce(setData, 1000);
-
   React.useEffect(() => {
-    axios.post('http://localhost:9000/album/queryAlbumList', {
+    axios.post(url, {
       params: {
         name,
       },
     }).then(r => {
       if (r.data.success) {
-        dSetData(r.data.data);
+        setData(r.data.data);
       }
     });
-  });
+  }, []);
+
+  const fetchData = _.debounce(() => {
+    axios.post(url, {
+      params: {
+        albumName: name,
+      },
+    }).then(r => {
+      if (r.data.success) {
+        setData(r.data.data);
+      }
+    })
+  }, 500);
+
+  const onChange = (e) => {
+    setName(e.target.value);
+    fetchData();
+  }
 
   const columns = [
     {
@@ -39,7 +56,7 @@ function MyApp() {
   return (
     <React.Fragment>
       <div>
-        <Input style={{ width: 500, margin: 10 }} onChange={(e) => setName(e.target.value)} value={name} allowClear />
+        <Input style={{ width: 500, margin: 10 }} onChange={onChange} value={name} allowClear />
       </div>
       <Button style={{ margin: 10 }} type="primary" onClick={() => setCount(count + 1)}>当前：{count}</Button>
       <Table rowKey="id" columns={columns} dataSource={data} />
