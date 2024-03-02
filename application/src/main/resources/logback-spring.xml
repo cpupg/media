@@ -11,6 +11,11 @@
     <appender-ref ref="SQL"/>
   </logger>
 
+  <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="TRACE" additivity="FALSE">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="SQL"/>
+  </logger>
+
   <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="FALSE">-->
   <!--  <appender-ref ref="STDOUT"/>-->
   <!--  <appender-ref ref="SQL"/>-->
