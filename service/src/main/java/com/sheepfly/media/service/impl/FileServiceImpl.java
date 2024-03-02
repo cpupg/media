@@ -36,6 +36,10 @@ import java.util.Properties;
 @Service
 @Slf4j
 public class FileServiceImpl implements FileService {
+    /**
+     * String.format拼接文件时的格式化字符串。fileDir/getDir/filename
+     */
+    private static final String FILE_FORMAT_PATTERN = "%s/%s/%s";
     @Autowired
     private FileUploadRepository repository;
     @Autowired
@@ -153,7 +157,7 @@ public class FileServiceImpl implements FileService {
         }
         log.info("删除文件:{}", file);
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
-        File file2 = new File(String.format("%s/%s/%s", recycleBin, dir, fileUpload.getFilename()));
+        File file2 = new File(String.format(FILE_FORMAT_PATTERN, recycleBin, dir, fileUpload.getFilename()));
         try {
             FileUtils.moveFile(file, file2);
         } catch (IOException e) {
@@ -179,7 +183,7 @@ public class FileServiceImpl implements FileService {
         List<File> fileList = new ArrayList<>();
         for (FileInfo fileInfo : list) {
             String dir = getFileDir(String.valueOf(fileInfo.getBusinessType()), fileInfo.getUploadTime());
-            File file = new File(dir, fileInfo.getFilename());
+            File file = getFile(dir, fileInfo.getFilename());
             if (file.exists()) {
                 fileList.add(file);
             } else {
@@ -209,7 +213,19 @@ public class FileServiceImpl implements FileService {
         }
         FileUpload fileUpload = opt.orElse(null);
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
-        return new File(String.format("%s/%s/%s", fileDir, dir, fileUpload.getFilename()));
+        return new File(String.format(FILE_FORMAT_PATTERN, fileDir, dir, fileUpload.getFilename()));
+    }
+
+    /**
+     * 拼接文件名和路径。
+     *
+     * @param dir 目录。
+     * @param filename 文件名。
+     *
+     * @return 文件。
+     */
+    private File getFile(String dir, String filename) {
+        return new File(String.format(FILE_FORMAT_PATTERN, fileDir, dir, filename));
     }
 
 }
