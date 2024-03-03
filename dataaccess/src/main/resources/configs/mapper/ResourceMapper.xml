@@ -62,4 +62,17 @@
     order by tf.REFER_TIME
     limit #{limitCount}
   </select>
+
+  <select id="queryList" resultType="com.sheepfly.media.dataaccess.vo.ResourceVo" parameterType="TableRequest">
+    select res.id,
+      dir.path as dir,
+      res.filename,
+      res.dir_code
+    from media.resource res
+           left join media.directory dir
+                     on res.dir_code = dir.dir_code
+    where res.DELETE_STATUS = '0'
+    <include refid="where_statement"/>
+    order by dir.PATH, res.FILENAME
+  </select>
 </mapper>

@@ -3,10 +3,13 @@ package com.sheepfly.media.service.impl;
 import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
@@ -159,6 +162,14 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         AlbumResource save = arService.save(ar);
         arService.flush();
         return save;
+    }
+
+    @Override
+    public TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
+        ResourceParam params = form.getParams();
+        Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
+        List<ResourceVo> list = mapper.queryList(form);
+        return TableResponse.success(list, page.getTotal());
     }
 
     @Override
