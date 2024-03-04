@@ -31,4 +31,8 @@ public class ResourceParam extends TablePagination implements Serializable {
      * 作者唯一标识。
      */
     private String authorId;
+    /**
+     * 和资源关联的专辑，只在selectModal中使用。
+     */
+    private String albumId;
 }

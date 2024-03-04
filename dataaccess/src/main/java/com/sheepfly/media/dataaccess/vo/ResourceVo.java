@@ -77,4 +77,8 @@ public class ResourceVo implements Serializable {
      * 封面文件id。
      */
     private String coverId;
+    /**
+     * 和资源关联的专辑id，只在ResourceSelectModal中使用。
+     */
+    private String albumId;
 }
