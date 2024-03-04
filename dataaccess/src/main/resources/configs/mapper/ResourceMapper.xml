@@ -10,10 +10,10 @@
 
   <sql id="where_statement">
     <if test="params.filename neq null and params.filename neq '' ">
-      and lower(${tb}.filename) like '%' || lower(#{params.filename}) || '%'
+      and lower(${tb}.filename) like '%' || #{params.filename} || '%'
     </if>
     <if test="params.dir neq null and params.dir neq '' ">
-      and lower(${tb2}.path) like '%' || lower(#{params.dir}) || '%'
+      and lower(${tb2}.path) like '%' || #{params.dir} || '%'
     </if>
     <if test="params.authorId neq null and params.authorId neq '' ">
       and ${tb3}.id = #{params.authorId}
