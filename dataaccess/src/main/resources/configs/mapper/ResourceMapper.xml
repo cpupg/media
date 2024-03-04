@@ -10,13 +10,13 @@
 
   <sql id="where_statement">
     <if test="params.filename neq null and params.filename neq '' ">
-      and lower(filename) like '%' || #{params.filename} || '%'
+      and lower(${tb}.filename) like '%' || #{params.filename} || '%'
     </if>
     <if test="params.dir neq null and params.dir neq '' ">
-      and lower(dir.path) like '%' || #{params.dir} || '%'
+      and lower(${tb2}.path) like '%' || #{params.dir} || '%'
     </if>
     <if test="params.authorId neq null and params.authorId neq '' ">
-      and author.id = #{params.authorId}
+      and ${tb3}.id = #{params.authorId}
     </if>
   </sql>
 
@@ -38,7 +38,11 @@
            left join media.directory dir
                      on res.dir_code = dir.dir_code
     where res.DELETE_STATUS = '0'
-    <include refid="where_statement"/>
+    <include refid="where_statement">
+      <property name="tb" value="res"/>
+      <property name="tb2" value="dir"/>
+      <property name="tb3" value="author"/>
+    </include>
     order by dir.PATH, res.FILENAME
   </select>
 
@@ -61,5 +65,25 @@
     where tf.resource_id = #{resourceId}
     order by tf.REFER_TIME
     limit #{limitCount}
+  </select>
+
+  <select id="queryList" resultType="com.sheepfly.media.dataaccess.vo.ResourceVo" parameterType="TableRequest">
+    select res.id,
+      dir.path as dir,
+      res.filename,
+      res.dir_code,
+      ar.ALBUM_ID
+    from media.resource res
+           left join media.directory dir
+                     on res.dir_code = dir.dir_code
+           left join media.album_resource ar
+                     on res.id = ar.RESOURCE_ID
+                        and ar.ALBUM_ID = #{params.albumId}
+    where res.DELETE_STATUS = '0'
+    <include refid="where_statement">
+      <property name="tb" value="res"/>
+      <property name="tb2" value="dir"/>
+    </include>
+    order by dir.PATH, res.FILENAME
   </select>
 </mapper>

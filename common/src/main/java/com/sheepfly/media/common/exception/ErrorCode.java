@@ -136,6 +136,7 @@ public enum ErrorCode {
     ALBUM_REPEATED_ALBUM("E0205001", "不能添加重复专辑"),
     ALBUM_EMPTY_NAME("E0205002", "专辑名称不能为空"),
     ALBUM_NAME_TOO_LONG("E0205003", "专辑名称过长"),
+    ALBUM_SELECT_MODAL_LOST_RESOURCE("E0205004", "查询表单弹框中表格时必须包含资源参数"),
     /*
      * 模块[专辑][album]结束[205]
      ***************************************************************************

@@ -7,9 +7,11 @@ import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.BatchTag;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
@@ -88,6 +90,12 @@ public class ResourceController {
             params.setFilename(params.getFilename().toLowerCase());
         }
         return service.queryResourceVoList(form);
+    }
+
+    @PostMapping("/queryList")
+    public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam,
+            ResourceSort> form) {
+        return service.queryList(form);
     }
 
     @PostMapping("/add")
