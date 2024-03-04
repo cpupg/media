@@ -50,4 +50,10 @@ public class AlbumVo implements Serializable {
      * 封面文件id。
      */
     private String coverId;
+    /**
+     * 和专辑关联的资源id。
+     *
+     * <p>此字段是为了在选择专辑时高亮已选专辑，其他时候不用。</p>
+     */
+    private String resourceId;
 }

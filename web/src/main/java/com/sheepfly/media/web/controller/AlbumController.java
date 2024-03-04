@@ -31,7 +31,11 @@ public class AlbumController {
 
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumVo> queryAlbumList(
-            @RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
+            @RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) throws BusinessException {
+        AlbumParam params = tableRequest.getParams();
+        if (params.isSelectModal() && StringUtils.isEmpty(params.getResourceId())) {
+            throw new BusinessException(ErrorCode.ALBUM_SELECT_MODAL_LOST_RESOURCE);
+        }
         return service.queryAlbumList(tableRequest);
     }
 
