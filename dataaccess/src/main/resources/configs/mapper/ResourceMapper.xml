@@ -79,6 +79,7 @@
            left join media.album_resource ar
                      on res.id = ar.RESOURCE_ID
                         and ar.ALBUM_ID = #{params.albumId}
+                        and ar.DELETE_STATUS = 0
     where res.DELETE_STATUS = '0'
     <include refid="where_statement">
       <property name="tb" value="res"/>

@@ -95,6 +95,13 @@ public class ResourceController {
     @PostMapping("/queryList")
     public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam,
             ResourceSort> form) {
+        ResourceParam params = form.getParams();
+        if (StringUtils.isNotBlank(params.getDir())) {
+            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+        }
+        if (StringUtils.isNotBlank(params.getFilename())) {
+            params.setFilename(params.getFilename().toLowerCase());
+        }
         return service.queryList(form);
     }
 
