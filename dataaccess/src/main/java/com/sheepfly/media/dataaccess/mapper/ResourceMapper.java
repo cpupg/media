@@ -1,6 +1,8 @@
 package com.sheepfly.media.dataaccess.mapper;
 
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
@@ -32,4 +34,6 @@ public interface ResourceMapper {
 
     List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(@Param("resourceId") String resourceId,
             @Param("limitCount") Integer limitCount);
+
+    List<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
 }

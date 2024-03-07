@@ -3,10 +3,13 @@ package com.sheepfly.media.service.impl;
 import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
@@ -21,6 +24,7 @@ import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
+import com.sheepfly.media.service.base.FileService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
@@ -58,6 +62,8 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     private AlbumService albumService;
     @Autowired
     private AlbumResourceService arService;
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private ResourceMapper mapper;
@@ -159,13 +165,23 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
+    public TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
+        ResourceParam params = form.getParams();
+        Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
+        List<ResourceVo> list = mapper.queryList(form);
+        return TableResponse.success(list, page.getTotal());
+    }
+
+    @Override
     public Resource deleteResource(String id) throws BusinessException {
         if (Constant.DELETED != logicDeleteById(id, Resource.class).getDeleteStatus()) {
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
-        log.info("删除资源{}的标签");
+        log.info("删除资源{}的标签", id);
         long l = trfService.deleteByResourceId(id);
         log.info("删除{}个标签", l);
+        int i = fileService.deleteFileByBusinessCode(id);
+        log.info("删除资源{}的预览图count={}", id, i);
         return findById(id);
     }
 }

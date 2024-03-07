@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 文件服务。
@@ -44,7 +43,7 @@ public interface FileService {
      *
      * @return 文件列表。
      */
-    TableResponse<List<FileInfo>> queryFileList(String businessCode);
+    TableResponse<FileInfo> queryFileList(String businessCode);
 
     /**
      * 根据id获取文件对象。
@@ -86,5 +85,16 @@ public interface FileService {
      * @return 业务类型。
      */
     String getBusinessType(String key);
+
+    /**
+     * 删除业务代码下的所有文件。
+     *
+     * @param businessCode 业务代码。
+     *
+     * @return 删除结果。
+     *
+     * @throws BusinessException e。
+     */
+    int deleteFileByBusinessCode(String businessCode) throws BusinessException;
 
 }

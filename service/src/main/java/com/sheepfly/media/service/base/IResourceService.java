@@ -1,7 +1,9 @@
 package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
@@ -84,4 +86,6 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @return 关联对象。
      */
     AlbumResource setAlbum(String resourceId, String albumId) throws BusinessException;
+
+    TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
 }

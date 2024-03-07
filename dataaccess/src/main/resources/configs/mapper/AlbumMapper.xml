@@ -14,15 +14,27 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID,NAME,DELETE_STATUS,
-        CREATE_TIME,UPDATE_TIME,DELETE_TIME
+    ${tb}.ID, ${tb}.NAME, ${tb}.DELETE_STATUS,
+    ${tb}.CREATE_TIME, ${tb}.UPDATE_TIME, ${tb}.DELETE_TIME
   </sql>
 
   <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.dataaccess.vo.AlbumVo">
-    select <include refid="Base_Column_List"/>
-    from media.ALBUM
-    <if test="params.albumName != null and params.albumName != ''">
-      where name like '%' || #{params.albumName} || '%'
+    select <include refid="Base_Column_List">
+        <property name="tb" value="a"/>
+      </include>
+      <if test="params.selectModal">
+        ,ar.resource_id
+      </if>
+    from media.ALBUM a
+    <if test="params.selectModal">
+      left join media.album_resource ar
+        on ar.album_id = a.id
+        and ar.delete_status = 0
+        and ar.resource_id = #{params.resourceId}
     </if>
+    <if test="params.albumName != null and params.albumName != ''">
+      where a.name like '%' || #{params.albumName} || '%'
+    </if>
+    order by CREATE_TIME desc
   </select>
 </mapper>

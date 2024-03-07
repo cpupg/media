@@ -51,7 +51,7 @@ public class FileController {
     }
 
     @PostMapping("/queryFileList")
-    public TableResponse<List<FileInfo>> queryFileList(@RequestParam("businessCode") String businessCode)
+    public TableResponse<FileInfo> queryFileList(@RequestParam("businessCode") String businessCode)
             throws BusinessException {
         log.info("获取文件列表，业务代码{}", businessCode);
         if (StringUtils.isEmpty(businessCode)) {

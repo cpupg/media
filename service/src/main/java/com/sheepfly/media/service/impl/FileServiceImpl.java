@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,10 @@ import java.util.Properties;
 @Service
 @Slf4j
 public class FileServiceImpl implements FileService {
+    /**
+     * String.format拼接文件时的格式化字符串。fileDir/getDir/filename
+     */
+    private static final String FILE_FORMAT_PATTERN = "%s/%s/%s";
     @Autowired
     private FileUploadRepository repository;
     @Autowired
@@ -122,7 +127,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public TableResponse<List<FileInfo>> queryFileList(String businessCode) {
+    public TableResponse<FileInfo> queryFileList(String businessCode) {
         // todo 分页
         List<FileInfo> list = mapper.queryFileList(businessCode);
         return TableResponse.success(list, (long) list.size());
@@ -152,7 +157,7 @@ public class FileServiceImpl implements FileService {
         }
         log.info("删除文件:{}", file);
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
-        File file2 = new File(String.format("%s/%s/%s", recycleBin, dir, fileUpload.getFilename()));
+        File file2 = new File(String.format(FILE_FORMAT_PATTERN, recycleBin, dir, fileUpload.getFilename()));
         try {
             FileUtils.moveFile(file, file2);
         } catch (IOException e) {
@@ -169,6 +174,36 @@ public class FileServiceImpl implements FileService {
         return businessType.getProperty(key);
     }
 
+    @Override
+    public int deleteFileByBusinessCode(String businessCode) throws BusinessException {
+        List<FileInfo> list = mapper.queryFileList(businessCode);
+        log.info("业务代码{}下有{}个文件", businessCode, list.size());
+        // 先判断文件是否存在，然后再删除
+        // 若中途删除失败，则已删除的文件只能手动删除
+        List<File> fileList = new ArrayList<>();
+        for (FileInfo fileInfo : list) {
+            String dir = getFileDir(String.valueOf(fileInfo.getBusinessType()), fileInfo.getUploadTime());
+            File file = getFile(dir, fileInfo.getFilename());
+            if (file.exists()) {
+                fileList.add(file);
+            } else {
+                log.warn("文件不存在:{}", fileInfo);
+                throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
+            }
+        }
+        int count = 0;
+        for (File file : fileList) {
+            if (file.delete()) {
+                count++;
+                log.info("文件{}删除完成", file);
+            } else {
+                log.warn("文件{}删除失败", file);
+                throw new BusinessException(ErrorCode.UNEXPECT_ERROR);
+            }
+        }
+        return count;
+    }
+
 
     @Override
     public File getFile(String id) {
@@ -178,6 +213,19 @@ public class FileServiceImpl implements FileService {
         }
         FileUpload fileUpload = opt.orElse(null);
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
-        return new File(String.format("%s/%s/%s", fileDir, dir, fileUpload.getFilename()));
+        return new File(String.format(FILE_FORMAT_PATTERN, fileDir, dir, fileUpload.getFilename()));
     }
+
+    /**
+     * 拼接文件名和路径。
+     *
+     * @param dir 目录。
+     * @param filename 文件名。
+     *
+     * @return 文件。
+     */
+    private File getFile(String dir, String filename) {
+        return new File(String.format(FILE_FORMAT_PATTERN, fileDir, dir, filename));
+    }
+
 }
