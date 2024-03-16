@@ -43,6 +43,20 @@
       <property name="tb2" value="dir"/>
       <property name="tb3" value="author"/>
     </include>
+    <if test="params.tagNames.length > 0">
+      and exists(select 1
+        from media.TAG_REFERENCE TR
+        where exists(select 1
+          from media.tag tag
+          where tag.NAME in (
+            <foreach collection="params.tagNames" item="name" separator=",">
+              #{name}
+            </foreach>
+          )
+          and res.id = tr.RESOURCE_ID
+          and tag.id = tr.TAG_ID)
+      )
+    </if>
     order by dir.PATH, res.FILENAME
   </select>
 
