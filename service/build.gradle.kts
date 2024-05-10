@@ -1,8 +1,0 @@
-plugins {
-    java
-}
-
-dependencies {
-    implementation(project(":dataaccess"))
-    testImplementation(project(":config"))
-}
