@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+
+apply from: rootProject.file('buildSrc/build.gradle')
+
+dependencies {
+    implementation project(':web')
+}

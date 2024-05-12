@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+apply from: rootProject.file('buildSrc/build.gradle')
+
+dependencies {
+    implementation project(':common')
+    testImplementation project(':config')
+    implementation project(':service')
+}

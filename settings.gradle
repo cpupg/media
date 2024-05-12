@@ -1,3 +1,4 @@
+
 pluginManagement {
     repositories {
         maven {
@@ -10,5 +11,20 @@ pluginManagement {
     }
 }
 
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    }
+}
+
+
 
 rootProject.name = 'media'
+include 'application'
+include 'cli'
+include 'common'
+include 'config'
+include 'dataaccess'
+include 'service'
+include 'web'
