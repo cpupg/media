@@ -1,25 +1,3 @@
-
-pluginManagement {
-    repositories {
-        maven {
-            url 'https://maven.aliyun.com/nexus/content/repositories/gradle-plugin'
-        }
-        gradlePluginPortal()
-    }
-    plugins {
-        id 'org.springframework.boot' version '2.6.1'
-    }
-}
-
-buildscript {
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-    }
-}
-
-
-
 rootProject.name = 'media'
 include 'application'
 include 'cli'
