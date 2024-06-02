@@ -45,7 +45,10 @@ subprojects {
 
     // 所有子模块的-依赖版本管理
     dependencies {
+        annotationProcessor 'org.projectlombok:lombok'
+        annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-aop'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
         implementation 'org.springframework.boot:spring-boot-starter-validation'

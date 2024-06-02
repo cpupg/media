@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(':common')
-    testImplementation project(':config')
+    api project(':common')
+    testRuntimeOnly project(':config')
 }

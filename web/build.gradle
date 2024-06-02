@@ -1,4 +1,5 @@
 dependencies {
-    implementation project(':service')
-    implementation project(':config')
+    api project(':service')
+    api project(':config')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
