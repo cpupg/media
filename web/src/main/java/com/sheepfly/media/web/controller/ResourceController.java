@@ -12,6 +12,7 @@ import com.sheepfly.media.common.form.param.AlbumParam;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.form.sort.ResourceSort;
+import com.sheepfly.media.common.http.BatchUpdateRequest;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
@@ -79,6 +80,13 @@ public class ResourceController {
     @Autowired
     private AlbumResourceService arService;
 
+    /**
+     * 查询资源表格，用来在资源页展示。
+     *
+     * @param form 查询表单。
+     *
+     * @return 资源表格。
+     */
     @PostMapping("/queryResourceList")
     public TableResponse<ResourceVo> queryResourceList(
             @RequestBody TableRequest<ResourceParam, ResourceParam, Object> form) {
@@ -92,6 +100,13 @@ public class ResourceController {
         return service.queryResourceVoList(form);
     }
 
+    /**
+     * 查询资源表格，用来在弹框展示资源。
+     *
+     * @param form 查询条件。
+     *
+     * @return 表格。
+     */
     @PostMapping("/queryList")
     public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam,
             ResourceSort> form) {
@@ -105,6 +120,17 @@ public class ResourceController {
         return service.queryList(form);
     }
 
+    /**
+     * 增加资源。
+     *
+     * @param resourceData 表单。
+     *
+     * @return 新增的资源。
+     *
+     * @throws InvocationTargetException e
+     * @throws IllegalAccessException e
+     * @throws BusinessException e
+     */
     @PostMapping("/add")
     public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
@@ -158,6 +184,15 @@ public class ResourceController {
         return ResponseData.success(savedResource);
     }
 
+    /**
+     * 删除资源。
+     *
+     * @param id 要删除的资源主键。
+     *
+     * @return 被删除的资源。
+     *
+     * @throws BusinessException e
+     */
     @PostMapping("/delete")
     public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
         if (!service.logicExistById(id)) {
@@ -167,6 +202,14 @@ public class ResourceController {
         return ResponseData.success(res);
     }
 
+    /**
+     * 添加标签。
+     *
+     * @param resourceId 资源主键。
+     * @param tagName 标签名。
+     *
+     * @return 标签引用。
+     */
     @PostMapping("addTag")
     public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId,
             @RequestParam("tagName") String tagName) {
@@ -188,6 +231,14 @@ public class ResourceController {
         return ResponseData.success(vo);
     }
 
+    /**
+     * 删除标签。
+     *
+     * @param referenceId 要删除的标签引用主键。
+     * @param resourceId 资源主键。
+     *
+     * @return 删除的标签引用。
+     */
     @PostMapping("deleteTag")
     public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId,
             @RequestParam("resourceId") String resourceId) {
@@ -210,6 +261,13 @@ public class ResourceController {
         return ResponseData.success(tagVo);
     }
 
+    /**
+     * 查询起源下的标签。
+     *
+     * @param request 请求。
+     *
+     * @return 资源对应的标签。
+     */
     @PostMapping("/queryTags")
     public ResponseData<List<TagReferenceVo>> queryTags(HttpServletRequest request) {
         String resourceId = request.getParameter("resourceId");
@@ -220,6 +278,13 @@ public class ResourceController {
         return ResponseData.success(list);
     }
 
+    /**
+     * 查询专辑清单，可以使用
+     *
+     * @param tableRequest
+     *
+     * @return
+     */
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam,
             AlbumSort> tableRequest) {
