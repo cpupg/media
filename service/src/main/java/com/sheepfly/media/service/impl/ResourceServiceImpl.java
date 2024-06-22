@@ -35,14 +35,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -196,35 +193,16 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         if (list.isEmpty()) {
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
-        if (condition.getIdList().isEmpty()) {
-            if (StringUtils.isEmpty(params.getFilename()) && StringUtils.isEmpty(params.getDir())) {
-                throw new BusinessException(ErrorCode.VALIDATE_ERROR);
-            }
-            int i = mapper.batchDelete(condition);
-            if (list.size() != i) {
-                throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
-            }
-        } else {
-            log.info("勾选了{}个资源", condition.getIdList().size());
-            if (list.size() != condition.getIdList().size()) {
-                throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
-            }
-            List<String> idList = list.stream().map(ResourceVo::getId).collect(Collectors.toList());
-            log.info("开始删除资源:{}", idList);
-            List<Map<String, Object>> resultList = new ArrayList<>();
-            for (ResourceVo resource : list) {
-                String id = resource.getId();
-                long l = trfService.deleteByResourceId(id);
-                int i = fileService.deleteFileByBusinessCode(id);
-                Map<String, Object> map = new HashMap<>();
-                map.put("res", resource);
-                map.put("tag", l);
-                map.put("file", i);
-                resultList.add(map);
-            }
-            log.info("删除完成{}", resultList);
-            return resultList;
+        if (StringUtils.isEmpty(params.getFilename()) && StringUtils.isEmpty(params.getDir())) {
+            throw new BusinessException(ErrorCode.VALIDATE_ERROR);
         }
+        int deleteCount = mapper.batchDelete(condition);
+        log.info("删除{}个资源", deleteCount);
+        if (list.size() != deleteCount) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
+        }
+        long l = trfService.batchDeleteByResource(condition);
+        log.info("删除{}个标签", l);
         return Collections.emptyList();
     }
 
