@@ -12,7 +12,6 @@ import com.sheepfly.media.common.form.param.AlbumParam;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.form.sort.ResourceSort;
-import com.sheepfly.media.common.http.BatchUpdateRequest;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
@@ -22,7 +21,6 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
-import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
@@ -72,8 +70,6 @@ public class ResourceController {
     @Autowired
     private DirectoryService directoryService;
     @Autowired
-    private ResourceRepository repository;
-    @Autowired
     private TagService tagService;
     @Autowired
     private TagReferenceService tagReferenceService;
@@ -89,10 +85,10 @@ public class ResourceController {
      */
     @PostMapping("/queryResourceList")
     public TableResponse<ResourceVo> queryResourceList(
-            @RequestBody TableRequest<ResourceParam, ResourceParam, Object> form) {
+            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
@@ -117,7 +113,7 @@ public class ResourceController {
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
-        return service.queryList(form);
+        return service.queryListByAlbum(form);
     }
 
     /**
@@ -195,9 +191,6 @@ public class ResourceController {
      */
     @PostMapping("/delete")
     public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
-        if (!service.logicExistById(id)) {
-            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA, "资源不存在", null);
-        }
         Resource res = service.deleteResource(id);
         return ResponseData.success(res);
     }
@@ -338,5 +331,10 @@ public class ResourceController {
         return ResponseData.success(list);
     }
 
+    @PostMapping("/batchUpdate")
+    public ResponseData<Object> batchDelete(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
+        List<Map<String, Object>> map = service.batchDelete(data);
+        return ResponseData.success(map);
+    }
 }
 

@@ -1,5 +1,7 @@
 package com.sheepfly.media.common.http;
 
+import java.util.List;
+
 /**
  * ProComponent的Request回调参数。
  *
@@ -22,6 +24,14 @@ public class TableRequest<F, P, S> {
      * 表头排序参数。
      */
     private S sort;
+    /**
+     * 是否批量操作的条件。
+     */
+    private boolean batch = false;
+    /**
+     * 勾选的id。
+     */
+    private List<String> idList;
 
     public F getFilter() {
         return filter;
@@ -45,5 +55,21 @@ public class TableRequest<F, P, S> {
 
     public void setSort(S sort) {
         this.sort = sort;
+    }
+
+    public boolean isBatch() {
+        return batch;
+    }
+
+    public void setBatch(boolean batch) {
+        this.batch = batch;
+    }
+
+    public List<String> getIdList() {
+        return idList;
+    }
+
+    public void setIdList(List<String> idList) {
+        this.idList = idList;
     }
 }

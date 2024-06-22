@@ -28,17 +28,21 @@ import com.sheepfly.media.service.base.FileService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -52,24 +56,27 @@ import java.util.Optional;
 public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, ResourceRepository>
         implements IResourceService {
     private static final Logger log = LoggerFactory.getLogger(ResourceServiceImpl.class);
-    @Autowired
+    @javax.annotation.Resource
     private TagService tagService;
-    @Autowired
+    @javax.annotation.Resource
     private TagReferenceService trfService;
-    @Autowired
+    @javax.annotation.Resource
     private Snowflake snowflake;
-    @Autowired
+    @javax.annotation.Resource
     private AlbumService albumService;
-    @Autowired
+    @javax.annotation.Resource
     private AlbumResourceService arService;
-    @Autowired
+    @javax.annotation.Resource
     private FileService fileService;
+    @javax.annotation.Resource
+    private ResourceRepository repository;
 
-    @Autowired
+    @javax.annotation.Resource
     private ResourceMapper mapper;
 
     @Override
-    public TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form) {
+    public TableResponse<ResourceVo> queryResourceVoList(
+            TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = mapper.selectResourceVoList(form);
@@ -165,11 +172,60 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
-    public TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
+    public TableResponse<ResourceVo> queryListByAlbum(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
-        List<ResourceVo> list = mapper.queryList(form);
+        List<ResourceVo> list = mapper.queryListByAlbum(form);
         return TableResponse.success(list, page.getTotal());
+    }
+
+    @Override
+    public List<Map<String, Object>> batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
+        ResourceParam params = condition.getParams();
+        boolean b = StringUtils.isBlank(params.getDir()) && StringUtils.isBlank(params.getFilename());
+        if (condition.getIdList().isEmpty() && b) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_PARAM_LOSE);
+        }
+        if (StringUtils.isNotBlank(params.getDir())) {
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
+        }
+        if (StringUtils.isNotBlank(params.getFilename())) {
+            params.setFilename(params.getFilename().toLowerCase());
+        }
+        List<ResourceVo> list = mapper.selectResourceVoList(condition);
+        if (list.isEmpty()) {
+            throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
+        }
+        if (condition.getIdList().isEmpty()) {
+            if (StringUtils.isEmpty(params.getFilename()) && StringUtils.isEmpty(params.getDir())) {
+                throw new BusinessException(ErrorCode.VALIDATE_ERROR);
+            }
+            int i = mapper.batchDelete(condition);
+            if (list.size() != i) {
+                throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
+            }
+        } else {
+            log.info("勾选了{}个资源", condition.getIdList().size());
+            if (list.size() != condition.getIdList().size()) {
+                throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
+            }
+            List<String> idList = list.stream().map(ResourceVo::getId).collect(Collectors.toList());
+            log.info("开始删除资源:{}", idList);
+            List<Map<String, Object>> resultList = new ArrayList<>();
+            for (ResourceVo resource : list) {
+                String id = resource.getId();
+                long l = trfService.deleteByResourceId(id);
+                int i = fileService.deleteFileByBusinessCode(id);
+                Map<String, Object> map = new HashMap<>();
+                map.put("res", resource);
+                map.put("tag", l);
+                map.put("file", i);
+                resultList.add(map);
+            }
+            log.info("删除完成{}", resultList);
+            return resultList;
+        }
+        return Collections.emptyList();
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      *
      * @return 满足条件的资源。
      */
-    TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form);
+    TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
 
     /**
      * 给资源创建标签。
@@ -87,5 +88,21 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      */
     AlbumResource setAlbum(String resourceId, String albumId) throws BusinessException;
 
-    TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
+    /**
+     * 查询资源列表，返回内容只包含目录和文件名，查询条件只有目录和文件名。
+     *
+     * @param form 搜索条件。
+     *
+     * @return 资源列表。
+     */
+    TableResponse<ResourceVo> queryListByAlbum(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
+
+    /**
+     * 批量删除。
+     *
+     * @param condition 删除条件。
+     *
+     * @return 删除结果。
+     */
+    List<Map<String, Object>> batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
 }
