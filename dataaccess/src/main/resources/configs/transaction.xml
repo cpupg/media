@@ -27,24 +27,35 @@
     <tx:attributes>
       <!--只对增删改开启事务，读取设置为只读事务（spring对只读有优化）-->
       <!--增加操作，所有insert,save,add,create开头的方法-->
-      <tx:method name="insert*" rollback-for="Throwable"/>
-      <tx:method name="add*" rollback-for="Throwable"/>
-      <tx:method name="save*" rollback-for="Throwable"/>
-      <tx:method name="create*" rollback-for="Throwable"/>
+      <!--表达式区分大小写-->
+      <tx:method name="*insert*" rollback-for="Throwable"/>
+      <tx:method name="*Insert*" rollback-for="Throwable"/>
+      <tx:method name="*add*" rollback-for="Throwable"/>
+      <tx:method name="*Add*" rollback-for="Throwable"/>
+      <tx:method name="*save*" rollback-for="Throwable"/>
+      <tx:method name="*Save*" rollback-for="Throwable"/>
+      <tx:method name="*create*" rollback-for="Throwable"/>
+      <tx:method name="*Create*" rollback-for="Throwable"/>
 
       <!--删除操作，以delete，remove开头的方法-->
-      <tx:method name="delete*" rollback-for="Throwable"/>
-      <tx:method name="remove*" rollback-for="Throwable"/>
+      <tx:method name="*delete*" rollback-for="Throwable"/>
+      <tx:method name="*Delete*" rollback-for="Throwable"/>
+      <tx:method name="*remove*" rollback-for="Throwable"/>
+      <tx:method name="*Remove*" rollback-for="Throwable"/>
 
       <!--修改操作，所有以update开头的方法-->
-      <tx:method name="update*" rollback-for="Throwable"/>
+      <tx:method name="*update*" rollback-for="Throwable"/>
+      <tx:method name="*Update*" rollback-for="Throwable"/>
 
       <!--查询操作，所有以find，query，select，以及以count开头或结尾的方法-->
-      <tx:method name="find*" read-only="true" rollback-for="Throwable"/>
-      <tx:method name="query*" read-only="true" rollback-for="Throwable"/>
-      <tx:method name="select*" read-only="true" rollback-for="Throwable"/>
-      <tx:method name="count*" read-only="true" rollback-for="Throwable"/>
-      <tx:method name="*count" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*find*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*Find*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*query*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*Query*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*select*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*Select*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*count*" read-only="true" rollback-for="Throwable"/>
+      <tx:method name="*Count*" read-only="true" rollback-for="Throwable"/>
       <!--切入点定义结束-->
     </tx:attributes>
   </tx:advice>
