@@ -19,7 +19,7 @@
     where resource_id in (
       select res.id
       from media.resource res
-      where DELETE_STATUS = 1
+      where res.DELETE_STATUS = 1
       <choose>
         <when test="idList neq null and idList.size() gt 0">
           and res.id in

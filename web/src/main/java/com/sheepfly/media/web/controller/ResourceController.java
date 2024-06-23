@@ -104,11 +104,11 @@ public class ResourceController {
      * @return 表格。
      */
     @PostMapping("/queryList")
-    public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam,
-            ResourceSort> form) {
+    public TableResponse<ResourceVo> queryList(
+            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
@@ -292,6 +292,15 @@ public class ResourceController {
         return ResponseData.success(albumResource);
     }
 
+    /**
+     * 从专辑里删除资源。
+     *
+     * <p>删除操作是逻辑删除。</p>
+     *
+     * @param albumResourceId 关联标识。
+     *
+     * @return 被删除的关联对象。
+     */
     @PostMapping("/unsetAlbum")
     public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
         log.info("移除专辑和资源关联关系{}", albumResourceId);
@@ -331,8 +340,18 @@ public class ResourceController {
         return ResponseData.success(list);
     }
 
-    @PostMapping("/batchUpdate")
-    public ResponseData<Object> batchDelete(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
+    /**
+     * 批量删除资源。
+     *
+     * <p>可以按勾选删除，也可以按搜索条件删除。搜索条件不包含标签。</p>
+     *
+     * @param data 删除条件。
+     *
+     * @return 删除结果。
+     */
+    @PostMapping("/batchDelete")
+    public ResponseData<Object> batchDelete(
+            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
         List<Map<String, Object>> map = service.batchDelete(data);
         return ResponseData.success(map);
     }

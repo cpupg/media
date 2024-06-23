@@ -10,5 +10,13 @@ import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
 import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
 
 public interface AlbumResourceService extends BaseJpaService<AlbumResource, String, AlbumResourceRepository> {
-    TableResponse<AlbumResourceVo> queryAlbumResourceList(TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
+    /**
+     * 查询包含指定资源的专辑。
+     *
+     * @param tableRequest 查询参数。
+     *
+     * @return 查询结果。
+     */
+    TableResponse<AlbumResourceVo> queryAlbumResourceList(
+            TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
 }

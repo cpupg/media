@@ -75,7 +75,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     public TableResponse<ResourceVo> queryResourceVoList(
             TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
-        Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
+        Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = mapper.selectResourceVoList(form);
         for (int i = 0; i < list.size(); i++) {
             ResourceVo vo = list.get(i);
@@ -203,6 +203,8 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         }
         long l = trfService.batchDeleteByResource(condition);
         log.info("删除{}个标签", l);
+        l = albumService.batchDeleteByResource(condition);
+        log.info("删除{}个专辑", l);
         return Collections.emptyList();
     }
 
