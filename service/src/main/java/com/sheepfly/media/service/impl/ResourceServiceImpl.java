@@ -2,7 +2,6 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
@@ -213,11 +212,10 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         if (Constant.DELETED != logicDeleteById(id, Resource.class).getDeleteStatus()) {
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
-        log.info("删除资源{}的标签", id);
         long l = trfService.deleteByResourceId(id);
-        log.info("删除{}个标签", l);
+        long l2 = albumService.deleteResourceFromAlbum(id);
         int i = fileService.deleteFileByBusinessCode(id);
-        log.info("删除资源{}的预览图count={}", id, i);
+        log.info("资源{}删除完成，包含{}个标签，{}个专辑，{}个文件", id, l, l2, i);
         return findById(id);
     }
 }

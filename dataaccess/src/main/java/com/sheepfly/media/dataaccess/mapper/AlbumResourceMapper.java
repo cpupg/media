@@ -37,6 +37,15 @@ public interface AlbumResourceMapper {
      * @return 删除数量。
      */
     long batchDeleteAlbum(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+
+    /**
+     * 从专辑中删除资源。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 删除数量。
+     */
+    long updateResourceFromAlbum(String resourceId);
 }
 
 

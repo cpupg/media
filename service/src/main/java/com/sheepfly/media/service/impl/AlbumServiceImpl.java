@@ -40,4 +40,9 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
     public long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
         return arMapper.batchDeleteAlbum(condition);
     }
+
+    @Override
+    public long deleteResourceFromAlbum(String resourceId) {
+        return arMapper.updateResourceFromAlbum(resourceId);
+    }
 }

@@ -41,6 +41,13 @@
     </choose>
     )
   </delete>
+  <update id="updateResourceFromAlbum" parameterType="string">
+    update media.ALBUM_RESOURCE
+    set DELETE_STATUS = 1,
+      UPDATE_TIME = current_timestamp()
+    where RESOURCE_ID = #{resourceId}
+      and DELETE_STATUS = 0
+  </update>
 
   <select id="selectAlbumResourceList" parameterType="TableRequest"
       resultType="com.sheepfly.media.dataaccess.vo.AlbumResourceVo">
@@ -58,6 +65,7 @@
            left join media.directory dir
                      on res.dir_code = dir.dir_code
     where ar.DELETE_STATUS = 0
+        and res.DELETE_STATUS = 0
     <if test="params.resourceId != null and params.resourceId != ''">and ar.RESOURCE_ID = #{params.resourceId}</if>
     <if test="params.albumName != null and params.albumName != ''">
       and a.name like '%' || #{params.albumName} || '%'

@@ -33,4 +33,13 @@ public interface AlbumService extends BaseJpaService<Album, String, AlbumReposit
      * @return 删除数量。
      */
     long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+
+    /**
+     * 从专辑中删除资源。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 删除数量。
+     */
+    long deleteResourceFromAlbum(String resourceId);
 }
