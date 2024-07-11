@@ -14,25 +14,27 @@ branch=$1;
 
 UI_URL="git@e.coding.net:wrote-code/mycode/media-ui.git";
 SERVER_URL="git@e.coding.net:wrote-code/mycode/media.git";
+#当前目录的绝对路径，用来定位
 WORK_DIR=$(pwd);
 UI_DIR=$WORK_DIR/media-ui;
 SERVER_DIR=$WORK_DIR/media;
 APP_DIR=app;
-LOG_FILE=$WORK_DIR/package.log;
+LOG_FILE=$WORK_DIR/build.log;
 # 加了-v参数的rm和mv命令日志写在这里
 VERBOSE_LOG_FILE=$WORK_DIR/verbose.log;
-MODULE_LIST="common config dataaccess service web";
-MODULE_LIB_DIR=$APP_DIR/lib_module;
-MAVEN_LIB_DIR=$APP_DIR/lib_maven;
+#依赖目录，使用manifast文件定位依赖
+LIB_DIR=$APP_DIR/lib;
 CURRENT_DATE=$(date '+%Y.%m.%d');
+#包名，格式为模块名-分支名-主版本号-修订号-日期，应用的修订号包含前后台修订号，命令行只包含后台修订号
 CLI_JAR_NAME=cli-$branch;
 CLI_JAR="";
 APP_JAR_NAME=media-$branch;
 APP_JAR="";
 JAVA_COMMAND="java -Dspring.profiles.active=prd,cli";
-CLASSPATH="lib_module/*;lib_maven/*";
-CLI_CLASSPATH="lib_maven/*";
+#命令行主类
 CLI_MAIN_CLASS="LoadSingleFile LoadDirectory";
+#应用主类
+APP_MAIN_CLASS="com.sheepfly.media.application.MediaApplication";
 PACKAGE_NAME=com.sheepfly.media.cli;
 #前台版本
 REVISION_UI="";
@@ -100,8 +102,6 @@ endWork "目录检查完成";
 
 log "创建目录";
 mkdir $APP_DIR;
-mkdir $MODULE_LIB_DIR;
-mkdir $MAVEN_LIB_DIR;
 
 ################################################################################
 
@@ -215,29 +215,14 @@ mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR;
 runStatus $?;
 mv -v $SERVER_DIR/cli/target/*.jar $APP_DIR/$CLI_JAR;
 runStatus $?;
-
-log "移动模块依赖";
-for dir in $MODULE_LIST;do
-    mv -v $SERVER_DIR/$dir/target/*.jar $MODULE_LIB_DIR;
-done
-log "解压jar包";
-unzip $APP_DIR/$APP_JAR -d app >> $VERBOSE_LOG_FILE;
+log "复制maven依赖";
+#application比cli多一个web模块
+cd $SERVER_DIR/application;
 runStatus $?;
-
-mv -v $APP_DIR/BOOT-INF/lib/* $MAVEN_LIB_DIR >> $VERBOSE_LOG_FILE;
+mvn dependency:copy-dependencies
 runStatus $?;
-rm -rfv $APP_DIR/BOOT-INF >> $VERBOSE_LOG_FILE;
+mv target/dependency $APP_DIR/lib
 runStatus $?;
-rm -rfv $APP_DIR/META-INF >> $VERBOSE_LOG_FILE;
-runStatus $?;
-rm -rfv $APP_DIR/org >> $VERBOSE_LOG_FILE;
-runStatus $?;
-log "删除maven依赖目录中的模块依赖";
-for f in $(ls $MODULE_LIB_DIR);do
-    rm -v $MAVEN_LIB_DIR/$f;
-    runStatus $?;
-done
-
 endWork "复制依赖包完成";
 ################################################################################
 
@@ -247,21 +232,14 @@ log "创建应用启动脚本";
 
 cd $APP_DIR;
 runStatus $?;
-echo "$JAVA_COMMAND -jar $APP_JAR" >> start-media.bat;
+echo "$JAVA_COMMAND -cp $APP_JAR com.sheepfly.media.application.MediaApplication" >> start-media.bat;
 runStatus $?;
 log "创建命令行启动脚本";
-log "拼接模块依赖";
-for item in $(ls lib_module); do
-    CLI_CLASSPATH="lib_module/$item;$CLI_CLASSPATH";
-    runStatus $?;
-done
-log "$CLI_CLASSPATH";
 for item in $CLI_MAIN_CLASS; do
-    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLI_JAR;$CLI_CLASSPATH $PACKAGE_NAME.$item %*" >> $item.bat;
+    echo "$JAVA_COMMAND -Dmodule=$item -cp $CLI_JAR $PACKAGE_NAME.$item %*" >> $item.bat;
     runStatus $?;
 done
 endWork "启动脚本创建完成";
 ################################################################################
-
 
 log "打包完成";
