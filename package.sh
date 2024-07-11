@@ -24,6 +24,8 @@ LOG_FILE=$WORK_DIR/build.log;
 VERBOSE_LOG_FILE=$WORK_DIR/verbose.log;
 #依赖目录，使用manifast文件定位依赖
 LIB_DIR=$APP_DIR/lib;
+#原始依赖目录，通过mvn复制
+LIB_SOURCE_DIR=$WORK_DIR/media/application/target/dependency;
 CURRENT_DATE=$(date '+%Y.%m.%d');
 #包名，格式为模块名-分支名-主版本号-修订号-日期，应用的修订号包含前后台修订号，命令行只包含后台修订号
 CLI_JAR_NAME=cli-$branch;
@@ -221,7 +223,8 @@ cd $SERVER_DIR/application;
 runStatus $?;
 mvn dependency:copy-dependencies
 runStatus $?;
-mv target/dependency $APP_DIR/lib
+cd $WORK_DIR;
+mv $LIB_SOURCE_DIR $LIB_DIR;
 runStatus $?;
 endWork "复制依赖包完成";
 ################################################################################
