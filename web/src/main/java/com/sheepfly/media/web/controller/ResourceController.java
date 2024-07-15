@@ -352,8 +352,8 @@ public class ResourceController {
     @PostMapping("/batchDelete")
     public ResponseData<Object> batchDelete(
             @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
-        List<Map<String, Object>> map = service.batchDelete(data);
-        return ResponseData.success(map);
+        List<Map<String, Object>> list = service.batchDelete(data);
+        return ResponseData.success(list);
     }
 }
 

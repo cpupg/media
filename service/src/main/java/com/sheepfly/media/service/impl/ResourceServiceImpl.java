@@ -192,9 +192,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         if (list.isEmpty()) {
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
-        if (StringUtils.isEmpty(params.getFilename()) && StringUtils.isEmpty(params.getDir())) {
-            throw new BusinessException(ErrorCode.VALIDATE_ERROR);
-        }
         int deleteCount = mapper.batchDelete(condition);
         log.info("删除{}个资源", deleteCount);
         if (list.size() != deleteCount) {
