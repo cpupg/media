@@ -35,6 +35,9 @@ public class FileUpload implements Serializable, LogicDelete {
 
     /**
      * 保存时的文件名
+     *
+     * <p>长度是43位，格式为时间戳+雪花id+扩展名。时间戳格式为yyyyMMddHHmmsssss，雪花id19位，扩展名
+     * 5位。时间戳和雪花id之间为下划线，扩展名前面是点。</p>
      */
     @Column(name = "FILENAME", nullable = false)
     private String filename;
