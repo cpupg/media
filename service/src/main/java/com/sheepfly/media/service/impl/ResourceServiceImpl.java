@@ -27,6 +27,7 @@ import com.sheepfly.media.service.base.FileService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,7 +180,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     public List<Map<String, Object>> batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
         ResourceParam params = condition.getParams();
         boolean b = StringUtils.isBlank(params.getDir()) && StringUtils.isBlank(params.getFilename());
-        if (condition.getIdList().isEmpty() && b) {
+        if (CollectionUtils.isEmpty(condition.getIdList()) && b) {
             throw new BusinessException(ErrorCode.BATCH_UPDATE_PARAM_LOSE);
         }
         if (StringUtils.isNotBlank(params.getDir())) {

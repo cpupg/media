@@ -1,7 +1,9 @@
 package com.sheepfly.media.dataaccess.entity;
 
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +15,9 @@ import java.util.Date;
 /**
  * 文件上传
  */
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "MEDIA.FILE_UPLOAD")
 public class FileUpload implements Serializable, LogicDelete {

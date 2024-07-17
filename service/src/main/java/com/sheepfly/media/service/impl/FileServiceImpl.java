@@ -14,18 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,13 +41,13 @@ public class FileServiceImpl implements FileService {
      * String.format拼接文件时的格式化字符串。fileDir/getDir/filename
      */
     private static final String FILE_FORMAT_PATTERN = "%s/%s/%s";
-    @Autowired
+    @Resource
     private FileUploadRepository repository;
-    @Autowired
+    @Resource
     private Snowflake snowflake;
-    @Autowired
+    @Resource
     private FileMapper mapper;
-    @Autowired
+    @Resource
     private Properties businessType;
     /**
      * 文件保存目录。
@@ -69,16 +70,14 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileInfo uploadFile(MultipartFile file, String businessCode, String businessType) throws IOException {
-        log.info("上传文件:{}", file.getName());
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmsssss");
         Date date = new Date();
         String originalFilename = file.getOriginalFilename();
         String ext = FilenameUtils.getExtension(originalFilename);
-        if (ext.length() > 0) {
+        if (StringUtils.isNotEmpty(ext)) {
             ext = "." + ext;
         }
         // 保存时使用时间戳保存文件
-        String filename = format.format(System.currentTimeMillis());
+        String filename = getFileName();
         File f = new File(String.format("%s/%s/%s%s", fileDir, getFileDir(businessType, date), filename, ext));
         // 目前没有预览功能，将所有文件放在一起方便预览。
         File f2 = new File(String.format("%s/%s%s", tempDir, filename, ext));
@@ -87,11 +86,9 @@ public class FileServiceImpl implements FileService {
         try (InputStream is = file.getInputStream();
              OutputStream os = new FileOutputStream(f);
              OutputStream os2 = new FileOutputStream(f2)) {
-            log.info("复制文件到上传目录");
             byte[] bytes = IOUtils.readFully(is, is.available());
             IOUtils.write(bytes, os);
             IOUtils.write(bytes, os2);
-            log.info("复制完成");
         }
         FileUpload fileUpload = new FileUpload();
         fileUpload.setBusinessCode(businessCode);
@@ -101,27 +98,12 @@ public class FileServiceImpl implements FileService {
         fileUpload.setExtension(FilenameUtils.getExtension(originalFilename));
 
         FileInfo fileInfo = new FileInfo();
-        // if (!StringUtils.isEmpty(fileUpload.getId())) {
-        // todo 文件上传二次确认
-        // 上传过程可能意外终止，若此时文件已经保存到指定目录，则有于上传终止，此文件成为脏文件。
-        // 只有经过二次确认的文件才能视为上传成功。
-        //     // 文件已上传，这次调用是用来更新状态。
-        //     log.info("文件已上传，修改上传状态。");
-        //     FileUpload f = new FileUpload();
-        //     f.setId(fileUpload.getId());
-        //     f.setUploadStatus(AFTER_UPLOAD);
-        //     FileUpload save = repository.save(f);
-        //     log.info("修改完成{}", save);
-        //     BeanUtils.copyProperties(fileUpload, fileInfo);
-        //     return fileInfo;
-        // }
         fileUpload.setId(snowflake.nextIdStr());
         fileUpload.setDeleteStatus(Constant.NOT_DELETED);
         fileUpload.setUploadStatus(START_UPLOAD);
         fileUpload.setUploadTime(new Date());
-        log.info("上传文件，文件信息:{}", fileUpload);
         FileUpload save = repository.save(fileUpload);
-        log.info("上传完成{}", save);
+        log.info("文件上传完成{}", save);
         BeanUtils.copyProperties(save, fileInfo);
         return fileInfo;
     }
@@ -202,6 +184,10 @@ public class FileServiceImpl implements FileService {
             }
         }
         return count;
+    }
+
+    private String getFileName() {
+        return DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS") + "_" + snowflake.nextIdStr();
     }
 
 
