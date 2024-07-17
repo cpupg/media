@@ -1,6 +1,9 @@
 package com.sheepfly.media.service.base;
 
+import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
@@ -37,5 +40,21 @@ public interface TagReferenceService extends BaseJpaService<TagReference, String
      */
     boolean getFavorite(String resourceId);
 
+    /**
+     * 通过资源标识删除标签。
+     *
+     * @param id 资源标识。
+     *
+     * @return 删除数量。
+     */
     long deleteByResourceId(String id);
+
+    /**
+     * 根据资源删除标签。
+     *
+     * @param condition 搜索条件。
+     *
+     * @return 删除数量。
+     */
+    long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
 }

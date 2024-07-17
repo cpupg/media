@@ -19,6 +19,35 @@
         DELETE_STATUS,CREATE_TIME,UPDATE_TIME,
         DELETE_TIME
   </sql>
+  <delete id="batchDeleteAlbum" parameterType="TableRequest">
+    update media.ALBUM_RESOURCE t
+    set DELETE_STATUS = 1, UPDATE_TIME = current_timestamp()
+    where  t.RESOURCE_ID in (
+    select res.id
+    from media.resource res
+    where res.DELETE_STATUS = 0
+    <choose>
+      <when test="idList neq null and idList.size() gt 0">
+        and res.id in
+        <foreach collection="idList" item="item" separator="," open="(" close=")">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.batch_where_sql">
+          <property name="t_resource" value="res"/>
+        </include>
+      </otherwise>
+    </choose>
+    )
+  </delete>
+  <update id="updateResourceFromAlbum" parameterType="string">
+    update media.ALBUM_RESOURCE
+    set DELETE_STATUS = 1,
+      UPDATE_TIME = current_timestamp()
+    where RESOURCE_ID = #{resourceId}
+      and DELETE_STATUS = 0
+  </update>
 
   <select id="selectAlbumResourceList" parameterType="TableRequest"
       resultType="com.sheepfly.media.dataaccess.vo.AlbumResourceVo">
@@ -36,6 +65,7 @@
            left join media.directory dir
                      on res.dir_code = dir.dir_code
     where ar.DELETE_STATUS = 0
+        and res.DELETE_STATUS = 0
     <if test="params.resourceId != null and params.resourceId != ''">and ar.RESOURCE_ID = #{params.resourceId}</if>
     <if test="params.albumName != null and params.albumName != ''">
       and a.name like '%' || #{params.albumName} || '%'

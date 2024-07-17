@@ -21,7 +21,6 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
-import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
 import com.sheepfly.media.dataaccess.vo.ResourceVo;
 import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
@@ -71,20 +70,25 @@ public class ResourceController {
     @Autowired
     private DirectoryService directoryService;
     @Autowired
-    private ResourceRepository repository;
-    @Autowired
     private TagService tagService;
     @Autowired
     private TagReferenceService tagReferenceService;
     @Autowired
     private AlbumResourceService arService;
 
+    /**
+     * 查询资源表格，用来在资源页展示。
+     *
+     * @param form 查询表单。
+     *
+     * @return 资源表格。
+     */
     @PostMapping("/queryResourceList")
     public TableResponse<ResourceVo> queryResourceList(
-            @RequestBody TableRequest<ResourceParam, ResourceParam, Object> form) {
+            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
@@ -92,19 +96,37 @@ public class ResourceController {
         return service.queryResourceVoList(form);
     }
 
+    /**
+     * 查询资源表格，用来在弹框展示资源。
+     *
+     * @param form 查询条件。
+     *
+     * @return 表格。
+     */
     @PostMapping("/queryList")
-    public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam,
-            ResourceSort> form) {
+    public TableResponse<ResourceVo> queryList(
+            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
-        return service.queryList(form);
+        return service.queryListByAlbum(form);
     }
 
+    /**
+     * 增加资源。
+     *
+     * @param resourceData 表单。
+     *
+     * @return 新增的资源。
+     *
+     * @throws InvocationTargetException e
+     * @throws IllegalAccessException e
+     * @throws BusinessException e
+     */
     @PostMapping("/add")
     public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
@@ -158,15 +180,29 @@ public class ResourceController {
         return ResponseData.success(savedResource);
     }
 
+    /**
+     * 删除资源。
+     *
+     * @param id 要删除的资源主键。
+     *
+     * @return 被删除的资源。
+     *
+     * @throws BusinessException e
+     */
     @PostMapping("/delete")
     public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
-        if (!service.logicExistById(id)) {
-            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA, "资源不存在", null);
-        }
         Resource res = service.deleteResource(id);
         return ResponseData.success(res);
     }
 
+    /**
+     * 添加标签。
+     *
+     * @param resourceId 资源主键。
+     * @param tagName 标签名。
+     *
+     * @return 标签引用。
+     */
     @PostMapping("addTag")
     public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId,
             @RequestParam("tagName") String tagName) {
@@ -188,6 +224,14 @@ public class ResourceController {
         return ResponseData.success(vo);
     }
 
+    /**
+     * 删除标签。
+     *
+     * @param referenceId 要删除的标签引用主键。
+     * @param resourceId 资源主键。
+     *
+     * @return 删除的标签引用。
+     */
     @PostMapping("deleteTag")
     public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId,
             @RequestParam("resourceId") String resourceId) {
@@ -210,6 +254,13 @@ public class ResourceController {
         return ResponseData.success(tagVo);
     }
 
+    /**
+     * 查询起源下的标签。
+     *
+     * @param request 请求。
+     *
+     * @return 资源对应的标签。
+     */
     @PostMapping("/queryTags")
     public ResponseData<List<TagReferenceVo>> queryTags(HttpServletRequest request) {
         String resourceId = request.getParameter("resourceId");
@@ -220,6 +271,13 @@ public class ResourceController {
         return ResponseData.success(list);
     }
 
+    /**
+     * 查询专辑清单，可以使用
+     *
+     * @param tableRequest
+     *
+     * @return
+     */
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam,
             AlbumSort> tableRequest) {
@@ -234,6 +292,15 @@ public class ResourceController {
         return ResponseData.success(albumResource);
     }
 
+    /**
+     * 从专辑里删除资源。
+     *
+     * <p>删除操作是逻辑删除。</p>
+     *
+     * @param albumResourceId 关联标识。
+     *
+     * @return 被删除的关联对象。
+     */
     @PostMapping("/unsetAlbum")
     public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
         log.info("移除专辑和资源关联关系{}", albumResourceId);
@@ -273,5 +340,20 @@ public class ResourceController {
         return ResponseData.success(list);
     }
 
+    /**
+     * 批量删除资源。
+     *
+     * <p>可以按勾选删除，也可以按搜索条件删除。搜索条件不包含标签。</p>
+     *
+     * @param data 删除条件。
+     *
+     * @return 删除结果。
+     */
+    @PostMapping("/batchDelete")
+    public ResponseData<Object> batchDelete(
+            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
+        List<Map<String, Object>> list = service.batchDelete(data);
+        return ResponseData.success(list);
+    }
 }
 

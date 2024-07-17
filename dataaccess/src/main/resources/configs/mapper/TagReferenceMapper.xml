@@ -14,6 +14,27 @@
     <!--这个字段目前没有值，不需要映射-->
     <!--<result property="unReferTime" column="UN_REFER_TIME"/>-->
   </resultMap>
+  <update id="batchDeleteByResource">
+    delete from media.TAG_REFERENCE
+    where resource_id in (
+      select res.id
+      from media.resource res
+      where res.DELETE_STATUS = 1
+      <choose>
+        <when test="idList neq null and idList.size() gt 0">
+          and res.id in
+          <foreach collection="idList" item="item" separator="," open="(" close=")">
+            #{item}
+          </foreach>
+        </when>
+        <otherwise>
+          <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.batch_where_sql">
+            <property name="t_resource" value="res"/>
+          </include>
+        </otherwise>
+      </choose>
+      )
+  </update>
   <select id="queryTagReferenceList" parameterType="com.sheepfly.media.common.http.TableRequest"
       resultMap="tagReferenceVo">
     select tf.id, tf.RESOURCE_ID, tf.TAG_ID, tag.NAME as tag_name

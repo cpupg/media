@@ -15,5 +15,12 @@ import java.util.List;
  * @Entity com.sheepfly.media.dataaccess.entity.Album
  */
 public interface AlbumMapper {
+    /**
+     * 查询专辑列表。
+     *
+     * @param tableRequest
+     *
+     * @return 查询结果。
+     */
     List<AlbumVo> selectAlbumList(TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
 }

@@ -3,7 +3,10 @@ package com.sheepfly.media.service.impl;
 import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
@@ -63,5 +66,10 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
     @Override
     public long deleteByResourceId(String id) {
         return repository.deleteByResourceId(id);
+    }
+
+    @Override
+    public long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
+        return mapper.batchDeleteByResource(condition);
     }
 }

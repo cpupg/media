@@ -14,13 +14,13 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ${tb}.ID, ${tb}.NAME, ${tb}.DELETE_STATUS,
-    ${tb}.CREATE_TIME, ${tb}.UPDATE_TIME, ${tb}.DELETE_TIME
+    ${t_album}.ID, ${t_album}.NAME, ${t_album}.DELETE_STATUS,
+    ${t_album}.CREATE_TIME, ${t_album}.UPDATE_TIME, ${t_album}.DELETE_TIME
   </sql>
 
   <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.dataaccess.vo.AlbumVo">
     select <include refid="Base_Column_List">
-        <property name="tb" value="a"/>
+        <property name="t_album" value="a"/>
       </include>
       <if test="params.selectModal">
         ,ar.resource_id

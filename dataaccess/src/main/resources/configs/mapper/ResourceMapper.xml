@@ -10,15 +10,61 @@
 
   <sql id="where_statement">
     <if test="params.filename neq null and params.filename neq '' ">
-      and lower(${tb}.filename) like '%' || #{params.filename} || '%'
+      and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
     </if>
     <if test="params.dir neq null and params.dir neq '' ">
-      and lower(${tb2}.path) like '%' || #{params.dir} || '%'
+      and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
     </if>
     <if test="params.authorId neq null and params.authorId neq '' ">
-      and ${tb3}.id = #{params.authorId}
+      and ${t_author}.id = #{params.authorId}
+    </if>
+    <if test="idList != null and idList.size() > 0">
+      and ${t_resource}.id in
+      <foreach collection="idList" item="idItem" separator="," open="(" close=")">
+        #{idItem}
+      </foreach>
     </if>
   </sql>
+
+  <sql id="batch_where_sql">
+    <if test="params.filename neq null and params.filename neq '' ">
+      and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
+    </if>
+    <if test="params.dir neq null and params.dir neq '' ">
+      and exists(
+        select 1
+        from media.directory dir
+        where lower(dir.path) like '%' || #{params.dir} || '%'
+            and dir.dir_code = ${t_resource}.dir_code)
+    </if>
+    <if test="params.authorId neq null and params.dir neq '' ">
+      and exists(
+        select 1
+        from media.author au
+        where au.id = #{params.authorId}
+            and ${t_resource}.author_id
+    </if>
+  </sql>
+
+  <update id="batchDelete" parameterType="TableRequest">
+    update media.resource res
+    set DELETE_STATUS = 1
+    where DELETE_STATUS = 0
+    <choose>
+      <when test="idList neq null and idList.size() gt 0">
+        and res.id in
+        <foreach collection="idList" item="item" separator="," open="(" close=")">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        <include refid="batch_where_sql">
+          <property name="t_resource" value="res"/>
+        </include>
+      </otherwise>
+    </choose>
+  </update>
+
 
   <select id="selectResourceVoList"
       parameterType="com.sheepfly.media.common.http.TableRequest"
@@ -39,10 +85,24 @@
                      on res.dir_code = dir.dir_code
     where res.DELETE_STATUS = '0'
     <include refid="where_statement">
-      <property name="tb" value="res"/>
-      <property name="tb2" value="dir"/>
-      <property name="tb3" value="author"/>
+      <property name="t_resource" value="res"/>
+      <property name="t_directory" value="dir"/>
+      <property name="t_author" value="author"/>
     </include>
+    <if test="params.tagNames.length > 0">
+      and exists(select 1
+        from media.TAG_REFERENCE TR
+        where exists(select 1
+          from media.tag tag
+          where tag.NAME in (
+            <foreach collection="params.tagNames" item="name" separator=",">
+              #{name}
+            </foreach>
+          )
+          and res.id = tr.RESOURCE_ID
+          and tag.id = tr.TAG_ID)
+      )
+    </if>
     order by dir.PATH, res.FILENAME
   </select>
 
@@ -67,7 +127,7 @@
     limit #{limitCount}
   </select>
 
-  <select id="queryList" resultType="com.sheepfly.media.dataaccess.vo.ResourceVo" parameterType="TableRequest">
+  <select id="queryListByAlbum" resultType="com.sheepfly.media.dataaccess.vo.ResourceVo" parameterType="TableRequest">
     select res.id,
       dir.path as dir,
       res.filename,
@@ -82,8 +142,8 @@
                         and ar.DELETE_STATUS = 0
     where res.DELETE_STATUS = '0'
     <include refid="where_statement">
-      <property name="tb" value="res"/>
-      <property name="tb2" value="dir"/>
+      <property name="t_resource" value="res"/>
+      <property name="t_directory" value="dir"/>
     </include>
     order by dir.PATH, res.FILENAME
   </select>
