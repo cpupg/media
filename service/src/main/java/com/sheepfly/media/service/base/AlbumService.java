@@ -28,6 +28,8 @@ public interface AlbumService extends BaseJpaService<Album, String, AlbumReposit
      *
      * <p>目录和文件名必须是小写，删除操作是物理删除。</p>
      *
+     * <p>此方法需要删除资源的操作提交后再执行，否则无效，因为筛选条件已改变。</p>
+     *
      * @param condition 删除条件。
      *
      * @return 删除数量。

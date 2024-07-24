@@ -89,6 +89,8 @@ public interface FileService {
     /**
      * 删除业务代码下的所有文件。
      *
+     * <p>删除时先修改数据库，然后才删除，如果出错，则已删除文件不会恢复，但数据库状态会还原。</p>
+     *
      * @param businessCode 业务代码。
      *
      * @return 删除结果。
