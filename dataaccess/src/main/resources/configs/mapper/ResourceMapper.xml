@@ -48,7 +48,7 @@
 
   <update id="batchDelete" parameterType="TableRequest">
     update media.resource res
-    set DELETE_STATUS = 1
+    set DELETE_STATUS = 1, UPDATE_TIME = current_timestamp()
     where DELETE_STATUS = 0
     <choose>
       <when test="idList neq null and idList.size() gt 0">

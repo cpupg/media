@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文件服务。
@@ -98,5 +99,16 @@ public interface FileService {
      * @throws BusinessException e。
      */
     int deleteFileByBusinessCode(String businessCode) throws BusinessException;
+
+    /**
+     * 批量删除文件。
+     *
+     * @param businessCodeList 业务代码。
+     *
+     * @return 删除结果。
+     *
+     * @throws BusinessException 异常。
+     */
+    int deleteFileByBusinessCodeList(List<String> businessCodeList) throws BusinessException;
 
 }

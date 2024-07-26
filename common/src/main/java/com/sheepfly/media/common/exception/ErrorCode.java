@@ -195,7 +195,7 @@ public enum ErrorCode {
      */
     UNEXPECT_ERROR("E0999100", "未知错误，请联系管理员"),
     VALIDATE_ERROR("E0999101", "输入参数有误"),
-    BATCH_UPDATE_PARAM_LOSE("E0999102", "批量更新/删除缺少参数"),
+    BATCH_UPDATE_PARAM_LOSE("E0999102", "批量更新/删除缺少条件"),
     BATCH_UPDATE_COUNT_CONFLICT("E0999103", "批量更新/删除数量和实际数量不一致"),
     ;
     /* 模块[公共][]结束[101]

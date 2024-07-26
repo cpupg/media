@@ -110,7 +110,6 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public TableResponse<FileInfo> queryFileList(String businessCode) {
-        // todo 分页
         List<FileInfo> list = mapper.queryFileList(businessCode);
         return TableResponse.success(list, (long) list.size());
     }
@@ -122,8 +121,7 @@ public class FileServiceImpl implements FileService {
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return String.format("%s/%s/%s/%s", businessType, year, month, day);
+        return String.format(FILE_FORMAT_PATTERN, businessType, year, month);
     }
 
     @Override
@@ -184,6 +182,17 @@ public class FileServiceImpl implements FileService {
             }
         }
         return count;
+    }
+
+    @Override
+    public int deleteFileByBusinessCodeList(List<String> businessCodeList)
+            throws BusinessException {
+        int i = 0;
+        for (String s : businessCodeList) {
+            deleteFileByBusinessCode(s);
+            i++;
+        }
+        return i;
     }
 
     private String getFileName() {

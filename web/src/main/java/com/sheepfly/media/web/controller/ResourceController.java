@@ -48,6 +48,7 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -84,8 +85,7 @@ public class ResourceController {
      * @return 资源表格。
      */
     @PostMapping("/queryResourceList")
-    public TableResponse<ResourceVo> queryResourceList(
-            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
+    public TableResponse<ResourceVo> queryResourceList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
             params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
@@ -104,8 +104,7 @@ public class ResourceController {
      * @return 表格。
      */
     @PostMapping("/queryList")
-    public TableResponse<ResourceVo> queryList(
-            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
+    public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
             params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
@@ -204,8 +203,7 @@ public class ResourceController {
      * @return 标签引用。
      */
     @PostMapping("addTag")
-    public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId,
-            @RequestParam("tagName") String tagName) {
+    public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId, @RequestParam("tagName") String tagName) {
         log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
         if (StringUtils.isBlank(tagName)) {
             return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
@@ -233,8 +231,7 @@ public class ResourceController {
      * @return 删除的标签引用。
      */
     @PostMapping("deleteTag")
-    public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId,
-            @RequestParam("resourceId") String resourceId) {
+    public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId, @RequestParam("resourceId") String resourceId) {
         TagReference tagReference = tagReferenceService.findById(referenceId);
         if (tagReference == null) {
             return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
@@ -279,8 +276,7 @@ public class ResourceController {
      * @return
      */
     @PostMapping("/queryAlbumList")
-    public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam,
-            AlbumSort> tableRequest) {
+    public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
         return arService.queryAlbumResourceList(tableRequest);
     }
 
@@ -350,10 +346,21 @@ public class ResourceController {
      * @return 删除结果。
      */
     @PostMapping("/batchDelete")
-    public ResponseData<Object> batchDelete(
-            @RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
+    public ResponseData<Object> batchDelete(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
         List<Map<String, Object>> list = service.batchDelete(data);
         return ResponseData.success(list);
+    }
+
+    /**
+     * 批量更新。
+     *
+     * <p>可以按勾选更新，也可以按搜索条件更新。搜索条件不包含标签。</p>
+     *
+     * @return 更新结果。
+     */
+    @PostMapping("/batchUpdate")
+    public ResponseData batchUpdate() {
+        return ResponseData.success(Collections.emptyList());
     }
 }
 

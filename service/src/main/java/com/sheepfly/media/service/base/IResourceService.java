@@ -105,4 +105,13 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      * @return 删除结果。
      */
     List<Map<String, Object>> batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+
+    /**
+     * 批量更新。
+     *
+     * @param condition 更新条件。
+     *
+     * @return 更新结果。
+     */
+    List<Map<String, Object>> batchUpdate(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
 }

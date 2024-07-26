@@ -22,10 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Map;
 
 @RestController
@@ -62,7 +62,7 @@ public class FileController {
     @GetMapping("/getFile")
     public void getFile(@RequestParam("id") String id, HttpServletResponse response) throws IOException {
         File file = service.getFile(id);
-        try (InputStream is = new FileInputStream(file);
+        try (InputStream is = Files.newInputStream(file.toPath());
              OutputStream os = response.getOutputStream()) {
             byte[] bytes = IOUtils.readFully(is, is.available());
             os.write(bytes);

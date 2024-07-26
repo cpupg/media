@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -202,6 +203,14 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         log.info("删除{}个标签", l);
         l = albumService.batchDeleteByResource(condition);
         log.info("删除{}个专辑", l);
+        List<String> idList = list.stream().map(ResourceVo::getId).collect(Collectors.toList());
+        int i = fileService.deleteFileByBusinessCodeList(idList);
+        log.info("删除{}个文件", i);
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Map<String, Object>> batchUpdate(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
         return Collections.emptyList();
     }
 
