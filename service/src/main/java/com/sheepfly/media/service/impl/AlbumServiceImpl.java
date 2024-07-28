@@ -10,11 +10,12 @@ import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.AlbumVo;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.mapper.AlbumMapper;
 import com.sheepfly.media.dataaccess.mapper.AlbumResourceMapper;
 import com.sheepfly.media.dataaccess.repository.AlbumRepository;
-import com.sheepfly.media.common.vo.AlbumVo;
 import com.sheepfly.media.service.base.AlbumService;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,14 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
     @Override
     public long deleteResourceFromAlbum(String resourceId) {
         return arMapper.updateResourceFromAlbum(resourceId);
+    }
+
+    @Override
+    public TableResponse<AlbumResourceVo> queryAlbumResourceList(
+            TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
+        AlbumParam params = tableRequest.getParams();
+        Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
+        List<AlbumResourceVo> list = arMapper.selectAlbumResourceList(tableRequest);
+        return TableResponse.success(list, page.getTotal());
     }
 }

@@ -8,6 +8,7 @@ import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.repository.AlbumRepository;
 import com.sheepfly.media.common.vo.AlbumVo;
@@ -44,4 +45,14 @@ public interface AlbumService extends BaseJpaService<Album, String, AlbumReposit
      * @return 删除数量。
      */
     long deleteResourceFromAlbum(String resourceId);
+
+    /**
+     * 查询包含指定资源的专辑。
+     *
+     * @param tableRequest 查询参数。
+     *
+     * @return 查询结果。
+     */
+    TableResponse<AlbumResourceVo> queryAlbumResourceList(
+            TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
 }
