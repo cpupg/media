@@ -27,10 +27,6 @@ public class TableRequest<F, P, S> implements Serializable {
      */
     private S sort;
     /**
-     * 是否批量操作的条件。
-     */
-    private boolean batch = false;
-    /**
      * 勾选的id。
      */
     private List<String> idList;
@@ -57,14 +53,6 @@ public class TableRequest<F, P, S> implements Serializable {
 
     public void setSort(S sort) {
         this.sort = sort;
-    }
-
-    public boolean isBatch() {
-        return batch;
-    }
-
-    public void setBatch(boolean batch) {
-        this.batch = batch;
     }
 
     public List<String> getIdList() {
