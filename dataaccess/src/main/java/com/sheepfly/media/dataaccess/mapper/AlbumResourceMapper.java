@@ -7,7 +7,7 @@ import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
 
 import java.util.List;
 

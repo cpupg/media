@@ -10,7 +10,7 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.repository.AlbumRepository;
-import com.sheepfly.media.dataaccess.vo.AlbumVo;
+import com.sheepfly.media.common.vo.AlbumVo;
 
 public interface AlbumService extends BaseJpaService<Album, String, AlbumRepository> {
     /**

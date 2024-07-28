@@ -1,6 +1,5 @@
-package com.sheepfly.media.dataaccess.vo;
+package com.sheepfly.media.common.vo;
 
-import com.sheepfly.media.dataaccess.entity.Site;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,7 +26,7 @@ public class AuthorVo implements Serializable {
     /**
      * 注册站点ID
      */
-    private Site site;
+    private SiteVo siteVo;
 
     /**
      * 主页
@@ -50,7 +49,7 @@ public class AuthorVo implements Serializable {
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
-                ", site=" + site +
+                ", site=" + siteVo +
                 ", homepage='" + homepage + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
@@ -81,12 +80,12 @@ public class AuthorVo implements Serializable {
         this.username = username;
     }
 
-    public Site getSite() {
-        return site;
+    public SiteVo getSiteVo() {
+        return siteVo;
     }
 
-    public void setSite(Site site) {
-        this.site = site;
+    public void setSiteVo(SiteVo siteVo) {
+        this.siteVo = siteVo;
     }
 
     public String getHomepage() {

@@ -1,6 +1,6 @@
 package com.sheepfly.media.dataaccess.mapper;
 
-import com.sheepfly.media.dataaccess.vo.DirRepoVo;
+import com.sheepfly.media.common.vo.DirRepoVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

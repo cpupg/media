@@ -14,7 +14,7 @@ import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.dataaccess.mapper.AlbumMapper;
 import com.sheepfly.media.dataaccess.mapper.AlbumResourceMapper;
 import com.sheepfly.media.dataaccess.repository.AlbumRepository;
-import com.sheepfly.media.dataaccess.vo.AlbumVo;
+import com.sheepfly.media.common.vo.AlbumVo;
 import com.sheepfly.media.service.base.AlbumService;
 import org.springframework.stereotype.Service;
 

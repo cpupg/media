@@ -50,7 +50,7 @@
   </update>
 
   <select id="selectAlbumResourceList" parameterType="TableRequest"
-      resultType="com.sheepfly.media.dataaccess.vo.AlbumResourceVo">
+      resultType="com.sheepfly.media.common.vo.AlbumResourceVo">
     select ar.ID,
       ar.ALBUM_ID,
       a.name as album_name,

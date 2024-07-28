@@ -1,4 +1,4 @@
-package com.sheepfly.media.dataaccess.vo.file;
+package com.sheepfly.media.common.vo.file;
 
 import lombok.Getter;
 import lombok.Setter;

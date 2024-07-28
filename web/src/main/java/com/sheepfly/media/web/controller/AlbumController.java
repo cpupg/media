@@ -9,7 +9,7 @@ import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Album;
-import com.sheepfly.media.dataaccess.vo.AlbumVo;
+import com.sheepfly.media.common.vo.AlbumVo;
 import com.sheepfly.media.service.base.AlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

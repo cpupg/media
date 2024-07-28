@@ -5,7 +5,7 @@ import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 
 import java.util.List;
 

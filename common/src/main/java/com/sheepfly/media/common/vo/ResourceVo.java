@@ -1,10 +1,9 @@
-package com.sheepfly.media.dataaccess.vo;
+package com.sheepfly.media.common.vo;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

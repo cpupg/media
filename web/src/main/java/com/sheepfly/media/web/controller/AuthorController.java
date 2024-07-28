@@ -10,7 +10,7 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Author;
-import com.sheepfly.media.dataaccess.vo.AuthorVo;
+import com.sheepfly.media.common.vo.AuthorVo;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
 import org.apache.commons.beanutils.BeanUtils;

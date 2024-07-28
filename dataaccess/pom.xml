@@ -20,6 +20,11 @@
       <groupId>com.sheepfly.media</groupId>
       <artifactId>common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-jpamodelgen</artifactId>
+      <version>5.6.1.Final</version>
+    </dependency>
 
     <dependency>
       <groupId>com.sheepfly.media</groupId>

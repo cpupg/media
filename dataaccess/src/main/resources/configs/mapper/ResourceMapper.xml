@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.ResourceMapper">
-  <resultMap id="ResourceVo" type="com.sheepfly.media.dataaccess.vo.ResourceVo" autoMapping="true">
+  <resultMap id="ResourceVo" type="com.sheepfly.media.common.vo.ResourceVo" autoMapping="true">
     <id property="id" column="id"/>
     <association property="authorVo"
         resultMap="com.sheepfly.media.dataaccess.mapper.AuthorMapper.AuthorVo"
@@ -127,7 +127,7 @@
     limit #{limitCount}
   </select>
 
-  <select id="queryListByAlbum" resultType="com.sheepfly.media.dataaccess.vo.ResourceVo" parameterType="TableRequest">
+  <select id="queryListByAlbum" resultType="com.sheepfly.media.common.vo.ResourceVo" parameterType="TableRequest">
     select res.id,
       dir.path as dir,
       res.filename,

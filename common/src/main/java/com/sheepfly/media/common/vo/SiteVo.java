@@ -1,31 +1,38 @@
-package com.sheepfly.media.dataaccess.vo;
+package com.sheepfly.media.common.vo;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Getter
 @Setter
-@ToString
-public class TagVo implements Serializable {
-
+@Getter
+public class SiteVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * ID
      */
     private String id;
 
     /**
-     * 名称
+     * 网站名称
      */
-    private String name;
+    private String siteName;
+
+    /**
+     * 网站地址
+     */
+    private String url;
 
     /**
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 更细时间
+     */
+    private Date updateTime;
 }

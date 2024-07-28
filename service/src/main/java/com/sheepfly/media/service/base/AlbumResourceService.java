@@ -7,7 +7,7 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
-import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
 
 /**
  * 专辑资源服务。

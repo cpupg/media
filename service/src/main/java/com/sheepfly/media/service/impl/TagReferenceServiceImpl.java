@@ -12,7 +12,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.mapper.TagReferenceMapper;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.service.base.TagReferenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

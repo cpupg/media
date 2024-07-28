@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.SiteMapper">
 
-  <resultMap id="site" type="com.sheepfly.media.dataaccess.entity.Site">
+  <resultMap id="siteVo" type="com.sheepfly.media.common.vo.SiteVo">
     <id property="id" column="id"/>
     <id property="siteName" column="SITE_NAME"/>
   </resultMap>

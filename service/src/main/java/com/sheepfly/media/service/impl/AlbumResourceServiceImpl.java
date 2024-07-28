@@ -10,7 +10,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.mapper.AlbumResourceMapper;
 import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
-import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

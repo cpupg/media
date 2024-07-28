@@ -3,7 +3,7 @@ package com.sheepfly.media.service.base;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
-import com.sheepfly.media.dataaccess.vo.file.FileInfo;
+import com.sheepfly.media.common.vo.file.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

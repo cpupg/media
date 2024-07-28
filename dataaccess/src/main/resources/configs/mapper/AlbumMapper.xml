@@ -18,7 +18,7 @@
     ${t_album}.CREATE_TIME, ${t_album}.UPDATE_TIME, ${t_album}.DELETE_TIME
   </sql>
 
-  <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.dataaccess.vo.AlbumVo">
+  <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.common.vo.AlbumVo">
     select <include refid="Base_Column_List">
         <property name="t_album" value="a"/>
       </include>

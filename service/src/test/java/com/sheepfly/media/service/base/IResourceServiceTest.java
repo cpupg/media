@@ -6,7 +6,7 @@ import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
+import com.sheepfly.media.common.vo.ResourceVo;
 import com.sheepfly.media.service.ServiceTestConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;

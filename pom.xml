@@ -139,14 +139,6 @@
     </dependency>
     <!--mybatis 结束-->
 
-    <!--hibernate 开始-->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-jpamodelgen</artifactId>
-      <version>5.6.1.Final</version>
-    </dependency>
-    <!--hibernate结束-->
-
     <!-- tomcat -->
     <dependency>
       <groupId>org.apache.tomcat</groupId>

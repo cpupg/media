@@ -7,7 +7,7 @@ import com.sheepfly.media.common.form.param.DirRepoParam;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.DirRepo;
-import com.sheepfly.media.dataaccess.vo.DirRepoVo;
+import com.sheepfly.media.common.vo.DirRepoVo;
 import com.sheepfly.media.service.base.DirRepoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

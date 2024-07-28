@@ -1,26 +1,26 @@
-package com.sheepfly.media.dataaccess.vo;
+package com.sheepfly.media.common.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ResourceTypeVo implements Serializable {
+public class ResourceTypeMapVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * ID
+     * 主键
      */
     private String id;
 
     /**
-     * 资源id
+     * 父类型
      */
-    private ResourceVo resourceVo;
+    private ResourceTypeMapVo parentResourceTypeMapVo;
 
     /**
-     * 类型id
+     * 名称
      */
-    private ResourceTypeMapVo resourceTypeMapVo;
+    private String name;
 
     /**
      * 创建时间
@@ -34,10 +34,10 @@ public class ResourceTypeVo implements Serializable {
 
     @Override
     public String toString() {
-        return "ResourceTypeVo{" +
+        return "ResourceTypeMapVo{" +
                 "id='" + id + '\'' +
-                ", resourceVo=" + resourceVo +
-                ", resourceTypeMapVo=" + resourceTypeMapVo +
+                ", parentResourceTypeMapVo=" + parentResourceTypeMapVo +
+                ", name='" + name + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
@@ -51,20 +51,20 @@ public class ResourceTypeVo implements Serializable {
         this.id = id;
     }
 
-    public ResourceVo getResourceVo() {
-        return resourceVo;
+    public ResourceTypeMapVo getParentResourceTypeMapVo() {
+        return parentResourceTypeMapVo;
     }
 
-    public void setResourceVo(ResourceVo resourceVo) {
-        this.resourceVo = resourceVo;
+    public void setParentResourceTypeMapVo(ResourceTypeMapVo parentResourceTypeMapVo) {
+        this.parentResourceTypeMapVo = parentResourceTypeMapVo;
     }
 
-    public ResourceTypeMapVo getResourceTypeMapVo() {
-        return resourceTypeMapVo;
+    public String getName() {
+        return name;
     }
 
-    public void setResourceTypeMapVo(ResourceTypeMapVo resourceTypeMapVo) {
-        this.resourceTypeMapVo = resourceTypeMapVo;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getCreateTime() {

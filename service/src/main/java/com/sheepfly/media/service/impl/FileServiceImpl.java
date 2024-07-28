@@ -8,7 +8,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.mapper.FileMapper;
 import com.sheepfly.media.dataaccess.repository.FileUploadRepository;
-import com.sheepfly.media.dataaccess.vo.file.FileInfo;
+import com.sheepfly.media.common.vo.file.FileInfo;
 import com.sheepfly.media.service.base.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;

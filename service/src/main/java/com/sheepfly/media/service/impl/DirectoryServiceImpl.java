@@ -6,7 +6,7 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.param.DirectoryParam;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
-import com.sheepfly.media.dataaccess.vo.DirectoryVo;
+import com.sheepfly.media.common.vo.DirectoryVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;

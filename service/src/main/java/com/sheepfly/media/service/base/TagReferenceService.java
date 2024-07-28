@@ -8,7 +8,7 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 
 public interface TagReferenceService extends BaseJpaService<TagReference, String, TagReferenceRepository> {
     /**

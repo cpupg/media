@@ -10,8 +10,8 @@ import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 
 import java.util.List;
 import java.util.Map;

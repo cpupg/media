@@ -4,7 +4,7 @@ import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.dataaccess.vo.AlbumVo;
+import com.sheepfly.media.common.vo.AlbumVo;
 
 import java.util.List;
 

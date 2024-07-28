@@ -1,14 +1,17 @@
-package com.sheepfly.media.dataaccess.vo;
+package com.sheepfly.media.common.vo;
 
 import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
+import lombok.Setter;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @ToString
-public class DirRepoVo {
+public class DirRepoVo implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 主键id。
      */

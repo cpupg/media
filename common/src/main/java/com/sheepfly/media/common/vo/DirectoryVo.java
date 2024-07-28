@@ -1,8 +1,9 @@
-package com.sheepfly.media.dataaccess.vo;
+package com.sheepfly.media.common.vo;
 
 import lombok.Getter;
 import lombok.Setter;import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class DirectoryVo {
+public class DirectoryVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
