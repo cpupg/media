@@ -3,6 +3,7 @@ package com.sheepfly.media.common.http;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,8 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class TableResponse<T> {
+public class TableResponse<T>  implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final String QUERY_SUCCESS = "查询数据成功";
     /**
      * 当前页。

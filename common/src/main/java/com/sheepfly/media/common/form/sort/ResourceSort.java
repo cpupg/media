@@ -1,4 +1,7 @@
 package com.sheepfly.media.common.form.sort;
 
-public class ResourceSort {
+import java.io.Serializable;
+
+public class ResourceSort implements Serializable {
+    private static final long serialVersionUID = 1L;
 }

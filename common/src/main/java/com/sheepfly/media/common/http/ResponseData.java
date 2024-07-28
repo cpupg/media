@@ -2,12 +2,15 @@ package com.sheepfly.media.common.http;
 
 import com.sheepfly.media.common.exception.ErrorCode;
 
+import java.io.Serializable;
+
 /**
  * 数据对象。
  *
  * @author sheepfly
  */
-public class ResponseData<T> {
+public class ResponseData<T>  implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 状态码。
      */

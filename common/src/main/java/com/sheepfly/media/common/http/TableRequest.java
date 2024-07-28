@@ -1,5 +1,6 @@
 package com.sheepfly.media.common.http;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,8 @@ import java.util.List;
  *
  * @author sheepfly
  */
-public class TableRequest<F, P, S> {
+public class TableRequest<F, P, S> implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 表头过滤参数。
      */

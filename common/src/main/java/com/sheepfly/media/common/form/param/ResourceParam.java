@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Setter
 @ToString
 public class ResourceParam extends TablePagination implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 文件名。
      */
