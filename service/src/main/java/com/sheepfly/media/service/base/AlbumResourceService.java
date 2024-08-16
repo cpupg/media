@@ -11,4 +11,5 @@ import com.sheepfly.media.dataaccess.repository.AlbumResourceRepository;
  * @author chen
  */
 public interface AlbumResourceService extends BaseJpaService<AlbumResource, String, AlbumResourceRepository> {
+    // 和专辑有关的内容写在AlbumService中。
 }
