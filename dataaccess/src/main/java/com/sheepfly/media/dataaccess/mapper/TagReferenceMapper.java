@@ -1,5 +1,6 @@
 package com.sheepfly.media.dataaccess.mapper;
 
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
@@ -41,4 +42,13 @@ public interface TagReferenceMapper {
      * @return 删除结果。
      */
     long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+
+    /**
+     * 根据资源搜索条件批量删除标签。
+     *
+     * @param resourceData 搜索条件。
+     *
+     * @return 更新结果。
+     */
+    long batchUpdateByResource(ResourceData resourceData);
 }

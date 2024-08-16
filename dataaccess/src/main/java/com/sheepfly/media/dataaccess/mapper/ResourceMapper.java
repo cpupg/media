@@ -1,5 +1,6 @@
 package com.sheepfly.media.dataaccess.mapper;
 
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
@@ -58,4 +59,13 @@ public interface ResourceMapper {
      * @return 删除数量。
      */
     int batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> param);
+
+    /**
+     * 批量更新，只更新目录和作者。
+     *
+     * @param resourceData 更新条件。
+     *
+     * @return 更新数量。
+     */
+    int batchUpdate(ResourceData resourceData);
 }

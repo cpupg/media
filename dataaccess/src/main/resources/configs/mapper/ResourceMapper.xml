@@ -8,6 +8,7 @@
         columnPrefix="author_vo_"/>
   </resultMap>
 
+  <!--参数类型是TableRequest-->
   <sql id="where_statement">
     <if test="params.filename neq null and params.filename neq '' ">
       and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
@@ -26,6 +27,7 @@
     </if>
   </sql>
 
+  <!--参数类型是TableRequest-->
   <sql id="batch_where_sql">
     <if test="params.filename neq null and params.filename neq '' ">
       and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
@@ -64,6 +66,7 @@
       </otherwise>
     </choose>
   </update>
+
 
 
   <select id="selectResourceVoList"
@@ -147,4 +150,75 @@
     </include>
     order by dir.PATH, res.FILENAME
   </select>
+
+  <!--参数类型是ResourceData，用来更新resource表-->
+  <sql id="batch_update_where">
+    <choose>
+      <when test="condition.idList neq null and condition.idList.size() gt 0">
+        and res.id in
+        <foreach collection="condition.idList" item="item" separator="," open="(" close=")">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        <if test="condition.params.filename neq null and condition.params.filename neq '' ">
+          and lower(${t_resource}.filename) like '%' || #{condition.params.filename} || '%'
+        </if>
+        <if test="condition.params.dir neq null and condition.params.dir neq '' ">
+          and exists(
+          select 1
+          from media.directory dir
+          where lower(dir.path) like '%' || #{condition.params.dir} || '%'
+          and dir.dir_code = ${t_resource}.dir_code)
+        </if>
+        <if test="condition.params.authorId neq null and condition.params.dir neq '' ">
+          and exists(
+          select 1
+          from media.author au
+          where au.id = #{condition.params.authorId}
+          and ${t_resource}.author_id
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+
+  <!--参数类型是ResourceData，用来更新TAG_REFERENCE和AlbumResource，执行语句是硬更新-->
+  <sql id="association_batch_update_hard_where">
+    <!--先要用关联资源表-->
+    where exists(
+        select 1
+        from media.resource res
+        where res.id = ${t_table}.${t_column}
+        <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.batch_update_where">
+          <property name="t_resource" value="res"/>
+        </include>
+    )
+  </sql>
+
+  <!--参数类型是ResourceData，用来更新TAG_REFERENCE和AlbumResource，执行语句是软更新-->
+  <sql id="association_batch_update_where">
+    <!--先要用关联资源表-->
+    and exists(
+        select 1
+        from media.resource res
+        where res.id = ${t_table}.${t_column}
+        <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.batch_update_where">
+          <property name="t_resource" value="res"/>
+        </include>
+    )
+  </sql>
+
+  <update id="batchUpdate" parameterType="com.sheepfly.media.common.form.data.ResourceData">
+    update media.resource res set
+    <if test="dirCode != null">
+      DIR_CODE = #{dirCode},
+    </if>
+    <if test="authorId != null">
+      authorId = #{authorId},
+    </if>
+    where DELETE_STATUS = 0
+    <include refid="batch_update_where">
+      <property name="t_resource" value="res"/>
+    </include>
+  </update>
 </mapper>

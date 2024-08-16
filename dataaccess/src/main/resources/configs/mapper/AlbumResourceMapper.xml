@@ -19,6 +19,7 @@
         DELETE_STATUS,CREATE_TIME,UPDATE_TIME,
         DELETE_TIME
   </sql>
+
   <delete id="batchDeleteAlbum" parameterType="TableRequest">
     update media.ALBUM_RESOURCE t
     set DELETE_STATUS = 1, UPDATE_TIME = current_timestamp()
@@ -47,6 +48,16 @@
       UPDATE_TIME = current_timestamp()
     where RESOURCE_ID = #{resourceId}
       and DELETE_STATUS = 0
+  </update>
+
+  <update id="updateResourceByResource" parameterType="com.sheepfly.media.common.form.data.ResourceData">
+    update media.ALBUM_RESOURCE ab set
+        DELETE_STATUS = 1
+    where DELETE_STATUS = 0
+    <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.association_batch_update_where">
+      <property name="t_table" value="ab"/>
+      <property name="t_column" value="resource_id"/>
+    </include>
   </update>
 
   <select id="selectAlbumResourceList" parameterType="TableRequest"
