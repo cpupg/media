@@ -1,5 +1,6 @@
 package com.sheepfly.media.service.base;
 
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
@@ -38,7 +39,7 @@ public interface AlbumService extends BaseJpaService<Album, String, AlbumReposit
     long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
 
     /**
-     * 从专辑中删除资源。
+     * 从专辑中删除资源，软删除。
      *
      * @param resourceId 资源标识。
      *
@@ -55,4 +56,13 @@ public interface AlbumService extends BaseJpaService<Album, String, AlbumReposit
      */
     TableResponse<AlbumResourceVo> queryAlbumResourceList(
             TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
+
+    /**
+     * 按资源批量更新专辑。
+     *
+     * <p>插入新专辑，删除老专辑。</p>
+     *
+     * @param resourceData 更新条件和更新内容。
+     */
+    void batchUpdateByResource(ResourceData resourceData);
 }

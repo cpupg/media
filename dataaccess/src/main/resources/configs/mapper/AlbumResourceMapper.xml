@@ -50,7 +50,7 @@
       and DELETE_STATUS = 0
   </update>
 
-  <update id="updateResourceByResource" parameterType="com.sheepfly.media.common.form.data.ResourceData">
+  <update id="batchUpdateByResource" parameterType="com.sheepfly.media.common.form.data.ResourceData">
     update media.ALBUM_RESOURCE ab set
         DELETE_STATUS = 1
     where DELETE_STATUS = 0
@@ -58,6 +58,10 @@
       <property name="t_table" value="ab"/>
       <property name="t_column" value="resource_id"/>
     </include>
+    and ab.album_id in
+    <foreach collection="deletedAlbums" item="item" open="(" close=")" separator=",">
+      #{item.id}
+    </foreach>
   </update>
 
   <select id="selectAlbumResourceList" parameterType="TableRequest"

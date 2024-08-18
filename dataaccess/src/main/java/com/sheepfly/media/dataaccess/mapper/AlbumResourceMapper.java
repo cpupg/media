@@ -55,7 +55,7 @@ public interface AlbumResourceMapper {
      *
      * @return 更新数量。
      */
-    long updateResourceByResource(ResourceData resourceData);
+    long batchUpdateByResource(ResourceData resourceData);
 }
 
 
