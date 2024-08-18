@@ -1,17 +1,18 @@
 package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.common.vo.ResourceVo;
-import com.sheepfly.media.common.vo.TagReferenceVo;
 
 import java.util.List;
 import java.util.Map;
@@ -109,9 +110,9 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
     /**
      * 批量更新。
      *
-     * @param condition 更新条件。
+     * @param resourceData 更新条件。
      *
      * @return 更新结果。
      */
-    List<Map<String, Object>> batchUpdate(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+    List<Map<String, Object>> batchUpdate(ResourceData resourceData);
 }

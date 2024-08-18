@@ -15,17 +15,18 @@ import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
+import com.sheepfly.media.common.vo.TagVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
-import com.sheepfly.media.common.vo.AlbumResourceVo;
-import com.sheepfly.media.common.vo.ResourceVo;
-import com.sheepfly.media.common.vo.TagReferenceVo;
-import com.sheepfly.media.common.vo.TagVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
+import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
@@ -62,6 +63,7 @@ import java.util.Map;
  * @author sheepfly
  * @since 2022-02-07
  */
+@SuppressWarnings({"java:S3740", "rawtypes"})
 @RestController
 @RequestMapping(value = "/resource", produces = "application/json;charset=utf-8")
 @Slf4j
@@ -74,6 +76,8 @@ public class ResourceController {
     private TagService tagService;
     @Autowired
     private TagReferenceService tagReferenceService;
+    @Autowired
+    private AlbumService albumService;
     @Autowired
     private AlbumResourceService arService;
 
@@ -277,7 +281,7 @@ public class ResourceController {
      */
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
-        return arService.queryAlbumResourceList(tableRequest);
+        return albumService.queryAlbumResourceList(tableRequest);
     }
 
     @PostMapping("/setAlbum")
@@ -359,8 +363,9 @@ public class ResourceController {
      * @return 更新结果。
      */
     @PostMapping("/batchUpdate")
-    public ResponseData batchUpdate() {
-        return ResponseData.success(Collections.emptyList());
+    public ResponseData batchUpdate(@RequestBody ResourceData resourceData) {
+        List<Map<String, Object>> list = service.batchUpdate(resourceData);
+        return ResponseData.success(list);
     }
 }
 

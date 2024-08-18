@@ -6,11 +6,14 @@ import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Tag;
@@ -19,8 +22,6 @@ import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.common.vo.ResourceVo;
-import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.FileService;
@@ -210,7 +211,17 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
-    public List<Map<String, Object>> batchUpdate(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
+    public List<Map<String, Object>> batchUpdate(ResourceData resourceData) {
+        log.info("开始批量更新资源，更新条件和预期结果{}", resourceData.toString());
+        // 更新资源表
+        int i = mapper.batchUpdate(resourceData);
+        // 更新专辑
+        log.info("资源表更新完成，共更新{}条数据，开始处理专辑", i);
+        albumService.batchUpdateByResource(resourceData);
+        // 更新标签
+        log.info("专辑处理完成，开始处理标签");
+        tagService.batchUpdateByResource(resourceData);
+        log.info("标签处理完成");
         return Collections.emptyList();
     }
 

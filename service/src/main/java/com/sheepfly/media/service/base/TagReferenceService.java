@@ -10,6 +10,13 @@ import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
 import com.sheepfly.media.common.vo.TagReferenceVo;
 
+/**
+ * 标签引用服务。
+ *
+ * <p>新方法写在TagService中，TagReferenceService类不再新增方法。</p>
+ *
+ * @author chen
+ */
 public interface TagReferenceService extends BaseJpaService<TagReference, String, TagReferenceRepository> {
     /**
      * 引用类型1，资源。

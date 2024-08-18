@@ -76,5 +76,9 @@
       <property name="t_table" value="trf"/>
       <property name="t_column" value="resource_id"/>
     </include>
+    and trf.tag_id in
+    <foreach collection="deletedTags" item="item" open="(" close=")" separator=",">
+      #{item.id}
+    </foreach>
   </delete>
 </mapper>
