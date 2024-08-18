@@ -23,6 +23,9 @@ import java.util.List;
 @Service
 public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, String, TagReferenceRepository>
         implements TagReferenceService {
+
+    // 新方法写在TagService中，TagReferenceService不再新增方法。
+
     @Autowired
     private TagReferenceMapper mapper;
     @Autowired
