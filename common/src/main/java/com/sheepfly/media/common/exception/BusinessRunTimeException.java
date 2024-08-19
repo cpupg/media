@@ -88,15 +88,15 @@ public class BusinessRunTimeException extends RuntimeException {
      * @return 错误消息。
      */
     public static String createMessage(ErrorCode errorCode, Exception e, Throwable cause) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("[").append(errorCode.getCode()).append("] ").append(errorCode.getMessage());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[").append(errorCode.getCode()).append("] ").append(errorCode.getMessage());
         if (e != null) {
-            stringBuffer.append("，异常描述：").append(e.getMessage());
+            stringBuilder.append("，异常描述：").append(e.getMessage());
         }
         if (cause != null) {
-            stringBuffer.append("。错误描述：").append(cause.getMessage());
+            stringBuilder.append("。错误描述：").append(cause.getMessage());
         }
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
 
     public String getErrorCode() {
