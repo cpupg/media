@@ -197,6 +197,8 @@ public enum ErrorCode {
     VALIDATE_ERROR("E0999101", "输入参数有误"),
     BATCH_UPDATE_PARAM_LOSE("E0999102", "批量更新/删除缺少条件"),
     BATCH_UPDATE_COUNT_CONFLICT("E0999103", "批量更新/删除数量和实际数量不一致"),
+    BATCH_UPDATE_CONDITION_LOST("E0999104", "批量更新缺少更新条件"),
+    BATCH_UPDATE_CONTENT_LOST("E0999105", "批量更新缺少更新内容"),
     ;
     /* 模块[公共][]结束[101]
      **************************************************************************

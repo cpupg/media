@@ -12,6 +12,7 @@ import com.sheepfly.media.dataaccess.repository.TagRepository;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,20 +36,24 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
 
     @Override
     public void batchUpdateByResource(ResourceData resourceData) {
-        log.info("处理删除的标签");
-        long l1 = tagReferenceMapper.batchUpdateByResource(resourceData);
-        log.info("处理完成，共删除{}条数据，开始处理新增标签", l1);
-        TableResponse<ResourceVo> response = resourceService.queryResourceVoList(resourceData.getCondition());
-        List<ResourceVo> list = response.getData();
-        log.info("一共{}个资源", list.size());
-        List<TagVo> tagsList = resourceData.getAddedTags();
-        for (TagVo tagVo : tagsList) {
-            log.info("当前标签:{}", tagVo.getName());
-            for (ResourceVo resourceVo : list) {
-                resourceService.createResourceTag(resourceVo.getId(), tagVo.getId());
-            }
+        if (ObjectUtils.isNotEmpty(resourceData.getDeletedTags())) {
+            log.info("处理删除的标签");
+            long l1 = tagReferenceMapper.batchUpdateByResource(resourceData);
+            log.info("处理完成，涉及标签{}个，涉及数据{}条", resourceData.getAddedTags().size(), l1);
         }
-        log.info("新标签处理完成");
+        if (ObjectUtils.isNotEmpty(resourceData.getAddedTags())) {
+            TableResponse<ResourceVo> response = resourceService.queryResourceVoList(resourceData.getCondition());
+            List<ResourceVo> list = response.getData();
+            log.info("一共{}个资源", list.size());
+            List<TagVo> tagsList = resourceData.getAddedTags();
+            for (TagVo tagVo : tagsList) {
+                log.info("当前标签:{}", tagVo.getName());
+                for (ResourceVo resourceVo : list) {
+                    resourceService.createResourceTag(resourceVo.getId(), tagVo.getName());
+                }
+            }
+            log.info("新标签处理完成");
+        }
     }
 
 }

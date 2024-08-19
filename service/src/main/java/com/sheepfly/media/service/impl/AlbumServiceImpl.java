@@ -2,6 +2,8 @@ package com.sheepfly.media.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
+import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
@@ -21,6 +23,7 @@ import com.sheepfly.media.dataaccess.repository.AlbumRepository;
 import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.IResourceService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -65,19 +68,30 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
 
     @Override
     public void batchUpdateByResource(ResourceData resourceData) {
-        log.info("处理需要删除的专辑");
-        long l = arMapper.batchUpdateByResource(resourceData);
-        log.info("删除{}个专辑，处理新增的专辑", l);
-        List<AlbumVo> albumList = resourceData.getAddedAlbums();
-        TableResponse<ResourceVo> response = resourceService.queryResourceVoList(
-                resourceData.getCondition());
-        log.info("给{}个资源设置{}个新专辑", response.getTotal(), albumList.size());
-        List<ResourceVo> resourceList = response.getData();
-        for (AlbumVo albumVo : albumList) {
-            log.info("当前专辑:{}", albumVo.getName());
-            for (ResourceVo resourceVo : resourceList) {
-                resourceService.setAlbum(resourceVo.getId(), albumVo.getId());
+        if (ObjectUtils.isNotEmpty(resourceData.getDeletedAlbums())) {
+            long l = arMapper.batchUpdateByResource(resourceData);
+            log.info("删除{}个专辑，涉及数据{}条", resourceData.getDeletedAlbums().size(), l);
+        }
+        if (ObjectUtils.isNotEmpty(resourceData.getAddedAlbums())) {
+            log.info("处理新增专辑");
+            List<AlbumVo> albumList = resourceData.getAddedAlbums();
+            TableResponse<ResourceVo> response = resourceService.queryResourceVoList(
+                    resourceData.getCondition());
+            log.info("给{}个资源设置{}个新专辑", response.getTotal(), albumList.size());
+            List<ResourceVo> resourceList = response.getData();
+            for (AlbumVo albumVo : albumList) {
+                log.info("当前专辑:{}", albumVo.getName());
+                for (ResourceVo resourceVo : resourceList) {
+                    try {
+                        resourceService.setAlbum(resourceVo.getId(), albumVo.getId());
+                    } catch (BusinessException e) {
+                        if (e.getError() == ErrorCode.RES_RA_NOT_REPEATED_AR) {
+                            log.warn("资源{}已设置专辑{},将忽略", resourceVo.getId(), albumVo.getId(), e);
+                        }
+                    }
+                }
             }
+            log.info("新增专辑处理完成");
         }
         log.info("专辑处理完成");
     }

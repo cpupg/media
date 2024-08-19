@@ -15,6 +15,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.vo.ResourceVo;
 import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
+import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
@@ -24,6 +25,7 @@ import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
+import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.FileService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
@@ -68,7 +70,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @javax.annotation.Resource
     private FileService fileService;
     @javax.annotation.Resource
-    private ResourceRepository repository;
+    private DirectoryService directoryService;
 
     @javax.annotation.Resource
     private ResourceMapper mapper;
@@ -212,8 +214,16 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
 
     @Override
     public List<Map<String, Object>> batchUpdate(ResourceData resourceData) {
-        log.info("开始批量更新资源，更新条件和预期结果{}", resourceData.toString());
         // 更新资源表
+        resourceData.setDirCode(null);
+        if (StringUtils.isNotEmpty(resourceData.getDir())) {
+
+            Directory directory = directoryService.queryDirectoryByPath(resourceData.getDir());
+            if (directory == null) {
+                directory = directoryService.createDirectory(resourceData.getDir());
+            }
+            resourceData.setDirCode(directory.getDirCode());
+        }
         int i = mapper.batchUpdate(resourceData);
         // 更新专辑
         log.info("资源表更新完成，共更新{}条数据，开始处理专辑", i);

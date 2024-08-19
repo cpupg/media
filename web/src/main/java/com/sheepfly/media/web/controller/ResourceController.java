@@ -34,6 +34,7 @@ import com.sheepfly.media.service.base.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -49,7 +50,6 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -364,6 +364,25 @@ public class ResourceController {
      */
     @PostMapping("/batchUpdate")
     public ResponseData batchUpdate(@RequestBody ResourceData resourceData) {
+        TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition = resourceData.getCondition();
+        ResourceParam params = condition.getParams();
+        if (StringUtils.isEmpty(params.getDir()) && StringUtils.isEmpty(params.getFilename()) &&
+                StringUtils.isEmpty(params.getAuthorId()) && ObjectUtils.isEmpty(condition.getIdList())) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_CONDITION_LOST);
+        }
+        if (ObjectUtils.isEmpty(resourceData.getAddedTags()) && ObjectUtils.isEmpty(resourceData.getDeletedTags()) &&
+                ObjectUtils.isEmpty(resourceData.getAddedAlbums()) && ObjectUtils.isEmpty(
+                resourceData.getDeletedAlbums()) &&
+                StringUtils.isEmpty(resourceData.getDir()) && StringUtils.isEmpty(resourceData.getFilename()) &&
+                StringUtils.isEmpty(resourceData.getAuthorId())) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_CONTENT_LOST);
+        }
+        if (StringUtils.isNotEmpty(params.getDir())) {
+            params.setDir(params.getDir().toLowerCase());
+        }
+        if (StringUtils.isNotEmpty(params.getFilename())) {
+            params.setFilename(params.getFilename().toLowerCase());
+        }
         List<Map<String, Object>> list = service.batchUpdate(resourceData);
         return ResponseData.success(list);
     }

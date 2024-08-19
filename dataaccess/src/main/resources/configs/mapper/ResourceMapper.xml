@@ -171,7 +171,7 @@
           where lower(dir.path) like '%' || #{condition.params.dir} || '%'
           and dir.dir_code = ${t_resource}.dir_code)
         </if>
-        <if test="condition.params.authorId neq null and condition.params.dir neq '' ">
+        <if test="condition.params.authorId neq null and condition.params.authorId neq '' ">
           and exists(
           select 1
           from media.author au
@@ -209,13 +209,15 @@
   </sql>
 
   <update id="batchUpdate" parameterType="com.sheepfly.media.common.form.data.ResourceData">
-    update media.resource res set
+    update media.resource res
+      set
     <if test="dirCode != null">
       DIR_CODE = #{dirCode},
     </if>
     <if test="authorId != null">
-      authorId = #{authorId},
+      AUTHOR_ID = #{authorId},
     </if>
+    UPDATE_TIME = current_timestamp()
     where DELETE_STATUS = 0
     <include refid="batch_update_where">
       <property name="t_resource" value="res"/>
