@@ -39,7 +39,7 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
         if (ObjectUtils.isNotEmpty(resourceData.getDeletedTags())) {
             log.info("处理删除的标签");
             long l1 = tagReferenceMapper.batchUpdateByResource(resourceData);
-            log.info("处理完成，涉及标签{}个，涉及数据{}条", resourceData.getAddedTags().size(), l1);
+            log.info("处理完成，涉及标签{}个，涉及数据{}条", resourceData.getDeletedTags().size(), l1);
         }
         if (ObjectUtils.isNotEmpty(resourceData.getAddedTags())) {
             TableResponse<ResourceVo> response = resourceService.queryResourceVoList(resourceData.getCondition());
