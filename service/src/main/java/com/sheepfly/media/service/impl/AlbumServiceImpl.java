@@ -86,7 +86,8 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
                         resourceService.setAlbum(resourceVo.getId(), albumVo.getId());
                     } catch (BusinessException e) {
                         if (e.getError() == ErrorCode.RES_RA_NOT_REPEATED_AR) {
-                            log.warn("资源{}已设置专辑{},将忽略", resourceVo.getId(), albumVo.getId(), e);
+                            log.warn("{},资源{}已设置专辑{}", e.getMessage(), resourceVo.getId(),
+                                    albumVo.getId());
                         }
                     }
                 }

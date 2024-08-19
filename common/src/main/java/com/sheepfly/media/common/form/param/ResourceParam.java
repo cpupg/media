@@ -41,4 +41,11 @@ public class ResourceParam extends TablePagination implements Serializable {
      * 标签名称。
      */
     private String[] tagNames = {};
+    /**
+     * 是否只查询资源表，默认否。
+     *
+     * <p>设置为true可以不进行1+n查询，用来在只需要资源表的场景中避免查询和资源表关联的其他
+     * 表。</p>
+     */
+    private boolean resourceOnly = false;
 }

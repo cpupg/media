@@ -81,6 +81,9 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         ResourceParam params = form.getParams();
         Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = mapper.selectResourceVoList(form);
+        if (params.isResourceOnly()) {
+            return TableResponse.success(list, page.getTotal());
+        }
         for (int i = 0; i < list.size(); i++) {
             ResourceVo vo = list.get(i);
             String id = vo.getId();
@@ -224,6 +227,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             }
             resourceData.setDirCode(directory.getDirCode());
         }
+        resourceData.getCondition().getParams().setResourceOnly(true);
         int i = mapper.batchUpdate(resourceData);
         // 更新专辑
         log.info("资源表更新完成，共更新{}条数据，开始处理专辑", i);

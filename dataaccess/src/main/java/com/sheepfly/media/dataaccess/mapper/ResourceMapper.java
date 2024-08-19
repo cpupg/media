@@ -33,8 +33,23 @@ public interface ResourceMapper {
      */
     List<ResourceVo> selectResourceVoList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
 
+    /**
+     * 根据资源搜索资源关联的标签。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 查询结果。
+     */
     List<TagReferenceVo> selectTagReferenceByResourceId(String resourceId);
 
+    /**
+     * 查询资源的标签并限制返回数量。
+     *
+     * @param resourceId 资源标识。
+     * @param limitCount 限制数量。
+     *
+     * @return 查询结果。
+     */
     List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(@Param("resourceId") String resourceId,
             @Param("limitCount") Integer limitCount);
 
