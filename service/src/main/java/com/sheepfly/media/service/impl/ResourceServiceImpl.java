@@ -107,7 +107,8 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     public TagReference createResourceTag(String resourceId, String name) {
         Tag tag = new Tag();
         tag.setName(name);
-        Optional<Tag> tagOpt = tagService.findOne(Example.of(tag));
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll().withIgnoreCase();
+        Optional<Tag> tagOpt = tagService.findOne(Example.of(tag, exampleMatcher));
         if (!tagOpt.isPresent()) {
             log.info("标签{{}}不存在，创建新标签", name);
             tag.setCreateTime(new Date());
