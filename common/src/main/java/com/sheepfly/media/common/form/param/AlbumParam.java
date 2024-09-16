@@ -22,7 +22,7 @@ public class AlbumParam extends TablePagination implements Serializable {
      */
     private String albumId;
     /**
-     * 是否是selectModal下的组件的表格查询请求。
+     * 查询时是否关联资源。
      */
-    private boolean selectModal = false;
+    private boolean queryWithResource = false;
 }

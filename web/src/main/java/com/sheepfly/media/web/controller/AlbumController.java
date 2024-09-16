@@ -33,7 +33,7 @@ public class AlbumController {
     public TableResponse<AlbumVo> queryAlbumList(
             @RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) throws BusinessException {
         AlbumParam params = tableRequest.getParams();
-        if (params.isSelectModal() && StringUtils.isEmpty(params.getResourceId())) {
+        if (params.isQueryWithResource() && StringUtils.isEmpty(params.getResourceId())) {
             throw new BusinessException(ErrorCode.ALBUM_SELECT_MODAL_LOST_RESOURCE);
         }
         return service.queryAlbumList(tableRequest);
