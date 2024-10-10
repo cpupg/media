@@ -78,7 +78,9 @@ subprojects {
         implementation 'org.projectlombok:lombok'
         implementation 'cn.hutool:hutool-core:5.5.8'
         implementation 'dom4j:dom4j:1.6.1'
-        implementation 'junit:junit:4.13.1'
+        testImplementation 'junit:junit:4.13.1'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.hibernate:hibernate-jpamodelgen'
     }
 
 }
