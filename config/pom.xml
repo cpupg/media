@@ -15,4 +15,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <dependencies>
+    <!--https://github.com/cpupg/mybatis-reload-->
+    <dependency>
+      <groupId>com.chen.mybatisreload</groupId>
+      <artifactId>core</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+  </dependencies>
+
 </project>
