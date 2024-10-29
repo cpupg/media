@@ -22,6 +22,10 @@ public class ResourceParam extends TablePagination implements Serializable {
      */
     private String filename;
     /**
+     * 精确路径。
+     */
+    private boolean accurateDir = false;
+    /**
      * 文件目录。
      */
     private String dir;

@@ -13,9 +13,18 @@
     <if test="params.filename neq null and params.filename neq '' ">
       and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
     </if>
-    <if test="params.dir neq null and params.dir neq '' ">
-      and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
-    </if>
+    <choose>
+      <when test="params.accurateDir == false">
+        <if test="params.dir neq null and params.dir neq '' ">
+          and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
+        </if>
+      </when>
+      <otherwise>
+        <if test="params.dir neq null and params.dir neq '' ">
+          and lower(${t_directory}.path) = #{params.dir}
+        </if>
+      </otherwise>
+    </choose>
     <if test="params.authorId neq null and params.authorId neq '' ">
       and ${t_author}.id = #{params.authorId}
     </if>
@@ -24,6 +33,20 @@
       <foreach collection="idList" item="idItem" separator="," open="(" close=")">
         #{idItem}
       </foreach>
+    </if>
+    <if test="params.tagNames.length > 0">
+      and exists(select 1
+        from media.TAG_REFERENCE TR
+        where exists(select 1
+          from media.tag tag
+          where tag.NAME in (
+            <foreach collection="params.tagNames" item="name" separator=",">
+              #{name}
+            </foreach>
+          )
+          and ${t_resource}.id = tr.RESOURCE_ID
+          and tag.id = tr.TAG_ID)
+      )
     </if>
   </sql>
 
@@ -92,20 +115,6 @@
       <property name="t_directory" value="dir"/>
       <property name="t_author" value="author"/>
     </include>
-    <if test="params.tagNames.length > 0">
-      and exists(select 1
-        from media.TAG_REFERENCE TR
-        where exists(select 1
-          from media.tag tag
-          where tag.NAME in (
-            <foreach collection="params.tagNames" item="name" separator=",">
-              #{name}
-            </foreach>
-          )
-          and res.id = tr.RESOURCE_ID
-          and tag.id = tr.TAG_ID)
-      )
-    </if>
     order by dir.PATH, res.FILENAME
   </select>
 
