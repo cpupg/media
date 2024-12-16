@@ -4,6 +4,7 @@ import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.data.TagData;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.common.vo.TagVo;
 import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.mapper.TagMapper;
@@ -54,6 +55,11 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
             }
             log.info("新标签处理完成");
         }
+    }
+
+    @Override
+    public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
+        return mapper.queryTagReferenceByResourceId(resourceId);
     }
 
 }

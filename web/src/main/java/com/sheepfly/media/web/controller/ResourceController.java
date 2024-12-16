@@ -227,35 +227,6 @@ public class ResourceController {
     }
 
     /**
-     * 删除标签。
-     *
-     * @param referenceId 要删除的标签引用主键。
-     * @param resourceId 资源主键。
-     *
-     * @return 删除的标签引用。
-     */
-    @PostMapping("deleteTag")
-    public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId, @RequestParam("resourceId") String resourceId) {
-        TagReference tagReference = tagReferenceService.findById(referenceId);
-        if (tagReference == null) {
-            return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
-        }
-        if (!resourceId.equals(tagReference.getResourceId())) {
-            return ResponseData.fail(ErrorCode.RES_DONT_HAVE_THIS_TAG);
-        }
-        service.deleteResourceTag(referenceId);
-        Tag tag = tagService.findById(tagReference.getTagId());
-        if (tag == null) {
-            log.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
-            return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
-        }
-        TagVo tagVo = new TagVo();
-        tag.copyTo(tagVo);
-        log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
-        return ResponseData.success(tagVo);
-    }
-
-    /**
      * 查询起源下的标签。
      *
      * @param request 请求。

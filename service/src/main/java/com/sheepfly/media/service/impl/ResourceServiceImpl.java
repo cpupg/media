@@ -138,11 +138,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
-    public void deleteResourceTag(String tagReferenceId) {
-        trfService.deleteById(tagReferenceId);
-    }
-
-    @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
         return mapper.selectTagReferenceByResourceId(resourceId);
     }

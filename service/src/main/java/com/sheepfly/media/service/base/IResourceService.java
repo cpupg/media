@@ -46,13 +46,6 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
     TagReference createResourceTag(String resourceId, String name);
 
     /**
-     * 删除资源标签。
-     *
-     * @param tagReferenceId 引用关系主键。。
-     */
-    void deleteResourceTag(String tagReferenceId);
-
-    /**
      * 查询资源对应的标签。
      *
      * @param resourceId 资源主键。
