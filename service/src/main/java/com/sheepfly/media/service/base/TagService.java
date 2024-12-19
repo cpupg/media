@@ -6,6 +6,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.common.vo.TagVo;
 import com.sheepfly.media.dataaccess.entity.Tag;
+import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.TagRepository;
 
 import java.util.List;
@@ -28,4 +29,14 @@ public interface TagService extends BaseJpaService<Tag, String, TagRepository> {
      * @return 标签列表。
      */
     List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId);
+
+
+    /**
+     * 给资源创建标签。
+     *
+     * @param tagData 标签表单。
+     *
+     * @return 创建好的标签引用。
+     */
+    TagReference addTag(TagData tagData);
 }

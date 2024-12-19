@@ -36,16 +36,6 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
     TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
 
     /**
-     * 给资源创建标签。
-     *
-     * @param resourceId 资源主键。
-     * @param name 标签名称。
-     *
-     * @return 创建好的标签引用。
-     */
-    TagReference createResourceTag(String resourceId, String name);
-
-    /**
      * 查询资源对应的标签。
      *
      * @param resourceId 资源主键。

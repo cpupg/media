@@ -1,19 +1,44 @@
 package com.sheepfly.media.common.form.data;
 
+import com.sheepfly.media.common.http.TablePagination;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
-public class TagData implements Serializable {
+public class TagData extends TablePagination implements Serializable {
     private static final long serialVersionUID = 1L;
+    /**
+     * 标签名。
+     */
+    @NotNull(message = "{entity.tag.name.notNull}")
+    @Length(message = "{entity.tag.name.length}")
     private String name;
-    private int currentPage;
-    private int pageSize;
+    /**
+     * 逗号分隔的标签。
+     */
+    private String names;
+    /**
+     * 标签主键。
+     */
+    private String tagId;
+
+    /**
+     * 资源标识。
+     */
+    @NotNull(message = "{entity.tag.resourceId.notNull}")
+    @Length(message = "{entity.tag.resourceId.length}")
+    private String resourceId;
+    /**
+     * 逗号分隔的资源。
+     */
+    private String resourceIds;
     /**
      * 是否是评分标签。
      *

@@ -23,7 +23,7 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "MEDIA.TAG_REFERENCE")
-public class TagReference implements Serializable, LogicDelete, EntityInterface, BaseBean {
+public class TagReference implements Serializable, LogicDelete, EntityInterface {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,15 +84,5 @@ public class TagReference implements Serializable, LogicDelete, EntityInterface,
     @Override
     public void setDeleteStatus(Integer deleteStatus) {
         // 应付语法检查，没有实际用途
-    }
-
-    @Override
-    public void copyFrom(Object source) {
-        BeanCopier.copyFrom(source, this);
-    }
-
-    @Override
-    public void copyTo(Object target) {
-        BeanCopier.copyTo(this, target);
     }
 }

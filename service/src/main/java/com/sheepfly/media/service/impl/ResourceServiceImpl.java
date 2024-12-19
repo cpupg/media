@@ -103,39 +103,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         return TableResponse.success(list, page.getTotal());
     }
 
-    @Override
-    public TagReference createResourceTag(String resourceId, String name) {
-        Tag tag = new Tag();
-        tag.setName(name);
-        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll().withIgnoreCase();
-        Optional<Tag> tagOpt = tagService.findOne(Example.of(tag, exampleMatcher));
-        if (!tagOpt.isPresent()) {
-            log.info("标签{{}}不存在，创建新标签", name);
-            tag.setCreateTime(new Date());
-            tag.setId(snowflake.nextIdStr());
-            tag = tagService.save(tag);
-            tagService.flush();
-            log.info("新标签{} -> {}创建完成", tag.getId(), tag.getName());
-        } else {
-            tag = tagOpt.orElse(null);
-        }
-        TagReference tagReference = new TagReference();
-        tagReference.setResourceId(resourceId);
-        tagReference.setTagId(tag.getId());
-        tagReference.setReferenceType(TagReferenceService.REF_TYPE_RESOURCE);
-        Optional<TagReference> tagRefOpt = trfService.findOne(Example.of(tagReference));
-        if (!tagRefOpt.isPresent()) {
-            log.warn("给资源{{}}设置标签{} -> {}", resourceId, tag.getId(), tag.getName());
-            tagReference.setId(snowflake.nextIdStr());
-            tagReference.setReferTime(new Date());
-            tagReference = trfService.save(tagReference);
-            trfService.flush();
-            log.info("给资源{{}}设置标签{{}}完成", resourceId, tag.getName());
-        } else {
-            tagReference = tagRefOpt.orElse(null);
-        }
-        return tagReference;
-    }
 
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {

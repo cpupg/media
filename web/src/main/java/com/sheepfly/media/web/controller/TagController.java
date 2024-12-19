@@ -12,6 +12,8 @@ import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tag")
@@ -66,24 +71,49 @@ public class TagController {
      *
      * <p>标签通过搜索得到，因此可以使用resourceId+tagId直接添加。</p>
      *
-     * @param tagId 标签主键。
-     * @param resourceId 资源主键。
+     * @param tagData 表单数据。
      *
      * @return 标签引用。
      */
     @PostMapping("/addTagToResource")
-    public ResponseData<TagReferenceVo> addTagToResource(@RequestParam("tagId") String tagId,
-            @RequestParam("resourceId") String resourceId) {
-        if (StringUtils.isBlank(tagId) || StringUtils.isBlank(resourceId)) {
-            return ResponseData.fail(ErrorCode.TAG_RES_ID_AND_TAG_ID_CANT_BE_NULL);
-        }
-        TagReference tagReference = trfService.addTag(tagId, resourceId);
-        TagVo tagVo = new TagVo();
-        tagVo.setId(tagId);
+    public ResponseData<TagReferenceVo> addTagToResource(@Validated @RequestBody TagData tagData) {
+        TagReference tagReference = service.addTag(tagData);
         TagReferenceVo vo = new TagReferenceVo();
-        tagReference.copyTo(vo);
-        vo.setTagVo(tagVo);
+        BeanUtils.copyProperties(tagReference, vo);
         return ResponseData.success(vo);
+    }
+
+
+    /**
+     * 临时请求，将来会删除。
+     *
+     * @param tagData 数据。
+     *
+     * @return 数据。
+     */
+    @PostMapping("/batchSetTag")
+    public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody TagData tagData) {
+        String[] tags = tagData.getNames().split(",");
+        String[] ids = tagData.getResourceIds().split(",");
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (String id : ids) {
+            log.info("当前资源:{}----", id);
+            Map<String, Object> tagMap = new HashMap<>();
+            for (String tag : tags) {
+                log.info("当前标签:{}", tag);
+                try {
+                    TagReference tagReference = service.addTag(tagData);
+                    tagMap.put(tag, tagReference);
+                } catch (Exception e) {
+                    log.error("资源{}添加标签{}失败", id, tag, e);
+                    tagMap.put(tag, e.getMessage());
+                }
+            }
+            Map<String, Object> idMap = new HashMap<>();
+            idMap.put(id, tagMap);
+            list.add(idMap);
+        }
+        return ResponseData.success(list);
     }
 
     /**

@@ -199,34 +199,6 @@ public class ResourceController {
     }
 
     /**
-     * 添加标签。
-     *
-     * @param resourceId 资源主键。
-     * @param tagName 标签名。
-     *
-     * @return 标签引用。
-     */
-    @PostMapping("addTag")
-    public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId, @RequestParam("tagName") String tagName) {
-        log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
-        if (StringUtils.isBlank(tagName)) {
-            return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
-        }
-        if (tagName.length() > 10) {
-            return ResponseData.fail(ErrorCode.TAG_NAME_TOO_LONG);
-        }
-        TagReference tagReference = service.createResourceTag(resourceId, tagName);
-        TagReferenceVo vo = new TagReferenceVo();
-        tagReference.copyTo(vo);
-        Tag tag = tagService.findById(tagReference.getTagId());
-        TagVo tagVo = new TagVo();
-        tag.copyTo(tagVo);
-        vo.setTagVo(tagVo);
-        log.info("添加完成");
-        return ResponseData.success(vo);
-    }
-
-    /**
      * 查询起源下的标签。
      *
      * @param request 请求。
@@ -277,38 +249,6 @@ public class ResourceController {
         log.info("移除专辑和资源关联关系{}", albumResourceId);
         AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
         return ResponseData.success(albumResource);
-    }
-
-    /**
-     * 临时请求，将来会删除。
-     *
-     * @param batchTag 数据。
-     *
-     * @return 数据。
-     */
-    @PostMapping("/batchSetTag")
-    public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody BatchTag batchTag) {
-        String[] tags = batchTag.getTags().split(",");
-        String[] ids = batchTag.getResourceIds().split(",");
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (String id : ids) {
-            log.info("当前资源:{}----", id);
-            Map<String, Object> tagMap = new HashMap<>();
-            for (String tag : tags) {
-                log.info("当前标签:{}", tag);
-                try {
-                    ResponseData<TagReferenceVo> data = addTag(id, tag);
-                    tagMap.put(tag, data);
-                } catch (Exception e) {
-                    log.error("资源{}添加标签{}失败", id, tag, e);
-                    tagMap.put(tag, e.getMessage());
-                }
-            }
-            Map<String, Object> idMap = new HashMap<>();
-            idMap.put(id, tagMap);
-            list.add(idMap);
-        }
-        return ResponseData.success(list);
     }
 
     /**
