@@ -43,7 +43,7 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
 
     @Override
     public TableResponse<TagVo> queryTagList(TagData tagData) {
-        List<TagVo> list = mapper.queryTagListBy(tagData);
+        List<TagVo> list = mapper.queryTagList(tagData);
         return TableResponse.success(list, (long) list.size());
     }
 

@@ -7,7 +7,7 @@ import com.sheepfly.media.common.vo.TagVo;
 import java.util.List;
 
 public interface TagMapper {
-    List<TagVo> queryTagListBy(TagData tagData);
+    List<TagVo> queryTagList(TagData tagData);
 
     /**
      * 根据资源搜索资源关联的标签。
