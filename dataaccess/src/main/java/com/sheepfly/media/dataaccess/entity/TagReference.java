@@ -1,12 +1,7 @@
 package com.sheepfly.media.dataaccess.entity;
 
-import com.sheepfly.media.common.util.BeanCopier;
-import com.sheepfly.media.dataaccess.entity.baseinterface.BaseBean;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,9 +13,6 @@ import java.util.Date;
 /**
  * 标签引用
  */
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "MEDIA.TAG_REFERENCE")
 public class TagReference implements Serializable, LogicDelete, EntityInterface {
@@ -85,4 +77,53 @@ public class TagReference implements Serializable, LogicDelete, EntityInterface 
     public void setDeleteStatus(Integer deleteStatus) {
         // 应付语法检查，没有实际用途
     }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getResourceId() {
+        return this.resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getTagId() {
+        return this.tagId;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
+    }
+
+    public Integer getReferenceType() {
+        return this.referenceType;
+    }
+
+    public void setReferenceType(Integer referenceType) {
+        this.referenceType = referenceType;
+    }
+
+    public Date getReferTime() {
+        return this.referTime;
+    }
+
+    public void setReferTime(Date referTime) {
+        this.referTime = referTime;
+    }
+
+    public Date getUnReferTime() {
+        return this.unReferTime;
+    }
+
+    public void setUnReferTime(Date unReferTime) {
+        this.unReferTime = unReferTime;
+    }
+
 }

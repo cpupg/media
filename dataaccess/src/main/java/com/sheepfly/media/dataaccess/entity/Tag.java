@@ -4,9 +4,6 @@ import com.sheepfly.media.common.util.BeanCopier;
 import com.sheepfly.media.dataaccess.entity.baseinterface.BaseBean;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,9 +15,6 @@ import java.util.Date;
 /**
  * 标签
  */
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "MEDIA.TAG")
 public class Tag implements Serializable, LogicDelete, EntityInterface, BaseBean {
@@ -83,4 +77,37 @@ public class Tag implements Serializable, LogicDelete, EntityInterface, BaseBean
     public void setUpdateTime(Date date) {
         // 应付语法检查，没有实际用途
     }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getDeleteTime() {
+        return this.deleteTime;
+    }
+
+    public void setDeleteTime(Date deleteTime) {
+        this.deleteTime = deleteTime;
+    }
+
 }
