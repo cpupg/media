@@ -4,7 +4,6 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
-import com.sheepfly.media.common.form.data.BatchTag;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
@@ -18,24 +17,21 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.vo.AlbumResourceVo;
 import com.sheepfly.media.common.vo.ResourceVo;
 import com.sheepfly.media.common.vo.TagReferenceVo;
-import com.sheepfly.media.common.vo.TagVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
-import com.sheepfly.media.dataaccess.entity.Tag;
-import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,9 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,8 +60,8 @@ import java.util.Map;
 @SuppressWarnings({"java:S3740", "rawtypes"})
 @RestController
 @RequestMapping(value = "/resource", produces = "application/json;charset=utf-8")
-@Slf4j
 public class ResourceController {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ResourceController.class);
     @Autowired
     private IResourceService service;
     @Autowired
@@ -144,9 +138,9 @@ public class ResourceController {
         // 判断输入的路径是文件还是目录，方便直接复制全路径到表单
         File file = new File(resourceData.getDir());
         String parentDir = file.getAbsolutePath();
-        log.info("文件目录{}", parentDir);
+        LOGGER.info("文件目录{}", parentDir);
         if (file.isFile()) {
-            log.info("当前资源是一个文件，计算父目录");
+            LOGGER.info("当前资源是一个文件，计算父目录");
             resource.setFilename(file.getName());
             parentDir = FilenameUtils.normalize(file.getParent(), true);
         }
@@ -230,7 +224,7 @@ public class ResourceController {
     @PostMapping("/setAlbum")
     public ResponseData<AlbumResource> setAlbum(@RequestParam String resourceId, @RequestParam String albumId)
             throws BusinessException {
-        log.info("为资源{}设置专辑{}", resourceId, albumId);
+        LOGGER.info("为资源{}设置专辑{}", resourceId, albumId);
         AlbumResource albumResource = service.setAlbum(resourceId, albumId);
         return ResponseData.success(albumResource);
     }
@@ -246,7 +240,7 @@ public class ResourceController {
      */
     @PostMapping("/unsetAlbum")
     public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
-        log.info("移除专辑和资源关联关系{}", albumResourceId);
+        LOGGER.info("移除专辑和资源关联关系{}", albumResourceId);
         AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
         return ResponseData.success(albumResource);
     }

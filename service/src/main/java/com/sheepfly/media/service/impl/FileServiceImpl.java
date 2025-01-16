@@ -5,17 +5,17 @@ import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.file.FileInfo;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.dataaccess.mapper.FileMapper;
 import com.sheepfly.media.dataaccess.repository.FileUploadRepository;
-import com.sheepfly.media.common.vo.file.FileInfo;
 import com.sheepfly.media.service.base.FileService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,12 +35,12 @@ import java.util.Optional;
 import java.util.Properties;
 
 @Service
-@Slf4j
 public class FileServiceImpl implements FileService {
     /**
      * String.format拼接文件时的格式化字符串。fileDir/getDir/filename
      */
     private static final String FILE_FORMAT_PATTERN = "%s/%s/%s";
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(FileServiceImpl.class);
     @Resource
     private FileUploadRepository repository;
     @Resource
@@ -103,7 +103,7 @@ public class FileServiceImpl implements FileService {
         fileUpload.setUploadStatus(START_UPLOAD);
         fileUpload.setUploadTime(new Date());
         FileUpload save = repository.save(fileUpload);
-        log.info("文件上传完成{}", save);
+        LOGGER.info("文件上传完成{}", save);
         BeanUtils.copyProperties(save, fileInfo);
         return fileInfo;
     }
@@ -135,7 +135,7 @@ public class FileServiceImpl implements FileService {
         if (file == null || !file.exists()) {
             throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
         }
-        log.info("删除文件:{}", file);
+        LOGGER.info("删除文件:{}", file);
         String dir = getFileDir(String.valueOf(fileUpload.getBusinessType()), fileUpload.getUploadTime());
         File file2 = new File(String.format(FILE_FORMAT_PATTERN, recycleBin, dir, fileUpload.getFilename()));
         try {
@@ -157,7 +157,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public int deleteFileByBusinessCode(String businessCode) throws BusinessException {
         List<FileInfo> list = mapper.queryFileList(businessCode);
-        log.info("业务代码{}下有{}个文件", businessCode, list.size());
+        LOGGER.info("业务代码{}下有{}个文件", businessCode, list.size());
         // 先判断文件是否存在，然后再删除
         // 若中途删除失败，则已删除的文件只能手动删除
         List<File> fileList = new ArrayList<>();
@@ -167,7 +167,7 @@ public class FileServiceImpl implements FileService {
             if (file.exists()) {
                 fileList.add(file);
             } else {
-                log.warn("文件不存在:{}", fileInfo);
+                LOGGER.warn("文件不存在:{}", fileInfo);
                 throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
             }
         }
@@ -175,9 +175,9 @@ public class FileServiceImpl implements FileService {
         for (File file : fileList) {
             if (file.delete()) {
                 count++;
-                log.info("文件{}删除完成", file);
+                LOGGER.info("文件{}删除完成", file);
             } else {
-                log.warn("文件{}删除失败", file);
+                LOGGER.warn("文件{}删除失败", file);
                 throw new BusinessException(ErrorCode.UNEXPECT_ERROR);
             }
         }

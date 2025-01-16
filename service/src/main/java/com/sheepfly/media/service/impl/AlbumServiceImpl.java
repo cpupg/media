@@ -22,16 +22,16 @@ import com.sheepfly.media.dataaccess.mapper.AlbumResourceMapper;
 import com.sheepfly.media.dataaccess.repository.AlbumRepository;
 import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.IResourceService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@Slf4j
 @Service
 public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRepository> implements AlbumService {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AlbumServiceImpl.class);
     @Resource
     private AlbumMapper mapper;
     @Resource
@@ -70,30 +70,30 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
     public void batchUpdateByResource(ResourceData resourceData) {
         if (ObjectUtils.isNotEmpty(resourceData.getDeletedAlbums())) {
             long l = arMapper.batchUpdateByResource(resourceData);
-            log.info("删除{}个专辑，涉及数据{}条", resourceData.getDeletedAlbums().size(), l);
+            LOGGER.info("删除{}个专辑，涉及数据{}条", resourceData.getDeletedAlbums().size(), l);
         }
         if (ObjectUtils.isNotEmpty(resourceData.getAddedAlbums())) {
-            log.info("处理新增专辑");
+            LOGGER.info("处理新增专辑");
             List<AlbumVo> albumList = resourceData.getAddedAlbums();
             TableResponse<ResourceVo> response = resourceService.queryResourceVoList(
                     resourceData.getCondition());
-            log.info("给{}个资源设置{}个新专辑", response.getTotal(), albumList.size());
+            LOGGER.info("给{}个资源设置{}个新专辑", response.getTotal(), albumList.size());
             List<ResourceVo> resourceList = response.getData();
             for (AlbumVo albumVo : albumList) {
-                log.info("当前专辑:{}", albumVo.getName());
+                LOGGER.info("当前专辑:{}", albumVo.getName());
                 for (ResourceVo resourceVo : resourceList) {
                     try {
                         resourceService.setAlbum(resourceVo.getId(), albumVo.getId());
                     } catch (BusinessException e) {
                         if (e.getError() == ErrorCode.RES_RA_NOT_REPEATED_AR) {
-                            log.warn("{},资源{}已设置专辑{}", e.getMessage(), resourceVo.getId(),
+                            LOGGER.warn("{},资源{}已设置专辑{}", e.getMessage(), resourceVo.getId(),
                                     albumVo.getId());
                         }
                     }
                 }
             }
-            log.info("新增专辑处理完成");
+            LOGGER.info("新增专辑处理完成");
         }
-        log.info("专辑处理完成");
+        LOGGER.info("专辑处理完成");
     }
 }

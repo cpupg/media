@@ -19,11 +19,11 @@ import com.sheepfly.media.dataaccess.entity.Site_;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import com.sheepfly.media.dataaccess.repository.SiteRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -47,13 +47,13 @@ import java.util.Set;
 /**
  * 扫描目录任务。
  */
-@Slf4j
 @Component
 public class LoadDirectoryTaskImpl implements Task {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(LoadDirectoryTaskImpl.class);
     /**
      * 扫描到的资源数据，用来进行校验。
      */
-    private ResourceData resourceData = new ResourceData();
+    private final ResourceData resourceData = new ResourceData();
     @Autowired
     private SiteRepository siteRepository;
     @Autowired
@@ -140,7 +140,7 @@ public class LoadDirectoryTaskImpl implements Task {
 
         Optional<Site> optionalSite = siteRepository.findOne(
                 (root, query, builder) -> builder.equal(root.get(Site_.id), author.getSiteId()));
-        log.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
+        LOGGER.info("当前作者用户名{},来源{}", author.getUsername(), optionalSite.orElse(null));
         // 查到就说明是相同文件。
         matcher = ExampleMatcher.matchingAll()
                 .withMatcher(Resource_.DIR_CODE, ExampleMatcher.GenericPropertyMatcher::exact)
@@ -149,7 +149,7 @@ public class LoadDirectoryTaskImpl implements Task {
 
         writeMessage(String.format("当前用户:%s", author.getUsername()));
         configIncludeAndExclude();
-        log.info("配置完成");
+        LOGGER.info("配置完成");
         writeMessage("   ->配置完成<-");
     }
 
@@ -173,18 +173,18 @@ public class LoadDirectoryTaskImpl implements Task {
                         return builder.and(p1, p2);
                     });
             if (authorList.isEmpty()) {
-                log.warn("没有匹配的作者，请重试");
+                LOGGER.warn("没有匹配的作者，请重试");
             } else if (authorList.size() == 1) {
-                log.info("匹配到唯一作者");
+                LOGGER.info("匹配到唯一作者");
                 author = authorList.get(0);
             } else if (authorList.size() <= 5) {
-                log.warn("有重名作者，请输入id后重试" + authorList);
+                LOGGER.warn("有重名作者，请输入id后重试" + authorList);
             } else {
-                log.warn("重名作者太多，请确定作者名称后重试");
+                LOGGER.warn("重名作者太多，请确定作者名称后重试");
             }
         } else {
             // 没有作者
-            log.error("author-id和author至少需要输入一个");
+            LOGGER.error("author-id和author至少需要输入一个");
         }
     }
 
@@ -210,7 +210,7 @@ public class LoadDirectoryTaskImpl implements Task {
         filenameFilter = (dir, name) -> {
             // 结果文件不需要扫描且不需要记录
             if (name.matches("^result.*\\.txt$")) {
-                log.info("忽略结果文件{}", name);
+                LOGGER.info("忽略结果文件{}", name);
                 return false;
             }
             // 先校验排除路径，再校验包含路径
@@ -249,13 +249,13 @@ public class LoadDirectoryTaskImpl implements Task {
     private void configDirAndFile() throws FileNotFoundException {
         String targetDir = config.getTargetDir();
         if (!FileUtil.isAbsolutePath(targetDir)) {
-            log.warn("目标路径不是绝对路径");
+            LOGGER.warn("目标路径不是绝对路径");
             String absolutePath = new File(targetDir).getAbsolutePath();
-            log.info("绝对路径:{}", absolutePath);
+            LOGGER.info("绝对路径:{}", absolutePath);
             config.setTargetDir(absolutePath);
         }
         String resultPath = targetDir + File.separator + "result";
-        log.info("运行结果将保存到文件{}中", resultPath);
+        LOGGER.info("运行结果将保存到文件{}中", resultPath);
         // 初始化输出流，需要在afterTaskFinish中关闭。
         resultOutputStream = new FileOutputStream(resultPath + ".txt", true);
         failOutputStream = new FileOutputStream(resultPath + ".fail.txt", true);
@@ -266,7 +266,7 @@ public class LoadDirectoryTaskImpl implements Task {
 
     @Override
     public void executeTask() {
-        log.info("当前目录:{},作者:{}", config.getTargetDir(), config.getAuthorName());
+        LOGGER.info("当前目录:{},作者:{}", config.getTargetDir(), config.getAuthorName());
         String path = FileUtil.getAbsolutePath(config.getTargetDir());
         scanAndLoadDirectory(path);
     }
@@ -281,7 +281,7 @@ public class LoadDirectoryTaskImpl implements Task {
                 .append("排除的资源数量：").append(excludeCount).append(System.lineSeparator())
                 .append("包含的资源数量：").append(includeCount).append(System.lineSeparator())
                 .append("重复资源数量：").append(duplicatedCount).append(System.lineSeparator());
-        log.info(builder.toString());
+        LOGGER.info(builder.toString());
     }
 
     @Override
@@ -309,7 +309,7 @@ public class LoadDirectoryTaskImpl implements Task {
      * @param dir 全路径。
      */
     private void scanAndLoadDirectory(String dir) {
-        log.info("当前路径:{}", dir);
+        LOGGER.info("当前路径:{}", dir);
         File currentPath = new File(dir);
         if (FileUtil.isFile(dir)) {
             Resource resource = new Resource();
@@ -322,7 +322,7 @@ public class LoadDirectoryTaskImpl implements Task {
             try {
                 d = cache.getOrCreateDirectory(parent);
             } catch (CommonException e) {
-                log.error("获取目录失败:{}", d.getPath(), e);
+                LOGGER.error("获取目录失败:{}", d.getPath(), e);
                 failCount++;
                 writeFailMessage(String.format("获取目录失败:%s,exception=%s,cause=%s", dir, e.getMessage(),
                         e.getCause().getMessage()));
@@ -335,7 +335,7 @@ public class LoadDirectoryTaskImpl implements Task {
             long count = resourceRepository.count(Example.of(resource, matcher));
             String message = String.format("%s -> %s", resource.getFilename(), parent);
             if (count > 0) {
-                log.info("已经存在资源{} -> {}", resource.getFilename(), parent);
+                LOGGER.info("已经存在资源{} -> {}", resource.getFilename(), parent);
                 duplicatedCount++;
                 writeDuplicatedMessage(message);
                 return;
@@ -351,7 +351,7 @@ public class LoadDirectoryTaskImpl implements Task {
                 resourceData.setDir("");
                 Set<ConstraintViolation<ResourceData>> result = validator.validate(resourceData);
                 if (!result.isEmpty()) {
-                    log.warn("资源保存失败:{} -> {}", resource.getFilename(), parent);
+                    LOGGER.warn("资源保存失败:{} -> {}", resource.getFilename(), parent);
                     failCount++;
                     writeFailMessage(message);
                     result.forEach(ele -> writeFailMessage(
@@ -363,7 +363,7 @@ public class LoadDirectoryTaskImpl implements Task {
                 writeMessage(message);
             } catch (Exception e) {
                 // 不能影响后面资源的保存。
-                log.error("资源保存失败:{} -> {}", resource.getFilename(), parent, e);
+                LOGGER.error("资源保存失败:{} -> {}", resource.getFilename(), parent, e);
                 failCount++;
                 writeFailMessage(message);
             }
@@ -372,13 +372,13 @@ public class LoadDirectoryTaskImpl implements Task {
         String[] fileNameList = currentPath.list(filenameFilter);
         String[] fullFileNameList = currentPath.list();
         if (fileNameList.length < fullFileNameList.length) {
-            log.warn("路径{}下有文件被排除", dir);
+            LOGGER.warn("路径{}下有文件被排除", dir);
         }
         if (fileNameList.length == 0) {
-            log.info("目录{}是空目录", currentPath);
+            LOGGER.info("目录{}是空目录", currentPath);
             return;
         }
-        log.info("当前路径是目录，有{}个子路径", fileNameList.length);
+        LOGGER.info("当前路径是目录，有{}个子路径", fileNameList.length);
         for (String name : fileNameList) {
             scanAndLoadDirectory(currentPath + File.separator + name);
         }

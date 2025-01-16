@@ -14,8 +14,6 @@ import com.sheepfly.media.dataaccess.repository.SiteRepository;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +30,6 @@ import java.util.List;
  */
 @Service
 public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteRepository> implements ISiteService {
-    private static final Logger log = LoggerFactory.getLogger(SiteServiceImpl.class);
     @Resource(name = "siteRepository")
     private SiteRepository repository;
     @Autowired

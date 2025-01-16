@@ -4,12 +4,12 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableResponse;
-import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.common.vo.file.FileInfo;
+import com.sheepfly.media.dataaccess.entity.FileUpload;
 import com.sheepfly.media.service.base.FileService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +30,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/file")
-@Slf4j
 public class FileController {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(FileController.class);
     @Autowired
     private FileService service;
 
@@ -45,14 +45,14 @@ public class FileController {
             throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE_TYPE);
         }
         FileInfo fileInfo = service.uploadFile(file, businessCode, businessType);
-        log.info("上传完成");
+        LOGGER.info("上传完成");
         return ResponseData.success(fileInfo);
     }
 
     @PostMapping("/queryFileList")
     public TableResponse<FileInfo> queryFileList(@RequestParam("businessCode") String businessCode)
             throws BusinessException {
-        log.info("获取文件列表，业务代码{}", businessCode);
+        LOGGER.info("获取文件列表，业务代码{}", businessCode);
         if (StringUtils.isEmpty(businessCode)) {
             throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE);
         }

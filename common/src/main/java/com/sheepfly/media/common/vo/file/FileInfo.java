@@ -1,15 +1,10 @@
 package com.sheepfly.media.common.vo.file;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
 /**
  * 文件信息。
  */
-@Getter
-@Setter
 public class FileInfo {
     /**
      * 主键标识。
@@ -47,4 +42,76 @@ public class FileInfo {
      * 上传时间。
      */
     private Date uploadTime;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getBusinessCode() {
+        return this.businessCode;
+    }
+
+    public void setBusinessCode(String businessCode) {
+        this.businessCode = businessCode;
+    }
+
+    public Integer getBusinessType() {
+        return this.businessType;
+    }
+
+    public void setBusinessType(Integer businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getOriginalFilename() {
+        return this.originalFilename;
+    }
+
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
+
+    public String getFilename() {
+        return this.filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getUid() {
+        return this.uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getExtension() {
+        return this.extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public Date getUploadTime() {
+        return this.uploadTime;
+    }
+
+    public void setUploadTime(Date uploadTime) {
+        this.uploadTime = uploadTime;
+    }
 }

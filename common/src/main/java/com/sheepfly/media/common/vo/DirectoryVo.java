@@ -1,17 +1,11 @@
 package com.sheepfly.media.common.vo;
 
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
-
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * 目录视图，和antd Select组件的TreeNode对应。
  */
-@Getter
-@Setter
-@ToString
 public class DirectoryVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -67,4 +61,75 @@ public class DirectoryVo implements Serializable {
      */
     private List<DirectoryVo> children;
 
+    public Long getDirCode() {
+        return this.dirCode;
+    }
+
+    public void setDirCode(Long dirCode) {
+        this.dirCode = dirCode;
+    }
+
+    public Long getParentCode() {
+        return this.parentCode;
+    }
+
+    public void setParentCode(Long parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return this.path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getCodeList() {
+        return this.codeList;
+    }
+
+    public void setCodeList(String codeList) {
+        this.codeList = codeList;
+    }
+
+    public Integer getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<DirectoryVo> getChildren() {
+        return this.children;
+    }
+
+    public void setChildren(List<DirectoryVo> children) {
+        this.children = children;
+    }
 }

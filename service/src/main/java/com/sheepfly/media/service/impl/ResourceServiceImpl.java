@@ -17,8 +17,6 @@ import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
-import com.sheepfly.media.dataaccess.entity.Tag;
-import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
@@ -42,7 +40,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +53,7 @@ import java.util.stream.Collectors;
 @Service
 public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, ResourceRepository>
         implements IResourceService {
-    private static final Logger log = LoggerFactory.getLogger(ResourceServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceServiceImpl.class);
     @javax.annotation.Resource
     private TagService tagService;
     @javax.annotation.Resource
@@ -164,17 +161,17 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
         int deleteCount = mapper.batchDelete(condition);
-        log.info("删除{}个资源", deleteCount);
+        LOGGER.info("删除{}个资源", deleteCount);
         if (list.size() != deleteCount) {
             throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
         }
         long l = trfService.batchDeleteByResource(condition);
-        log.info("删除{}个标签", l);
+        LOGGER.info("删除{}个标签", l);
         l = albumService.batchDeleteByResource(condition);
-        log.info("删除{}个专辑", l);
+        LOGGER.info("删除{}个专辑", l);
         List<String> idList = list.stream().map(ResourceVo::getId).collect(Collectors.toList());
         int i = fileService.deleteFileByBusinessCodeList(idList);
-        log.info("删除{}个文件", i);
+        LOGGER.info("删除{}个文件", i);
         return Collections.emptyList();
     }
 
@@ -193,12 +190,12 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         resourceData.getCondition().getParams().setResourceOnly(true);
         int i = mapper.batchUpdate(resourceData);
         // 更新专辑
-        log.info("资源表更新完成，共更新{}条数据，开始处理专辑", i);
+        LOGGER.info("资源表更新完成，共更新{}条数据，开始处理专辑", i);
         albumService.batchUpdateByResource(resourceData);
         // 更新标签
-        log.info("专辑处理完成，开始处理标签");
+        LOGGER.info("专辑处理完成，开始处理标签");
         tagService.batchUpdateByResource(resourceData);
-        log.info("标签处理完成");
+        LOGGER.info("标签处理完成");
         return Collections.emptyList();
     }
 
@@ -210,7 +207,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         long l = trfService.deleteByResourceId(id);
         long l2 = albumService.deleteResourceFromAlbum(id);
         int i = fileService.deleteFileByBusinessCode(id);
-        log.info("资源{}删除完成，包含{}个标签，{}个专辑，{}个文件", id, l, l2, i);
+        LOGGER.info("资源{}删除完成，包含{}个标签，{}个专辑，{}个文件", id, l, l2, i);
         return findById(id);
     }
 }

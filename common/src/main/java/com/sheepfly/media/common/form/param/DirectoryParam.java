@@ -1,8 +1,6 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -11,9 +9,6 @@ import java.io.Serializable;
  *
  * @author wrote-code
  */
-@Getter
-@Setter
-@ToString
 public class DirectoryParam extends TablePagination implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,4 +39,43 @@ public class DirectoryParam extends TablePagination implements Serializable {
      */
     private Integer level;
 
+    public Long getDirCode() {
+        return this.dirCode;
+    }
+
+    public void setDirCode(Long dirCode) {
+        this.dirCode = dirCode;
+    }
+
+    public Long getParentCode() {
+        return this.parentCode;
+    }
+
+    public void setParentCode(Long parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCodeList() {
+        return this.codeList;
+    }
+
+    public void setCodeList(String codeList) {
+        this.codeList = codeList;
+    }
+
+    public Integer getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
 }

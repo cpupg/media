@@ -43,19 +43,6 @@ public class AuthorVo implements Serializable {
      */
     private Date updateTime;
 
-    @Override
-    public String toString() {
-        return "AuthorVo{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", username='" + username + '\'' +
-                ", site=" + siteVo +
-                ", homepage='" + homepage + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
-    }
-
     public String getId() {
         return id;
     }

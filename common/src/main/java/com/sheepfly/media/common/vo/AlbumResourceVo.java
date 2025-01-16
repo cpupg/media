@@ -1,9 +1,5 @@
 package com.sheepfly.media.common.vo;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serializable;
 
 /**
@@ -14,9 +10,6 @@ import java.io.Serializable;
  *
  * @author wrote-code.
  */
-@Getter
-@Setter
-@ToString
 public class AlbumResourceVo implements Serializable {
     private String id;
     private String albumId;
@@ -24,4 +17,52 @@ public class AlbumResourceVo implements Serializable {
     private String resourceId;
     private String resourceName;
     private String resourceDir;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAlbumId() {
+        return this.albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
+    public String getAlbumName() {
+        return this.albumName;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    public String getResourceId() {
+        return this.resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getResourceName() {
+        return this.resourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public String getResourceDir() {
+        return this.resourceDir;
+    }
+
+    public void setResourceDir(String resourceDir) {
+        this.resourceDir = resourceDir;
+    }
 }

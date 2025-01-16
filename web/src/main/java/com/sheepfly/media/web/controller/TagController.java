@@ -10,8 +10,8 @@ import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +28,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/tag")
-@Slf4j
 public class TagController {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TagController.class);
     @Resource
     private TagService service;
     @Resource
@@ -97,15 +97,15 @@ public class TagController {
         String[] ids = tagData.getResourceIds().split(",");
         List<Map<String, Object>> list = new ArrayList<>();
         for (String id : ids) {
-            log.info("当前资源:{}----", id);
+            LOGGER.info("当前资源:{}----", id);
             Map<String, Object> tagMap = new HashMap<>();
             for (String tag : tags) {
-                log.info("当前标签:{}", tag);
+                LOGGER.info("当前标签:{}", tag);
                 try {
                     TagReference tagReference = service.addTag(tagData);
                     tagMap.put(tag, tagReference);
                 } catch (Exception e) {
-                    log.error("资源{}添加标签{}失败", id, tag, e);
+                    LOGGER.error("资源{}添加标签{}失败", id, tag, e);
                     tagMap.put(tag, e.getMessage());
                 }
             }
@@ -136,12 +136,12 @@ public class TagController {
         trfService.deleteById(referenceId);
         Tag tag = service.findById(tagReference.getTagId());
         if (tag == null) {
-            log.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
+            LOGGER.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
             return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
         }
         TagVo tagVo = new TagVo();
         tag.copyTo(tagVo);
-        log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
+        LOGGER.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
         return ResponseData.success(tagVo);
     }
 }

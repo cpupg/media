@@ -32,17 +32,6 @@ public class ResourceTypeVo implements Serializable {
      */
     private Date updateTime;
 
-    @Override
-    public String toString() {
-        return "ResourceTypeVo{" +
-                "id='" + id + '\'' +
-                ", resourceVo=" + resourceVo +
-                ", resourceTypeMapVo=" + resourceTypeMapVo +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
-    }
-
     public String getId() {
         return id;
     }

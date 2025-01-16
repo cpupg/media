@@ -4,12 +4,12 @@ import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.param.DirectoryParam;
+import com.sheepfly.media.common.vo.DirectoryVo;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
-import com.sheepfly.media.common.vo.DirectoryVo;
 import com.sheepfly.media.service.base.DirectoryService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class DirectoryServiceImpl implements DirectoryService, InitializingBean {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DirectoryServiceImpl.class);
     @Autowired
     private DirectoryRepository repository;
     @Autowired
@@ -62,7 +62,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
     public Directory createDirectory(String path) throws BusinessException {
         String pathPrefix = FilenameUtils.getPrefix(path).toUpperCase();
         Directory driver = createDriver(pathPrefix);
-        log.info("盘符{},目录代码:{}", driver.getPath(), driver.getDirCode());
+        LOGGER.info("盘符{},目录代码:{}", driver.getPath(), driver.getDirCode());
         // 将目录以/分隔，从最后一层依次查找目录表，查到后作为父目录依次简历后面的目录
         // 假设目标目录是c:/a/b/c/d/e/f/,系统会按层级依次保存c:,a,b,c,d,e,f等7个目录。
         String[] dirNames = path.split(Constant.SEPERATOR);
@@ -75,7 +75,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
             Directory currentDir = queryDirectoryByPath(path);
             if (currentDir != null) {
                 // 搜到父目录/a/b/c/，此时dirName=d
-                log.info("找到当前目录，开始创建子目录:{}", currentDir);
+                LOGGER.info("找到当前目录，开始创建子目录:{}", currentDir);
                 StringBuilder codeListBuilder = new StringBuilder(currentDir.getCodeList());
                 // 当前目录的层级就是子目录的下标
                 // 目录：c:/a/b/c/d/e
@@ -100,7 +100,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                     subDir.setDeleteStatus(Constant.NOT_DELETED);
                     subDir.setCreateTime(new Date());
                     resultDir = repository.saveAndFlush(subDir);
-                    log.info("子目录创建成功：{}", resultDir);
+                    LOGGER.info("子目录创建成功：{}", resultDir);
                     parentCode = subDir.getDirCode();
                 }
                 return resultDir;
@@ -162,7 +162,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
     private Long createDirCode() {
         // 目录代码是唯一的，查询时不能加条件
         Directory directory = repository.findFirstByOrderByDirCodeDesc();
-        log.info("当前最大目录代码:" + directory.getDirCode());
+        LOGGER.info("当前最大目录代码:" + directory.getDirCode());
         return directory.getDirCode() + 1;
     }
 
@@ -175,19 +175,19 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
      */
     private Long createDriverCode() {
         Directory directory = repository.findFirstByOrderByDirCode();
-        log.info("当前最大盘符代码：{}", Math.abs(directory.getDirCode()));
+        LOGGER.info("当前最大盘符代码：{}", Math.abs(directory.getDirCode()));
         return directory.getDirCode() - 1;
     }
 
     @Override
     public void afterPropertiesSet() throws BusinessException {
-        log.info("初始化根目录");
+        LOGGER.info("初始化根目录");
         Directory root = new Directory();
         root.setPath(Constant.SEPERATOR);
         Example<Directory> example = Example.of(root);
         Optional<Directory> opt = repository.findOne(example);
         if (!opt.isPresent()) {
-            log.warn("没有根目录");
+            LOGGER.warn("没有根目录");
             root.setId(snowflake.nextIdStr());
             root.setDirCode(0L);
             root.setParentCode(0L);
@@ -199,6 +199,6 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
             root.setCreateTime(new Date());
             repository.saveAndFlush(root);
         }
-        log.info("初始化成功");
+        LOGGER.info("初始化成功");
     }
 }

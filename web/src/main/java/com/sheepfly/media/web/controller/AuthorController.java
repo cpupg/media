@@ -6,11 +6,11 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.AuthorData;
 import com.sheepfly.media.common.form.param.AuthorParam;
+import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
-import com.sheepfly.media.common.http.ResponseData;
-import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.vo.AuthorVo;
+import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -40,7 +40,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/author")
 public class AuthorController {
-    private static final Logger log = LoggerFactory.getLogger(AuthorController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthorController.class);
     @Autowired
     private IAuthorService service;
     @Autowired
@@ -58,7 +58,7 @@ public class AuthorController {
     @PostMapping("/add")
     public ResponseData<Author> add(@RequestBody @Validated AuthorData authorData)
             throws InvocationTargetException, IllegalAccessException {
-        log.info("保存作者");
+        LOGGER.info("保存作者");
         String siteId = authorData.getSiteId();
         if (StringUtils.isEmpty(siteId) || !siteService.existsById(siteId)) {
             return ResponseData.fail(ErrorCode.AUTHOR_SITE_CANT_BE_NULL);
@@ -72,16 +72,16 @@ public class AuthorController {
 
     @GetMapping("/delete")
     public ResponseData<Author> delete(@RequestParam("id") String id) throws BusinessException {
-        log.info("删除作者");
+        LOGGER.info("删除作者");
         if (StringUtils.isEmpty(id)) {
             throw new BusinessException(ErrorCode.AUTHOR_ID_CANT_BE_NULL);
         }
         if (service.isAuthorCanBeDelete(id)) {
             service.safeLogicDeleteById(id, Author.class, ErrorCode.DELETE_NOT_EXIST_DATA);
-            log.info("删除完成");
+            LOGGER.info("删除完成");
             return ResponseData.success();
         } else {
-            log.info("要删除的作者不存在");
+            LOGGER.info("要删除的作者不存在");
             return ResponseData.fail(ErrorCode.AUTHOR_ASSOCIATE_RESOURCE);
         }
     }

@@ -15,9 +15,9 @@ import com.sheepfly.media.dataaccess.repository.TagRepository;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -27,9 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepository> implements TagService {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TagServiceImpl.class);
     @Resource
     private TagMapper mapper;
     @Resource
@@ -50,17 +50,17 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
     @Override
     public void batchUpdateByResource(ResourceData resourceData) {
         if (ObjectUtils.isNotEmpty(resourceData.getDeletedTags())) {
-            log.info("处理删除的标签");
+            LOGGER.info("处理删除的标签");
             long l1 = tagReferenceMapper.batchUpdateByResource(resourceData);
-            log.info("处理完成，涉及标签{}个，涉及数据{}条", resourceData.getDeletedTags().size(), l1);
+            LOGGER.info("处理完成，涉及标签{}个，涉及数据{}条", resourceData.getDeletedTags().size(), l1);
         }
         if (ObjectUtils.isNotEmpty(resourceData.getAddedTags())) {
             TableResponse<ResourceVo> response = resourceService.queryResourceVoList(resourceData.getCondition());
             List<ResourceVo> list = response.getData();
-            log.info("一共{}个资源", list.size());
+            LOGGER.info("一共{}个资源", list.size());
             List<TagVo> tagsList = resourceData.getAddedTags();
             for (TagVo tagVo : tagsList) {
-                log.info("当前标签:{}", tagVo.getName());
+                LOGGER.info("当前标签:{}", tagVo.getName());
                 TagData tagData = new TagData();
                 for (ResourceVo resourceVo : list) {
                     tagData.setResourceId(resourceVo.getId());
@@ -68,7 +68,7 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
                     addTag(tagData);
                 }
             }
-            log.info("新标签处理完成");
+            LOGGER.info("新标签处理完成");
         }
     }
 
@@ -89,12 +89,12 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll().withIgnoreCase();
         Optional<Tag> tagOpt = findOne(Example.of(tag, exampleMatcher));
         if (!tagOpt.isPresent()) {
-            log.info("标签{{}}不存在，创建新标签", name);
+            LOGGER.info("标签{{}}不存在，创建新标签", name);
             tag.setCreateTime(new Date());
             tag.setId(snowflake.nextIdStr());
             tag = save(tag);
             flush();
-            log.info("新标签{} -> {}创建完成", tag.getId(), tag.getName());
+            LOGGER.info("新标签{} -> {}创建完成", tag.getId(), tag.getName());
         } else {
             tag = tagOpt.orElse(null);
         }
@@ -104,12 +104,12 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
         tagReference.setReferenceType(TagReferenceService.REF_TYPE_RESOURCE);
         Optional<TagReference> tagRefOpt = trfService.findOne(Example.of(tagReference));
         if (!tagRefOpt.isPresent()) {
-            log.warn("给资源{{}}设置标签{} -> {}", resourceId, tag.getId(), tag.getName());
+            LOGGER.warn("给资源{{}}设置标签{} -> {}", resourceId, tag.getId(), tag.getName());
             tagReference.setId(snowflake.nextIdStr());
             tagReference.setReferTime(new Date());
             tagReference = trfService.save(tagReference);
             trfService.flush();
-            log.info("给资源{{}}设置标签{{}}完成", resourceId, tag.getName());
+            LOGGER.info("给资源{{}}设置标签{{}}完成", resourceId, tag.getName());
         } else {
             tagReference = tagRefOpt.orElse(null);
         }

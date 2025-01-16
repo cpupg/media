@@ -4,8 +4,9 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvReadConfig;
 import cn.hutool.core.text.csv.CsvReader;
 import com.sheepfly.media.dataaccess.DataAccessTestConfiguration;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,9 +20,9 @@ import java.util.List;
  */
 @SpringBootTest(classes = DataAccessTestConfiguration.class)
 @RunWith(SpringRunner.class)
-@Slf4j
 public class PreLoadTestData {
     private static final CsvReadConfig CSV_READ_CONFIG = new CsvReadConfig();
+    private static final Logger LOGGER = LoggerFactory.getLogger(PreLoadTestData.class);
 
     static {
         CSV_READ_CONFIG.setContainsHeader(true);
@@ -39,11 +40,11 @@ public class PreLoadTestData {
      * @param <T> 实体类泛型。
      */
     public static <T> void loadCsv(String file, JpaRepository repository, Class<T> c) {
-        log.info("加载测试数据{}", file);
+        LOGGER.info("加载测试数据{}", file);
         CsvReader csvReader = new CsvReader(CSV_READ_CONFIG);
         List<T> list = csvReader.read(ResourceUtil.getUtf8Reader(file), c);
         List list2 = repository.saveAllAndFlush(list);
-        log.info("加载完成{}", list2.size());
+        LOGGER.info("加载完成{}", list2.size());
     }
 
 }

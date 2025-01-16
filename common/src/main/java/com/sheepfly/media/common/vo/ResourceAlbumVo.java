@@ -34,17 +34,6 @@ public class ResourceAlbumVo implements Serializable {
      */
     private AlbumVo albumVo;
 
-    @Override
-    public String toString() {
-        return "ResourceAlbumVo{" +
-                "id='" + id + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", resourceVo=" + resourceVo +
-                ", albumVo=" + albumVo +
-                '}';
-    }
-
     public String getId() {
         return id;
     }

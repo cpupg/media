@@ -1,8 +1,6 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,9 +10,6 @@ import java.util.Date;
  *
  * @author wrote-code
  */
-@Getter
-@Setter
-@ToString
 public class AuthorParam extends TablePagination implements Serializable {
     /**
      * ID
@@ -50,4 +45,60 @@ public class AuthorParam extends TablePagination implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getSiteId() {
+        return this.siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
+
+    public String getHomepage() {
+        return this.homepage;
+    }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

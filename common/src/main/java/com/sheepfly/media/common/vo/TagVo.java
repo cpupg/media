@@ -1,15 +1,8 @@
 package com.sheepfly.media.common.vo;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serializable;
 import java.util.Date;
 
-@Getter
-@Setter
-@ToString
 public class TagVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,4 +21,28 @@ public class TagVo implements Serializable {
      * 创建时间
      */
     private Date createTime;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 }

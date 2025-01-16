@@ -1,9 +1,6 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,9 +9,6 @@ import java.io.Serializable;
  *
  * @author sheepfly
  */
-@Getter
-@Setter
-@ToString
 public class ResourceParam extends TablePagination implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
@@ -52,4 +46,68 @@ public class ResourceParam extends TablePagination implements Serializable {
      * 表。</p>
      */
     private boolean resourceOnly = false;
+
+    public String getFilename() {
+        return this.filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public boolean isAccurateDir() {
+        return this.accurateDir;
+    }
+
+    public void setAccurateDir(boolean accurateDir) {
+        this.accurateDir = accurateDir;
+    }
+
+    public String getDir() {
+        return this.dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
+
+    public String getAuthorName() {
+        return this.authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAuthorId() {
+        return this.authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAlbumId() {
+        return this.albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
+    public String[] getTagNames() {
+        return this.tagNames;
+    }
+
+    public void setTagNames(String[] tagNames) {
+        this.tagNames = tagNames;
+    }
+
+    public boolean isResourceOnly() {
+        return this.resourceOnly;
+    }
+
+    public void setResourceOnly(boolean resourceOnly) {
+        this.resourceOnly = resourceOnly;
+    }
 }
