@@ -3,6 +3,7 @@ package com.sheepfly.media.dataaccess.entity;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author chen
  */
 @Table(schema = "media", name = "RATE")
+@Entity
 public class Rate implements Serializable, EntityInterface {
     private static final long serialVersionUID = 1L;
     /**
