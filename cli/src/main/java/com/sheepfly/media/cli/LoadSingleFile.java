@@ -1,7 +1,6 @@
 package com.sheepfly.media.cli;
 
 import com.sheepfly.media.cli.task.impl.LoadSingleFileTaskImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -14,8 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.sheepfly.media.dataaccess.repository")
 @MapperScan("com.sheepfly.media.dataaccess.mapper")
 @ImportResource("classpath:configs/springboot.xml")
-@Slf4j
 public class LoadSingleFile {
+
     public static void main(String[] args) throws Exception {
         SpringApplication application = new SpringApplication(LoadSingleFile.class);
         application.setWebApplicationType(WebApplicationType.NONE);

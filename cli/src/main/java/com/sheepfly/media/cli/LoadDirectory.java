@@ -3,7 +3,6 @@ package com.sheepfly.media.cli;
 import com.sheepfly.media.cli.config.LoadDirectoryConfig;
 import com.sheepfly.media.cli.task.Task;
 import com.sheepfly.media.cli.util.CommandLineUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -13,6 +12,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,36 +24,36 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.sheepfly.media.dataaccess.repository")
 @MapperScan("com.sheepfly.media.dataaccess.mapper")
 @ImportResource("classpath:configs/springboot.xml")
-@Slf4j
 public class LoadDirectory {
     private static final String LOAD_DIRECTORY = "loadDirectory";
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(LoadDirectory.class);
 
     public static void main(String[] args) throws Exception {
-        log.info("解析程序参数");
+        LOGGER.info("解析程序参数");
         CommandLine commandLine = parseArgs(args);
         if (commandLine == null) {
             return;
         }
-        log.info("配置任务");
+        LOGGER.info("配置任务");
         LoadDirectoryConfig config = new LoadDirectoryConfig();
         config(config, commandLine);
 
-        log.info("初始化spring上下文");
+        LOGGER.info("初始化spring上下文");
         SpringApplication springApplication = new SpringApplication(LoadDirectory.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         ConfigurableApplicationContext context = springApplication.run(args);
-        log.info("初始化完成,获取任务");
+        LOGGER.info("初始化完成,获取任务");
         Task task = context.getBean("loadDirectoryTaskImpl", Task.class);
         task.setTaskConfig(config);
         task.initializeTaskConfig();
         if (!task.ready()) {
             return;
         }
-        log.info("执行任务");
+        LOGGER.info("执行任务");
         task.executeTask();
         task.getExecuteResult();
         task.afterTaskFinish();
-        log.info("任务完成");
+        LOGGER.info("任务完成");
     }
 
     private static CommandLine parseArgs(String[] args) {
