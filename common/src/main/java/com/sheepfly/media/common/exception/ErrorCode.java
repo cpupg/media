@@ -67,6 +67,7 @@ public enum ErrorCode {
     RES_RA_RES_NOT_EXISTS("E0202006", "无法为不存在的资源设置专辑"),
     RES_RA_ALBUM_EXISTS("E0202007", "无法为资源设置不存在的专辑"),
     RES_RA_NOT_REPEATED_AR("E0202008", "不可重复设置专辑"),
+    RES_NOT_FOUND("E0202009", "资源不存在"),
     // endregion
 
     // region 模块[目录][DIRECTORY]开始[203]
@@ -91,6 +92,13 @@ public enum ErrorCode {
 
     // region 模块[评分][RATE]开始[206]
     // 正文。新模块补在===前面
+    // endregion
+
+    // region 模块[评分][RATE]开始[207]
+    // A-------1---------000----000
+    // 错误类型-操作结果---模块代码-错误序号
+    // 大写字母-1成功0失败-
+    RATE_RANGE_NOT_ALLOW("E0207001", "评分必须是0-10的整数"),
     // endregion
 
     // region 模块[文件][FILE]开始[300]

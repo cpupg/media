@@ -94,8 +94,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             long count = trfService.count(
                     (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
             vo.setTagCount(count);
-            vo.setFavorite(trfService.getFavorite(id));
-            vo.setRate(trfService.getRate(id));
         }
         return TableResponse.success(list, page.getTotal());
     }

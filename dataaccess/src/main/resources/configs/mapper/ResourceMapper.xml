@@ -103,12 +103,15 @@
       res.update_time,
       res.author_id author_vo_id,
       res.dir_code,
-      author.username author_vo_username
+      author.username author_vo_username,
+      rate.rate
     from media.resource res
            left join media.author author
                      on author.id = res.author_id
            left join media.directory dir
                      on res.dir_code = dir.dir_code
+           left join media.rate rate
+                     on rate.RESOURCE_ID = res.ID
     where res.DELETE_STATUS = '0'
     <include refid="where_statement">
       <property name="t_resource" value="res"/>

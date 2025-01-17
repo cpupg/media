@@ -64,7 +64,7 @@ public class ResourceVo implements Serializable {
     /**
      * 评分。
      */
-    private int rate;
+    private Integer rate;
     /**
      * 封面文件id。
      */
@@ -162,11 +162,11 @@ public class ResourceVo implements Serializable {
         this.favorite = favorite;
     }
 
-    public int getRate() {
+    public Integer getRate() {
         return this.rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(Integer rate) {
         this.rate = rate;
     }
 
