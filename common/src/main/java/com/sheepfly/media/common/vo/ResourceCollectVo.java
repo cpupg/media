@@ -1,5 +1,9 @@
 package com.sheepfly.media.common.vo;
 
+import com.sheepfly.media.common.vo.constraintgroup.DeleteConstraint;
+import com.sheepfly.media.common.vo.constraintgroup.InsertConstraint;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -9,16 +13,19 @@ public class ResourceCollectVo {
     /**
      * 资源和收藏的关联id。
      */
+    @NotBlank(groups = {DeleteConstraint.class}, message = "{entity.ResourceCollect.id.notEmpty}")
     private String resourceCollectId;
 
     /**
      * 资源主键id
      */
+    @NotBlank(groups = {InsertConstraint.class}, message = "{entity.resourceCollect.resourceId.notBlank}")
     private String resourceId;
 
     /**
      * 收藏id
      */
+    @NotBlank(groups = {InsertConstraint.class}, message = "{entity.resourceCollect.collectId.notBlank}")
     private String collectId;
 
     /**

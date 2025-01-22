@@ -101,6 +101,10 @@ public enum ErrorCode {
     RATE_RANGE_NOT_ALLOW("E0207001", "评分必须是0-10的整数"),
     // endregion
 
+    // region 模块[收藏][collect]开始[208]
+    COLLECT_NOT_FOUND("E0208001", "收藏夹不存在"),
+    // endregion
+
     // region 模块[文件][FILE]开始[300]
     FILE_EMPTY_BUSINESS_CODE_TYPE("E0206001", "缺少业务代码和业务类型"),
     FILE_EMPTY_BUSINESS_CODE("E0206002", "缺少业务代码"),

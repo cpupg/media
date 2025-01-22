@@ -1,19 +1,31 @@
 package com.sheepfly.media.common.vo;
 
+import com.sheepfly.media.common.vo.constraintgroup.DeleteConstraint;
+import com.sheepfly.media.common.vo.constraintgroup.InsertConstraint;
+import com.sheepfly.media.common.vo.constraintgroup.UpdateConstraint;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * 收藏视图。
+ *
+ * @author chen
  */
 public class CollectVo {
     /**
      * 主键id。
      */
+    @NotBlank(groups = {UpdateConstraint.class, DeleteConstraint.class}, message = "{entity.collect.collectId.notBlank}")
     private String collectId;
 
     /**
      * 收藏名称
      */
+    @NotNull(groups = InsertConstraint.class, message = "{entity.collect.collectName.notNull}")
+    @Length(min = 1, max = 32, groups = {InsertConstraint.class, UpdateConstraint.class}, message = "{entity.collect.collectName.length}")
     private String collectName;
 
     /**
