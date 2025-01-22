@@ -31,6 +31,16 @@ public class ResourceCollectVo {
      */
     private Date createTime;
 
+    /**
+     * 更新时间。
+     */
+    private Date updateTime;
+
+    /**
+     * 删除时间。
+     */
+    private Date deleteTime;
+
     public String getResourceCollectId() {
         return resourceCollectId;
     }
@@ -69,5 +79,21 @@ public class ResourceCollectVo {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getDeleteTime() {
+        return deleteTime;
+    }
+
+    public void setDeleteTime(Date deleteTime) {
+        this.deleteTime = deleteTime;
     }
 }

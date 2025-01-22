@@ -4,16 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.ResourceCollectMapper">
 
-    <resultMap id="BaseResultMap" type="com.sheepfly.media.dataaccess.entity.ResourceCollect">
-            <id property="resourceCollectId" column="RESOURCE_COLLECT_ID" jdbcType="VARCHAR"/>
-            <result property="resourceId" column="RESOURCE_ID" jdbcType="VARCHAR"/>
-            <result property="collectId" column="COLLECT_ID" jdbcType="VARCHAR"/>
-            <result property="deleteStatus" column="DELETE_STATUS" jdbcType="INTEGER"/>
-            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.sheepfly.media.dataaccess.entity.ResourceCollect">
+    <id property="resourceCollectId" column="RESOURCE_COLLECT_ID" jdbcType="VARCHAR"/>
+    <result property="resourceId" column="RESOURCE_ID" jdbcType="VARCHAR"/>
+    <result property="collectId" column="COLLECT_ID" jdbcType="VARCHAR"/>
+    <result property="deleteStatus" column="DELETE_STATUS" jdbcType="INTEGER"/>
+    <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="deleteTime" column="DELETE_TIME" jdbcType="TIMESTAMP"/>
+  </resultMap>
 
-    <sql id="Base_Column_List">
-        RESOURCE_COLLECT_ID,RESOURCE_ID,COLLECT_ID,
-        DELETE_STATUS,CREATE_TIME
-    </sql>
+  <sql id="Base_Column_List">
+    res_cect.RESOURCE_COLLECT_ID, res_cect.RESOURCE_ID, res_cect.COLLECT_ID,
+        res_cect.DELETE_STATUS, res_cect.CREATE_TIME, res_cect.update_time, res_cect.delete_time
+  </sql>
 </mapper>

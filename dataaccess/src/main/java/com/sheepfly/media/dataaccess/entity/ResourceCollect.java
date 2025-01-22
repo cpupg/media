@@ -50,6 +50,18 @@ public class ResourceCollect implements Serializable, EntityInterface {
     private Date createTime;
 
     /**
+     * 更新时间。
+     */
+    @Column(name = "UPDATE_TIME")
+    private Date updateTime;
+
+    /**
+     * 删除时间。
+     */
+    @Column(name = "DELETE_TIME")
+    private Date deleteTime;
+
+    /**
      * 关联id
      */
     public String getResourceCollectId() {
@@ -131,11 +143,19 @@ public class ResourceCollect implements Serializable, EntityInterface {
 
     @Override
     public Date getUpdateTime() {
-        return this.createTime;
+        return updateTime;
     }
 
     @Override
-    public void setUpdateTime(Date date) {
-        this.createTime = date;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getDeleteTime() {
+        return deleteTime;
+    }
+
+    public void setDeleteTime(Date deleteTime) {
+        this.deleteTime = deleteTime;
     }
 }
