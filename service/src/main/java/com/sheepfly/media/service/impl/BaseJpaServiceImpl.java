@@ -49,6 +49,11 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     }
 
     @Override
+    public List<T> saveAll(List<T> list) {
+        return d.saveAll(list);
+    }
+
+    @Override
     public boolean existsById(ID id) {
         return d.existsById(id);
     }
@@ -56,23 +61,6 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     @Override
     public void deleteById(ID id) {
         d.deleteById(id);
-    }
-
-    @Override
-    public void safeDeleteById(ID id, ErrorCode errorCode) throws BusinessException {
-        if (existsById(id)) {
-            deleteById(id);
-        } else {
-            throw new BusinessException(errorCode);
-        }
-    }
-
-    @Override
-    public T logicDelete(T t) {
-        if (t.getUpdateTime() == null) {
-            t.setUpdateTime(new Date());
-        }
-        return d.save(t);
     }
 
     @Override
@@ -154,9 +142,14 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     }
 
     @Override
-    public void update(T t) {
+    public T update(T t) {
         t.setUpdateTime(new Date());
-        d.save(t);
+        return d.save(t);
+    }
+
+    @Override
+    public List<T> updateAll(List<T> list) {
+        return d.saveAll(list);
     }
 
     @Override
@@ -167,6 +160,11 @@ public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepo
     @Override
     public void delete(T t) {
         d.delete(t);
+    }
+
+    @Override
+    public void deleteAll(List<T> list) {
+        d.deleteAll(list);
     }
 
     @Override
