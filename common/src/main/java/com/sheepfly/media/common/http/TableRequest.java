@@ -31,6 +31,15 @@ public class TableRequest<F, P, S> implements Serializable {
      */
     private List<String> idList;
 
+    public TableRequest() {
+    }
+
+    public TableRequest(F filter, P params, S sort) {
+        this.filter = filter;
+        this.params = params;
+        this.sort = sort;
+    }
+
     public F getFilter() {
         return filter;
     }

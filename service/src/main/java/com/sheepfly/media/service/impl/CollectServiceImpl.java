@@ -1,10 +1,17 @@
 package com.sheepfly.media.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.constant.Constant;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.BaseFilterVo;
+import com.sheepfly.media.common.vo.BaseSortVo;
 import com.sheepfly.media.common.vo.CollectVo;
 import com.sheepfly.media.dataaccess.entity.Collect;
 import com.sheepfly.media.dataaccess.entity.ResourceCollect;
 import com.sheepfly.media.dataaccess.entity.ResourceCollect_;
+import com.sheepfly.media.dataaccess.mapper.CollectMapper;
 import com.sheepfly.media.dataaccess.repository.CollectRepository;
 import com.sheepfly.media.service.base.CollectService;
 import com.sheepfly.media.service.base.ResourceCollectService;
@@ -26,6 +33,8 @@ public class CollectServiceImpl
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectServiceImpl.class);
     @Resource
     private CollectRepository collectRepository;
+    @Resource
+    private CollectMapper collectMapper;
     @Resource
     private ResourceCollectService resourceCollectService;
 
@@ -55,5 +64,13 @@ public class CollectServiceImpl
         LOGGER.info("收藏夹{}删除完成", vo.getCollectId());
         BeanUtils.copyProperties(saved, vo);
         return vo;
+    }
+
+    @Override
+    public TableResponse<CollectVo> queryAll(TableRequest<BaseFilterVo, CollectVo, BaseSortVo> tableRequest) {
+        CollectVo params = tableRequest.getParams();
+        Page<CollectVo> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
+        List<CollectVo> list = collectMapper.queryAll(tableRequest);
+        return TableResponse.success(list, page.getTotal());
     }
 }

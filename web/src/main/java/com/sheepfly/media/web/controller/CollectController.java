@@ -3,6 +3,10 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ResponseData;
+import com.sheepfly.media.common.http.TableRequest;
+import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.BaseFilterVo;
+import com.sheepfly.media.common.vo.BaseSortVo;
 import com.sheepfly.media.common.vo.CollectVo;
 import com.sheepfly.media.common.vo.ResourceCollectVo;
 import com.sheepfly.media.common.vo.constraintgroup.DeleteConstraint;
@@ -127,5 +131,30 @@ public class CollectController {
         resourceCollectService.deleteById(vo.getResourceCollectId());
         LOGGER.info("移除完成");
         return ResponseData.success(vo);
+    }
+
+    /**
+     * 查询收藏夹。
+     *
+     * @param tableRequest 查询参数。
+     *
+     * @return 查询结果。
+     */
+    @PostMapping("/queryCollect")
+    public TableResponse<CollectVo> queryCollect(@RequestBody TableRequest<BaseFilterVo, CollectVo, BaseSortVo> tableRequest) {
+        return collectService.queryAll(tableRequest);
+    }
+
+    /**
+     * 查询收藏夹和资源的关联关系。
+     *
+     * @param tableRequest 查询请求。
+     *
+     * @return 查询结果。
+     */
+    @PostMapping("/queryResourceCollect")
+    public TableResponse<ResourceCollectVo> queryResourceCollect(@RequestBody TableRequest<BaseFilterVo, ResourceCollectVo, BaseSortVo> tableRequest) {
+        LOGGER.info("查询收藏夹下的资源");
+        return resourceCollectService.queryAll(tableRequest);
     }
 }

@@ -1,15 +1,17 @@
 package com.sheepfly.media.common.vo;
 
+import com.sheepfly.media.common.http.TablePagination;
 import com.sheepfly.media.common.vo.constraintgroup.DeleteConstraint;
 import com.sheepfly.media.common.vo.constraintgroup.InsertConstraint;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 资源下关联的收藏。
  */
-public class ResourceCollectVo {
+public class ResourceCollectVo extends TablePagination implements Serializable {
     /**
      * 资源和收藏的关联id。
      */
@@ -27,6 +29,11 @@ public class ResourceCollectVo {
      */
     @NotBlank(groups = {InsertConstraint.class}, message = "{entity.resourceCollect.collectId.notBlank}")
     private String collectId;
+
+    /**
+     * 收藏夹名称。
+     */
+    private String collectName;
 
     /**
      * 删除状态
@@ -54,6 +61,14 @@ public class ResourceCollectVo {
 
     public void setResourceCollectId(String resourceCollectId) {
         this.resourceCollectId = resourceCollectId;
+    }
+
+    public String getCollectName() {
+        return collectName;
+    }
+
+    public void setCollectName(String collectName) {
+        this.collectName = collectName;
     }
 
     public String getResourceId() {

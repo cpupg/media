@@ -1,5 +1,6 @@
 package com.sheepfly.media.common.vo;
 
+import com.sheepfly.media.common.http.TablePagination;
 import com.sheepfly.media.common.vo.constraintgroup.DeleteConstraint;
 import com.sheepfly.media.common.vo.constraintgroup.InsertConstraint;
 import com.sheepfly.media.common.vo.constraintgroup.UpdateConstraint;
@@ -7,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Date;
  *
  * @author chen
  */
-public class CollectVo {
+public class CollectVo extends TablePagination implements Serializable {
     /**
      * 主键id。
      */
