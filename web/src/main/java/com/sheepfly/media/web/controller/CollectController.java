@@ -1,10 +1,12 @@
 package com.sheepfly.media.web.controller;
 
+import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.util.IdUtil;
 import com.sheepfly.media.common.vo.BaseFilterVo;
 import com.sheepfly.media.common.vo.BaseSortVo;
 import com.sheepfly.media.common.vo.CollectVo;
@@ -13,7 +15,9 @@ import com.sheepfly.media.common.vo.constraintgroup.DeleteConstraint;
 import com.sheepfly.media.common.vo.constraintgroup.InsertConstraint;
 import com.sheepfly.media.common.vo.constraintgroup.UpdateConstraint;
 import com.sheepfly.media.dataaccess.entity.Collect;
+import com.sheepfly.media.dataaccess.entity.Collect_;
 import com.sheepfly.media.dataaccess.entity.ResourceCollect;
+import com.sheepfly.media.dataaccess.entity.ResourceCollect_;
 import com.sheepfly.media.service.base.CollectService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.ResourceCollectService;
@@ -55,8 +59,14 @@ public class CollectController {
     @PostMapping("/create")
     public ResponseData<Collect> create(@RequestBody @Validated(InsertConstraint.class) CollectVo vo) {
         LOGGER.info("创建收藏夹{}", vo.getCollectName());
+        long count = collectService.count((r, q, b) -> b.equal(r.get(Collect_.COLLECT_NAME), vo.getCollectName()));
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.COLLECT_EXISTS);
+        }
         Collect collect = new Collect();
         BeanUtils.copyProperties(vo, collect);
+        collect.setCollectId(IdUtil.getIdStr());
+        collect.setDeleteStatus(Constant.NOT_DELETED);
         collect.setCreateTime(new Date());
         Collect saved = collectService.save(collect);
         return ResponseData.success(saved);
@@ -111,8 +121,16 @@ public class CollectController {
         if (collect == null) {
             throw new BusinessException(ErrorCode.COLLECT_NOT_FOUND);
         }
+        long count = resourceCollectService.count(
+                (r, q, b) -> b.equal(r.get(ResourceCollect_.RESOURCE_ID), vo.getResourceId()));
+        if (count > 0) {
+            throw new  BusinessException(ErrorCode.COLLECT_CONTAIN_RESOURCE);
+        }
         ResourceCollect rc = new ResourceCollect();
         BeanUtils.copyProperties(vo, rc);
+        rc.setId(IdUtil.getIdStr());
+        rc.setCreateTime(new Date());
+        rc.setDeleteStatus( Constant.NOT_DELETED);
         ResourceCollect save = resourceCollectService.save(rc);
         LOGGER.info("添加完成");
         return ResponseData.success(save);

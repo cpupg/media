@@ -22,7 +22,8 @@
 
   <select id="queryAll" parameterType="TableRequest"
       resultType="com.sheepfly.media.common.vo.ResourceCollectVo">
-        select <include refid="Base_Column_List"/>
+        select <include refid="Base_Column_List"/>,
+          clet.collect_name
         from media.RESOURCE_COLLECT res_clet
                  left join media.resource res
                            on res_clet.RESOURCE_ID = res.ID
@@ -31,7 +32,7 @@
                           on res_clet.COLLECT_ID = clet.COLLECT_ID
         <where>
           <if test="params.resourceId != null and params.resourceId != ''">
-            and clet.resource_id = #{params.resourceId}
+            and res_clet.resource_id = #{params.resourceId}
           </if>
           <if test="params.collectName != null and params.collectName != ''">
             and clet.collect_name like '%' || #{params.collectName} || '%'

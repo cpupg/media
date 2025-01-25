@@ -103,6 +103,8 @@ public enum ErrorCode {
 
     // region 模块[收藏][collect]开始[208]
     COLLECT_NOT_FOUND("E0208001", "收藏夹不存在"),
+    COLLECT_CONTAIN_RESOURCE("E0208002", "收藏夹已经包含资源"),
+    COLLECT_EXISTS("E0208003", "收藏夹已存在"),
     // endregion
 
     // region 模块[文件][FILE]开始[300]

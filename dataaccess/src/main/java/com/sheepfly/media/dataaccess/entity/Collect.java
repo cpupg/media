@@ -34,7 +34,7 @@ public class Collect implements Serializable, EntityInterface {
     /**
      * 删除状态
      */
-    @Column(name = "DELETE_STATUS")
+    @Column(name = "DELETE_STATUS", nullable = false)
     private Integer deleteStatus;
 
     /**
@@ -46,13 +46,13 @@ public class Collect implements Serializable, EntityInterface {
     /**
      * 更新时间
      */
-    @Column(name = "UPDATE_TIME")
+    @Column(name = "UPDATE_TIME", nullable = false)
     private Date updateTime;
 
     /**
      * 删除时间
      */
-    @Column(name = "DELETE_TIME")
+    @Column(name = "DELETE_TIME", nullable = false)
     private Date deleteTime;
 
 
