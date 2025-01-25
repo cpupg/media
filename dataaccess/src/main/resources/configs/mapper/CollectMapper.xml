@@ -21,7 +21,7 @@
   <select id="queryAll" parameterType="TableRequest" resultType="com.sheepfly.media.common.vo.CollectVo">
     select
     <include refid="Base_Column_List"/>
-    from media.COLLECT coll
+    from media.COLLECT clet
     <where>
       <if test="params.collectName != null and params.collectName != ''">
         clet.collect_name like '%' || #{params.collectName} || '%'

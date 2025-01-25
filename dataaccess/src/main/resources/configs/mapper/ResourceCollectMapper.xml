@@ -30,8 +30,11 @@
                  left join media.COLLECT clet
                           on res_clet.COLLECT_ID = clet.COLLECT_ID
         <where>
+          <if test="params.resourceId != null and params.resourceId != ''">
+            and clet.resource_id = #{params.resourceId}
+          </if>
           <if test="params.collectName != null and params.collectName != ''">
-            clet.collect_name like '%' || #{params.collectName} || '%'
+            and clet.collect_name like '%' || #{params.collectName} || '%'
           </if>
           and res_clet.delete_status = 0
         </where>
