@@ -3,7 +3,7 @@ package com.sheepfly.media.dataaccess.mapper;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.form.param.AuthorParam;
-import com.sheepfly.media.dataaccess.vo.AuthorVo;
+import com.sheepfly.media.common.vo.AuthorVo;
 import com.sheepfly.media.common.http.TableRequest;
 import org.apache.ibatis.annotations.Mapper;
 

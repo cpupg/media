@@ -24,7 +24,7 @@ import java.util.Set;
  */
 @ControllerAdvice
 public class BusinessExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(BusinessExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BusinessExceptionHandler.class);
 
     /**
      * 处理捕捉到的业务异常。
@@ -36,14 +36,14 @@ public class BusinessExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
     public ResponseData<BusinessException> handleBusinessException(BusinessException e) {
-        log.error("发生业务异常", e);
+        LOGGER.error("发生业务异常", e);
         return ResponseData.fail(e.getError());
     }
 
     @ResponseBody
     @ExceptionHandler(BusinessRunTimeException.class)
     public ResponseData<BusinessException> handleBusinessRuntimeException(BusinessException e) {
-        log.error("发生业务异常", e);
+        LOGGER.error("发生业务异常", e);
         return ResponseData.fail(e.getError());
     }
 
@@ -57,21 +57,21 @@ public class BusinessExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseData<Exception> handleException(Exception e) {
-        log.error("发生未知异常", e);
+        LOGGER.error("发生未知异常", e);
         return ResponseData.fail(ErrorCode.UNEXPECT_ERROR);
     }
 
     @ExceptionHandler({MissingRequestValueException.class, HttpMessageNotReadableException.class})
     @ResponseBody
     public ResponseData<Exception> handleMissingRequestValueException(Exception e) {
-        log.error("缺少请求参数", e);
+        LOGGER.error("缺少请求参数", e);
         return ResponseData.fail(ErrorCode.REQUEST_VALUE_IS_LOST);
     }
 
     @ExceptionHandler({ValidationException.class})
     @ResponseBody
     public ResponseData<Exception> handleConstraintViolationException(Exception e) {
-        log.error("数据验证失败", e);
+        LOGGER.error("数据验证失败", e);
         if (e instanceof ConstraintViolationException) {
             ConstraintViolationException cve = (ConstraintViolationException) e;
             Set<ConstraintViolation<?>> errors = cve.getConstraintViolations();
@@ -80,7 +80,7 @@ public class BusinessExceptionHandler {
             errors.forEach(ele -> stringBuffer.append(ele.getMessage()).append(","));
             return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuffer);
         } else {
-            log.error("验证失败", e);
+            LOGGER.error("验证失败", e);
             return ResponseData.fail("验证失败");
         }
     }

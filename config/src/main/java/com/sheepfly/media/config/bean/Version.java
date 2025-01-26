@@ -1,8 +1,5 @@
 package com.sheepfly.media.config.bean;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -17,9 +14,6 @@ import java.util.Properties;
  *
  * @author wrote-code
  */
-@Getter
-@Setter
-@ToString
 public class Version extends Properties {
     private static final String VER = "v1.0.0";
     private String mainVersion = VER;
@@ -38,5 +32,29 @@ public class Version extends Properties {
         if (!(StringUtils.isEmpty(vc) || "v".equals(vc))) {
             clientVersion = vc;
         }
+    }
+
+    public String getMainVersion() {
+        return this.mainVersion;
+    }
+
+    public void setMainVersion(String mainVersion) {
+        this.mainVersion = mainVersion;
+    }
+
+    public String getClientVersion() {
+        return this.clientVersion;
+    }
+
+    public void setClientVersion(String clientVersion) {
+        this.clientVersion = clientVersion;
+    }
+
+    public String getServerVersion() {
+        return this.serverVersion;
+    }
+
+    public void setServerVersion(String serverVersion) {
+        this.serverVersion = serverVersion;
     }
 }

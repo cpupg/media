@@ -1,5 +1,7 @@
 package com.sheepfly.media.common.http;
 
+import java.io.Serializable;
+
 /**
  * ProTable请求分页参数。
  *
@@ -11,7 +13,8 @@ package com.sheepfly.media.common.http;
  *
  * @author sheepfly
  */
-public class TablePagination {
+public class TablePagination  implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int pageSize = 20;
     private int current = 1;
 

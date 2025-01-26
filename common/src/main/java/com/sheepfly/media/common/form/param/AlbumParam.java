@@ -1,13 +1,9 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
 public class AlbumParam extends TablePagination implements Serializable {
     /**
      * 资源标识。
@@ -22,7 +18,39 @@ public class AlbumParam extends TablePagination implements Serializable {
      */
     private String albumId;
     /**
-     * 是否是selectModal下的组件的表格查询请求。
+     * 查询时是否关联资源。
      */
-    private boolean selectModal = false;
+    private boolean queryWithResource = false;
+
+    public String getResourceId() {
+        return this.resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getAlbumName() {
+        return this.albumName;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    public String getAlbumId() {
+        return this.albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
+    public boolean isQueryWithResource() {
+        return this.queryWithResource;
+    }
+
+    public void setQueryWithResource(boolean queryWithResource) {
+        this.queryWithResource = queryWithResource;
+    }
 }

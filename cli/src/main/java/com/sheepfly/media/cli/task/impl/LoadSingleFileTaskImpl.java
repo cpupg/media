@@ -14,8 +14,8 @@ import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +28,9 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Scanner;
 
-@Slf4j
 @Component
 public class LoadSingleFileTaskImpl implements Task {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(LoadSingleFileTaskImpl.class);
     private String usage;
     @Autowired
     private AuthorRepository authorRepository;
@@ -48,16 +48,16 @@ public class LoadSingleFileTaskImpl implements Task {
             properties.load(inputStream);
             usage = properties.getProperty("loadSingleFile");
         } catch (IOException e) {
-            log.error("初始化异常", e);
+            LOGGER.error("初始化异常", e);
         }
     }
 
     @Override
     public void executeTask() {
-        log.info("请输入作者用户名和资源全路径，用空格分隔。若输入了id，则会先使用id进行匹配");
-        log.info("输入bye可以退出程序");
+        LOGGER.info("请输入作者用户名和资源全路径，用空格分隔。若输入了id，则会先使用id进行匹配");
+        LOGGER.info("输入bye可以退出程序");
         Scanner scanner = new Scanner(System.in);
-        log.info(usage);
+        LOGGER.info(usage);
         for (String line = scanner.nextLine(); !"bye".equals(line); line = scanner.nextLine()) {
             try {
                 // win下shift+右键复制的路径带双引号，读取到的路径也包含双引号，会导致路径异常。
@@ -71,14 +71,14 @@ public class LoadSingleFileTaskImpl implements Task {
                     arr[i] = arr[i].trim();
                 }
                 Resource resource = parseInputToResource(arr);
-                log.info("保存成功:{} -> dirCode({})", resource.getFilename(), resource.getDirCode());
+                LOGGER.info("保存成功:{} -> dirCode({})", resource.getFilename(), resource.getDirCode());
             } catch (IllegalCliStateException e) {
                 // 此异常不需要堆栈
-                log.error("任务异常:{}", e.getMessage());
+                LOGGER.error("任务异常:{}", e.getMessage());
             } catch (Throwable t) {
-                log.error("发生异常", t);
+                LOGGER.error("发生异常", t);
             }
-            log.info(usage);
+            LOGGER.info(usage);
         }
     }
 
@@ -155,7 +155,7 @@ public class LoadSingleFileTaskImpl implements Task {
         if (id != null) {
             Optional<Author> authorOptional = authorRepository.findById(id);
             if (authorOptional.isPresent()) {
-                log.info("作者存在");
+                LOGGER.info("作者存在");
                 author = authorOptional.orElse(null);
                 return author;
             }

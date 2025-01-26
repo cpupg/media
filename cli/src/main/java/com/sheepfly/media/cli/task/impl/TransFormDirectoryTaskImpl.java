@@ -5,10 +5,8 @@ import com.sheepfly.media.cli.util.DirectoryCache;
 import com.sheepfly.media.common.exception.CommonException;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -31,8 +29,8 @@ import java.util.Properties;
  * <p>将目录中的路径转换为dir_code并保存到临时表中。</p>
  */
 @Component
-@Slf4j
 public class TransFormDirectoryTaskImpl implements Task {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TransFormDirectoryTaskImpl.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -57,7 +55,7 @@ public class TransFormDirectoryTaskImpl implements Task {
     private List<Resource> uncompletedResourceList;
 
     public TransFormDirectoryTaskImpl() throws IOException {
-        log.info("加载sql");
+        LOGGER.info("加载sql");
         ClassPathResource resource = new ClassPathResource("config/jdbc-template.properties");
         Properties properties = PropertiesLoaderUtils.loadProperties(resource);
         dropTemp = properties.getProperty("dropTemp");
@@ -66,7 +64,7 @@ public class TransFormDirectoryTaskImpl implements Task {
         queryResource = properties.getProperty("queryResource");
         insertTemp = properties.getProperty("insertTemp");
         updateResource = properties.getProperty("updateResource");
-        log.info("sql加载完成");
+        LOGGER.info("sql加载完成");
         completedResourceList = new ArrayList<>();
         uncompletedResourceList = new ArrayList<>();
     }
@@ -75,25 +73,25 @@ public class TransFormDirectoryTaskImpl implements Task {
     public void initializeTaskConfig() throws Exception {
         Task.super.initializeTaskConfig();
         try {
-            log.info("删除临时表");
+            LOGGER.info("删除临时表");
             jdbcTemplate.execute(dropTemp);
         } catch (Exception e) {
             // 删除失败说明没有表，不需要处理异常
-            log.error("删除临时表失败", e);
+            LOGGER.error("删除临时表失败", e);
         }
-        log.info("创建临时表");
+        LOGGER.info("创建临时表");
         // 创建失败要抛出异常
         jdbcTemplate.execute(createTemp);
-        log.info("查询目录");
+        LOGGER.info("查询目录");
         dirList = jdbcTemplate.queryForList(queryDirectory, String.class);
-        log.info("目录个数:{}", dirList.size());
+        LOGGER.info("目录个数:{}", dirList.size());
     }
 
     @Override
     public void executeTask() throws Exception {
-        log.info("开始转换任务");
+        LOGGER.info("开始转换任务");
         transForm();
-        log.info("转换完成，成功{}，失败{}", completedResourceList.size(), uncompletedResourceList.size());
+        LOGGER.info("转换完成，成功{}，失败{}", completedResourceList.size(), uncompletedResourceList.size());
     }
 
     private void transForm() throws CommonException {
@@ -103,23 +101,23 @@ public class TransFormDirectoryTaskImpl implements Task {
         if (total % pageSize > 0) {
             pages++;
         }
-        log.info("资源总数:{},每页容量{},总页数{}", total, pageSize, pages);
+        LOGGER.info("资源总数:{},每页容量{},总页数{}", total, pageSize, pages);
         Map<String, Integer> map = new HashMap<>();
         for (int i = 1; i <= pages; i++) {
-            log.info("------>>>当前页{}", i);
+            LOGGER.info("------>>>当前页{}", i);
             int offset = pageSize * (i - 1);
             map.put("limit", pageSize);
             map.put("offset", offset);
             List<Resource> list = npJdbcTemplate.query(queryResource, map,
                     BeanPropertyRowMapper.newInstance(Resource.class));
             for (Resource res : list) {
-                log.info("处理资源:{} -> {}", res.filename, res.dir);
+                LOGGER.info("处理资源:{} -> {}", res.filename, res.dir);
                 res.dir = FilenameUtils.normalize(res.dir, true);
                 if (!res.dir.endsWith("/")) {
                     res.dir = res.dir + "/";
                 }
                 if (res.dir.endsWith(res.filename + "/")) {
-                    log.warn("资源目录保存的是文件:{}", res.dir);
+                    LOGGER.warn("资源目录保存的是文件:{}", res.dir);
                     res.dir = res.dir.substring(0, res.dir.length() - res.filename.length() - 1);
                 }
                 Directory directory = cache.getOrCreateDirectory(res.dir);
@@ -127,13 +125,13 @@ public class TransFormDirectoryTaskImpl implements Task {
                 dirCode.id = res.id;
                 dirCode.dirCode = directory.getDirCode();
                 int update = npJdbcTemplate.update(insertTemp, new BeanPropertySqlParameterSource(dirCode));
-                log.info("插入完成{},开始更新源表", update);
+                LOGGER.info("插入完成{},开始更新源表", update);
                 res.dirCode = dirCode.dirCode;
                 update = npJdbcTemplate.update(updateResource, new BeanPropertySqlParameterSource(res));
-                log.info("更新完成{}", update);
+                LOGGER.info("更新完成{}", update);
                 completedResourceList.add(res);
             }
-            log.info("查询完成:{}", list.size());
+            LOGGER.info("查询完成:{}", list.size());
         }
     }
 
@@ -142,19 +140,63 @@ public class TransFormDirectoryTaskImpl implements Task {
         Task.super.afterTaskFinish();
     }
 
-    @Getter
-    @Setter
     private static class DirCode {
         public String id;
         public Long dirCode;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public Long getDirCode() {
+            return this.dirCode;
+        }
+
+        public void setDirCode(Long dirCode) {
+            this.dirCode = dirCode;
+        }
     }
 
-    @Getter
-    @Setter
     private static class Resource {
         public String id;
         public String filename;
         public String dir;
         public long dirCode;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getFilename() {
+            return this.filename;
+        }
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+        public String getDir() {
+            return this.dir;
+        }
+
+        public void setDir(String dir) {
+            this.dir = dir;
+        }
+
+        public long getDirCode() {
+            return this.dirCode;
+        }
+
+        public void setDirCode(long dirCode) {
+            this.dirCode = dirCode;
+        }
     }
 }

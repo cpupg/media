@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.ResourceMapper">
-  <resultMap id="ResourceVo" type="com.sheepfly.media.dataaccess.vo.ResourceVo" autoMapping="true">
+  <resultMap id="ResourceVo" type="com.sheepfly.media.common.vo.ResourceVo" autoMapping="true">
     <id property="id" column="id"/>
     <association property="authorVo"
         resultMap="com.sheepfly.media.dataaccess.mapper.AuthorMapper.AuthorVo"
         columnPrefix="author_vo_"/>
   </resultMap>
 
+  <!--参数类型是TableRequest-->
   <sql id="where_statement">
     <if test="params.filename neq null and params.filename neq '' ">
       and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
     </if>
-    <if test="params.dir neq null and params.dir neq '' ">
-      and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
-    </if>
+    <choose>
+      <when test="params.accurateDir == false">
+        <if test="params.dir neq null and params.dir neq '' ">
+          and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
+        </if>
+      </when>
+      <otherwise>
+        <if test="params.dir neq null and params.dir neq '' ">
+          and lower(${t_directory}.path) = #{params.dir}
+        </if>
+      </otherwise>
+    </choose>
     <if test="params.authorId neq null and params.authorId neq '' ">
       and ${t_author}.id = #{params.authorId}
     </if>
@@ -24,8 +34,23 @@
         #{idItem}
       </foreach>
     </if>
+    <if test="params.tagNames.length > 0">
+      and exists(select 1
+        from media.TAG_REFERENCE TR
+        where exists(select 1
+          from media.tag tag
+          where tag.NAME in (
+            <foreach collection="params.tagNames" item="name" separator=",">
+              #{name}
+            </foreach>
+          )
+          and ${t_resource}.id = tr.RESOURCE_ID
+          and tag.id = tr.TAG_ID)
+      )
+    </if>
   </sql>
 
+  <!--参数类型是TableRequest-->
   <sql id="batch_where_sql">
     <if test="params.filename neq null and params.filename neq '' ">
       and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
@@ -48,7 +73,7 @@
 
   <update id="batchDelete" parameterType="TableRequest">
     update media.resource res
-    set DELETE_STATUS = 1
+    set DELETE_STATUS = 1, UPDATE_TIME = current_timestamp()
     where DELETE_STATUS = 0
     <choose>
       <when test="idList neq null and idList.size() gt 0">
@@ -66,6 +91,7 @@
   </update>
 
 
+
   <select id="selectResourceVoList"
       parameterType="com.sheepfly.media.common.http.TableRequest"
       resultMap="ResourceVo">
@@ -77,32 +103,21 @@
       res.update_time,
       res.author_id author_vo_id,
       res.dir_code,
-      author.username author_vo_username
+      author.username author_vo_username,
+      rate.rate
     from media.resource res
            left join media.author author
                      on author.id = res.author_id
            left join media.directory dir
                      on res.dir_code = dir.dir_code
+           left join media.rate rate
+                     on rate.RESOURCE_ID = res.ID
     where res.DELETE_STATUS = '0'
     <include refid="where_statement">
       <property name="t_resource" value="res"/>
       <property name="t_directory" value="dir"/>
       <property name="t_author" value="author"/>
     </include>
-    <if test="params.tagNames.length > 0">
-      and exists(select 1
-        from media.TAG_REFERENCE TR
-        where exists(select 1
-          from media.tag tag
-          where tag.NAME in (
-            <foreach collection="params.tagNames" item="name" separator=",">
-              #{name}
-            </foreach>
-          )
-          and res.id = tr.RESOURCE_ID
-          and tag.id = tr.TAG_ID)
-      )
-    </if>
     order by dir.PATH, res.FILENAME
   </select>
 
@@ -127,7 +142,7 @@
     limit #{limitCount}
   </select>
 
-  <select id="queryListByAlbum" resultType="com.sheepfly.media.dataaccess.vo.ResourceVo" parameterType="TableRequest">
+  <select id="queryListByAlbum" resultType="com.sheepfly.media.common.vo.ResourceVo" parameterType="TableRequest">
     select res.id,
       dir.path as dir,
       res.filename,
@@ -147,4 +162,77 @@
     </include>
     order by dir.PATH, res.FILENAME
   </select>
+
+  <!--参数类型是ResourceData，用来更新resource表-->
+  <sql id="batch_update_where">
+    <choose>
+      <when test="condition.idList neq null and condition.idList.size() gt 0">
+        and res.id in
+        <foreach collection="condition.idList" item="item" separator="," open="(" close=")">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        <if test="condition.params.filename neq null and condition.params.filename neq '' ">
+          and lower(${t_resource}.filename) like '%' || #{condition.params.filename} || '%'
+        </if>
+        <if test="condition.params.dir neq null and condition.params.dir neq '' ">
+          and exists(
+          select 1
+          from media.directory dir
+          where lower(dir.path) like '%' || #{condition.params.dir} || '%'
+          and dir.dir_code = ${t_resource}.dir_code)
+        </if>
+        <if test="condition.params.authorId neq null and condition.params.authorId neq '' ">
+          and exists(
+          select 1
+          from media.author au
+          where au.id = #{condition.params.authorId}
+          and ${t_resource}.author_id
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+
+  <!--参数类型是ResourceData，用来更新TAG_REFERENCE和AlbumResource，执行语句是硬更新-->
+  <sql id="association_batch_update_hard_where">
+    <!--先要用关联资源表-->
+    where exists(
+        select 1
+        from media.resource res
+        where res.id = ${t_table}.${t_column}
+        <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.batch_update_where">
+          <property name="t_resource" value="res"/>
+        </include>
+    )
+  </sql>
+
+  <!--参数类型是ResourceData，用来更新TAG_REFERENCE和AlbumResource，执行语句是软更新-->
+  <sql id="association_batch_update_where">
+    <!--先要用关联资源表-->
+    and exists(
+        select 1
+        from media.resource res
+        where res.id = ${t_table}.${t_column}
+        <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.batch_update_where">
+          <property name="t_resource" value="res"/>
+        </include>
+    )
+  </sql>
+
+  <update id="batchUpdate" parameterType="com.sheepfly.media.common.form.data.ResourceData">
+    update media.resource res
+      set
+    <if test="dirCode != null">
+      DIR_CODE = #{dirCode},
+    </if>
+    <if test="authorId != null">
+      AUTHOR_ID = #{authorId},
+    </if>
+    UPDATE_TIME = current_timestamp()
+    where DELETE_STATUS = 0
+    <include refid="batch_update_where">
+      <property name="t_resource" value="res"/>
+    </include>
+  </update>
 </mapper>

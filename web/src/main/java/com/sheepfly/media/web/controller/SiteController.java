@@ -6,15 +6,13 @@ import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.SiteData;
 import com.sheepfly.media.common.form.param.SiteParam;
+import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
-import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.service.base.ISiteService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +40,6 @@ import java.util.Set;
 @RestController
 @RequestMapping("/site")
 public class SiteController {
-    private static final Logger log = LoggerFactory.getLogger(SiteController.class);
 
     @Resource(name = "siteServiceImpl")
     private ISiteService service;

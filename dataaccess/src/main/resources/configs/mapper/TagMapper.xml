@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.TagMapper">
-  <select id="queryTagListBy" resultType="com.sheepfly.media.dataaccess.vo.TagVo"
+  <select id="queryTagList" resultType="com.sheepfly.media.common.vo.TagVo"
       parameterType="com.sheepfly.media.common.form.data.TagData">
     select *
     from MEDIA.tag
@@ -16,5 +16,15 @@
     <if test="rate == true">
       order by cast(name as integer)
     </if>
+  </select>
+
+  <select id="queryTagReferenceByResourceId"
+      resultMap="com.sheepfly.media.dataaccess.mapper.TagReferenceMapper.tagReferenceVo">
+    select tf.id, tf.resource_id, tf.reference_type, tf.REFER_TIME, tag.id as tag_id, tag.name as tag_name
+    from media.TAG_REFERENCE tf
+           left join media.tag tag
+                     on tf.TAG_ID = tag.Id
+    where tf.resource_id = #{resourcdId}
+    order by tf.REFER_TIME
   </select>
 </mapper>

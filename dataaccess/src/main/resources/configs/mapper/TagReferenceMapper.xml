@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sheepfly.media.dataaccess.mapper.TagReferenceMapper">
-  <resultMap id="tagReferenceVo" type="com.sheepfly.media.dataaccess.vo.TagReferenceVo">
+  <resultMap id="tagReferenceVo" type="com.sheepfly.media.common.vo.TagReferenceVo">
     <id property="id" column="ID"/>
     <result property="resourceId" column="RESOURCE_ID"/>
     <result property="referenceType" column="REFERENCE_TYPE"/>
     <result property="referTime" column="REFER_TIME"/>
-    <association property="tagVo" columnPrefix="tag_" javaType="com.sheepfly.media.dataaccess.vo.TagVo">
+    <association property="tagVo" columnPrefix="tag_" javaType="com.sheepfly.media.common.vo.TagVo">
       <result property="id" column="ID"/>
       <result property="name" column="NAME"/>
       <result property="createTime" column="CREATE_TIME"/>
@@ -69,4 +69,16 @@
       and tf.RESOURCE_ID = #{resourceId}
       and tag.name in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
   </select>
+
+  <delete id="batchUpdateByResource" parameterType="com.sheepfly.media.common.form.data.ResourceData">
+    delete from media.TAG_REFERENCE trf
+    <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.association_batch_update_hard_where">
+      <property name="t_table" value="trf"/>
+      <property name="t_column" value="resource_id"/>
+    </include>
+    and trf.tag_id in
+    <foreach collection="deletedTags" item="item" open="(" close=")" separator=",">
+      #{item.id}
+    </foreach>
+  </delete>
 </mapper>

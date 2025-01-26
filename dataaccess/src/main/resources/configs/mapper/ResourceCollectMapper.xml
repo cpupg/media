@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sheepfly.media.dataaccess.mapper.ResourceCollectMapper">
+
+  <resultMap id="BaseResultMap" type="com.sheepfly.media.dataaccess.entity.ResourceCollect">
+    <id property="resourceCollectId" column="RESOURCE_COLLECT_ID" jdbcType="VARCHAR"/>
+    <result property="resourceId" column="RESOURCE_ID" jdbcType="VARCHAR"/>
+    <result property="collectId" column="COLLECT_ID" jdbcType="VARCHAR"/>
+    <result property="deleteStatus" column="DELETE_STATUS" jdbcType="INTEGER"/>
+    <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+    <result property="deleteTime" column="DELETE_TIME" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    res_clet.RESOURCE_COLLECT_ID, res_clet.RESOURCE_ID, res_clet.COLLECT_ID,
+        res_clet.DELETE_STATUS, res_clet.CREATE_TIME, res_clet.update_time, res_clet.delete_time
+  </sql>
+
+
+  <select id="queryAll" parameterType="TableRequest"
+      resultType="com.sheepfly.media.common.vo.ResourceCollectVo">
+        select <include refid="Base_Column_List"/>,
+          clet.collect_name
+        from media.RESOURCE_COLLECT res_clet
+                 left join media.resource res
+                           on res_clet.RESOURCE_ID = res.ID
+                               and res_clet.DELETE_STATUS = 0
+                 left join media.COLLECT clet
+                          on res_clet.COLLECT_ID = clet.COLLECT_ID
+        <where>
+          <if test="params.resourceId != null and params.resourceId != ''">
+            and res_clet.resource_id = #{params.resourceId}
+          </if>
+          <if test="params.collectName != null and params.collectName != ''">
+            and clet.collect_name like '%' || #{params.collectName} || '%'
+          </if>
+          and res_clet.delete_status = 0
+        </where>
+  </select>
+</mapper>

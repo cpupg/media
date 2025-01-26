@@ -18,15 +18,15 @@
     ${t_album}.CREATE_TIME, ${t_album}.UPDATE_TIME, ${t_album}.DELETE_TIME
   </sql>
 
-  <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.dataaccess.vo.AlbumVo">
+  <select id="selectAlbumList" parameterType="TableRequest" resultType="com.sheepfly.media.common.vo.AlbumVo">
     select <include refid="Base_Column_List">
         <property name="t_album" value="a"/>
       </include>
-      <if test="params.selectModal">
+      <if test="params.queryWithResource">
         ,ar.resource_id
       </if>
     from media.ALBUM a
-    <if test="params.selectModal">
+    <if test="params.queryWithResource">
       left join media.album_resource ar
         on ar.album_id = a.id
         and ar.delete_status = 0

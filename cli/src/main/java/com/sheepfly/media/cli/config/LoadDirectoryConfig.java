@@ -1,16 +1,10 @@
 package com.sheepfly.media.cli.config;
 
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
-
 /**
  * 扫描指定目录的配置。
  *
  * @author wrote-code
  */
-@Getter
-@Setter
-@ToString
 public class LoadDirectoryConfig implements TaskConfig {
     /**
      * 要扫描的目录。
@@ -38,4 +32,52 @@ public class LoadDirectoryConfig implements TaskConfig {
      * 作者对应的唯一标识。
      */
     private String authorId;
+
+    public String getTargetDir() {
+        return this.targetDir;
+    }
+
+    public void setTargetDir(String targetDir) {
+        this.targetDir = targetDir;
+    }
+
+    public String[] getExcludePathArray() {
+        return this.excludePathArray;
+    }
+
+    public void setExcludePathArray(String[] excludePathArray) {
+        this.excludePathArray = excludePathArray;
+    }
+
+    public String[] getIncludePathArray() {
+        return this.includePathArray;
+    }
+
+    public void setIncludePathArray(String[] includePathArray) {
+        this.includePathArray = includePathArray;
+    }
+
+    public String getResultDir() {
+        return this.resultDir;
+    }
+
+    public void setResultDir(String resultDir) {
+        this.resultDir = resultDir;
+    }
+
+    public String getAuthorName() {
+        return this.authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAuthorId() {
+        return this.authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
 }

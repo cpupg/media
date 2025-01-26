@@ -1,7 +1,7 @@
 package com.sheepfly.media.web.controller;
 
 import com.sheepfly.media.common.http.ResponseData;
-import com.sheepfly.media.dataaccess.vo.DirectoryVo;
+import com.sheepfly.media.common.vo.DirectoryVo;
 import com.sheepfly.media.service.base.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -2,7 +2,7 @@ package com.sheepfly.media.dataaccess.mapper;
 
 import com.sheepfly.media.common.form.data.TagData;
 import com.sheepfly.media.dataaccess.DataAccessTestConfiguration;
-import com.sheepfly.media.dataaccess.vo.TagVo;
+import com.sheepfly.media.common.vo.TagVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +18,15 @@ public class TagMapperTest {
     private TagMapper mapper;
 
     @Test
-    public void testQueryTagListByName() {
+    public void testQueryTagListName() {
         TagData tagData = new TagData();
         tagData.setName("测试");
-        List<TagVo> list = mapper.queryTagListBy(tagData);
+        List<TagVo> list = mapper.queryTagList(tagData);
         System.out.println(list.size());
         list.forEach(System.out::println);
         tagData.setName(null);
         tagData.setRate(true );
-        list = mapper.queryTagListBy(tagData);
+        list = mapper.queryTagList(tagData);
         System.out.println(list.size());
         list.forEach(System.out::println);
     }

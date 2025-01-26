@@ -2,8 +2,6 @@ package com.sheepfly.media.dataaccess.entity;
 
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,9 +20,6 @@ import java.util.Date;
  */
 @Entity
 @Table(schema = "MEDIA", name = "SITE")
-@Getter
-@Setter
-@ToString
 public class Site implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;
@@ -66,4 +61,53 @@ public class Site implements Serializable, EntityInterface, LogicDelete {
      */
     @Column(name = "DELETE_STATUS", insertable = false)
     private Integer deleteStatus;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getSiteName() {
+        return this.siteName;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public Integer getDeleteStatus() {
+        return this.deleteStatus;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setDeleteStatus(Integer deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
+
 }

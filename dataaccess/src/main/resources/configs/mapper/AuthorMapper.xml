@@ -15,11 +15,11 @@
   </sql>
 
   <resultMap id="AuthorVo"
-      type="com.sheepfly.media.dataaccess.vo.AuthorVo"
+      type="com.sheepfly.media.common.vo.AuthorVo"
       autoMapping="true">
     <id property="id" column="id"/>
-    <association property="site"
-        resultMap="com.sheepfly.media.dataaccess.mapper.SiteMapper.site"
+    <association property="siteVo"
+        resultMap="com.sheepfly.media.dataaccess.mapper.SiteMapper.siteVo"
         columnPrefix="site2_"/>
   </resultMap>
 

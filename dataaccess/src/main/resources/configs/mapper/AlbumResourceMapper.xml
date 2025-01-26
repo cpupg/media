@@ -19,13 +19,14 @@
         DELETE_STATUS,CREATE_TIME,UPDATE_TIME,
         DELETE_TIME
   </sql>
+
   <delete id="batchDeleteAlbum" parameterType="TableRequest">
     update media.ALBUM_RESOURCE t
     set DELETE_STATUS = 1, UPDATE_TIME = current_timestamp()
     where  t.RESOURCE_ID in (
     select res.id
     from media.resource res
-    where res.DELETE_STATUS = 0
+    where res.DELETE_STATUS = 1
     <choose>
       <when test="idList neq null and idList.size() gt 0">
         and res.id in
@@ -49,8 +50,22 @@
       and DELETE_STATUS = 0
   </update>
 
+  <update id="batchUpdateByResource" parameterType="com.sheepfly.media.common.form.data.ResourceData">
+    update media.ALBUM_RESOURCE ab set
+        DELETE_STATUS = 1
+    where DELETE_STATUS = 0
+    <include refid="com.sheepfly.media.dataaccess.mapper.ResourceMapper.association_batch_update_where">
+      <property name="t_table" value="ab"/>
+      <property name="t_column" value="resource_id"/>
+    </include>
+    and ab.album_id in
+    <foreach collection="deletedAlbums" item="item" open="(" close=")" separator=",">
+      #{item.id}
+    </foreach>
+  </update>
+
   <select id="selectAlbumResourceList" parameterType="TableRequest"
-      resultType="com.sheepfly.media.dataaccess.vo.AlbumResourceVo">
+      resultType="com.sheepfly.media.common.vo.AlbumResourceVo">
     select ar.ID,
       ar.ALBUM_ID,
       a.name as album_name,

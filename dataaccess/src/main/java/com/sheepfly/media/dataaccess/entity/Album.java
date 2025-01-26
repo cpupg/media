@@ -2,9 +2,6 @@ package com.sheepfly.media.dataaccess.entity;
 
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +16,7 @@ import java.util.Date;
  * @TableName ALBUM
  */
 @Table(name = "ALBUM", schema = "MEDIA")
-@Getter
 @Entity
-@ToString
-@Setter
 public class Album implements Serializable, EntityInterface, LogicDelete {
     private static final long serialVersionUID = 1L;
     /**
@@ -66,4 +60,60 @@ public class Album implements Serializable, EntityInterface, LogicDelete {
      */
     @Column(name = "COVER_ID", nullable = false)
     private String coverId;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getDeleteStatus() {
+        return this.deleteStatus;
+    }
+
+    public void setDeleteStatus(Integer deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getDeleteTime() {
+        return this.deleteTime;
+    }
+
+    public void setDeleteTime(Date deleteTime) {
+        this.deleteTime = deleteTime;
+    }
+
+    public String getCoverId() {
+        return this.coverId;
+    }
+
+    public void setCoverId(String coverId) {
+        this.coverId = coverId;
+    }
 }

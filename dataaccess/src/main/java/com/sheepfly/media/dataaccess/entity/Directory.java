@@ -1,8 +1,5 @@
 package com.sheepfly.media.dataaccess.entity;
 
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,9 +11,6 @@ import java.util.Date;
 /**
  * 资源目录
  */
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(schema = "MEDIA", name = "DIRECTORY",
         indexes = {@Index(
@@ -109,4 +103,91 @@ public class Directory implements Serializable {
     @Column(name = "DELETE_TIME")
     private Date deleteTime;
 
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Long getDirCode() {
+        return this.dirCode;
+    }
+
+    public void setDirCode(Long dirCode) {
+        this.dirCode = dirCode;
+    }
+
+    public Long getParentCode() {
+        return this.parentCode;
+    }
+
+    public void setParentCode(Long parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return this.path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getCodeList() {
+        return this.codeList;
+    }
+
+    public void setCodeList(String codeList) {
+        this.codeList = codeList;
+    }
+
+    public Integer getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getDeleteStatus() {
+        return this.deleteStatus;
+    }
+
+    public void setDeleteStatus(Integer deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getDeleteTime() {
+        return this.deleteTime;
+    }
+
+    public void setDeleteTime(Date deleteTime) {
+        this.deleteTime = deleteTime;
+    }
 }

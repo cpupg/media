@@ -1,6 +1,6 @@
 package com.sheepfly.media.dataaccess.mapper;
 
-import com.sheepfly.media.dataaccess.vo.file.FileInfo;
+import com.sheepfly.media.common.vo.file.FileInfo;
 
 import java.util.List;
 
