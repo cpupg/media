@@ -31,7 +31,6 @@
     <project.report.outputEncoding>UTF-8</project.report.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <version.media>0.6.2</version.media>
   </properties>
 
   <build>
@@ -52,27 +51,27 @@
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>common</artifactId>
-        <version>${version.media}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>web</artifactId>
-        <version>${version.media}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>dataaccess</artifactId>
-        <version>${version.media}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>service</artifactId>
-        <version>${version.media}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sheepfly.media</groupId>
         <artifactId>config</artifactId>
-        <version>${version.media}</version>
+        <version>${project.version}</version>
       </dependency>
       <!--media结束-->
 

@@ -14,6 +14,7 @@ branch=$1;
 
 UI_URL="git@e.coding.net:wrote-code/mycode/media-ui.git";
 SERVER_URL="git@e.coding.net:wrote-code/mycode/media.git";
+MODULE="common service web dataaccess config"
 #当前目录的绝对路径，用来定位
 WORK_DIR=$(pwd);
 UI_DIR=$WORK_DIR/media-ui;
@@ -227,6 +228,17 @@ cd $WORK_DIR;
 mv $LIB_SOURCE_DIR $LIB_DIR;
 runStatus $?;
 endWork "复制依赖包完成";
+# dependency:copy-dependencies从本地仓库复制，复制的不是最新的jar，因此要手动复制
+log "复制模块依赖"
+cd $WORK_DIR;
+runStatus $?;
+pwd
+for m in $MODULE
+do
+  mv -v $SERVER_DIR/$m/target/*.jar $LIB_DIR;
+  runStatus $?;
+done
+log "模块依赖复制完成"
 ################################################################################
 
 ################################################################################
