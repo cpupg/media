@@ -22,6 +22,10 @@ public class CollectVo extends TablePagination implements Serializable {
      */
     @NotBlank(groups = {UpdateConstraint.class, DeleteConstraint.class}, message = "{entity.collect.collectId.notBlank}")
     private String collectId;
+    /**
+     * 资源标识。
+     */
+    private String resourceId;
 
     /**
      * 收藏名称
@@ -56,6 +60,14 @@ public class CollectVo extends TablePagination implements Serializable {
 
     public void setCollectId(String collectId) {
         this.collectId = collectId;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
     public String getCollectName() {

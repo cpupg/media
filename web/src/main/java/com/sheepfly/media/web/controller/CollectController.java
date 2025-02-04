@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.Predicate;
 import java.util.Date;
 
 /**
@@ -122,15 +123,20 @@ public class CollectController {
             throw new BusinessException(ErrorCode.COLLECT_NOT_FOUND);
         }
         long count = resourceCollectService.count(
-                (r, q, b) -> b.equal(r.get(ResourceCollect_.RESOURCE_ID), vo.getResourceId()));
+                (r, q, b) -> {
+                    Predicate p1 = b.equal(r.get(ResourceCollect_.RESOURCE_ID), vo.getResourceId());
+                    Predicate p2 = b.equal(r.get(ResourceCollect_.DELETE_STATUS), Constant.NOT_DELETED);
+                    Predicate p3 = b.equal(r.get(ResourceCollect_.COLLECT_ID), vo.getCollectId());
+                    return b.and(p1, p2, p3);
+                });
         if (count > 0) {
-            throw new  BusinessException(ErrorCode.COLLECT_CONTAIN_RESOURCE);
+            throw new BusinessException(ErrorCode.COLLECT_CONTAIN_RESOURCE);
         }
         ResourceCollect rc = new ResourceCollect();
         BeanUtils.copyProperties(vo, rc);
         rc.setId(IdUtil.getIdStr());
         rc.setCreateTime(new Date());
-        rc.setDeleteStatus( Constant.NOT_DELETED);
+        rc.setDeleteStatus(Constant.NOT_DELETED);
         ResourceCollect save = resourceCollectService.save(rc);
         LOGGER.info("添加完成");
         return ResponseData.success(save);
