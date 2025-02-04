@@ -22,6 +22,7 @@ public class CollectMapperTest {
     public void test_queryAll() {
         CollectVo vo = new CollectVo();
         vo.setCollectName("hello");
+        vo.setResourceId("123456");
         TableRequest tableRequest = new TableRequest();
         tableRequest.setParams(vo);
         List<CollectVo> list = collectMapper.queryAll(tableRequest);

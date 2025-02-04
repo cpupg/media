@@ -1,15 +1,15 @@
 <configuration>
   <include resource="logback-appender.xml"/>
 
-  <logger name="sql" level="DEBUG" additivity="FALSE">
-    <appender-ref ref="STDOUT"/>
-    <appender-ref ref="SQL"/>
-  </logger>
+  <!--<logger name="sql" level="DEBUG" additivity="FALSE">-->
+  <!--  <appender-ref ref="STDOUT"/>-->
+  <!--  <appender-ref ref="SQL"/>-->
+  <!--</logger>-->
 
-  <logger name="org.hibernate.SQL" level="DEBUG" additivity="FALSE">
-    <appender-ref ref="STDOUT"/>
-    <appender-ref ref="SQL"/>
-  </logger>
+  <!--<logger name="org.hibernate.SQL" level="DEBUG" additivity="FALSE">-->
+  <!--  <appender-ref ref="STDOUT"/>-->
+  <!--  <appender-ref ref="SQL"/>-->
+  <!--</logger>-->
 
   <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="TRACE" additivity="FALSE">
     <appender-ref ref="STDOUT"/>

@@ -20,8 +20,17 @@
 
   <select id="queryAll" parameterType="TableRequest" resultType="com.sheepfly.media.common.vo.CollectVo">
     select
-    <include refid="Base_Column_List"/>
+      <include refid="Base_Column_List"/>
+      <if test="params.resourceId != null and params.resourceId != ''">
+        ,res_clet.RESOURCE_ID as resource_id
+      </if>
     from media.COLLECT clet
+    <if test="params.resourceId != null and params.resourceId != ''">
+      left join media.RESOURCE_COLLECT res_clet
+      on clet.COLLECT_ID = res_clet.COLLECT_ID
+      and res_clet.DELETE_STATUS = 0
+      and res_clet.RESOURCE_ID = #{params.resourceId}
+    </if>
     <where>
       <if test="params.collectName != null and params.collectName != ''">
         clet.collect_name like '%' || #{params.collectName} || '%'
