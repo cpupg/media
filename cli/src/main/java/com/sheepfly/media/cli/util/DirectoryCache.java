@@ -5,7 +5,7 @@ import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.service.base.DirectoryService;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wrote-code
  */
 @Component
-@Slf4j
 public class DirectoryCache {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DirectoryCache.class);
     @Autowired
     private DirectoryRepository repository;
     @Autowired
@@ -46,12 +46,12 @@ public class DirectoryCache {
      * @return 路径对应的目录对象。
      */
     public Directory get(String path) {
-        if (log.isDebugEnabled()) {
-            log.info("从缓存中获取目录:{}", path);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.info("从缓存中获取目录:{}", path);
         }
         if (directoryMap.containsKey(path)) {
-            if (log.isDebugEnabled()) {
-                log.info("命中缓存:{}", path);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.info("命中缓存:{}", path);
             }
             return directoryMap.get(path);
         }
@@ -60,7 +60,7 @@ public class DirectoryCache {
             put(path, one.orElse(null));
             return one.orElse(null);
         }
-        log.warn("数据库中不存在指定目录{}", path);
+        LOGGER.warn("数据库中不存在指定目录{}", path);
         return null;
     }
 
@@ -98,7 +98,7 @@ public class DirectoryCache {
         if (directory == null) {
             throw new CommonException("创建目录失败:" + dir);
         }
-        log.info("目录创建完成，将目录{}和{}加入缓存", rawDir, dir);
+        LOGGER.info("目录创建完成，将目录{}和{}加入缓存", rawDir, dir);
         put(rawDir, directory);
         put(dir, directory);
         return directory;

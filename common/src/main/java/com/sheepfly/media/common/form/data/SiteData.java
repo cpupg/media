@@ -1,7 +1,5 @@
 package com.sheepfly.media.common.form.data;
 
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
@@ -13,9 +11,6 @@ import java.io.Serializable;
  * 站点
  * </p>
  */
-@Getter
-@Setter
-@ToString
 public class SiteData implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,4 +29,20 @@ public class SiteData implements Serializable {
     @NotNull(message = "{entity.site.url.notNull}")
     @Length(max = 90, message = "{entity.site.url.length}")
     private String url;
+
+    public String getSiteName() {
+        return this.siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

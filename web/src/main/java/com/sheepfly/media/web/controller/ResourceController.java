@@ -4,7 +4,6 @@ package com.sheepfly.media.web.controller;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
-import com.sheepfly.media.common.form.data.BatchTag;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
@@ -15,26 +14,24 @@ import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.Resource_;
-import com.sheepfly.media.dataaccess.entity.Tag;
-import com.sheepfly.media.dataaccess.entity.TagReference;
-import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
-import com.sheepfly.media.dataaccess.vo.TagVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
+import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,9 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,29 +57,36 @@ import java.util.Map;
  * @author sheepfly
  * @since 2022-02-07
  */
+@SuppressWarnings({"java:S3740", "rawtypes"})
 @RestController
 @RequestMapping(value = "/resource", produces = "application/json;charset=utf-8")
-@Slf4j
 public class ResourceController {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ResourceController.class);
     @Autowired
     private IResourceService service;
     @Autowired
     private DirectoryService directoryService;
     @Autowired
-    private ResourceRepository repository;
-    @Autowired
     private TagService tagService;
     @Autowired
     private TagReferenceService tagReferenceService;
     @Autowired
+    private AlbumService albumService;
+    @Autowired
     private AlbumResourceService arService;
 
+    /**
+     * 查询资源表格，用来在资源页展示。
+     *
+     * @param form 查询表单。
+     *
+     * @return 资源表格。
+     */
     @PostMapping("/queryResourceList")
-    public TableResponse<ResourceVo> queryResourceList(
-            @RequestBody TableRequest<ResourceParam, ResourceParam, Object> form) {
+    public TableResponse<ResourceVo> queryResourceList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
@@ -92,19 +94,36 @@ public class ResourceController {
         return service.queryResourceVoList(form);
     }
 
+    /**
+     * 查询资源表格，用来在弹框展示资源。
+     *
+     * @param form 查询条件。
+     *
+     * @return 表格。
+     */
     @PostMapping("/queryList")
-    public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam,
-            ResourceSort> form) {
+    public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replaceAll("\\\\", "/"));
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
         }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
-        return service.queryList(form);
+        return service.queryListByAlbum(form);
     }
 
+    /**
+     * 增加资源。
+     *
+     * @param resourceData 表单。
+     *
+     * @return 新增的资源。
+     *
+     * @throws InvocationTargetException e
+     * @throws IllegalAccessException e
+     * @throws BusinessException e
+     */
     @PostMapping("/add")
     public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
@@ -119,9 +138,9 @@ public class ResourceController {
         // 判断输入的路径是文件还是目录，方便直接复制全路径到表单
         File file = new File(resourceData.getDir());
         String parentDir = file.getAbsolutePath();
-        log.info("文件目录{}", parentDir);
+        LOGGER.info("文件目录{}", parentDir);
         if (file.isFile()) {
-            log.info("当前资源是一个文件，计算父目录");
+            LOGGER.info("当前资源是一个文件，计算父目录");
             resource.setFilename(file.getName());
             parentDir = FilenameUtils.normalize(file.getParent(), true);
         }
@@ -158,58 +177,28 @@ public class ResourceController {
         return ResponseData.success(savedResource);
     }
 
+    /**
+     * 删除资源。
+     *
+     * @param id 要删除的资源主键。
+     *
+     * @return 被删除的资源。
+     *
+     * @throws BusinessException e
+     */
     @PostMapping("/delete")
     public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
-        if (!service.logicExistById(id)) {
-            return ResponseData.fail(ErrorCode.DELETE_NOT_EXIST_DATA, "资源不存在", null);
-        }
         Resource res = service.deleteResource(id);
         return ResponseData.success(res);
     }
 
-    @PostMapping("addTag")
-    public ResponseData<TagReferenceVo> addTag(@RequestParam("resourceId") String resourceId,
-            @RequestParam("tagName") String tagName) {
-        log.info("给资源{{}}添加标签{{}}", resourceId, tagName);
-        if (StringUtils.isBlank(tagName)) {
-            return ResponseData.fail(ErrorCode.RES_TAG_NAME_CANT_NULL);
-        }
-        if (tagName.length() > 10) {
-            return ResponseData.fail(ErrorCode.TAG_NAME_TOO_LONG);
-        }
-        TagReference tagReference = service.createResourceTag(resourceId, tagName);
-        TagReferenceVo vo = new TagReferenceVo();
-        tagReference.copyTo(vo);
-        Tag tag = tagService.findById(tagReference.getTagId());
-        TagVo tagVo = new TagVo();
-        tag.copyTo(tagVo);
-        vo.setTagVo(tagVo);
-        log.info("添加完成");
-        return ResponseData.success(vo);
-    }
-
-    @PostMapping("deleteTag")
-    public ResponseData<TagVo> deleteTag(@RequestParam("referenceId") String referenceId,
-            @RequestParam("resourceId") String resourceId) {
-        TagReference tagReference = tagReferenceService.findById(referenceId);
-        if (tagReference == null) {
-            return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
-        }
-        if (!resourceId.equals(tagReference.getResourceId())) {
-            return ResponseData.fail(ErrorCode.RES_DONT_HAVE_THIS_TAG);
-        }
-        service.deleteResourceTag(referenceId);
-        Tag tag = tagService.findById(tagReference.getTagId());
-        if (tag == null) {
-            log.warn("标签{}在不存在，但是被资源{}引用", tagReference.getTagId(), tagReference.getResourceId());
-            return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
-        }
-        TagVo tagVo = new TagVo();
-        tag.copyTo(tagVo);
-        log.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
-        return ResponseData.success(tagVo);
-    }
-
+    /**
+     * 查询起源下的标签。
+     *
+     * @param request 请求。
+     *
+     * @return 资源对应的标签。
+     */
     @PostMapping("/queryTags")
     public ResponseData<List<TagReferenceVo>> queryTags(HttpServletRequest request) {
         String resourceId = request.getParameter("resourceId");
@@ -220,58 +209,87 @@ public class ResourceController {
         return ResponseData.success(list);
     }
 
+    /**
+     * 查询专辑清单，可以使用
+     *
+     * @param tableRequest
+     *
+     * @return
+     */
     @PostMapping("/queryAlbumList")
-    public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam,
-            AlbumSort> tableRequest) {
-        return arService.queryAlbumResourceList(tableRequest);
+    public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
+        return albumService.queryAlbumResourceList(tableRequest);
     }
 
     @PostMapping("/setAlbum")
     public ResponseData<AlbumResource> setAlbum(@RequestParam String resourceId, @RequestParam String albumId)
             throws BusinessException {
-        log.info("为资源{}设置专辑{}", resourceId, albumId);
+        LOGGER.info("为资源{}设置专辑{}", resourceId, albumId);
         AlbumResource albumResource = service.setAlbum(resourceId, albumId);
         return ResponseData.success(albumResource);
     }
 
+    /**
+     * 从专辑里删除资源。
+     *
+     * <p>删除操作是逻辑删除。</p>
+     *
+     * @param albumResourceId 关联标识。
+     *
+     * @return 被删除的关联对象。
+     */
     @PostMapping("/unsetAlbum")
     public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
-        log.info("移除专辑和资源关联关系{}", albumResourceId);
+        LOGGER.info("移除专辑和资源关联关系{}", albumResourceId);
         AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
         return ResponseData.success(albumResource);
     }
 
     /**
-     * 临时请求，将来会删除。
+     * 批量删除资源。
      *
-     * @param batchTag 数据。
+     * <p>可以按勾选删除，也可以按搜索条件删除。搜索条件不包含标签。</p>
      *
-     * @return 数据。
+     * @param data 删除条件。
+     *
+     * @return 删除结果。
      */
-    @PostMapping("/batchSetTag")
-    public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody BatchTag batchTag) {
-        String[] tags = batchTag.getTags().split(",");
-        String[] ids = batchTag.getResourceIds().split(",");
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (String id : ids) {
-            log.info("当前资源:{}----", id);
-            Map<String, Object> tagMap = new HashMap<>();
-            for (String tag : tags) {
-                log.info("当前标签:{}", tag);
-                try {
-                    ResponseData<TagReferenceVo> data = addTag(id, tag);
-                    tagMap.put(tag, data);
-                } catch (Exception e) {
-                    log.error("资源{}添加标签{}失败", id, tag, e);
-                    tagMap.put(tag, e.getMessage());
-                }
-            }
-            Map<String, Object> idMap = new HashMap<>();
-            idMap.put(id, tagMap);
-            list.add(idMap);
-        }
+    @PostMapping("/batchDelete")
+    public ResponseData<Object> batchDelete(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
+        List<Map<String, Object>> list = service.batchDelete(data);
         return ResponseData.success(list);
     }
 
+    /**
+     * 批量更新。
+     *
+     * <p>可以按勾选更新，也可以按搜索条件更新。搜索条件不包含标签。</p>
+     *
+     * @return 更新结果。
+     */
+    @PostMapping("/batchUpdate")
+    public ResponseData batchUpdate(@RequestBody ResourceData resourceData) {
+        TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition = resourceData.getCondition();
+        ResourceParam params = condition.getParams();
+        if (StringUtils.isEmpty(params.getDir()) && StringUtils.isEmpty(params.getFilename()) &&
+                StringUtils.isEmpty(params.getAuthorId()) && ObjectUtils.isEmpty(condition.getIdList())) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_CONDITION_LOST);
+        }
+        if (ObjectUtils.isEmpty(resourceData.getAddedTags()) && ObjectUtils.isEmpty(resourceData.getDeletedTags()) &&
+                ObjectUtils.isEmpty(resourceData.getAddedAlbums()) && ObjectUtils.isEmpty(
+                resourceData.getDeletedAlbums()) &&
+                StringUtils.isEmpty(resourceData.getDir()) && StringUtils.isEmpty(resourceData.getFilename()) &&
+                StringUtils.isEmpty(resourceData.getAuthorId())) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_CONTENT_LOST);
+        }
+        if (StringUtils.isNotEmpty(params.getDir())) {
+            params.setDir(params.getDir().toLowerCase());
+        }
+        if (StringUtils.isNotEmpty(params.getFilename())) {
+            params.setFilename(params.getFilename().toLowerCase());
+        }
+        List<Map<String, Object>> list = service.batchUpdate(resourceData);
+        return ResponseData.success(list);
+    }
 }
 

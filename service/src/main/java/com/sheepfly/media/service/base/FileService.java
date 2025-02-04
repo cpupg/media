@@ -3,12 +3,13 @@ package com.sheepfly.media.service.base;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.FileUpload;
-import com.sheepfly.media.dataaccess.vo.file.FileInfo;
+import com.sheepfly.media.common.vo.file.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文件服务。
@@ -89,6 +90,8 @@ public interface FileService {
     /**
      * 删除业务代码下的所有文件。
      *
+     * <p>删除时先修改数据库，然后才删除，如果出错，则已删除文件不会恢复，但数据库状态会还原。</p>
+     *
      * @param businessCode 业务代码。
      *
      * @return 删除结果。
@@ -96,5 +99,16 @@ public interface FileService {
      * @throws BusinessException e。
      */
     int deleteFileByBusinessCode(String businessCode) throws BusinessException;
+
+    /**
+     * 批量删除文件。
+     *
+     * @param businessCodeList 业务代码。
+     *
+     * @return 删除结果。
+     *
+     * @throws BusinessException 异常。
+     */
+    int deleteFileByBusinessCodeList(List<String> businessCodeList) throws BusinessException;
 
 }

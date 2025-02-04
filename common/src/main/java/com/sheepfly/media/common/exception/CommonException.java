@@ -5,7 +5,7 @@ package com.sheepfly.media.common.exception;
  *
  * @author wrote-code
  */
-public class CommonException extends Exception {
+public class CommonException extends RuntimeException {
     public CommonException(String message) {
         super(message);
     }

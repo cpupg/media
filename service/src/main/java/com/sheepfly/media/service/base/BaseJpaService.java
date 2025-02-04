@@ -49,6 +49,15 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
     T save(T t);
 
     /**
+     * 保存全部。
+     *
+     * @param list。
+     *
+     * @return 保存的对象。
+     */
+    List<T> saveAll(List<T> list);
+
+    /**
      * 判断指定id的对象是否存在。
      *
      * @param id id。
@@ -63,28 +72,6 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
      * @param id id。
      */
     void deleteById(ID id);
-
-    /**
-     * 通过id删除对象。
-     *
-     * <p>删除前会先调用{@link #existsById(Object)}进行判断，如果不存在，则会抛出
-     * 异常，异常类型为ErrorCode。</p>
-     *
-     * @param id 主键id。
-     * @param errorCode 错误码。
-     */
-    void safeDeleteById(ID id, ErrorCode errorCode) throws BusinessException;
-
-    /**
-     * 逻辑删除一个对象。
-     *
-     * <p>为防止副作用，建议只设置主键id和删除状态两个字段。</p>
-     *
-     * @param t 要删除的对象。
-     *
-     * @return 已删除的对象。
-     */
-    T logicDelete(T t);
 
     /**
      * 将指定id的删除状态改为{@link LogicDelete#DELETED}
@@ -141,7 +128,9 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
 
     long count(Example<T> example);
 
-    void update(T t);
+    T update(T t);
+
+    List<T> updateAll(List<T> list);
 
     /**
      * 刷新实体管理器上下文。
@@ -151,6 +140,8 @@ public interface BaseJpaService<T extends EntityInterface, ID, D extends JpaRepo
     void flush();
 
     void delete(T t);
+
+    void deleteAll(List<T> list);
 
     /**
      * 获取仓库对象。

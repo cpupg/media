@@ -20,14 +20,6 @@ public class BusinessException extends CommonException {
      */
     private String errorCode = ErrorCode.UNEXPECT_ERROR.getCode();
     /**
-     * 错误描述。
-     */
-    private String errorDescription = ErrorCode.UNEXPECT_ERROR.getMessage();
-    /**
-     * 错误消息。
-     */
-    private String errorMessage = createMessage(ErrorCode.UNEXPECT_ERROR, null, null);
-    /**
      * 异常。
      */
     private Throwable throwable;
@@ -59,9 +51,7 @@ public class BusinessException extends CommonException {
     public BusinessException(ErrorCode errorCode, Exception exception) {
         super(createMessage(errorCode, exception, null), exception);
         this.errorCode = errorCode.getCode();
-        this.errorDescription = errorCode.getMessage();
         this.throwable = exception;
-        this.errorMessage = createMessage(errorCode, exception, null);
         this.error = errorCode;
     }
 
@@ -75,19 +65,13 @@ public class BusinessException extends CommonException {
     public BusinessException(ErrorCode errorCode, Exception exception, Throwable cause) {
         super(createMessage(errorCode, exception, cause), cause);
         this.errorCode = errorCode.getCode();
-        this.errorDescription = errorCode.getMessage();
         this.throwable = exception;
         this.cause = exception;
-        this.errorMessage = createMessage(errorCode, exception, cause);
         this.error = errorCode;
     }
 
     public String getErrorCode() {
         return errorCode;
-    }
-
-    public String getErrorDescription() {
-        return errorDescription;
     }
 
     public ErrorCode getError() {

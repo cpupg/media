@@ -4,7 +4,7 @@ import com.sheepfly.media.common.form.filter.AlbumFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.dataaccess.vo.AlbumVo;
+import com.sheepfly.media.common.vo.AlbumVo;
 
 import java.util.List;
 
@@ -15,5 +15,12 @@ import java.util.List;
  * @Entity com.sheepfly.media.dataaccess.entity.Album
  */
 public interface AlbumMapper {
+    /**
+     * 查询专辑列表。
+     *
+     * @param tableRequest
+     *
+     * @return 查询结果。
+     */
     List<AlbumVo> selectAlbumList(TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
 }

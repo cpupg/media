@@ -4,8 +4,6 @@ import com.sheepfly.media.common.util.BeanCopier;
 import com.sheepfly.media.dataaccess.entity.baseinterface.Copy;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,9 +21,6 @@ import java.util.Date;
  * @since 2022-02-07
  */
 @Entity
-@Getter
-@Setter
-@ToString
 @Table(schema = "MEDIA", name = "RESOURCE")
 public class Resource implements Serializable, EntityInterface, LogicDelete, Copy {
 
@@ -109,4 +104,85 @@ public class Resource implements Serializable, EntityInterface, LogicDelete, Cop
     public void copyTo(Object target) {
         BeanCopier.copyTo(this, target);
     }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getFilename() {
+        return this.filename;
+    }
+
+    public String getAuthorId() {
+        return this.authorId;
+    }
+
+    public String getAlbumId() {
+        return this.albumId;
+    }
+
+    public Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public Date getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public Date getSaveTime() {
+        return this.saveTime;
+    }
+
+    public Integer getDeleteStatus() {
+        return this.deleteStatus;
+    }
+
+    public Long getDirCode() {
+        return this.dirCode;
+    }
+
+    public String getCoverId() {
+        return this.coverId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setSaveTime(Date saveTime) {
+        this.saveTime = saveTime;
+    }
+
+    public void setDeleteStatus(Integer deleteStatus) {
+        this.deleteStatus = deleteStatus;
+    }
+
+    public void setDirCode(Long dirCode) {
+        this.dirCode = dirCode;
+    }
+
+    public void setCoverId(String coverId) {
+        this.coverId = coverId;
+    }
+
 }

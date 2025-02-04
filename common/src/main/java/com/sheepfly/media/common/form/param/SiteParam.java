@@ -1,8 +1,6 @@
 package com.sheepfly.media.common.form.param;
 
 import com.sheepfly.media.common.http.TablePagination;
-import lombok.Getter;
-import lombok.Setter;import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -11,9 +9,14 @@ import java.io.Serializable;
  *
  * @author sheepfly
  */
-@Getter
-@Setter
-@ToString
 public class SiteParam extends TablePagination implements Serializable {
     private String siteName;
+
+    public String getSiteName() {
+        return this.siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
 }

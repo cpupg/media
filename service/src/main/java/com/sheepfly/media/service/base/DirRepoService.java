@@ -2,7 +2,7 @@ package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.dataaccess.entity.DirRepo;
 import com.sheepfly.media.dataaccess.repository.DirRepoRepository;
-import com.sheepfly.media.dataaccess.vo.DirRepoVo;
+import com.sheepfly.media.common.vo.DirRepoVo;
 
 import java.util.List;
 

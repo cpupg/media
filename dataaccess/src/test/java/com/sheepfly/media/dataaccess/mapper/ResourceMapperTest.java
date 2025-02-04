@@ -1,10 +1,12 @@
 package com.sheepfly.media.dataaccess.mapper;
 
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.dataaccess.DataAccessTestConfiguration;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class ResourceMapperTest {
 
     @Test
     public void testSelectResourceVoList2() {
-        TableRequest<ResourceParam, ResourceParam, Object> form = new TableRequest<>();
+        TableRequest<ResourceFilter, ResourceParam, ResourceSort> form = new TableRequest<>();
         ResourceParam params = new ResourceParam();
         params.setFilename("测试文件");
         params.setDir("C:/hello/");

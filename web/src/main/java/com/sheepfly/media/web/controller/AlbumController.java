@@ -8,10 +8,9 @@ import com.sheepfly.media.common.form.sort.AlbumSort;
 import com.sheepfly.media.common.http.ResponseData;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.AlbumVo;
 import com.sheepfly.media.dataaccess.entity.Album;
-import com.sheepfly.media.dataaccess.vo.AlbumVo;
 import com.sheepfly.media.service.base.AlbumService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,6 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/album")
-@Slf4j
 public class AlbumController {
     @Autowired
     private AlbumService service;
@@ -33,7 +31,7 @@ public class AlbumController {
     public TableResponse<AlbumVo> queryAlbumList(
             @RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) throws BusinessException {
         AlbumParam params = tableRequest.getParams();
-        if (params.isSelectModal() && StringUtils.isEmpty(params.getResourceId())) {
+        if (params.isQueryWithResource() && StringUtils.isEmpty(params.getResourceId())) {
             throw new BusinessException(ErrorCode.ALBUM_SELECT_MODAL_LOST_RESOURCE);
         }
         return service.queryAlbumList(tableRequest);

@@ -1,20 +1,23 @@
 package com.sheepfly.media.config;
 
+import com.chen.mybatisreload.core.MyBatisReloadService;
 import com.sheepfly.media.config.bean.Version;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.InputStream;
-import java.util.Properties;
 
 /**
  * 应用自动配置。
  */
 @Configuration
-@Slf4j
 public class MediaAutoConfiguration {
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(MediaAutoConfiguration.class);
+
     /**
      * 自动从配置文件中获取系统版本号。
      *
@@ -28,8 +31,13 @@ public class MediaAutoConfiguration {
             InputStream inputStream = cpr.getInputStream();
             version.load(inputStream);
         } catch (Exception e) {
-            log.warn("加载版本号发生异常，使用默认版本号1.0.0。异常原因：{}", e.getMessage());
+            LOGGER.warn("加载版本号发生异常，使用默认版本号1.0.0。异常原因：{}", e.getMessage());
         }
         return version;
+    }
+
+    @Bean
+    public MyBatisReloadService mybatisReloadService(@Autowired SqlSessionFactory sqlSessionFactory) {
+        return new MyBatisReloadService(sqlSessionFactory);
     }
 }

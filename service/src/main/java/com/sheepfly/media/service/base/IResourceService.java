@@ -1,19 +1,21 @@
 package com.sheepfly.media.service.base;
 
 import com.sheepfly.media.common.exception.BusinessException;
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Resource;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,24 +33,7 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      *
      * @return 满足条件的资源。
      */
-    TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form);
-
-    /**
-     * 给资源创建标签。
-     *
-     * @param resourceId 资源主键。
-     * @param name 标签名称。
-     *
-     * @return 创建好的标签引用。
-     */
-    TagReference createResourceTag(String resourceId, String name);
-
-    /**
-     * 删除资源标签。
-     *
-     * @param tagReferenceId 引用关系主键。。
-     */
-    void deleteResourceTag(String tagReferenceId);
+    TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
 
     /**
      * 查询资源对应的标签。
@@ -87,5 +72,30 @@ public interface IResourceService extends BaseJpaService<Resource, String, Resou
      */
     AlbumResource setAlbum(String resourceId, String albumId) throws BusinessException;
 
-    TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
+    /**
+     * 查询资源列表，返回内容只包含目录和文件名，查询条件只有目录和文件名。
+     *
+     * @param form 搜索条件。
+     *
+     * @return 资源列表。
+     */
+    TableResponse<ResourceVo> queryListByAlbum(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form);
+
+    /**
+     * 批量删除。
+     *
+     * @param condition 删除条件。
+     *
+     * @return 删除结果。
+     */
+    List<Map<String, Object>> batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+
+    /**
+     * 批量更新。
+     *
+     * @param resourceData 更新条件。
+     *
+     * @return 更新结果。
+     */
+    List<Map<String, Object>> batchUpdate(ResourceData resourceData);
 }

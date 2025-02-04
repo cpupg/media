@@ -1,18 +1,16 @@
 package com.sheepfly.media.service.impl;
 
-import com.sheepfly.media.dataaccess.mapper.DirRepoMapper;
+import com.sheepfly.media.common.vo.DirRepoVo;
 import com.sheepfly.media.dataaccess.entity.DirRepo;
+import com.sheepfly.media.dataaccess.mapper.DirRepoMapper;
 import com.sheepfly.media.dataaccess.repository.DirRepoRepository;
-import com.sheepfly.media.dataaccess.vo.DirRepoVo;
 import com.sheepfly.media.service.base.DirRepoService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Slf4j
 public class DirRepoServiceImpl extends BaseJpaServiceImpl<DirRepo, String, DirRepoRepository>
         implements DirRepoService {
     @Autowired

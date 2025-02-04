@@ -1,10 +1,14 @@
 package com.sheepfly.media.dataaccess.mapper;
 
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.AlbumFilter;
+import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.AlbumParam;
+import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.AlbumSort;
+import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.dataaccess.vo.AlbumResourceVo;
+import com.sheepfly.media.common.vo.AlbumResourceVo;
 
 import java.util.List;
 
@@ -15,7 +19,43 @@ import java.util.List;
  * @Entity com.sheepfly.media.dataaccess.entity.AlbumResource
  */
 public interface AlbumResourceMapper {
+    /**
+     * 查询包含资源的专辑。
+     *
+     * @param tableRequest 查询条件。
+     *
+     * @return 查询结果。
+     */
     List<AlbumResourceVo> selectAlbumResourceList(TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest);
+
+    /**
+     * 通过资源批量删除专辑。
+     *
+     * <p>目录和文件名必须是小写，删除操作是物理删除。</p>
+     *
+     * @param condition 删除条件。
+     *
+     * @return 删除数量。
+     */
+    long batchDeleteAlbum(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition);
+
+    /**
+     * 从专辑中删除资源，软删除。
+     *
+     * @param resourceId 资源标识。
+     *
+     * @return 删除数量。
+     */
+    long updateResourceFromAlbum(String resourceId);
+
+    /**
+     * 按资源表格搜索条件更新专辑关联状态为1。
+     *
+     * @param resourceData 更新条件。
+     *
+     * @return 更新数量。
+     */
+    long batchUpdateByResource(ResourceData resourceData);
 }
 
 

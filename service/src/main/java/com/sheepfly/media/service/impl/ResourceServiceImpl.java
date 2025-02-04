@@ -2,35 +2,36 @@ package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
+import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
+import com.sheepfly.media.common.vo.ResourceVo;
+import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
+import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
-import com.sheepfly.media.dataaccess.entity.Tag;
-import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
-import com.sheepfly.media.dataaccess.vo.ResourceVo;
-import com.sheepfly.media.dataaccess.vo.TagReferenceVo;
 import com.sheepfly.media.service.base.AlbumResourceService;
 import com.sheepfly.media.service.base.AlbumService;
+import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.FileService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -51,28 +53,34 @@ import java.util.Optional;
 @Service
 public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, ResourceRepository>
         implements IResourceService {
-    private static final Logger log = LoggerFactory.getLogger(ResourceServiceImpl.class);
-    @Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceServiceImpl.class);
+    @javax.annotation.Resource
     private TagService tagService;
-    @Autowired
+    @javax.annotation.Resource
     private TagReferenceService trfService;
-    @Autowired
+    @javax.annotation.Resource
     private Snowflake snowflake;
-    @Autowired
+    @javax.annotation.Resource
     private AlbumService albumService;
-    @Autowired
+    @javax.annotation.Resource
     private AlbumResourceService arService;
-    @Autowired
+    @javax.annotation.Resource
     private FileService fileService;
+    @javax.annotation.Resource
+    private DirectoryService directoryService;
 
-    @Autowired
+    @javax.annotation.Resource
     private ResourceMapper mapper;
 
     @Override
-    public TableResponse<ResourceVo> queryResourceVoList(TableRequest<ResourceParam, ResourceParam, Object> form) {
+    public TableResponse<ResourceVo> queryResourceVoList(
+            TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
-        Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
+        Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = mapper.selectResourceVoList(form);
+        if (params.isResourceOnly()) {
+            return TableResponse.success(list, page.getTotal());
+        }
         for (int i = 0; i < list.size(); i++) {
             ResourceVo vo = list.get(i);
             String id = vo.getId();
@@ -86,49 +94,10 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
             long count = trfService.count(
                     (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
             vo.setTagCount(count);
-            vo.setFavorite(trfService.getFavorite(id));
-            vo.setRate(trfService.getRate(id));
         }
         return TableResponse.success(list, page.getTotal());
     }
 
-    @Override
-    public TagReference createResourceTag(String resourceId, String name) {
-        Tag tag = new Tag();
-        tag.setName(name);
-        Optional<Tag> tagOpt = tagService.findOne(Example.of(tag));
-        if (!tagOpt.isPresent()) {
-            log.info("标签{{}}不存在，创建新标签", name);
-            tag.setCreateTime(new Date());
-            tag.setId(snowflake.nextIdStr());
-            tag = tagService.save(tag);
-            tagService.flush();
-            log.info("新标签{} -> {}创建完成", tag.getId(), tag.getName());
-        } else {
-            tag = tagOpt.orElse(null);
-        }
-        TagReference tagReference = new TagReference();
-        tagReference.setResourceId(resourceId);
-        tagReference.setTagId(tag.getId());
-        tagReference.setReferenceType(TagReferenceService.REF_TYPE_RESOURCE);
-        Optional<TagReference> tagRefOpt = trfService.findOne(Example.of(tagReference));
-        if (!tagRefOpt.isPresent()) {
-            log.warn("给资源{{}}设置标签{} -> {}", resourceId, tag.getId(), tag.getName());
-            tagReference.setId(snowflake.nextIdStr());
-            tagReference.setReferTime(new Date());
-            tagReference = trfService.save(tagReference);
-            trfService.flush();
-            log.info("给资源{{}}设置标签{{}}完成", resourceId, tag.getName());
-        } else {
-            tagReference = tagRefOpt.orElse(null);
-        }
-        return tagReference;
-    }
-
-    @Override
-    public void deleteResourceTag(String tagReferenceId) {
-        trfService.deleteById(tagReferenceId);
-    }
 
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
@@ -165,11 +134,67 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     }
 
     @Override
-    public TableResponse<ResourceVo> queryList(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
+    public TableResponse<ResourceVo> queryListByAlbum(TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
         Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
-        List<ResourceVo> list = mapper.queryList(form);
+        List<ResourceVo> list = mapper.queryListByAlbum(form);
         return TableResponse.success(list, page.getTotal());
+    }
+
+    @Override
+    public List<Map<String, Object>> batchDelete(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
+        ResourceParam params = condition.getParams();
+        boolean b = StringUtils.isBlank(params.getDir()) && StringUtils.isBlank(params.getFilename());
+        if (CollectionUtils.isEmpty(condition.getIdList()) && b) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_PARAM_LOSE);
+        }
+        if (StringUtils.isNotBlank(params.getDir())) {
+            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
+        }
+        if (StringUtils.isNotBlank(params.getFilename())) {
+            params.setFilename(params.getFilename().toLowerCase());
+        }
+        List<ResourceVo> list = mapper.selectResourceVoList(condition);
+        if (list.isEmpty()) {
+            throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
+        }
+        int deleteCount = mapper.batchDelete(condition);
+        LOGGER.info("删除{}个资源", deleteCount);
+        if (list.size() != deleteCount) {
+            throw new BusinessException(ErrorCode.BATCH_UPDATE_COUNT_CONFLICT);
+        }
+        long l = trfService.batchDeleteByResource(condition);
+        LOGGER.info("删除{}个标签", l);
+        l = albumService.batchDeleteByResource(condition);
+        LOGGER.info("删除{}个专辑", l);
+        List<String> idList = list.stream().map(ResourceVo::getId).collect(Collectors.toList());
+        int i = fileService.deleteFileByBusinessCodeList(idList);
+        LOGGER.info("删除{}个文件", i);
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Map<String, Object>> batchUpdate(ResourceData resourceData) {
+        // 更新资源表
+        resourceData.setDirCode(null);
+        if (StringUtils.isNotEmpty(resourceData.getDir())) {
+
+            Directory directory = directoryService.queryDirectoryByPath(resourceData.getDir());
+            if (directory == null) {
+                directory = directoryService.createDirectory(resourceData.getDir());
+            }
+            resourceData.setDirCode(directory.getDirCode());
+        }
+        resourceData.getCondition().getParams().setResourceOnly(true);
+        int i = mapper.batchUpdate(resourceData);
+        // 更新专辑
+        LOGGER.info("资源表更新完成，共更新{}条数据，开始处理专辑", i);
+        albumService.batchUpdateByResource(resourceData);
+        // 更新标签
+        LOGGER.info("专辑处理完成，开始处理标签");
+        tagService.batchUpdateByResource(resourceData);
+        LOGGER.info("标签处理完成");
+        return Collections.emptyList();
     }
 
     @Override
@@ -177,11 +202,10 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         if (Constant.DELETED != logicDeleteById(id, Resource.class).getDeleteStatus()) {
             throw new BusinessException(ErrorCode.DELETE_NOT_EXIST_DATA);
         }
-        log.info("删除资源{}的标签", id);
         long l = trfService.deleteByResourceId(id);
-        log.info("删除{}个标签", l);
+        long l2 = albumService.deleteResourceFromAlbum(id);
         int i = fileService.deleteFileByBusinessCode(id);
-        log.info("删除资源{}的预览图count={}", id, i);
+        LOGGER.info("资源{}删除完成，包含{}个标签，{}个专辑，{}个文件", id, l, l2, i);
         return findById(id);
     }
 }
