@@ -199,7 +199,7 @@ log "复制前台产物";
 cp -rv $UI_DIR/dist/* application/src/main/resources/static >> $VERBOSE_LOG_FILE;
 runStatus $?;
 log "编译";
-mvn -Dfile.encoding=UTF-8 -DskipTests=true package;
+mvn -Dfile.encoding=UTF-8 -DskipTests=true package install;
 runStatus $?;
 
 endWork "编译打包";
@@ -210,9 +210,9 @@ endWork "编译打包";
 startWork "复制依赖包";
 
 log "移动jar包";
-APP_JAR=$APP_JAR_NAME-$MAIN_VERSION-$REVISION_SERVER-$REVISION_UI-$CURRENT_DATE.jar;
+APP_JAR=$APP_JAR_NAME-$MAIN_VERSION-$REVISION_SERVER-$REVISION_UI.jar;
 echo "web程序jar包:$APP_JAR";
-CLI_JAR=$CLI_JAR_NAME-$MAIN_VERSION-$REVISION_SERVER-$CURRENT_DATE.jar;
+CLI_JAR=$CLI_JAR_NAME-$MAIN_VERSION-$REVISION_SERVER.jar;
 echo "命令行程序jar包:$CLI_JAR";
 mv -v $SERVER_DIR/application/target/*.jar $APP_DIR/$APP_JAR;
 runStatus $?;
