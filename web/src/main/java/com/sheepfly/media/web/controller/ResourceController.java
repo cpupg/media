@@ -173,6 +173,9 @@ public class ResourceController {
         if (resource.getCoverId() == null) {
             resource.setCoverId("");
         }
+        if (StringUtils.isNotBlank(resource.getId())) {
+            resource.setUpdateTime(new Date());
+        }
         Resource savedResource = service.save(resource);
         return ResponseData.success(savedResource);
     }
