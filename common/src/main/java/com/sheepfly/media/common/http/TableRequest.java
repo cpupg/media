@@ -25,7 +25,11 @@ public class TableRequest<F, P, S> implements Serializable {
     /**
      * 表头排序参数。
      */
-    private S sort;
+    private S sorter;
+    /**
+     * 排序语句。
+     */
+    private String orderBy;
     /**
      * 勾选的id。
      */
@@ -37,7 +41,7 @@ public class TableRequest<F, P, S> implements Serializable {
     public TableRequest(F filter, P params, S sort) {
         this.filter = filter;
         this.params = params;
-        this.sort = sort;
+        this.sorter = sort;
     }
 
     public F getFilter() {
@@ -56,12 +60,20 @@ public class TableRequest<F, P, S> implements Serializable {
         this.params = params;
     }
 
-    public S getSort() {
-        return sort;
+    public S getSorter() {
+        return sorter;
     }
 
-    public void setSort(S sort) {
-        this.sort = sort;
+    public void setSorter(S sort) {
+        this.sorter = sort;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 
     public List<String> getIdList() {
