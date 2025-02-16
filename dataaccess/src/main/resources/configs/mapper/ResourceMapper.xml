@@ -118,7 +118,14 @@
       <property name="t_directory" value="dir"/>
       <property name="t_author" value="author"/>
     </include>
-    order by dir.PATH, res.FILENAME
+    <choose>
+      <when test="sorter.orderBy == null">
+        order by update_time desc, create_time desc
+      </when>
+      <otherwise>
+        ${sorter.orderBy}
+      </otherwise>
+    </choose>
   </select>
 
   <select id="selectTagReferenceByResourceId"
