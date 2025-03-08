@@ -63,19 +63,19 @@ public class ResourceData implements Serializable {
     /**
      * 删除的专辑。
      */
-    private List<AlbumVo> deletedAlbums;
+    private List<String> deletedAlbums;
     /**
      * 新增的专辑。
      */
-    private List<AlbumVo> addedAlbums;
+    private List<String> addedAlbums;
     /**
      * 删除的标签。
      */
-    private List<TagVo> deletedTags;
+    private List<String> deletedTags;
     /**
      * 新增的标签。
      */
-    private List<TagVo> addedTags;
+    private List<String> addedTags;
 
     public @Length(max = 90) String getId() {
         return this.id;
@@ -133,35 +133,35 @@ public class ResourceData implements Serializable {
         this.condition = condition;
     }
 
-    public List<AlbumVo> getDeletedAlbums() {
+    public List<String> getDeletedAlbums() {
         return this.deletedAlbums;
     }
 
-    public void setDeletedAlbums(List<AlbumVo> deletedAlbums) {
+    public void setDeletedAlbums(List<String> deletedAlbums) {
         this.deletedAlbums = deletedAlbums;
     }
 
-    public List<AlbumVo> getAddedAlbums() {
+    public List<String> getAddedAlbums() {
         return this.addedAlbums;
     }
 
-    public void setAddedAlbums(List<AlbumVo> addedAlbums) {
+    public void setAddedAlbums(List<String> addedAlbums) {
         this.addedAlbums = addedAlbums;
     }
 
-    public List<TagVo> getDeletedTags() {
+    public List<String> getDeletedTags() {
         return this.deletedTags;
     }
 
-    public void setDeletedTags(List<TagVo> deletedTags) {
+    public void setDeletedTags(List<String> deletedTags) {
         this.deletedTags = deletedTags;
     }
 
-    public List<TagVo> getAddedTags() {
+    public List<String> getAddedTags() {
         return this.addedTags;
     }
 
-    public void setAddedTags(List<TagVo> addedTags) {
+    public void setAddedTags(List<String> addedTags) {
         this.addedTags = addedTags;
     }
 

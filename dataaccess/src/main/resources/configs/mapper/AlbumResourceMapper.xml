@@ -60,7 +60,7 @@
     </include>
     and ab.album_id in
     <foreach collection="deletedAlbums" item="item" open="(" close=")" separator=",">
-      #{item.id}
+      #{item}
     </foreach>
   </update>
 

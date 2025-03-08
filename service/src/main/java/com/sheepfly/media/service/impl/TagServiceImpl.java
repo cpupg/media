@@ -58,13 +58,13 @@ public class TagServiceImpl extends BaseJpaServiceImpl<Tag, String, TagRepositor
             TableResponse<ResourceVo> response = resourceService.queryResourceVoList(resourceData.getCondition());
             List<ResourceVo> list = response.getData();
             LOGGER.info("一共{}个资源", list.size());
-            List<TagVo> tagsList = resourceData.getAddedTags();
-            for (TagVo tagVo : tagsList) {
-                LOGGER.info("当前标签:{}", tagVo.getName());
+            List<String> tagsList = resourceData.getAddedTags();
+            for (String id : tagsList) {
+                LOGGER.info("当前标签:{}", id);
                 TagData tagData = new TagData();
                 for (ResourceVo resourceVo : list) {
                     tagData.setResourceId(resourceVo.getId());
-                    tagData.setName(tagVo.getName());
+                    tagData.setName(id);
                     addTag(tagData);
                 }
             }

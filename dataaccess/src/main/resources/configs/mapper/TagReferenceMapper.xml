@@ -78,7 +78,7 @@
     </include>
     and trf.tag_id in
     <foreach collection="deletedTags" item="item" open="(" close=")" separator=",">
-      #{item.id}
+      #{item}
     </foreach>
   </delete>
 </mapper>

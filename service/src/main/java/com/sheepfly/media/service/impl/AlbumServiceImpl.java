@@ -74,20 +74,19 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
         }
         if (ObjectUtils.isNotEmpty(resourceData.getAddedAlbums())) {
             LOGGER.info("处理新增专辑");
-            List<AlbumVo> albumList = resourceData.getAddedAlbums();
+            List<String> albumList = resourceData.getAddedAlbums();
             TableResponse<ResourceVo> response = resourceService.queryResourceVoList(
                     resourceData.getCondition());
             LOGGER.info("给{}个资源设置{}个新专辑", response.getTotal(), albumList.size());
             List<ResourceVo> resourceList = response.getData();
-            for (AlbumVo albumVo : albumList) {
-                LOGGER.info("当前专辑:{}", albumVo.getName());
+            for (String id : albumList) {
+                LOGGER.info("当前专辑:{}", id);
                 for (ResourceVo resourceVo : resourceList) {
                     try {
-                        resourceService.setAlbum(resourceVo.getId(), albumVo.getId());
+                        resourceService.setAlbum(resourceVo.getId(), id);
                     } catch (BusinessException e) {
                         if (e.getError() == ErrorCode.RES_RA_NOT_REPEATED_AR) {
-                            LOGGER.warn("{},资源{}已设置专辑{}", e.getMessage(), resourceVo.getId(),
-                                    albumVo.getId());
+                            LOGGER.warn("{},资源{}已设置专辑{}", e.getMessage(), resourceVo.getId(), id);
                         }
                     }
                 }
