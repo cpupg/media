@@ -285,8 +285,15 @@ public class ResourceController {
                 StringUtils.isEmpty(resourceData.getAuthorId())) {
             throw new BusinessException(ErrorCode.BATCH_UPDATE_CONTENT_LOST);
         }
-        if (StringUtils.isNotEmpty(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase());
+        String dir = resourceData.getDir();
+        if (StringUtils.isNotEmpty(dir)) {
+            if (!dir.matches("^\"?[a-zA-Z]:(.*(?=[/\\\\])?)+\"?$")) {
+                return ResponseData.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
+            }
+            if (!dir.endsWith("/")) {
+                dir += "/";
+            }
+            resourceData.setDir(dir.toUpperCase());
         }
         if (StringUtils.isNotEmpty(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
