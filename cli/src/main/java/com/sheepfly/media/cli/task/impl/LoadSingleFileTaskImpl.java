@@ -16,7 +16,6 @@ import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Predicate;
@@ -32,13 +31,13 @@ import java.util.Scanner;
 public class LoadSingleFileTaskImpl implements Task {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(LoadSingleFileTaskImpl.class);
     private String usage;
-    @Autowired
+    @javax.annotation.Resource
     private AuthorRepository authorRepository;
-    @Autowired
+    @javax.annotation.Resource
     private ResourceRepository resourceRepository;
-    @Autowired
+    @javax.annotation.Resource
     private Snowflake snowflake;
-    @Autowired
+    @javax.annotation.Resource
     private DirectoryCache cache;
 
     public LoadSingleFileTaskImpl() {

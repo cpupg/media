@@ -7,13 +7,13 @@ import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.service.base.BaseJpaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
@@ -22,11 +22,11 @@ import java.util.Optional;
 
 public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
         implements BaseJpaService<T, ID, D> {
-    @Autowired
+    @Resource
     private D d;
-    @Autowired
+    @Resource
     private Snowflake snowflake;
-    @Autowired
+    @Resource
     private EntityManager entityManager;
 
     @Override

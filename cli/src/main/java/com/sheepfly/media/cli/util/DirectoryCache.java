@@ -6,9 +6,9 @@ import com.sheepfly.media.dataaccess.entity.Directory_;
 import com.sheepfly.media.dataaccess.repository.DirectoryRepository;
 import com.sheepfly.media.service.base.DirectoryService;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,9 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class DirectoryCache {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DirectoryCache.class);
-    @Autowired
+    @Resource
     private DirectoryRepository repository;
-    @Autowired
+    @Resource
     private DirectoryService service;
     /**
      * 目录缓存。

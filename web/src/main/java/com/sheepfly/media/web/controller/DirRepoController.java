@@ -10,20 +10,20 @@ import com.sheepfly.media.common.vo.DirRepoVo;
 import com.sheepfly.media.dataaccess.entity.DirRepo;
 import com.sheepfly.media.service.base.DirRepoService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/dirRepo")
 public class DirRepoController {
-    @Autowired
+    @Resource
     private DirRepoService service;
 
     /**

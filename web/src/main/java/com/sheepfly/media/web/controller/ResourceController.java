@@ -32,7 +32,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,17 +61,17 @@ import java.util.Map;
 @RequestMapping(value = "/resource", produces = "application/json;charset=utf-8")
 public class ResourceController {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ResourceController.class);
-    @Autowired
+    @javax.annotation.Resource
     private IResourceService service;
-    @Autowired
+    @javax.annotation.Resource
     private DirectoryService directoryService;
-    @Autowired
+    @javax.annotation.Resource
     private TagService tagService;
-    @Autowired
+    @javax.annotation.Resource
     private TagReferenceService tagReferenceService;
-    @Autowired
+    @javax.annotation.Resource
     private AlbumService albumService;
-    @Autowired
+    @javax.annotation.Resource
     private AlbumResourceService arService;
 
     /**

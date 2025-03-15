@@ -17,7 +17,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
@@ -41,9 +41,9 @@ import java.util.Date;
 @RequestMapping("/author")
 public class AuthorController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorController.class);
-    @Autowired
+    @Resource
     private IAuthorService service;
-    @Autowired
+    @Resource
     private ISiteService siteService;
 
     /**

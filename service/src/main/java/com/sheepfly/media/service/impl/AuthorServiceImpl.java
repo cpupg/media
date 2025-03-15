@@ -13,9 +13,9 @@ import com.sheepfly.media.dataaccess.mapper.AuthorMapper;
 import com.sheepfly.media.dataaccess.repository.AuthorRepository;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.IResourceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -28,9 +28,9 @@ import java.util.List;
  */
 @Service
 public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, AuthorRepository> implements IAuthorService {
-    @Autowired
+    @Resource
     private AuthorMapper mapper;
-    @Autowired
+    @Resource
     private IResourceService resourceService;
 
     @Override

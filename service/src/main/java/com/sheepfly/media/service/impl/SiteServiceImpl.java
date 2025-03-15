@@ -14,7 +14,6 @@ import com.sheepfly.media.dataaccess.repository.SiteRepository;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,7 +31,7 @@ import java.util.List;
 public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteRepository> implements ISiteService {
     @Resource(name = "siteRepository")
     private SiteRepository repository;
-    @Autowired
+    @Resource
     private IAuthorService authorService;
     @Resource(name = "siteMapper")
     private SiteMapper mapper;

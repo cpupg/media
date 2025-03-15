@@ -5,17 +5,17 @@ import com.sheepfly.media.dataaccess.entity.DirRepo;
 import com.sheepfly.media.dataaccess.mapper.DirRepoMapper;
 import com.sheepfly.media.dataaccess.repository.DirRepoRepository;
 import com.sheepfly.media.service.base.DirRepoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class DirRepoServiceImpl extends BaseJpaServiceImpl<DirRepo, String, DirRepoRepository>
         implements DirRepoService {
-    @Autowired
+    @Resource
     private DirRepoRepository repository;
-    @Autowired
+    @Resource
     private DirRepoMapper mapper;
 
     @Override

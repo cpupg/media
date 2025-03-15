@@ -1,15 +1,16 @@
 package com.sheepfly.media.web.controller;
 
 import com.sheepfly.media.config.bean.Version;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+
 @RestController
 @RequestMapping("/version")
 public class VersionController {
-    @Autowired
+    @Resource
     private Version version;
 
     @GetMapping("/main")

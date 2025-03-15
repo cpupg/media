@@ -14,9 +14,9 @@ import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.dataaccess.mapper.TagReferenceMapper;
 import com.sheepfly.media.dataaccess.repository.TagReferenceRepository;
 import com.sheepfly.media.service.base.TagReferenceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +26,11 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
 
     // 新方法写在TagService中，TagReferenceService不再新增方法。
 
-    @Autowired
+    @Resource
     private TagReferenceMapper mapper;
-    @Autowired
+    @Resource
     private Snowflake snowflake;
-    @Autowired
+    @Resource
     private TagReferenceRepository repository;
 
     @Override

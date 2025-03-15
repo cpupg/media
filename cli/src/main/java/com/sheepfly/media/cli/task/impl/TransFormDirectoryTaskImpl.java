@@ -7,7 +7,6 @@ import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -31,18 +30,18 @@ import java.util.Properties;
 @Component
 public class TransFormDirectoryTaskImpl implements Task {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TransFormDirectoryTaskImpl.class);
-    @Autowired
+    @javax.annotation.Resource
     private JdbcTemplate jdbcTemplate;
-    @Autowired
+    @javax.annotation.Resource
     private NamedParameterJdbcTemplate npJdbcTemplate;
-    @Autowired
+    @javax.annotation.Resource
     private ResourceRepository resourceRepository;
     /**
      * 目录缓存。
      *
      * <p>一个目录有两个缓存，原始路径一个，格式化后的路径一个。</p>
      */
-    @Autowired
+    @javax.annotation.Resource
     private DirectoryCache cache;
     private String dropTemp;
     private String createTemp;

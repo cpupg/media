@@ -25,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
@@ -54,17 +53,17 @@ public class LoadDirectoryTaskImpl implements Task {
      * 扫描到的资源数据，用来进行校验。
      */
     private final ResourceData resourceData = new ResourceData();
-    @Autowired
+    @javax.annotation.Resource
     private SiteRepository siteRepository;
-    @Autowired
+    @javax.annotation.Resource
     private AuthorRepository authorRepository;
-    @Autowired
+    @javax.annotation.Resource
     private ResourceRepository resourceRepository;
-    @Autowired
+    @javax.annotation.Resource
     private Snowflake snowflake;
-    @Autowired
+    @javax.annotation.Resource
     private Validator validator;
-    @Autowired
+    @javax.annotation.Resource
     private DirectoryCache cache;
     private LoadDirectoryConfig config;
     /**

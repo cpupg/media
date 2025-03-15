@@ -12,10 +12,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +24,9 @@ import java.util.Optional;
 @Service
 public class DirectoryServiceImpl implements DirectoryService, InitializingBean {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DirectoryServiceImpl.class);
-    @Autowired
+    @Resource
     private DirectoryRepository repository;
-    @Autowired
+    @Resource
     private Snowflake snowflake;
 
     @Override
