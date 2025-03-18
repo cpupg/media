@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/directory")
 public class DirectoryController {
     @Resource
-    private DirectoryService service;
+    private DirectoryService directoryService;
 
     /**
      * 查询子目录。
@@ -28,7 +28,7 @@ public class DirectoryController {
      */
     @PostMapping("/queryRootDirectory")
     public ResponseData<DirectoryVo> querySubDirectoryList(long parentDirCode) {
-        List<DirectoryVo> list = service.queryDirectoryList();
+        List<DirectoryVo> list = directoryService.queryDirectoryList();
         return ResponseData.success(list);
     }
 }

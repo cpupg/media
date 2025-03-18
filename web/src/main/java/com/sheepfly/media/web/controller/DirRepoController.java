@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/dirRepo")
 public class DirRepoController {
     @Resource
-    private DirRepoService service;
+    private DirRepoService dirRepoService;
 
     /**
      * 保存一个目录仓库。
@@ -37,9 +37,9 @@ public class DirRepoController {
     public ResponseData<DirRepo> saveDirRepo(@Validated @RequestBody DirRepoData data) {
         DirRepo dirRepo = new DirRepo();
         BeanUtils.copyProperties(data, dirRepo);
-        dirRepo.setDirCode(service.createDirCode());
+        dirRepo.setDirCode(dirRepoService.createDirCode());
         dirRepo.setCreateTime(new Date());
-        DirRepo saved = service.save(dirRepo);
+        DirRepo saved = dirRepoService.save(dirRepo);
         return ResponseData.success(saved);
     }
 
@@ -51,7 +51,7 @@ public class DirRepoController {
     @PostMapping("queryAllDirRepoList")
     public TableResponse<DirRepoVo> queryAllDirRepoList(@Validated @RequestBody DirRepoParam filter) {
         Page<Object> page = PageMethod.startPage(filter.getCurrent(), filter.getPageSize());
-        List<DirRepoVo> list = service.queryAllDirRepoList();
+        List<DirRepoVo> list = dirRepoService.queryAllDirRepoList();
         return TableResponse.success(list, page.getTotal());
     }
 }

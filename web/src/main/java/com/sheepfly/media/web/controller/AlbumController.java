@@ -25,7 +25,7 @@ import java.util.Date;
 @RequestMapping("/album")
 public class AlbumController {
     @Resource
-    private AlbumService service;
+    private AlbumService albumService;
 
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumVo> queryAlbumList(
@@ -34,7 +34,7 @@ public class AlbumController {
         if (params.isQueryWithResource() && StringUtils.isEmpty(params.getResourceId())) {
             throw new BusinessException(ErrorCode.ALBUM_SELECT_MODAL_LOST_RESOURCE);
         }
-        return service.queryAlbumList(tableRequest);
+        return albumService.queryAlbumList(tableRequest);
     }
 
     @PostMapping("/addAlbum")
@@ -48,7 +48,7 @@ public class AlbumController {
         }
         Album album = new Album();
         album.setName(albumName);
-        if (service.checkRepeat(album)) {
+        if (albumService.checkRepeat(album)) {
             return ResponseData.fail(ErrorCode.ALBUM_REPEATED_ALBUM);
         }
         album.setCreateTime(new Date());
@@ -56,7 +56,7 @@ public class AlbumController {
             // todo 检查文件是否存在
             album.setCoverId(coverId);
         }
-        Album save = service.save(album);
+        Album save = albumService.save(album);
         return ResponseData.success(save);
     }
 }

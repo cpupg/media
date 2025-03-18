@@ -7,6 +7,7 @@ import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.service.base.BaseJpaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +23,8 @@ import java.util.Optional;
 
 public class BaseJpaServiceImpl<T extends EntityInterface, ID, D extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>>
         implements BaseJpaService<T, ID, D> {
-    @Resource
+    @SuppressWarnings("java:S6813") // 使用@Resource无法注入，必须使用@autowired。
+    @Autowired
     private D d;
     @Resource
     private Snowflake snowflake;

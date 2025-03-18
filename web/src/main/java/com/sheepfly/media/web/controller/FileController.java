@@ -33,7 +33,7 @@ import java.util.Map;
 public class FileController {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(FileController.class);
     @Resource
-    private FileService service;
+    private FileService fileService;
 
     @PostMapping("/upload")
     public ResponseData<Map> upload(HttpServletRequest request, @RequestParam("file") MultipartFile file)
@@ -44,7 +44,7 @@ public class FileController {
         if (StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(businessType)) {
             throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE_TYPE);
         }
-        FileInfo fileInfo = service.uploadFile(file, businessCode, businessType);
+        FileInfo fileInfo = fileService.uploadFile(file, businessCode, businessType);
         LOGGER.info("上传完成");
         return ResponseData.success(fileInfo);
     }
@@ -56,12 +56,12 @@ public class FileController {
         if (StringUtils.isEmpty(businessCode)) {
             throw new BusinessException(ErrorCode.FILE_EMPTY_BUSINESS_CODE);
         }
-        return service.queryFileList(businessCode);
+        return fileService.queryFileList(businessCode);
     }
 
     @GetMapping("/getFile")
     public void getFile(@RequestParam("id") String id, HttpServletResponse response) throws IOException {
-        File file = service.getFile(id);
+        File file = fileService.getFile(id);
         try (InputStream is = Files.newInputStream(file.toPath());
              OutputStream os = response.getOutputStream()) {
             byte[] bytes = IOUtils.readFully(is, is.available());
@@ -71,7 +71,7 @@ public class FileController {
 
     @PostMapping("/deleteFile")
     public ResponseData<FileInfo> deleteFile(@RequestParam("id") String id) throws BusinessException {
-        FileUpload fileUpload = service.deleteFile(id);
+        FileUpload fileUpload = fileService.deleteFile(id);
         FileInfo fileInfo = new FileInfo();
         BeanUtils.copyProperties(fileUpload, fileInfo);
         return ResponseData.success(fileInfo);
@@ -79,6 +79,6 @@ public class FileController {
 
     @PostMapping("/getBusinessType")
     public ResponseData<String> getBusinessType(@RequestParam("key") String key) {
-        return ResponseData.success(service.getBusinessType(key));
+        return ResponseData.success(fileService.getBusinessType(key));
     }
 }

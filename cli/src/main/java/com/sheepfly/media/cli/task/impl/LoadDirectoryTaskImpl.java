@@ -64,7 +64,7 @@ public class LoadDirectoryTaskImpl implements Task {
     @javax.annotation.Resource
     private Validator validator;
     @javax.annotation.Resource
-    private DirectoryCache cache;
+    private DirectoryCache directoryCache;
     private LoadDirectoryConfig config;
     /**
      * 录入成功的资源数量。
@@ -319,7 +319,7 @@ public class LoadDirectoryTaskImpl implements Task {
             }
             Directory d = null;
             try {
-                d = cache.getOrCreateDirectory(parent);
+                d = directoryCache.getOrCreateDirectory(parent);
             } catch (CommonException e) {
                 LOGGER.error("获取目录失败:{}", d.getPath(), e);
                 failCount++;

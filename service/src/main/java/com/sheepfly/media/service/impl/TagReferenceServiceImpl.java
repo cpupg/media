@@ -27,17 +27,17 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
     // 新方法写在TagService中，TagReferenceService不再新增方法。
 
     @Resource
-    private TagReferenceMapper mapper;
+    private TagReferenceMapper tagReferenceMapper;
     @Resource
     private Snowflake snowflake;
     @Resource
-    private TagReferenceRepository repository;
+    private TagReferenceRepository tagReferenceRepository;
 
     @Override
     public TableResponse<TagReferenceVo> queryTagReferenceList(TableRequest<Object, TagReferenceParam, Object> form) {
         TagReferenceParam param = form.getParams();
         Page<Object> page = PageMethod.startPage(param.getCurrent(), param.getPageSize());
-        List<TagReferenceVo> list = mapper.queryTagReferenceList(form);
+        List<TagReferenceVo> list = tagReferenceMapper.queryTagReferenceList(form);
         return TableResponse.success(list, page.getTotal());
     }
 
@@ -50,29 +50,29 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
         tagReference.setTagId(tagId);
         tagReference.setReferenceType(TagReferenceService.REF_TYPE_RESOURCE);
         tagReference.setReferTime(new Date());
-        return repository.saveAndFlush(tagReference);
+        return tagReferenceRepository.saveAndFlush(tagReference);
     }
 
     @Override
     public int getRate(String resourceId) {
-        TagReferenceVo trf = mapper.queryRate(resourceId);
+        TagReferenceVo trf = tagReferenceMapper.queryRate(resourceId);
         // note trf表是逻辑删除，trf.getTagVo() == null?
         return trf == null ? -1 : Integer.parseInt(trf.getTagVo().getName());
     }
 
     @Override
     public boolean getFavorite(String resourceId) {
-        TagReferenceVo trf = mapper.queryFavorite(resourceId);
+        TagReferenceVo trf = tagReferenceMapper.queryFavorite(resourceId);
         return trf != null;
     }
 
     @Override
     public long deleteByResourceId(String id) {
-        return repository.deleteByResourceId(id);
+        return tagReferenceRepository.deleteByResourceId(id);
     }
 
     @Override
     public long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
-        return mapper.batchDeleteByResource(condition);
+        return tagReferenceMapper.batchDeleteByResource(condition);
     }
 }

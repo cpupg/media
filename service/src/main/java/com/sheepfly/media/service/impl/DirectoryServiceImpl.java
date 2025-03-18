@@ -25,7 +25,7 @@ import java.util.Optional;
 public class DirectoryServiceImpl implements DirectoryService, InitializingBean {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DirectoryServiceImpl.class);
     @Resource
-    private DirectoryRepository repository;
+    private DirectoryRepository directoryRepository;
     @Resource
     private Snowflake snowflake;
 
@@ -37,7 +37,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
 
     @Override
     public List<DirectoryVo> queryDirectoryList() {
-        List<Directory> directories = repository.queryByLevelAndDeleteStatus(0, Constant.NOT_DELETED);
+        List<Directory> directories = directoryRepository.queryByLevelAndDeleteStatus(0, Constant.NOT_DELETED);
         List<DirectoryVo> voList = new ArrayList<>();
         // 第一层目录。
         for (Directory directory : directories) {
@@ -45,7 +45,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
             BeanUtils.copyProperties(directory, directoryVo);
             voList.add(directoryVo);
             // 第二层目录
-            List<Directory> childrenDirectoryList = repository.queryByParentCodeAndDeleteStatus(directory.getDirCode(),
+            List<Directory> childrenDirectoryList = directoryRepository.queryByParentCodeAndDeleteStatus(directory.getDirCode(),
                     Constant.NOT_DELETED);
             List<DirectoryVo> childrenVoList = new ArrayList<>();
             for (Directory childrenDir : childrenDirectoryList) {
@@ -99,7 +99,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
                     subDir.setLevel(j);
                     subDir.setDeleteStatus(Constant.NOT_DELETED);
                     subDir.setCreateTime(new Date());
-                    resultDir = repository.saveAndFlush(subDir);
+                    resultDir = directoryRepository.saveAndFlush(subDir);
                     LOGGER.info("子目录创建成功：{}", resultDir);
                     parentCode = subDir.getDirCode();
                 }
@@ -117,7 +117,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
         directory.setDeleteStatus(Constant.NOT_DELETED);
         directory.setPath(path);
         // 全路径是唯一的
-        return repository.findOne(Example.of(directory)).orElse(null);
+        return directoryRepository.findOne(Example.of(directory)).orElse(null);
     }
 
     /**
@@ -133,7 +133,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
         Directory directory = new Directory();
         directory.setPath(driverPath);
         Example<Directory> example = Example.of(directory);
-        Optional<Directory> opt = repository.findOne(example);
+        Optional<Directory> opt = directoryRepository.findOne(example);
         if (opt.isPresent()) {
             return opt.orElse(null);
         } else {
@@ -146,7 +146,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
             directory.setLevel(0);
             directory.setDeleteStatus(Constant.NOT_DELETED);
             directory.setCreateTime(new Date());
-            return repository.saveAndFlush(directory);
+            return directoryRepository.saveAndFlush(directory);
         }
     }
 
@@ -161,7 +161,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
      */
     private Long createDirCode() {
         // 目录代码是唯一的，查询时不能加条件
-        Directory directory = repository.findFirstByOrderByDirCodeDesc();
+        Directory directory = directoryRepository.findFirstByOrderByDirCodeDesc();
         LOGGER.info("当前最大目录代码:" + directory.getDirCode());
         return directory.getDirCode() + 1;
     }
@@ -174,7 +174,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
      * @return 目录代码。
      */
     private Long createDriverCode() {
-        Directory directory = repository.findFirstByOrderByDirCode();
+        Directory directory = directoryRepository.findFirstByOrderByDirCode();
         LOGGER.info("当前最大盘符代码：{}", Math.abs(directory.getDirCode()));
         return directory.getDirCode() - 1;
     }
@@ -185,7 +185,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
         Directory root = new Directory();
         root.setPath(Constant.SEPERATOR);
         Example<Directory> example = Example.of(root);
-        Optional<Directory> opt = repository.findOne(example);
+        Optional<Directory> opt = directoryRepository.findOne(example);
         if (!opt.isPresent()) {
             LOGGER.warn("没有根目录");
             root.setId(snowflake.nextIdStr());
@@ -197,7 +197,7 @@ public class DirectoryServiceImpl implements DirectoryService, InitializingBean 
             root.setLevel(0);
             root.setDeleteStatus(Constant.NOT_DELETED);
             root.setCreateTime(new Date());
-            repository.saveAndFlush(root);
+            directoryRepository.saveAndFlush(root);
         }
         LOGGER.info("初始化成功");
     }

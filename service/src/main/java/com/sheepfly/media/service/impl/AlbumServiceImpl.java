@@ -33,28 +33,28 @@ import java.util.List;
 public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRepository> implements AlbumService {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AlbumServiceImpl.class);
     @Resource
-    private AlbumMapper mapper;
+    private AlbumMapper albumMapper;
     @Resource
-    private AlbumResourceMapper arMapper;
+    private AlbumResourceMapper albumResourceMapper;
     @Resource
-    private IResourceService resourceService;
+    private IResourceService iResourceService;
 
     @Override
     public TableResponse<AlbumVo> queryAlbumList(TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
         AlbumParam params = tableRequest.getParams();
         Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
-        List<AlbumVo> list = mapper.selectAlbumList(tableRequest);
+        List<AlbumVo> list = albumMapper.selectAlbumList(tableRequest);
         return TableResponse.success(list, page.getTotal());
     }
 
     @Override
     public long batchDeleteByResource(TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition) {
-        return arMapper.batchDeleteAlbum(condition);
+        return albumResourceMapper.batchDeleteAlbum(condition);
     }
 
     @Override
     public long deleteResourceFromAlbum(String resourceId) {
-        return arMapper.updateResourceFromAlbum(resourceId);
+        return albumResourceMapper.updateResourceFromAlbum(resourceId);
     }
 
     @Override
@@ -62,20 +62,20 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
             TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
         AlbumParam params = tableRequest.getParams();
         Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
-        List<AlbumResourceVo> list = arMapper.selectAlbumResourceList(tableRequest);
+        List<AlbumResourceVo> list = albumResourceMapper.selectAlbumResourceList(tableRequest);
         return TableResponse.success(list, page.getTotal());
     }
 
     @Override
     public void batchUpdateByResource(ResourceData resourceData) {
         if (ObjectUtils.isNotEmpty(resourceData.getDeletedAlbums())) {
-            long l = arMapper.batchUpdateByResource(resourceData);
+            long l = albumResourceMapper.batchUpdateByResource(resourceData);
             LOGGER.info("删除{}个专辑，涉及数据{}条", resourceData.getDeletedAlbums().size(), l);
         }
         if (ObjectUtils.isNotEmpty(resourceData.getAddedAlbums())) {
             LOGGER.info("处理新增专辑");
             List<String> albumList = resourceData.getAddedAlbums();
-            TableResponse<ResourceVo> response = resourceService.queryResourceVoList(
+            TableResponse<ResourceVo> response = iResourceService.queryResourceVoList(
                     resourceData.getCondition());
             LOGGER.info("给{}个资源设置{}个新专辑", response.getTotal(), albumList.size());
             List<ResourceVo> resourceList = response.getData();
@@ -83,7 +83,7 @@ public class AlbumServiceImpl extends BaseJpaServiceImpl<Album, String, AlbumRep
                 LOGGER.info("当前专辑:{}", id);
                 for (ResourceVo resourceVo : resourceList) {
                     try {
-                        resourceService.setAlbum(resourceVo.getId(), id);
+                        iResourceService.setAlbum(resourceVo.getId(), id);
                     } catch (BusinessException e) {
                         if (e.getError() == ErrorCode.RES_RA_NOT_REPEATED_AR) {
                             LOGGER.warn("{},资源{}已设置专辑{}", e.getMessage(), resourceVo.getId(), id);

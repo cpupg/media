@@ -42,7 +42,7 @@ import java.util.Date;
 public class AuthorController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorController.class);
     @Resource
-    private IAuthorService service;
+    private IAuthorService authorService;
     @Resource
     private ISiteService siteService;
 
@@ -66,7 +66,7 @@ public class AuthorController {
         Author author = new Author();
         BeanUtils.copyProperties(author, authorData);
         author.setCreateTime(new Date());
-        Author savedAuthor = service.save(author);
+        Author savedAuthor = authorService.save(author);
         return ResponseData.success(savedAuthor);
     }
 
@@ -76,8 +76,8 @@ public class AuthorController {
         if (StringUtils.isEmpty(id)) {
             throw new BusinessException(ErrorCode.AUTHOR_ID_CANT_BE_NULL);
         }
-        if (service.isAuthorCanBeDelete(id)) {
-            service.safeLogicDeleteById(id, Author.class, ErrorCode.DELETE_NOT_EXIST_DATA);
+        if (authorService.isAuthorCanBeDelete(id)) {
+            authorService.safeLogicDeleteById(id, Author.class, ErrorCode.DELETE_NOT_EXIST_DATA);
             LOGGER.info("删除完成");
             return ResponseData.success();
         } else {
@@ -96,7 +96,7 @@ public class AuthorController {
             username = username.replace(Constant.SQL_LIKE, Constant.BLANK_STRING);
             params.setUsername(Constant.SQL_LIKE + username + Constant.SQL_LIKE);
         }
-        return service.queryForAuthorList(vo);
+        return authorService.queryForAuthorList(vo);
     }
 }
 

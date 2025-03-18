@@ -29,7 +29,7 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, AuthorRepository> implements IAuthorService {
     @Resource
-    private AuthorMapper mapper;
+    private AuthorMapper authorMapper;
     @Resource
     private IResourceService resourceService;
 
@@ -38,7 +38,7 @@ public class AuthorServiceImpl extends BaseJpaServiceImpl<Author, String, Author
             TableRequest<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
         AuthorParam params = vo.getParams();
         Page<Object> page = PageHelper.startPage(params.getCurrent(), params.getPageSize());
-        List<AuthorVo> authorList = mapper.queryAuthorVoList(vo);
+        List<AuthorVo> authorList = authorMapper.queryAuthorVoList(vo);
         return TableResponse.success(authorList, page.getTotal());
     }
 

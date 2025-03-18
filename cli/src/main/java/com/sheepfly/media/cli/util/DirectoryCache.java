@@ -24,9 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DirectoryCache {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DirectoryCache.class);
     @Resource
-    private DirectoryRepository repository;
+    private DirectoryRepository directoryRepository;
     @Resource
-    private DirectoryService service;
+    private DirectoryService directoryService;
     /**
      * 目录缓存。
      */
@@ -55,7 +55,7 @@ public class DirectoryCache {
             }
             return directoryMap.get(path);
         }
-        Optional<Directory> one = repository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), path));
+        Optional<Directory> one = directoryRepository.findOne((r, q, b) -> b.equal(r.get(Directory_.PATH), path));
         if (one.isPresent()) {
             put(path, one.orElse(null));
             return one.orElse(null);
@@ -94,7 +94,7 @@ public class DirectoryCache {
             put(rawDir, directory);
             return directory;
         }
-        directory = service.createDirectory(dir);
+        directory = directoryService.createDirectory(dir);
         if (directory == null) {
             throw new CommonException("创建目录失败:" + dir);
         }

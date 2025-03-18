@@ -38,7 +38,7 @@ public class LoadSingleFileTaskImpl implements Task {
     @javax.annotation.Resource
     private Snowflake snowflake;
     @javax.annotation.Resource
-    private DirectoryCache cache;
+    private DirectoryCache directoryCache;
 
     public LoadSingleFileTaskImpl() {
         InputStream inputStream = ResourceUtil.getStream("config/commandline.properties");
@@ -126,7 +126,7 @@ public class LoadSingleFileTaskImpl implements Task {
         }
         Directory d;
         try {
-            d = cache.getOrCreateDirectory(parent);
+            d = directoryCache.getOrCreateDirectory(parent);
         } catch (CommonException e) {
             throw new CommonException("获取目录失败", e);
         }

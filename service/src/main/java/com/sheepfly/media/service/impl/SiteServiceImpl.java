@@ -30,17 +30,17 @@ import java.util.List;
 @Service
 public class SiteServiceImpl extends BaseJpaServiceImpl<Site, String, SiteRepository> implements ISiteService {
     @Resource(name = "siteRepository")
-    private SiteRepository repository;
+    private SiteRepository siteRepository;
     @Resource
     private IAuthorService authorService;
     @Resource(name = "siteMapper")
-    private SiteMapper mapper;
+    private SiteMapper siteMapper;
 
     @Override
     public TableResponse<Site> querySiteList(TableRequest<Object, SiteParam, Object> vo) {
         SiteParam form = vo.getParams();
         Page<Object> page = PageHelper.startPage(form.getCurrent(), form.getPageSize());
-        List<Site> siteList = mapper.querySiteList(form);
+        List<Site> siteList = siteMapper.querySiteList(form);
         return TableResponse.success(siteList, page.getTotal());
     }
 

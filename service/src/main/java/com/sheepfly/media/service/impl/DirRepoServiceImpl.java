@@ -14,19 +14,19 @@ import java.util.List;
 public class DirRepoServiceImpl extends BaseJpaServiceImpl<DirRepo, String, DirRepoRepository>
         implements DirRepoService {
     @Resource
-    private DirRepoRepository repository;
+    private DirRepoRepository dirRepoRepository;
     @Resource
-    private DirRepoMapper mapper;
+    private DirRepoMapper dirRepoMapper;
 
     @Override
     public List<DirRepoVo> queryAllDirRepoList() {
         // 目前查全部就可以，暂时不需要设置过滤条件。
-        return mapper.queryAll();
+        return dirRepoMapper.queryAll();
     }
 
     @Override
     public long createDirCode() {
-        DirRepo dirRepo = repository.queryFirstByOrderByDirCodeDesc();
+        DirRepo dirRepo = dirRepoRepository.queryFirstByOrderByDirCodeDesc();
         if (dirRepo == null) {
             return 1;
         } else {

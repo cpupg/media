@@ -26,7 +26,6 @@ import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
-import com.sheepfly.media.service.base.TagService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -62,17 +61,15 @@ import java.util.Map;
 public class ResourceController {
     private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ResourceController.class);
     @javax.annotation.Resource
-    private IResourceService service;
+    private IResourceService resourceService;
     @javax.annotation.Resource
     private DirectoryService directoryService;
-    @javax.annotation.Resource
-    private TagService tagService;
     @javax.annotation.Resource
     private TagReferenceService tagReferenceService;
     @javax.annotation.Resource
     private AlbumService albumService;
     @javax.annotation.Resource
-    private AlbumResourceService arService;
+    private AlbumResourceService albumResourceService;
 
     /**
      * 查询资源表格，用来在资源页展示。
@@ -90,7 +87,7 @@ public class ResourceController {
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
-        return service.queryResourceVoList(form);
+        return resourceService.queryResourceVoList(form);
     }
 
     /**
@@ -109,7 +106,7 @@ public class ResourceController {
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
-        return service.queryListByAlbum(form);
+        return resourceService.queryListByAlbum(form);
     }
 
     /**
@@ -155,7 +152,7 @@ public class ResourceController {
         } else {
             // 检查重复文件
             Directory d = directory;
-            boolean repeat = service.checkRepeat((r, q, b) -> {
+            boolean repeat = resourceService.checkRepeat((r, q, b) -> {
                 Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
                 Predicate p2 = b.equal(r.get(Resource_.DELETE_STATUS), Constant.NOT_DELETED);
                 Predicate p3 = b.equal(r.get(Resource_.FILENAME), resource.getFilename());
@@ -175,7 +172,7 @@ public class ResourceController {
         if (StringUtils.isNotBlank(resource.getId())) {
             resource.setUpdateTime(new Date());
         }
-        Resource savedResource = service.save(resource);
+        Resource savedResource = resourceService.save(resource);
         return ResponseData.success(savedResource);
     }
 
@@ -190,7 +187,7 @@ public class ResourceController {
      */
     @PostMapping("/delete")
     public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
-        Resource res = service.deleteResource(id);
+        Resource res = resourceService.deleteResource(id);
         return ResponseData.success(res);
     }
 
@@ -207,7 +204,7 @@ public class ResourceController {
         if (StringUtils.isBlank(resourceId)) {
             return ResponseData.fail(ErrorCode.REQUEST_VALUE_IS_LOST);
         }
-        List<TagReferenceVo> list = service.queryTagReferenceByResourceId(resourceId);
+        List<TagReferenceVo> list = resourceService.queryTagReferenceByResourceId(resourceId);
         return ResponseData.success(list);
     }
 
@@ -227,7 +224,7 @@ public class ResourceController {
     public ResponseData<AlbumResource> setAlbum(@RequestParam String resourceId, @RequestParam String albumId)
             throws BusinessException {
         LOGGER.info("为资源{}设置专辑{}", resourceId, albumId);
-        AlbumResource albumResource = service.setAlbum(resourceId, albumId);
+        AlbumResource albumResource = resourceService.setAlbum(resourceId, albumId);
         return ResponseData.success(albumResource);
     }
 
@@ -243,7 +240,7 @@ public class ResourceController {
     @PostMapping("/unsetAlbum")
     public ResponseData<AlbumResource> unsetAlbum(@RequestParam String albumResourceId) {
         LOGGER.info("移除专辑和资源关联关系{}", albumResourceId);
-        AlbumResource albumResource = arService.logicDeleteById(albumResourceId, AlbumResource.class);
+        AlbumResource albumResource = albumResourceService.logicDeleteById(albumResourceId, AlbumResource.class);
         return ResponseData.success(albumResource);
     }
 
@@ -258,7 +255,7 @@ public class ResourceController {
      */
     @PostMapping("/batchDelete")
     public ResponseData<Object> batchDelete(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
-        List<Map<String, Object>> list = service.batchDelete(data);
+        List<Map<String, Object>> list = resourceService.batchDelete(data);
         return ResponseData.success(list);
     }
 
@@ -297,7 +294,7 @@ public class ResourceController {
         if (StringUtils.isNotEmpty(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
-        List<Map<String, Object>> list = service.batchUpdate(resourceData);
+        List<Map<String, Object>> list = resourceService.batchUpdate(resourceData);
         return ResponseData.success(list);
     }
 }
