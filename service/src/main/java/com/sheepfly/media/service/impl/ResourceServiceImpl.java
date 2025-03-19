@@ -192,6 +192,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         albumService.batchUpdateByResource(resourceData);
         // 更新标签
         LOGGER.info("专辑处理完成，开始处理标签");
+        resourceData.getCondition().setSorter(new ResourceSort());
         tagService.batchUpdateByResource(resourceData);
         LOGGER.info("标签处理完成");
         return Collections.emptyList();

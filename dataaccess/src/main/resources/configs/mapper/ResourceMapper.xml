@@ -119,8 +119,8 @@
       <property name="t_author" value="author"/>
     </include>
     <choose>
-      <when test="sorter == null">
-        order by update_time desc, create_time desc
+      <when test="sorter.orderBy == null">
+        order by create_time desc, update_time desc
       </when>
       <otherwise>
         ${sorter.orderBy}

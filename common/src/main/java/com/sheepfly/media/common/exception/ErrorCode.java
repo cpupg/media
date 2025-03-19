@@ -55,7 +55,7 @@ public enum ErrorCode {
     AUTHOR_SITE_CANT_BE_NULL("E0201001", "注册网站不能为空"),
     AUTHOR_ID_AND_NAME_CANT_NULL("E0201002", "用户名和用户id不能同时为空"),
     AUTHOR_ID_CANT_BE_NULL("E0201002", "作者标识不能为空"),
-    AUTHOR_ASSOCIATE_RESOURCE("E0201003", "作者下由关联的资源"),
+    AUTHOR_ASSOCIATE_RESOURCE("E0201003", "作者下有关联的资源"),
     // endregion
 
     // region 模块[资源][RES]开始[202]
