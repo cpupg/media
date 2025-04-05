@@ -119,7 +119,7 @@
       <property name="t_author" value="author"/>
     </include>
     <choose>
-      <when test="sorter.orderBy == null">
+      <when test="sorter == null or sorter.orderBy == null">
         order by create_time desc, update_time desc
       </when>
       <otherwise>
