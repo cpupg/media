@@ -6,24 +6,24 @@ package com.sheepfly.media.common.constant;
  * @author wrote-code
  * @since 0.0.1-SNAPSHOT
  */
-public interface Constant {
+public class Constant {
     /**
      * sql通配符。
      */
-    String SQL_LIKE = "%";
+    public static final String SQL_LIKE = "%";
     /**
      * 空字符串。
      */
-    String BLANK_STRING = "";
-    String STANDARD_TIME = "yyyy-MM-dd HH:mm:ss.sss";
+    public static final String BLANK_STRING = "";
+    public static final String STANDARD_TIME = "yyyy-MM-dd HH:mm:ss.sss";
     /**
      * 实体已删除。
      */
-    int DELETED = 1;
+    public static final int DELETED = 1;
     /**
      * 实体未删除。
      */
     int NOT_DELETED = 0;
 
-    String SEPERATOR = "/";
+    public static final String SEPERATOR = "/";
 }
