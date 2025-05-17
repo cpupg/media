@@ -10,6 +10,7 @@ import com.sheepfly.media.dataaccess.entity.Tag;
 import com.sheepfly.media.dataaccess.entity.TagReference;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.service.base.TagService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +43,7 @@ public class TagController {
      *
      * @return 查询结果。
      */
+    @Trim
     @PostMapping("/queryList")
     public TableResponse<TagVo> queryList(@RequestBody TagData tagData) {
         if (StringUtils.isBlank(tagData.getName()) && !(tagData.isRate() || tagData.isFavourite())) {
@@ -75,6 +77,7 @@ public class TagController {
      *
      * @return 标签引用。
      */
+    @Trim
     @PostMapping("/addTagToResource")
     public ResponseData<TagReferenceVo> addTagToResource(@Validated @RequestBody TagData tagData) {
         TagReference tagReference = service.addTag(tagData);
@@ -91,6 +94,7 @@ public class TagController {
      *
      * @return 数据。
      */
+    @Trim
     @PostMapping("/batchSetTag")
     public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody TagData tagData) {
         String[] tags = tagData.getNames().split(",");

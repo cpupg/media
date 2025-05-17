@@ -9,6 +9,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.vo.DirRepoVo;
 import com.sheepfly.media.dataaccess.entity.DirRepo;
 import com.sheepfly.media.service.base.DirRepoService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ public class DirRepoController {
      *
      * @return 保存成功的数据。
      */
+    @Trim
     @PostMapping("/saveDirRepo")
     public ResponseData<DirRepo> saveDirRepo(@Validated @RequestBody DirRepoData data) {
         DirRepo dirRepo = new DirRepo();
@@ -48,6 +50,7 @@ public class DirRepoController {
      *
      * @return 符合条件的清单。
      */
+    @Trim
     @PostMapping("queryAllDirRepoList")
     public TableResponse<DirRepoVo> queryAllDirRepoList(@Validated @RequestBody DirRepoParam filter) {
         Page<Object> page = PageMethod.startPage(filter.getCurrent(), filter.getPageSize());

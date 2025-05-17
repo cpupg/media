@@ -26,6 +26,7 @@ import com.sheepfly.media.service.base.AlbumService;
 import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -78,6 +79,7 @@ public class ResourceController {
      *
      * @return 资源表格。
      */
+    @Trim
     @PostMapping("/queryResourceList")
     public TableResponse<ResourceVo> queryResourceList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
@@ -97,6 +99,7 @@ public class ResourceController {
      *
      * @return 表格。
      */
+    @Trim
     @PostMapping("/queryList")
     public TableResponse<ResourceVo> queryList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
@@ -120,6 +123,7 @@ public class ResourceController {
      * @throws IllegalAccessException e
      * @throws BusinessException e
      */
+    @Trim
     @PostMapping("/add")
     public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
@@ -185,6 +189,7 @@ public class ResourceController {
      *
      * @throws BusinessException e
      */
+    @Trim
     @PostMapping("/delete")
     public ResponseData<Resource> delete(@RequestBody @NotNull String id) throws BusinessException {
         Resource res = resourceService.deleteResource(id);
@@ -215,6 +220,7 @@ public class ResourceController {
      *
      * @return
      */
+    @Trim
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumResourceVo> queryAlbumList(@RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) {
         return albumService.queryAlbumResourceList(tableRequest);
@@ -253,6 +259,7 @@ public class ResourceController {
      *
      * @return 删除结果。
      */
+    @Trim
     @PostMapping("/batchDelete")
     public ResponseData<Object> batchDelete(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> data) {
         List<Map<String, Object>> list = resourceService.batchDelete(data);
@@ -266,6 +273,7 @@ public class ResourceController {
      *
      * @return 更新结果。
      */
+    @Trim
     @PostMapping("/batchUpdate")
     public ResponseData batchUpdate(@RequestBody ResourceData resourceData) {
         TableRequest<ResourceFilter, ResourceParam, ResourceSort> condition = resourceData.getCondition();

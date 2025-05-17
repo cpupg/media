@@ -2,6 +2,7 @@ package com.sheepfly.media.web.controller;
 
 import com.chen.mybatisreload.core.MyBatisReloadService;
 import com.chen.mybatisreload.core.bean.ReloadContext;
+import com.sheepfly.media.web.annotations.Trim;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class MyBatisController {
     private ApplicationContext applicationContext;
 
 
+    @Trim
     @PostMapping(value = "/reloadMapper", consumes = "application/json")
     public ReloadContext reloadMapper(@RequestBody ReloadContext reloadCopntext) {
         String[] activeProfiles = applicationContext.getEnvironment().getActiveProfiles();

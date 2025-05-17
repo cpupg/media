@@ -11,6 +11,7 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.dataaccess.entity.Site;
 import com.sheepfly.media.service.base.ISiteService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -53,6 +54,7 @@ public class SiteController {
      *
      * @return 和输入参数中的条件匹配的站点。
      */
+    @Trim
     @PostMapping("/querySiteList")
     public TableResponse<Site> querySiteList(@RequestBody TableRequest<Object, SiteParam, Object> vo) {
         SiteParam form = vo.getParams();
@@ -73,6 +75,7 @@ public class SiteController {
      *
      * @return 录入结果。
      */
+    @Trim
     @PostMapping("/addSite")
     public ResponseData<Site> addSite(@RequestBody @Validated SiteData siteData)
             throws InvocationTargetException, IllegalAccessException {

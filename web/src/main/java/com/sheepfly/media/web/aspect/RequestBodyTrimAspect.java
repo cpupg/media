@@ -1,4 +1,4 @@
-package com.sheepfly.media.web.config;
+package com.sheepfly.media.web.aspect;
 
 import com.sheepfly.media.common.util.ObjectUtil;
 import org.aspectj.lang.JoinPoint;
@@ -12,6 +12,11 @@ import java.lang.annotation.Annotation;
 
 /**
  * 裁剪请求参数中的字符串类型属性。
+ *
+ * <p>解析参数在切面之前运行，因此请求方法上的@Validated会先于@Trim运行。此外，这个切面只能
+ * 裁剪@RequestBody注解的参数。</p>
+ *
+ * @author bytechaocai
  */
 @Aspect
 @Component

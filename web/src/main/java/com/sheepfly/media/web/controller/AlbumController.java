@@ -11,6 +11,7 @@ import com.sheepfly.media.common.http.TableResponse;
 import com.sheepfly.media.common.vo.AlbumVo;
 import com.sheepfly.media.dataaccess.entity.Album;
 import com.sheepfly.media.service.base.AlbumService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class AlbumController {
     @Resource
     private AlbumService albumService;
 
+    @Trim
     @PostMapping("/queryAlbumList")
     public TableResponse<AlbumVo> queryAlbumList(
             @RequestBody TableRequest<AlbumFilter, AlbumParam, AlbumSort> tableRequest) throws BusinessException {

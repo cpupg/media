@@ -21,6 +21,7 @@ import com.sheepfly.media.dataaccess.entity.ResourceCollect_;
 import com.sheepfly.media.service.base.CollectService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.ResourceCollectService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -57,6 +58,7 @@ public class CollectController {
      *
      * @return 收藏夹。
      */
+    @Trim
     @PostMapping("/create")
     public ResponseData<Collect> create(@RequestBody @Validated(InsertConstraint.class) CollectVo vo) {
         LOGGER.info("创建收藏夹{}", vo.getCollectName());
@@ -80,6 +82,7 @@ public class CollectController {
      *
      * @return 更新结果。
      */
+    @Trim
     @PostMapping("/update")
     public ResponseData<Collect> update(@RequestBody @Validated(UpdateConstraint.class) CollectVo vo) {
         LOGGER.info("更新收藏夹{}", vo.getCollectId());
@@ -97,6 +100,7 @@ public class CollectController {
      *
      * @return 删除结果。
      */
+    @Trim
     @PostMapping("/delete")
     public ResponseData<CollectVo> delete(@RequestBody @Validated(UpdateConstraint.class) CollectVo vo) {
         LOGGER.info("删除收藏夹{}", vo.getCollectId());
@@ -111,6 +115,7 @@ public class CollectController {
      *
      * @return 添加结果。
      */
+    @Trim
     @PostMapping("/addCollect")
     public ResponseData<ResourceCollect> addCollect(@RequestBody @Validated(InsertConstraint.class) ResourceCollectVo vo) {
         LOGGER.info("将资源{}添加到收藏夹{}", vo.getCollectId(), vo.getResourceId());
@@ -149,6 +154,7 @@ public class CollectController {
      *
      * @return 被删除的收藏夹-资源关联对象。。
      */
+    @Trim
     @PostMapping("/cancelCollect")
     public ResponseData<ResourceCollectVo> cancelCollect(@RequestBody @Validated(DeleteConstraint.class) ResourceCollectVo vo) {
         LOGGER.info("将资源{}从收藏夹{}移除", vo.getResourceId(), vo.getCollectId());
@@ -164,6 +170,7 @@ public class CollectController {
      *
      * @return 查询结果。
      */
+    @Trim
     @PostMapping("/queryCollect")
     public TableResponse<CollectVo> queryCollect(@RequestBody TableRequest<BaseFilterVo, CollectVo, BaseSortVo> tableRequest) {
         return collectService.queryAll(tableRequest);
@@ -176,6 +183,7 @@ public class CollectController {
      *
      * @return 查询结果。
      */
+    @Trim
     @PostMapping("/queryResourceCollect")
     public TableResponse<ResourceCollectVo> queryResourceCollect(@RequestBody TableRequest<BaseFilterVo, ResourceCollectVo, BaseSortVo> tableRequest) {
         LOGGER.info("查询收藏夹下的资源");

@@ -13,6 +13,7 @@ import com.sheepfly.media.common.vo.AuthorVo;
 import com.sheepfly.media.dataaccess.entity.Author;
 import com.sheepfly.media.service.base.IAuthorService;
 import com.sheepfly.media.service.base.ISiteService;
+import com.sheepfly.media.web.annotations.Trim;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class AuthorController {
      *
      * @return 新作者。
      */
+    @Trim
     @PostMapping("/add")
     public ResponseData<Author> add(@RequestBody @Validated AuthorData authorData)
             throws InvocationTargetException, IllegalAccessException {
@@ -86,6 +88,7 @@ public class AuthorController {
         }
     }
 
+    @Trim
     @PostMapping("/queryList")
     public TableResponse<AuthorVo> queryList(
             @RequestBody TableRequest<AuthorParam, AuthorParam, AuthorParam> vo) throws BusinessException {
