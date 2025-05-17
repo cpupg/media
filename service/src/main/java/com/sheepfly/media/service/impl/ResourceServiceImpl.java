@@ -9,6 +9,7 @@ import com.sheepfly.media.common.exception.ErrorCode;
 import com.sheepfly.media.common.form.data.ResourceData;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
+import com.sheepfly.media.common.form.param.TagReferenceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.http.TableResponse;
@@ -17,7 +18,6 @@ import com.sheepfly.media.common.vo.TagReferenceVo;
 import com.sheepfly.media.dataaccess.entity.AlbumResource;
 import com.sheepfly.media.dataaccess.entity.Directory;
 import com.sheepfly.media.dataaccess.entity.Resource;
-import com.sheepfly.media.dataaccess.entity.TagReference_;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 import com.sheepfly.media.dataaccess.mapper.ResourceMapper;
 import com.sheepfly.media.dataaccess.repository.ResourceRepository;
@@ -81,19 +81,20 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         if (params.isResourceOnly()) {
             return TableResponse.success(list, page.getTotal());
         }
-        for (int i = 0; i < list.size(); i++) {
-            ResourceVo vo = list.get(i);
-            String id = vo.getId();
 
-            // todo 1+n查询方案优化
-            // todo 临时优化：生产环境标签多，查询时只返回3个以优化性能
-            if (i >= 5) {
-                vo.setTagReferenceVoList(Collections.emptyList());
-            }
-            vo.setTagReferenceVoList(queryTagReferenceByResourceIdAndCount(id));
-            long count = trfService.count(
-                    (r, q, b) -> b.equal(r.get(TagReference_.RESOURCE_ID), id));
-            vo.setTagCount(count);
+        List<String> resourceIdList = list.stream().map(ResourceVo::getId).collect(Collectors.toList());
+        TableRequest<Object, TagReferenceParam, Object> tableRequest = new TableRequest<>();
+        TagReferenceParam param = new TagReferenceParam();
+        param.setResourceIdList(resourceIdList);
+        tableRequest.setParams(param);
+        List<TagReferenceVo> tagList = trfService.queryTagReferenceList(tableRequest).getData();
+        // 使用map优化1-n查询。
+        Map<String, List<String>> tagMap = tagList.stream()
+                .collect(Collectors.groupingBy(TagReferenceVo::getResourceId,
+                        Collectors.mapping(item -> item.getTagVo().getName(), Collectors.toList())));
+        for (ResourceVo vo : list) {
+            vo.setTags(tagMap.getOrDefault(vo.getId(), Collections.emptyList()));
+            vo.setTagCount((long) vo.getTags().size());
         }
         return TableResponse.success(list, page.getTotal());
     }
@@ -102,11 +103,6 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
     @Override
     public List<TagReferenceVo> queryTagReferenceByResourceId(String resourceId) {
         return mapper.selectTagReferenceByResourceId(resourceId);
-    }
-
-    @Override
-    public List<TagReferenceVo> queryTagReferenceByResourceIdAndCount(String resourceId) {
-        return mapper.queryTagReferenceByResourceIdAndCount(resourceId, 5);
     }
 
     @Override

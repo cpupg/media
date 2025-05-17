@@ -54,6 +54,10 @@ public class ResourceVo implements Serializable {
      */
     private List<TagReferenceVo> tagReferenceVoList;
     /**
+     * 标签。
+     */
+    private List<String> tags;
+    /**
      * 标签数量。
      */
     private Long tagCount;
@@ -144,6 +148,14 @@ public class ResourceVo implements Serializable {
 
     public void setTagReferenceVoList(List<TagReferenceVo> tagReferenceVoList) {
         this.tagReferenceVoList = tagReferenceVoList;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public Long getTagCount() {

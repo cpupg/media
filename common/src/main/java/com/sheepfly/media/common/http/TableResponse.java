@@ -54,12 +54,12 @@ public class TableResponse<T> implements Serializable {
      *
      * @return 查询结果。
      */
-    public static <T> TableResponse success(List<T> list, Long total) {
+    public static <T> TableResponse<T> success(List<T> list, Long total) {
         return new TableResponse<>(total, list);
     }
 
-    public static <T> TableResponse fail(String message) {
-        return new TableResponse(message);
+    public static <T> TableResponse<T> fail(String message) {
+        return new TableResponse<>(message);
     }
 
     public Integer getPage() {

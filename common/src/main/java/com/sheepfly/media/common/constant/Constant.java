@@ -23,7 +23,7 @@ public class Constant {
     /**
      * 实体未删除。
      */
-    int NOT_DELETED = 0;
+    public static final int NOT_DELETED = 0;
 
     public static final String SEPERATOR = "/";
 }
