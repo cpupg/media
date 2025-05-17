@@ -86,40 +86,6 @@ public class TagController {
         return ResponseData.success(vo);
     }
 
-
-    /**
-     * 临时请求，将来会删除。
-     *
-     * @param tagData 数据。
-     *
-     * @return 数据。
-     */
-    @Trim
-    @PostMapping("/batchSetTag")
-    public ResponseData<List<TagReferenceVo>> batchSetTag(@RequestBody TagData tagData) {
-        String[] tags = tagData.getNames().split(",");
-        String[] ids = tagData.getResourceIds().split(",");
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (String id : ids) {
-            LOGGER.info("当前资源:{}----", id);
-            Map<String, Object> tagMap = new HashMap<>();
-            for (String tag : tags) {
-                LOGGER.info("当前标签:{}", tag);
-                try {
-                    TagReference tagReference = service.addTag(tagData);
-                    tagMap.put(tag, tagReference);
-                } catch (Exception e) {
-                    LOGGER.error("资源{}添加标签{}失败", id, tag, e);
-                    tagMap.put(tag, e.getMessage());
-                }
-            }
-            Map<String, Object> idMap = new HashMap<>();
-            idMap.put(id, tagMap);
-            list.add(idMap);
-        }
-        return ResponseData.success(list);
-    }
-
     /**
      * 删除标签。
      *

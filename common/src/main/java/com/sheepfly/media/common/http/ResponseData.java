@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author sheepfly
  */
-public class ResponseData<T>  implements Serializable {
+public class ResponseData<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 状态码。
@@ -33,45 +33,41 @@ public class ResponseData<T>  implements Serializable {
         this.message = message;
     }
 
-    public static <T> ResponseData success() {
+    public static <T> ResponseData<T> success() {
         return success(ErrorCode.OPERATION_SUCCESS.getMessage());
     }
 
-    public static <T> ResponseData success(T data) {
+    public static <T> ResponseData<T> success(T data) {
         return new ResponseData<>(ErrorCode.OPERATION_SUCCESS.getCode(), data,
                 ErrorCode.OPERATION_SUCCESS.getMessage());
     }
 
-    public static <T> ResponseData success(T data, String message) {
+    public static <T> ResponseData<T> success(T data, String message) {
         return new ResponseData<>(ErrorCode.OPERATION_SUCCESS.getCode(), data, message);
     }
 
-    public static <T> ResponseData success(String message) {
+    public static <T> ResponseData<T> success(String message) {
         return new ResponseData<T>(ErrorCode.OPERATION_SUCCESS.getCode(), null, message);
     }
 
-    public static <T> ResponseData fail(T data) {
+    public static <T> ResponseData<T> fail(T data) {
         return new ResponseData<>(ErrorCode.UNEXPECT_ERROR.getCode(), data, ErrorCode.UNEXPECT_ERROR.getMessage());
     }
 
-    public static <T> ResponseData fail(T data, String message) {
+    public static <T> ResponseData<T> fail(T data, String message) {
         return new ResponseData<>(ErrorCode.UNEXPECT_ERROR.getCode(), data, message);
     }
 
-    public static <T> ResponseData fail(String message) {
+    public static <T> ResponseData<T> fail(String message) {
         return new ResponseData<>(ErrorCode.UNEXPECT_ERROR.getCode(), null, message);
     }
 
-    public static <T> ResponseData fail(ErrorCode errorCode, Object data) {
-        return new ResponseData<>(errorCode.getCode(), data, errorCode.getMessage());
-    }
-
-    public static ResponseData fail(ErrorCode errorCode) {
+    public static <T> ResponseData<T> fail(ErrorCode errorCode) {
         return new ResponseData<>(errorCode.getCode(), null, errorCode.getMessage());
     }
 
-    public static <T> ResponseData fail(ErrorCode errorCode, String message, Object data) {
-        return new ResponseData<>(errorCode.getCode(), data, message);
+    public static <T> ResponseData<T> fail(ErrorCode errorCode, String message) {
+        return new ResponseData<>(errorCode.getCode(), null, message);
     }
 
     public String getStatusCode() {

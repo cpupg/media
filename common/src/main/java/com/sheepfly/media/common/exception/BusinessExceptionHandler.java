@@ -75,10 +75,10 @@ public class BusinessExceptionHandler {
         if (e instanceof ConstraintViolationException) {
             ConstraintViolationException cve = (ConstraintViolationException) e;
             Set<ConstraintViolation<?>> errors = cve.getConstraintViolations();
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append("验证失败:");
-            errors.forEach(ele -> stringBuffer.append(ele.getMessage()).append(","));
-            return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuffer);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("验证失败:");
+            errors.forEach(ele -> stringBuilder.append(ele.getMessage()).append(","));
+            return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuilder.toString());
         } else {
             LOGGER.error("验证失败", e);
             return ResponseData.fail("验证失败");
@@ -89,8 +89,8 @@ public class BusinessExceptionHandler {
     @ResponseBody
     public ResponseData<Exception> handleBindException(BindException e) {
         List<ObjectError> allErrors = e.getAllErrors();
-        StringBuffer stringBuffer = new StringBuffer();
-        allErrors.forEach(ele -> stringBuffer.append(ele.getDefaultMessage() + ","));
-        return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuffer);
+        StringBuilder stringBuilder = new StringBuilder();
+        allErrors.forEach(ele -> stringBuilder.append(ele.getDefaultMessage() + ","));
+        return ResponseData.fail(ErrorCode.VALIDATE_ERROR, stringBuilder.toString());
     }
 }

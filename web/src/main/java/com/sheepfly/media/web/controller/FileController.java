@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/file")
@@ -36,7 +35,7 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping("/upload")
-    public ResponseData<Map> upload(HttpServletRequest request, @RequestParam("file") MultipartFile file)
+    public ResponseData<FileInfo> upload(HttpServletRequest request, @RequestParam("file") MultipartFile file)
             throws IOException, BusinessException {
         String businessCode = request.getParameter("businessCode");
         // businessType是数字，入库前按字符串处理，入库时按数字处理

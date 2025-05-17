@@ -27,7 +27,7 @@ public class DirectoryController {
      * @return 根目录和根目录的子目录。
      */
     @PostMapping("/queryRootDirectory")
-    public ResponseData<DirectoryVo> querySubDirectoryList(long parentDirCode) {
+    public ResponseData<List<DirectoryVo>> querySubDirectoryList(long parentDirCode) {
         List<DirectoryVo> list = directoryService.queryDirectoryList();
         return ResponseData.success(list);
     }
