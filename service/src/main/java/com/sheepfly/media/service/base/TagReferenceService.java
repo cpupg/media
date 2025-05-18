@@ -23,6 +23,13 @@ public interface TagReferenceService extends BaseJpaService<TagReference, String
      */
     Integer REF_TYPE_RESOURCE = 1;
 
+    /**
+     * 查询标签和资源关联关系，不分页。
+     *
+     * @param form 查询条件。
+     *
+     * @return 查询结果。
+     */
     TableResponse<TagReferenceVo> queryTagReferenceList(
             TableRequest<Object, TagReferenceParam, Object> form);
 

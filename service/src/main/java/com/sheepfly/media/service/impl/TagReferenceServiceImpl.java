@@ -1,8 +1,6 @@
 package com.sheepfly.media.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.page.PageMethod;
 import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.param.TagReferenceParam;
@@ -35,10 +33,8 @@ public class TagReferenceServiceImpl extends BaseJpaServiceImpl<TagReference, St
 
     @Override
     public TableResponse<TagReferenceVo> queryTagReferenceList(TableRequest<Object, TagReferenceParam, Object> form) {
-        TagReferenceParam param = form.getParams();
-        Page<Object> page = PageMethod.startPage(param.getCurrent(), param.getPageSize());
         List<TagReferenceVo> list = tagReferenceMapper.queryTagReferenceList(form);
-        return TableResponse.success(list, page.getTotal());
+        return TableResponse.success(list, (long) list.size());
     }
 
 
