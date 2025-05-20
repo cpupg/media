@@ -110,7 +110,7 @@ public class TagController {
             return ResponseData.fail(ErrorCode.RES_TAG_NOT_FOUND);
         }
         TagVo tagVo = new TagVo();
-        tag.copyTo(tagVo);
+        BeanUtils.copyProperties(tag, tagVo);
         LOGGER.info("删除资源{}的标签{}删除成功", resourceId, referenceId);
         return ResponseData.success(tagVo);
     }

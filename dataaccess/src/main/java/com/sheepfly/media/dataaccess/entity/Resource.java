@@ -1,7 +1,5 @@
 package com.sheepfly.media.dataaccess.entity;
 
-import com.sheepfly.media.common.util.BeanCopier;
-import com.sheepfly.media.dataaccess.entity.baseinterface.Copy;
 import com.sheepfly.media.dataaccess.entity.baseinterface.EntityInterface;
 import com.sheepfly.media.dataaccess.entity.baseinterface.LogicDelete;
 
@@ -22,7 +20,7 @@ import java.util.Date;
  */
 @Entity
 @Table(schema = "MEDIA", name = "RESOURCE")
-public class Resource implements Serializable, EntityInterface, LogicDelete, Copy {
+public class Resource implements Serializable, EntityInterface, LogicDelete {
 
     private static final long serialVersionUID = 1L;
 
@@ -94,16 +92,6 @@ public class Resource implements Serializable, EntityInterface, LogicDelete, Cop
      */
     @Column(name = "COVER_ID", nullable = false)
     private String coverId;
-
-    @Override
-    public void copyFrom(Object source) {
-        BeanCopier.copyFrom(source, this);
-    }
-
-    @Override
-    public void copyTo(Object target) {
-        BeanCopier.copyTo(this, target);
-    }
 
     public String getId() {
         return this.id;
