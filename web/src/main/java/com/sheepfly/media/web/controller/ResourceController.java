@@ -1,6 +1,7 @@
 package com.sheepfly.media.web.controller;
 
 
+import cn.hutool.core.lang.Snowflake;
 import com.sheepfly.media.common.constant.Constant;
 import com.sheepfly.media.common.exception.BusinessException;
 import com.sheepfly.media.common.exception.ErrorCode;
@@ -27,11 +28,11 @@ import com.sheepfly.media.service.base.DirectoryService;
 import com.sheepfly.media.service.base.IResourceService;
 import com.sheepfly.media.service.base.TagReferenceService;
 import com.sheepfly.media.web.annotations.Trim;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +73,8 @@ public class ResourceController {
     private AlbumService albumService;
     @javax.annotation.Resource
     private AlbumResourceService albumResourceService;
+    @javax.annotation.Resource
+    private Snowflake snowflake;
 
     /**
      * 查询资源表格，用来在资源页展示。
@@ -125,23 +129,17 @@ public class ResourceController {
      */
     @Trim
     @PostMapping("/add")
-    public ResponseData<Resource> add(@RequestBody @Validated ResourceData resourceData)
+    public ResponseData<List<Resource>> add(@RequestBody @Validated ResourceData resourceData)
             throws InvocationTargetException, IllegalAccessException, BusinessException {
         if (!resourceData.getDir().matches("^\"?[a-zA-Z]:(.*(?=[/\\\\])?)+\"?$")) {
             return ResponseData.fail(ErrorCode.DIRECTORY_ILLEGAL_DRIVER);
         }
-        Resource resource = new Resource();
-        BeanUtils.copyProperties(resource, resourceData);
-        Date date = new Date();
-        resource.setCreateTime(date);
-        resource.setSaveTime(date);
         // 判断输入的路径是文件还是目录，方便直接复制全路径到表单
         File file = new File(resourceData.getDir());
         String parentDir = file.getAbsolutePath();
         LOGGER.info("文件目录{}", parentDir);
         if (file.isFile()) {
             LOGGER.info("当前资源是一个文件，计算父目录");
-            resource.setFilename(file.getName());
             parentDir = FilenameUtils.normalize(file.getParent(), true);
         }
         parentDir = FilenameUtils.normalize(parentDir, true);
@@ -151,33 +149,46 @@ public class ResourceController {
         // 盘符大写
         parentDir = parentDir.substring(0, 1).toUpperCase() + parentDir.substring(1);
         Directory directory = directoryService.queryDirectoryByPath(parentDir);
+        String[] names = resourceData.getFilename().split("\n");
         if (directory == null) {
             directory = directoryService.createDirectory(parentDir);
         } else {
             // 检查重复文件
             Directory d = directory;
-            boolean repeat = resourceService.checkRepeat((r, q, b) -> {
-                Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
-                Predicate p2 = b.equal(r.get(Resource_.DELETE_STATUS), Constant.NOT_DELETED);
-                Predicate p3 = b.equal(r.get(Resource_.FILENAME), resource.getFilename());
-                return b.and(p1, p2, p3);
-            });
-            if (repeat) {
-                return ResponseData.fail(ErrorCode.RES_ADD_FAIL_BY_DUPLICATED);
+            for (String name : names) {
+                boolean repeat = resourceService.checkRepeat((r, q, b) -> {
+                    Predicate p1 = b.equal(r.get(Resource_.DIR_CODE), d.getDirCode());
+                    Predicate p2 = b.equal(r.get(Resource_.DELETE_STATUS), Constant.NOT_DELETED);
+                    Predicate p3 = b.equal(r.get(Resource_.FILENAME), name);
+                    return b.and(p1, p2, p3);
+                });
+                if (repeat) {
+                    return ResponseData.fail(ErrorCode.RES_ADD_FAIL_BY_DUPLICATED);
+                }
             }
         }
         if (directory == null) {
-            ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
+            return ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
         }
-        resource.setDirCode(directory.getDirCode());
-        if (resource.getCoverId() == null) {
-            resource.setCoverId("");
+        List<Resource> list = new ArrayList<>(names.length);
+        Date now = new Date();
+        for (String name : names) {
+            Resource resource = new Resource();
+            resource.setId(snowflake.nextIdStr());
+            resource.setFilename(name);
+            resource.setAuthorId(resourceData.getAuthorId());
+            resource.setCreateTime(now);
+            resource.setUpdateTime(now);
+            resource.setSaveTime(now);
+            resource.setDeleteStatus(Constant.NOT_DELETED);
+            resource.setDirCode(directory.getDirCode());
+            if (resource.getCoverId() == null) {
+                resource.setCoverId("");
+            }
+            list.add(resource);
         }
-        if (StringUtils.isNotBlank(resource.getId())) {
-            resource.setUpdateTime(new Date());
-        }
-        Resource savedResource = resourceService.save(resource);
-        return ResponseData.success(savedResource);
+        List<Resource> savedList = resourceService.saveAll(list);
+        return ResponseData.success(savedList);
     }
 
     /**
@@ -297,7 +308,7 @@ public class ResourceController {
             if (!dir.endsWith("/")) {
                 dir += "/";
             }
-            resourceData.setDir(dir.toUpperCase());
+            resourceData.setDir(dir);
         }
         if (StringUtils.isNotEmpty(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
