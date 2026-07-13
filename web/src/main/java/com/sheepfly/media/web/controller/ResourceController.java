@@ -32,7 +32,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -174,7 +173,12 @@ public class ResourceController {
         Date now = new Date();
         for (String name : names) {
             Resource resource = new Resource();
-            resource.setId(snowflake.nextIdStr());
+            // 是修改请求，不是添加
+            if (names.length == 1 && resourceData.getId() != null) {
+                resource.setId(resourceData.getId());
+            } else {
+                resource.setId(snowflake.nextIdStr());
+            }
             resource.setFilename(name);
             resource.setAuthorId(resourceData.getAuthorId());
             resource.setCreateTime(now);
