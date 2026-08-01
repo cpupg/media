@@ -8,7 +8,6 @@ import com.sheepfly.media.common.http.TableRequest;
 import com.sheepfly.media.common.vo.ResourceVo;
 import com.sheepfly.media.common.vo.TagReferenceVo;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

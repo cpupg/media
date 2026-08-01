@@ -13,18 +13,16 @@
     <if test="params.filename neq null and params.filename neq '' ">
       and lower(${t_resource}.filename) like '%' || #{params.filename} || '%'
     </if>
-    <choose>
-      <when test="params.accurateDir == false">
-        <if test="params.dir neq null and params.dir neq '' ">
-          and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
-        </if>
-      </when>
-      <otherwise>
-        <if test="params.dir neq null and params.dir neq '' ">
-          and lower(${t_directory}.path) = #{params.dir}
-        </if>
-      </otherwise>
-    </choose>
+    <if test="params.dir neq null and params.dir neq '' ">
+      <choose>
+        <when test="params.accurateDir">
+            and lower(${t_directory}.path) = #{params.dir}
+        </when>
+        <otherwise>
+            and lower(${t_directory}.path) like '%' || #{params.dir} || '%'
+        </otherwise>
+      </choose>
+    </if>
     <if test="params.authorId neq null and params.authorId neq '' ">
       and ${t_author}.id = #{params.authorId}
     </if>
