@@ -78,7 +78,7 @@ public class ResourceServiceImpl extends BaseJpaServiceImpl<Resource, String, Re
         ResourceParam params = form.getParams();
         Page<Object> page = PageMethod.startPage(params.getCurrent(), params.getPageSize());
         List<ResourceVo> list = mapper.selectResourceVoList(form);
-        if (params.isResourceOnly()) {
+        if (params.isResourceOnly() || list.isEmpty()) {
             return TableResponse.success(list, page.getTotal());
         }
 

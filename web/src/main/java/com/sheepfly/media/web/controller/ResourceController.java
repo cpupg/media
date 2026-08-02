@@ -86,9 +86,6 @@ public class ResourceController {
     @PostMapping("/queryResourceList")
     public TableResponse<ResourceVo> queryResourceList(@RequestBody TableRequest<ResourceFilter, ResourceParam, ResourceSort> form) {
         ResourceParam params = form.getParams();
-        if (StringUtils.isNotBlank(params.getDir())) {
-            params.setDir(params.getDir().toLowerCase().replace("\\\\", "/"));
-        }
         if (StringUtils.isNotBlank(params.getFilename())) {
             params.setFilename(params.getFilename().toLowerCase());
         }
