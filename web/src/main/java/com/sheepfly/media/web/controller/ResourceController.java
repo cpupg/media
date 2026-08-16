@@ -145,7 +145,7 @@ public class ResourceController {
         // 盘符大写
         parentDir = parentDir.substring(0, 1).toUpperCase() + parentDir.substring(1);
         Directory directory = directoryService.queryDirectoryByPath(parentDir);
-        String[] names = resourceData.getFilename().split("\n");
+        List<String> names = resourceData.getFilenames();
         if (directory == null) {
             directory = directoryService.createDirectory(parentDir);
         } else {
@@ -166,12 +166,12 @@ public class ResourceController {
         if (directory == null) {
             return ResponseData.fail(ErrorCode.RESOURCE_MKDIR_FAIL);
         }
-        List<Resource> list = new ArrayList<>(names.length);
+        List<Resource> list = new ArrayList<>(names.size());
         Date now = new Date();
         for (String name : names) {
             Resource resource = new Resource();
             // 是修改请求，不是添加
-            if (names.length == 1 && resourceData.getId() != null) {
+            if (names.size() == 1 && resourceData.getId() != null) {
                 resource.setId(resourceData.getId());
             } else {
                 resource.setId(snowflake.nextIdStr());

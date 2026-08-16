@@ -4,8 +4,6 @@ import com.sheepfly.media.common.form.filter.ResourceFilter;
 import com.sheepfly.media.common.form.param.ResourceParam;
 import com.sheepfly.media.common.form.sort.ResourceSort;
 import com.sheepfly.media.common.http.TableRequest;
-import com.sheepfly.media.common.vo.AlbumVo;
-import com.sheepfly.media.common.vo.TagVo;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -35,6 +33,10 @@ public class ResourceData implements Serializable {
     @NotNull(message = "{entity.resource.filename.notNull}")
     @Length(max = 90, message = "{entity.resource.filename.length}")
     private String filename;
+    /**
+     * 批量新增时的文件名。
+     */
+    private List<String> filenames;
     /**
      * 资源目录。
      */
@@ -91,6 +93,14 @@ public class ResourceData implements Serializable {
 
     public void setFilename(@NotNull(message = "{entity.resource.filename.notNull}") @Length(max = 90, message = "{entity.resource.filename.length}") String filename) {
         this.filename = filename;
+    }
+
+    public List<String> getFilenames() {
+        return filenames;
+    }
+
+    public void setFilenames(List<String> filenames) {
+        this.filenames = filenames;
     }
 
     public @NotNull(message = "{entity.resource.dir.notNull}") @Length(max = 900, message = "{entity.resource.dir.length}") String getDir() {
